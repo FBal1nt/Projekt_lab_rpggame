@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bu35svkkyd021"]
+
+[ext_resource type="Script" uid="uid://lakvy04tvtag" path="res://scenes/MapGenerator.gd" id="1_elqb8"]
+[ext_resource type="PackedScene" uid="uid://ckjoiicio0un2" path="res://scenes/Rooms/Start_room.tscn" id="2_rvslj"]
+[ext_resource type="Script" uid="uid://b330ukyp77kwg" path="res://scenes/DebugCamera.gd" id="3_0bbpv"]
+[ext_resource type="PackedScene" uid="uid://6cm8qjk3jic2" path="res://scenes/Rooms/Negy_iranyu_szoba.tscn" id="3_vcsgt"]
+[ext_resource type="PackedScene" uid="uid://bjln4u6ica7hn" path="res://scenes/Rooms/L_also_jobb.tscn" id="4_c01mt"]
+
+[node name="Main" type="Node2D" unique_id=221779206]
+script = ExtResource("1_elqb8")
+starter_scene = ExtResource("2_rvslj")
+room_scenes = Array[PackedScene]([ExtResource("3_vcsgt"), ExtResource("4_c01mt")])
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1414560673]
+script = ExtResource("3_0bbpv")
