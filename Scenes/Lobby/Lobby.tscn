@@ -1,0 +1,263 @@
+[gd_scene format=3 uid="uid://bj2jwehnlcbfk"]
+
+[ext_resource type="Script" uid="uid://bwegda1m08hf8" path="res://Scripts/UI/lobby.gd" id="1_a15b7"]
+
+[node name="Lobby" type="Control" unique_id=1294276721]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a15b7")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1382107859]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Buildings" type="Control" parent="." unique_id=935053470]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="ShopBuilding" type="Button" parent="Buildings" unique_id=851163315]
+layout_mode = 0
+offset_left = 211.0
+offset_top = 300.0
+offset_right = 260.0
+offset_bottom = 331.0
+text = "BOLT"
+
+[node name="CharacterBuilding" type="Button" parent="Buildings" unique_id=1599212263]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 400.0
+offset_right = 589.0
+offset_bottom = 431.0
+text = "KARAKTER"
+
+[node name="BlacksmithBuilding" type="Button" parent="Buildings" unique_id=141160614]
+layout_mode = 0
+offset_left = 800.0
+offset_top = 300.0
+offset_right = 871.0
+offset_bottom = 331.0
+text = "KOVÁCS"
+
+[node name="WizardBuilding" type="Button" parent="Buildings" unique_id=698314455]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 200.0
+offset_right = 589.0
+offset_bottom = 231.0
+text = "VARÁZSLÓ"
+
+[node name="DungeonBuilding" type="Button" parent="Buildings" unique_id=1114759652]
+layout_mode = 0
+offset_left = 900.0
+offset_top = 500.0
+offset_right = 990.0
+offset_bottom = 531.0
+text = "DUNGEON"
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1488900799]
+
+[node name="TopBar" type="PanelContainer" parent="UI" unique_id=1117863535]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Container" type="HBoxContainer" parent="UI/TopBar" unique_id=1930533876]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="GoldLabel" type="Label" parent="UI/TopBar/Container" unique_id=267772598]
+layout_mode = 2
+text = "Gold: 500"
+
+[node name="LevelLabel" type="Label" parent="UI/TopBar/Container" unique_id=1962142581]
+layout_mode = 2
+text = "Level: 1"
+
+[node name="WindowLayer" type="Control" parent="UI" unique_id=1311911022]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ShopWindow" type="Panel" parent="UI/WindowLayer" unique_id=1072471645]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/WindowLayer/ShopWindow" unique_id=531918893]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 291.0
+offset_bottom = 123.0
+text = "BOLT"
+
+[node name="CloseButton" type="Button" parent="UI/WindowLayer/ShopWindow" unique_id=1212834348]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 300.0
+offset_right = 319.0
+offset_bottom = 331.0
+text = "Bezárás"
+
+[node name="CharacterWindow" type="Panel" parent="UI/WindowLayer" unique_id=152919397]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/WindowLayer/CharacterWindow" unique_id=1559709937]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 291.0
+offset_bottom = 123.0
+text = "KARAKTER"
+
+[node name="CloseButton" type="Button" parent="UI/WindowLayer/CharacterWindow" unique_id=1218586773]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 300.0
+offset_right = 319.0
+offset_bottom = 331.0
+text = "Bezárás"
+
+[node name="BlacksmithWindow" type="Panel" parent="UI/WindowLayer" unique_id=376969783]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/WindowLayer/BlacksmithWindow" unique_id=1537915825]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 291.0
+offset_bottom = 123.0
+text = "KOVÁCS"
+
+[node name="CloseButton" type="Button" parent="UI/WindowLayer/BlacksmithWindow" unique_id=74603876]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 300.0
+offset_right = 319.0
+offset_bottom = 331.0
+text = "Bezárás"
+
+[node name="WizardWindow" type="Panel" parent="UI/WindowLayer" unique_id=393921317]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/WindowLayer/WizardWindow" unique_id=1954846268]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 291.0
+offset_bottom = 123.0
+text = "VARÁZSLÓ"
+
+[node name="CloseButton" type="Button" parent="UI/WindowLayer/WizardWindow" unique_id=1630288213]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 300.0
+offset_right = 319.0
+offset_bottom = 331.0
+text = "Bezárás"
+
+[node name="DungeonWindow" type="Panel" parent="UI/WindowLayer" unique_id=934430006]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/WindowLayer/DungeonWindow" unique_id=276813622]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 291.0
+offset_bottom = 123.0
+text = "DUNGEON"
+
+[node name="CloseButton" type="Button" parent="UI/WindowLayer/DungeonWindow" unique_id=752525385]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 300.0
+offset_right = 319.0
+offset_bottom = 331.0
+text = "Bezárás"
+
+[connection signal="pressed" from="Buildings/ShopBuilding" to="." method="_on_shop_building_pressed"]
+[connection signal="pressed" from="Buildings/CharacterBuilding" to="." method="_on_character_building_pressed"]
+[connection signal="pressed" from="Buildings/BlacksmithBuilding" to="." method="_on_blacksmith_building_pressed"]
+[connection signal="pressed" from="Buildings/WizardBuilding" to="." method="_on_wizard_building_pressed"]
+[connection signal="pressed" from="Buildings/DungeonBuilding" to="." method="_on_dungeon_building_pressed"]
+[connection signal="pressed" from="UI/WindowLayer/ShopWindow/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="UI/WindowLayer/CharacterWindow/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="UI/WindowLayer/BlacksmithWindow/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="UI/WindowLayer/WizardWindow/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="UI/WindowLayer/DungeonWindow/CloseButton" to="." method="_on_close_button_pressed"]

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dj1xsf57w6sbd"]
+
+[ext_resource type="Script" uid="uid://c6cqjvi61acb6" path="res://Scripts/UI/main_menu.gd" id="1_a2ivp"]
+
+[node name="MainMenu" type="Control" unique_id=844555518]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a2ivp")
+
+[node name="Title" type="Label" parent="." unique_id=2069315836]
+layout_mode = 0
+offset_left = 523.0
+offset_top = 136.0
+offset_right = 602.0
+offset_bottom = 159.0
+text = "RPG game"
+
+[node name="StartButton" type="Button" parent="." unique_id=2022940165]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 256.0
+offset_right = 617.0
+offset_bottom = 287.0
+text = "Játék indítása"
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

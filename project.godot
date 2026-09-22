@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="Projekt_lab_rpggame"
+run/main_scene="uid://dj1xsf57w6sbd"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameState="*uid://boegp7qfflud"
 
 [display]
 
