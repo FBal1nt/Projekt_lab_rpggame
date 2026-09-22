@@ -1,14 +1,23 @@
 extends Node
 
+
+signal state_changed
+
+
 var gold: int = 500
 var level: int = 1
 var xp: int = 0
 
-# Called when the node enters the scene tree for the first time.
+
+var backpack: Inventory
+var stash: Inventory
+
+
 func _ready() -> void:
-	pass # Replace with function body.
+	backpack = Inventory.new()
+	backpack.width = 8
+	backpack.height = 4
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	stash = Inventory.new()
+	stash.width = 10
+	stash.height = 5

@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dbbx8xkxlo7eh"]
+
+[ext_resource type="PackedScene" uid="uid://dhpjx4tv707c7" path="res://Scenes/Inventory/InventoryGrid.tscn" id="1_a1eca"]
+[ext_resource type="Script" uid="uid://b0f3xbj133tqs" path="res://Scripts/UI/InventoryWindow.gd" id="1_mf4og"]
+
+[node name="Panel" type="Panel" unique_id=1944863520]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mf4og")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1707420878]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1891518568]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1954768302]
+layout_mode = 2
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="InventoryContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1331889621]
+layout_mode = 2
+alignment = 1
+
+[node name="BackpackPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/InventoryContainer" unique_id=1389141643]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/InventoryContainer/BackpackPanel" unique_id=2127815400]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/InventoryContainer/BackpackPanel/VBoxContainer" unique_id=795296717]
+layout_mode = 2
+text = "BACKPACK"
+
+[node name="BackpackGrid" parent="MarginContainer/VBoxContainer/InventoryContainer/BackpackPanel/VBoxContainer" unique_id=370135112 instance=ExtResource("1_a1eca")]
+layout_mode = 2
+
+[node name="StashPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/InventoryContainer" unique_id=949839729]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/InventoryContainer/StashPanel" unique_id=62926667]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/InventoryContainer/StashPanel/VBoxContainer" unique_id=1238699269]
+layout_mode = 2
+text = "STASH"
+
+[node name="StashGrid" parent="MarginContainer/VBoxContainer/InventoryContainer/StashPanel/VBoxContainer" unique_id=533027285 instance=ExtResource("1_a1eca")]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1613142188]
+layout_mode = 2
+text = "BEZÁRÁS"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

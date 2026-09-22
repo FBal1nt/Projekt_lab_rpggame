@@ -9,6 +9,7 @@ extends Control
 @onready var shop_window: Panel = $UI/WindowLayer/ShopWindow
 @onready var wizard_window: Panel = $UI/WindowLayer/WizardWindow
 @onready var dungeon_window: Panel = $UI/WindowLayer/DungeonWindow
+@onready var inventory_window: Panel = $UI/WindowLayer/InventoryWindow
 
 var windows: Array[Panel] = []
 
@@ -18,7 +19,8 @@ func _ready() -> void:
 		blacksmith_window,
 		shop_window,
 		wizard_window,
-		dungeon_window
+		dungeon_window,
+		inventory_window
 	]
 
 	close_all_windows()
@@ -53,3 +55,6 @@ func _on_wizard_building_pressed() -> void:
 
 func _on_dungeon_building_pressed() -> void:
 	open_window(dungeon_window)
+
+func _on_inventory_building_pressed() -> void:
+	open_window(inventory_window)

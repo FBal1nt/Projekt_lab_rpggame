@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dhpjx4tv707c7"]
+
+[ext_resource type="Script" uid="uid://o7s50biii7cv" path="res://Scripts/UI/InventoryGrid.gd" id="1_7hmmc"]
+
+[node name="InventoryGrid" type="Control" unique_id=370135112]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7hmmc")
