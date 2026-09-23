@@ -5,11 +5,14 @@
 [ext_resource type="Script" uid="uid://b330ukyp77kwg" path="res://scenes/DebugCamera.gd" id="3_0bbpv"]
 [ext_resource type="PackedScene" uid="uid://6cm8qjk3jic2" path="res://scenes/Rooms/Negy_iranyu_szoba.tscn" id="3_vcsgt"]
 [ext_resource type="PackedScene" uid="uid://bjln4u6ica7hn" path="res://scenes/Rooms/L_also_jobb.tscn" id="4_c01mt"]
+[ext_resource type="PackedScene" uid="uid://c6et03m7m843p" path="res://scenes/Rooms/L_felso_bal.tscn" id="5_c01mt"]
+[ext_resource type="PackedScene" uid="uid://du8qgs7ostht7" path="res://scenes/Rooms/bal_jobb_folyoso.tscn" id="6_jlsqs"]
+[ext_resource type="PackedScene" uid="uid://ex8y0fu2hq5m" path="res://scenes/Rooms/fent_lent_folyoso.tscn" id="7_q8u5g"]
 
 [node name="Main" type="Node2D" unique_id=221779206]
 script = ExtResource("1_elqb8")
 starter_scene = ExtResource("2_rvslj")
-room_scenes = Array[PackedScene]([ExtResource("3_vcsgt"), ExtResource("4_c01mt")])
+room_scenes = Array[PackedScene]([ExtResource("3_vcsgt"), ExtResource("4_c01mt"), ExtResource("5_c01mt"), ExtResource("6_jlsqs"), ExtResource("7_q8u5g")])
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1414560673]
 script = ExtResource("3_0bbpv")
