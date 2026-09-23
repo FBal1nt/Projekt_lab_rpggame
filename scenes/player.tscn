@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dscjbrnyg4cnt"]
+
+[ext_resource type="Script" uid="uid://bhprbwx8gcil3" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="SpriteFrames" uid="uid://bnuq0kpjoc4lu" path="res://resources/knight_frames.tres" id="2_g2els"]
+
+[node name="Player" type="CharacterBody2D" unique_id=1313112752]
+motion_mode = 1
+script = ExtResource("1_g2els")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1850445373]
+sprite_frames = ExtResource("2_g2els")
+animation = &"attack_1"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=835619162]
+zoom = Vector2(4, 4)

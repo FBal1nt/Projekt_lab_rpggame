@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://4slxp47x5vsl"]
+
+[ext_resource type="Script" uid="uid://dtm3k2ap0gyq8" path="res://scenes/character_class.gd" id="1_d2bec"]
+[ext_resource type="SpriteFrames" uid="uid://bnuq0kpjoc4lu" path="res://resources/knight_frames.tres" id="2_82myt"]
+
+[resource]
+script = ExtResource("1_d2bec")
+sprite_frames = ExtResource("2_82myt")
+sprite_scale = Vector2(0.5, 0.5)
+metadata/_custom_type_script = "uid://dtm3k2ap0gyq8"

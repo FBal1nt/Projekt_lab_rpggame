@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bu35svkkyd021"]
+
+[ext_resource type="Script" uid="uid://bjn17co80q44d" path="res://scripts/MapGenerator.gd" id="1_elqb8"]
+[ext_resource type="Script" uid="uid://h2s735pkiobj" path="res://scripts/fog_of_war.gd" id="2_0bbpv"]
+[ext_resource type="PackedScene" uid="uid://ckjoiicio0un2" path="res://scenes/Rooms/Start_room.tscn" id="2_rvslj"]
+[ext_resource type="PackedScene" uid="uid://du8qgs7ostht7" path="res://scenes/Rooms/bal_jobb_folyoso.tscn" id="3_nxtc6"]
+[ext_resource type="PackedScene" uid="uid://dscjbrnyg4cnt" path="res://scenes/player.tscn" id="3_rarhs"]
+[ext_resource type="PackedScene" uid="uid://ex8y0fu2hq5m" path="res://scenes/Rooms/fent_lent_folyoso.tscn" id="4_jlsqs"]
+[ext_resource type="PackedScene" uid="uid://bjln4u6ica7hn" path="res://scenes/Rooms/L_also_jobb.tscn" id="5_q8u5g"]
+[ext_resource type="PackedScene" uid="uid://c6et03m7m843p" path="res://scenes/Rooms/L_felso_bal.tscn" id="6_lhr70"]
+[ext_resource type="PackedScene" uid="uid://6cm8qjk3jic2" path="res://scenes/Rooms/Negy_iranyu_szoba.tscn" id="7_wp0k4"]
+
+[node name="Main" type="Node2D" unique_id=221779206]
+
+[node name="MapGenerator" type="Node2D" parent="." unique_id=2008055438 node_paths=PackedStringArray("master_floor", "master_wall", "master_decoratives", "master_torch", "fog_of_war", "player")]
+script = ExtResource("1_elqb8")
+starter_scene = ExtResource("2_rvslj")
+room_scenes = Array[PackedScene]([ExtResource("3_nxtc6"), ExtResource("4_jlsqs"), ExtResource("5_q8u5g"), ExtResource("6_lhr70"), ExtResource("7_wp0k4")])
+master_floor = NodePath("../TileMapLayer_Floor")
+master_wall = NodePath("../TileMapLayer_Wall")
+master_decoratives = NodePath("../TileMapLayer_Decoratives")
+master_torch = NodePath("../TileMapLayer_Torch")
+fog_of_war = NodePath("../FogOfWar")
+player = NodePath("../Player")
+
+[node name="TileMapLayer_Floor" type="TileMapLayer" parent="." unique_id=1581955919]
+
+[node name="TileMapLayer_Wall" type="TileMapLayer" parent="." unique_id=856751499]
+z_index = 1
+
+[node name="TileMapLayer_Decoratives" type="TileMapLayer" parent="." unique_id=1281258749]
+z_index = 2
+
+[node name="TileMapLayer_Torch" type="TileMapLayer" parent="." unique_id=528917705]
+z_index = 3
+
+[node name="FogOfWar" type="Node2D" parent="." unique_id=563146021 node_paths=PackedStringArray("floor_layer", "wall_layer", "decoratives_layer", "torch_layer")]
+visible = false
+position = Vector2(0, -3)
+script = ExtResource("2_0bbpv")
+floor_layer = NodePath("../TileMapLayer_Floor")
+wall_layer = NodePath("../TileMapLayer_Wall")
+decoratives_layer = NodePath("../TileMapLayer_Decoratives")
+torch_layer = NodePath("../TileMapLayer_Torch")
+
+[node name="Player" parent="." unique_id=1313112752 node_paths=PackedStringArray("floor_layer", "wall_layer", "decoratives_layer", "fog_of_war") instance=ExtResource("3_rarhs")]
+z_index = 10
+floor_layer = NodePath("../TileMapLayer_Floor")
+wall_layer = NodePath("../TileMapLayer_Wall")
+decoratives_layer = NodePath("../TileMapLayer_Decoratives")
+fog_of_war = NodePath("../FogOfWar")
