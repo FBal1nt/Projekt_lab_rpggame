@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://bcwire0gd5ndr"]
+
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_t3klc"]
+[ext_resource type="PackedScene" uid="uid://tjop60ao78bn" path="res://scenes/wizard_spell.tscn" id="1_wyu87"]
+[ext_resource type="SpriteFrames" uid="uid://b1a8aph4sjuaf" path="res://resources/heroes/wizard_frames.tres" id="3_g82w1"]
+
+[resource]
+script = ExtResource("1_t3klc")
+class_name_id = "Wizard"
+max_hp = 80
+base_damage = 28
+initiative = 12
+move_duration = 0.15
+is_ranged = true
+attack_range = 5
+projectile_scene = ExtResource("1_wyu87")
+release_frame = 6
+sprite_frames = ExtResource("3_g82w1")
+metadata/_custom_type_script = "uid://bewq3fbkpsbt7"

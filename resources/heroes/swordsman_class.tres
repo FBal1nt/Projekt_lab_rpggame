@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://bpdtmk7mp61y6"]
+
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_owjtg"]
+[ext_resource type="SpriteFrames" uid="uid://damcttydypd7o" path="res://resources/heroes/swordsman_frames.tres" id="2_ahu0g"]
+
+[resource]
+script = ExtResource("1_owjtg")
+class_name_id = "Swordsman"
+max_hp = 105
+base_damage = 25
+initiative = 15
+move_duration = 0.12
+sprite_frames = ExtResource("2_ahu0g")
+metadata/_custom_type_script = "uid://bewq3fbkpsbt7"

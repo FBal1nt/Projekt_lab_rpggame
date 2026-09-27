@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b2rb3eieyvbkx"]
+
+[ext_resource type="Script" uid="uid://c8clx3030op47" path="res://scripts/arrow.gd" id="1_23jat"]
+[ext_resource type="Texture2D" uid="uid://rdqvy6maflk8" path="res://assets/Characters(100x100 split)/Archer/Arrow(projectile)/Arrow02(100x100).png" id="2_q8ifc"]
+
+[node name="Arrow" type="Node2D" unique_id=1528699677]
+script = ExtResource("1_23jat")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=765551658]
+texture = ExtResource("2_q8ifc")

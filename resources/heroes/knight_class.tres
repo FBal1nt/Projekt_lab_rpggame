@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://4slxp47x5vsl"]
+
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_d2bec"]
+[ext_resource type="SpriteFrames" uid="uid://bnuq0kpjoc4lu" path="res://resources/heroes/knight_frames.tres" id="2_82myt"]
+
+[resource]
+script = ExtResource("1_d2bec")
+class_name_id = "Knight"
+max_hp = 120
+base_damage = 18
+initiative = 10
+move_duration = 0.15
+sprite_frames = ExtResource("2_82myt")

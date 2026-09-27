@@ -1,15 +1,25 @@
 [gd_scene format=3 uid="uid://dscjbrnyg4cnt"]
 
 [ext_resource type="Script" uid="uid://bhprbwx8gcil3" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="SpriteFrames" uid="uid://bnuq0kpjoc4lu" path="res://resources/knight_frames.tres" id="2_g2els"]
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="2_qlg0r"]
+[ext_resource type="Resource" uid="uid://c0n8ixafdrpcq" path="res://resources/heroes/archer_class.tres" id="3_tuyoq"]
+[ext_resource type="Resource" uid="uid://4slxp47x5vsl" path="res://resources/heroes/knight_class.tres" id="4_fjrip"]
+[ext_resource type="Resource" uid="uid://cvhn77pr5csyc" path="res://resources/heroes/knight_templar_class.tres" id="5_fjrip"]
+[ext_resource type="Resource" uid="uid://dp6hjt6oq1eqx" path="res://resources/heroes/lancer_class.tres" id="6_smehm"]
+[ext_resource type="Resource" uid="uid://v0mhclqh6gts" path="res://resources/heroes/priest_class.tres" id="7_smehm"]
+[ext_resource type="Resource" uid="uid://bg2m7h8jugg76" path="res://resources/heroes/soldier_class.tres" id="8_y4r1p"]
+[ext_resource type="Resource" uid="uid://bpdtmk7mp61y6" path="res://resources/heroes/swordsman_class.tres" id="9_d2wvv"]
+[ext_resource type="Resource" uid="uid://bcwire0gd5ndr" path="res://resources/heroes/wizard_class.tres" id="10_3v2ag"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a7abf"]
 
 [node name="Player" type="CharacterBody2D" unique_id=1313112752]
 motion_mode = 1
 script = ExtResource("1_g2els")
+available_classes = Array[ExtResource("2_qlg0r")]([ExtResource("3_tuyoq"), ExtResource("4_fjrip"), ExtResource("5_fjrip"), ExtResource("6_smehm"), ExtResource("7_smehm"), ExtResource("8_y4r1p"), ExtResource("9_d2wvv"), ExtResource("10_3v2ag")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1850445373]
-sprite_frames = ExtResource("2_g2els")
-animation = &"attack_1"
+sprite_frames = SubResource("SpriteFrames_a7abf")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=835619162]
 zoom = Vector2(4, 4)

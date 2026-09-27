@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://dp6hjt6oq1eqx"]
+
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_qg6on"]
+[ext_resource type="SpriteFrames" uid="uid://4mk7skuucrvd" path="res://resources/heroes/lancer_frames.tres" id="2_airu5"]
+
+[resource]
+script = ExtResource("1_qg6on")
+class_name_id = "Lancer"
+max_hp = 110
+base_damage = 22
+initiative = 13
+move_duration = 0.1
+attack_range = 2
+sprite_frames = ExtResource("2_airu5")
+metadata/_custom_type_script = "uid://bewq3fbkpsbt7"

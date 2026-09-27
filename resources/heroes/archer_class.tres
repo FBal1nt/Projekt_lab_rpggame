@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://c0n8ixafdrpcq"]
+
+[ext_resource type="PackedScene" uid="uid://b2rb3eieyvbkx" path="res://scenes/arrow.tscn" id="1_x6iag"]
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="2_kjvre"]
+[ext_resource type="SpriteFrames" uid="uid://c18t121ymvjp4" path="res://resources/heroes/archer_frames.tres" id="3_jk4ns"]
+
+[resource]
+script = ExtResource("2_kjvre")
+class_name_id = "Archer"
+max_hp = 85
+base_damage = 15
+initiative = 14
+move_duration = 0.13
+is_ranged = true
+attack_range = 5
+projectile_scene = ExtResource("1_x6iag")
+release_frame = 7
+sprite_frames = ExtResource("3_jk4ns")
+metadata/_custom_type_script = "uid://bewq3fbkpsbt7"

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://tjop60ao78bn"]
+
+[ext_resource type="Script" uid="uid://ktub1p3dstr0" path="res://scripts/wizard_spell.gd" id="1_3bqq0"]
+[ext_resource type="SpriteFrames" uid="uid://b44csflsryk0f" path="res://resources/wizard_spell.tres" id="1_6yv32"]
+
+[node name="WizardSpell" type="Node2D" unique_id=631529737]
+script = ExtResource("1_3bqq0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=615361163]
+sprite_frames = ExtResource("1_6yv32")
+animation = &"ice"
