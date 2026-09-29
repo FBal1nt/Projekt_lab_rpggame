@@ -21,3 +21,21 @@ func _ready() -> void:
 	stash = Inventory.new()
 	stash.width = 10
 	stash.height = 5
+	
+	setup_starting_inventory()
+
+
+func setup_starting_inventory() -> void:
+	var sword: ItemData = load("res://Data/Items/iron_sword.tres")
+	var potion: ItemData = load("res://Data/Items/health_potion.tres")
+
+	backpack.add_item(
+		sword,
+		Vector2i(0, 0)
+	)
+
+	backpack.add_item(
+		potion,
+		Vector2i(2, 0),
+		3
+	)

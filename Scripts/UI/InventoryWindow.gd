@@ -12,8 +12,5 @@ func _ready() -> void:
 	backpack_grid.set_inventory(GameState.backpack)
 	stash_grid.set_inventory(GameState.stash)
 
-	close_button.pressed.connect(_on_close_button_pressed)
-
-
 func _on_close_button_pressed() -> void:
 	hide()
