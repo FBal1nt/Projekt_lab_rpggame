@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cj1b02yc8xld4"]
 
 [ext_resource type="Script" uid="uid://4qjcof5xncfd" path="res://Scripts/Data/ItemData.gd" id="1_4n0t4"]
+[ext_resource type="Texture2D" uid="uid://dvmuc81y6xe86" path="res://Arts/Items/Consumables/health_potion.png" id="1_pnwwy"]
 
 [resource]
 script = ExtResource("1_4n0t4")
 id = &"health_potion"
 display_name = "Health Potion"
 description = "Restores health."
+icon = ExtResource("1_pnwwy")
 max_stack = 5
 buy_price = 50
 sell_price = 25

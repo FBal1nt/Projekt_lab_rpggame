@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bj2jwehnlcbfk"]
 
 [ext_resource type="Script" uid="uid://bwegda1m08hf8" path="res://Scripts/UI/lobby.gd" id="1_a15b7"]
+[ext_resource type="PackedScene" uid="uid://tyslssobm4ap" path="res://Scenes/Shop/ShopWindow.tscn" id="2_q0a3m"]
 [ext_resource type="PackedScene" uid="uid://dbbx8xkxlo7eh" path="res://Scenes/Inventory/InventoryWindow.tscn" id="2_t6nvb"]
 
 [node name="Lobby" type="Control" unique_id=1294276721]
@@ -105,36 +106,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ShopWindow" type="Panel" parent="UI/WindowLayer" unique_id=1072471645]
+[node name="ShopWindow" parent="UI/WindowLayer" unique_id=1915880606 instance=ExtResource("2_q0a3m")]
 visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Title" type="Label" parent="UI/WindowLayer/ShopWindow" unique_id=531918893]
 layout_mode = 0
-offset_left = 250.0
-offset_top = 100.0
-offset_right = 291.0
-offset_bottom = 123.0
-text = "BOLT"
-
-[node name="CloseButton" type="Button" parent="UI/WindowLayer/ShopWindow" unique_id=1212834348]
-layout_mode = 0
-offset_left = 250.0
-offset_top = 300.0
-offset_right = 319.0
-offset_bottom = 331.0
-text = "Bezárás"
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 258.0
+offset_top = 134.0
+offset_right = 858.0
+offset_bottom = 534.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="CharacterWindow" type="Panel" parent="UI/WindowLayer" unique_id=152919397]
 visible = false
@@ -261,6 +244,7 @@ offset_bottom = 331.0
 text = "Bezárás"
 
 [node name="InventoryWindow" parent="UI/WindowLayer" unique_id=524928531 instance=ExtResource("2_t6nvb")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -278,7 +262,6 @@ offset_bottom = 209.0
 [connection signal="pressed" from="Buildings/WizardBuilding" to="." method="_on_wizard_building_pressed"]
 [connection signal="pressed" from="Buildings/DungeonBuilding" to="." method="_on_dungeon_building_pressed"]
 [connection signal="pressed" from="Buildings/InventoryBuilding" to="." method="_on_inventory_building_pressed"]
-[connection signal="pressed" from="UI/WindowLayer/ShopWindow/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="UI/WindowLayer/CharacterWindow/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="UI/WindowLayer/BlacksmithWindow/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="UI/WindowLayer/WizardWindow/CloseButton" to="." method="_on_close_button_pressed"]

@@ -136,24 +136,38 @@ func create_item_visual(inventory_item: InventoryItem) -> void:
 		item_size.y * cell_size - 4
 	)
 
-	item_panel.tooltip_text = inventory_item.item_data.description
+	item_panel.tooltip_text = (
+		inventory_item.item_data.display_name
+		+ "\n\n"
+		+ inventory_item.item_data.description
+	)
 
 	add_child(item_panel)
 
 	item_visuals[inventory_item] = item_panel
 
-	var label := Label.new()
+	var icon := TextureRect.new()
 
-	label.text = inventory_item.item_data.display_name
+	icon.texture = inventory_item.item_data.icon
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
+	item_panel.add_child(icon)
+	
 	if inventory_item.amount > 1:
-		label.text += "\nx" + str(inventory_item.amount)
+		var amount_label := Label.new()
 
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		amount_label.text = str(inventory_item.amount)
 
-	item_panel.add_child(label)
+		amount_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		amount_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+
+		amount_label.set_anchors_and_offsets_preset(
+			Control.PRESET_FULL_RECT
+		)
+
+		item_panel.add_child(amount_label)
 
 func select_item(item: InventoryItem) -> void:
 	selected_item = item
@@ -190,13 +204,41 @@ func _gui_input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		handle_mouse_motion(event)
 
-func try_move_selected_item(target_cell: Vector2i) -> void:
+func try_place_selected_item(target_cell: Vector2i) -> void:
 	if inventory == null:
 		return
 
 	if selected_item == null:
 		return
 
+	var target_item := inventory.get_item_at_cell(
+		target_cell,
+		selected_item
+	)
+
+	# Azonos item → stackelési kísérlet.
+	if target_item != null:
+		if inventory.can_stack(selected_item, target_item):
+			inventory.merge_items(
+				selected_item,
+				target_item
+			)
+
+			selected_item = null
+			preview_cell = Vector2i(-1, -1)
+			placement_preview.hide()
+			return
+
+		# Másik item vagy megtelt stack → nincs mozgatás.
+		print(
+			"Cannot place ",
+			selected_item.item_data.display_name,
+			" here."
+		)
+
+		return
+
+	# Üres cella → normális mozgatás.
 	var moved := inventory.move_item(
 		selected_item,
 		target_cell
@@ -215,9 +257,9 @@ func try_move_selected_item(target_cell: Vector2i) -> void:
 		placement_preview.hide()
 	else:
 		print(
-			"Cannot move ",
+			"Cannot place ",
 			selected_item.item_data.display_name,
-			" to ",
+			" at ",
 			target_cell
 		)
 
@@ -266,31 +308,55 @@ func update_placement_preview(target_cell: Vector2i) -> void:
 
 	var item_size := selected_item.item_data.size
 
+	var target_item := inventory.get_item_at_cell(
+		target_cell,
+		selected_item
+	)
+
 	var can_place := inventory.can_place_item(
 		selected_item.item_data,
 		target_cell,
 		selected_item
 	)
 
+	var can_stack := false
+
+	if target_item != null:
+		can_stack = inventory.can_stack(
+			selected_item,
+			target_item
+		)
+
+	var preview_position := target_cell
+	var preview_size := item_size
+
+	# Ha stackelhető célpontra mutatunk,
+	# akkor ez is érvényes elhelyezési lehetőség.
+	if can_stack:
+		preview_position = target_item.position
+		preview_size = target_item.item_data.size
+
+	var placement_is_valid := can_place or can_stack
+
 	placement_preview.position = Vector2(
-		target_cell.x * cell_size + 2,
-		target_cell.y * cell_size + 2
+		preview_position.x * cell_size + 2,
+		preview_position.y * cell_size + 2
 	)
 
 	placement_preview.size = Vector2(
-		item_size.x * cell_size - 4,
-		item_size.y * cell_size - 4
+		preview_size.x * cell_size - 4,
+		preview_size.y * cell_size - 4
 	)
 
 	placement_preview.add_theme_stylebox_override(
 		"panel",
-		create_preview_style(can_place)
+		create_preview_style(placement_is_valid)
 	)
 
 	placement_preview.show()
 
 func create_preview_style(can_place: bool) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
+	var style = StyleBoxFlat.new()
 
 	if can_place:
 		style.bg_color = Color(0.2, 0.8, 0.2, 0.25)
@@ -311,7 +377,7 @@ func handle_item_click(clicked_item: InventoryItem) -> void:
 	if selected_item == clicked_item:
 		return
 
-	try_move_selected_item(clicked_item.position)
+	try_place_selected_item(clicked_item.position)
 
 func handle_mouse_button(event: InputEventMouseButton) -> void:
 	if event.button_index != MOUSE_BUTTON_LEFT:
@@ -344,7 +410,7 @@ func handle_left_mouse_press(cell: Vector2i, mouse_position: Vector2) -> void:
 	# Ha másik itemre kattintunk, megpróbáljuk oda áttenni
 	# a jelenleg kijelölt itemet.
 	if clicked_item != null and clicked_item != selected_item:
-		try_move_selected_item(clicked_item.position)
+		try_place_selected_item(clicked_item.position)
 		return
 
 	# Ha ugyanarra az itemre kattintunk, kezdődhet a drag.
@@ -355,7 +421,7 @@ func handle_left_mouse_press(cell: Vector2i, mouse_position: Vector2) -> void:
 		return
 
 	# Üres cella → a kétkattintásos mozgatás továbbra is működik.
-	try_move_selected_item(cell)
+	try_place_selected_item(cell)
 
 
 func handle_mouse_motion(event: InputEventMouseMotion) -> void:
@@ -402,39 +468,36 @@ func handle_left_mouse_release(cell: Vector2i) -> void:
 
 	var target_cell := cell - drag_offset
 
-	var moved := inventory.move_item(
-		dragging_item,
-		target_cell
-	)
+	var item_before := dragging_item
 
-	var visual: Control = item_visuals.get(dragging_item)
+	try_place_selected_item(target_cell)
+
+	var visual: Control = item_visuals.get(item_before)
 
 	if visual != null:
 		visual.z_index = 0
 
-	if moved:
-		print(
-			"Dragged ",
-			dragging_item.item_data.display_name,
-			" to ",
-			target_cell
-		)
-	else:
-		print(
-			"Cannot place ",
-			dragging_item.item_data.display_name,
-			" at ",
-			target_cell
-		)
-	if not moved:
-		refresh()
+	# Ha nem sikerült elhelyezni, állítsuk vissza a vizuális helyzetet.
+	if items_visual_still_exists(item_before):
+		var current_visual: Control = item_visuals.get(item_before)
 
-	selected_item = null
+		if current_visual != null:
+			current_visual.position = Vector2(
+				item_before.position.x * cell_size + 2,
+				item_before.position.y * cell_size + 2
+			)
+
 	drag_candidate = null
 	dragging_item = null
 
 	preview_cell = Vector2i(-1, -1)
 	placement_preview.hide()
+
+func items_visual_still_exists(item: InventoryItem) -> bool:
+	if inventory == null:
+		return false
+
+	return inventory.items.has(item)
 
 func update_drag_visual(mouse_position: Vector2) -> void:
 	if dragging_item == null:
