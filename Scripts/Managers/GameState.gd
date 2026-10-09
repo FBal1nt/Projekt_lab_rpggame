@@ -26,8 +26,8 @@ func _ready() -> void:
 
 
 func setup_starting_inventory() -> void:
-	var sword: ItemData = load("res://data/items/iron_sword.tres")
-	var potion: ItemData = load("res://data/items/health_potion.tres")
+	var sword: ItemData = load("res://Data/Items/iron_sword.tres")
+	var potion: ItemData = load("res://Data/Items/health_potion.tres")
 
 	backpack.add_item(
 		sword,
@@ -50,6 +50,9 @@ func buy_item(
 	item_data: ItemData,
 	amount: int = 1
 ) -> bool:
+	if item_data == null or amount <= 0 or item_data.buy_price < 0:
+		return false
+
 	var total_price := item_data.buy_price * amount
 
 	if gold < total_price:

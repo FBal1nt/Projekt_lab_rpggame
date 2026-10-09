@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bwegda1m08hf8" path="res://Scripts/UI/lobby.gd" id="1_a15b7"]
 [ext_resource type="PackedScene" uid="uid://tyslssobm4ap" path="res://Scenes/Shop/ShopWindow.tscn" id="2_q0a3m"]
 [ext_resource type="PackedScene" uid="uid://dbbx8xkxlo7eh" path="res://Scenes/Inventory/InventoryWindow.tscn" id="2_t6nvb"]
+[ext_resource type="Texture2D" path="res://Arts/UI/lobby_background.png" id="3_background"]
 
 [node name="Lobby" type="Control" unique_id=1294276721]
 layout_mode = 3
@@ -21,6 +22,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("3_background")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Buildings" type="Control" parent="." unique_id=935053470]
 layout_mode = 1
@@ -82,8 +86,11 @@ text = "INVENTORY"
 [node name="UI" type="CanvasLayer" parent="." unique_id=1488900799]
 
 [node name="TopBar" type="PanelContainer" parent="UI" unique_id=1117863535]
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 0.0
+offset_bottom = 70.0
 
 [node name="Container" type="HBoxContainer" parent="UI/TopBar" unique_id=1930533876]
 layout_mode = 2

@@ -12,7 +12,7 @@ const SHOP_ITEM_ROW_SCENE = preload(
 
 @onready var sell_list: VBoxContainer = $MarginContainer/VBoxContainer/Content/SellPanel/VBoxContainer/SellScroll/SellList
 
-@onready var close_button: Button = $MarginContainer/VBoxContainer/CloseButton
+@onready var close_button: Button = $MarginContainer/VBoxContainer/CloseCenter/CloseButton
 
 
 var shop_items: Array[ItemData] = [
@@ -22,8 +22,8 @@ var shop_items: Array[ItemData] = [
 
 
 func _ready() -> void:
-	GameState.state_changed.connect(refresh)
-	GameState.backpack.inventory_changed.connect(refresh)
+	if not GameState.state_changed.is_connected(refresh):
+		GameState.state_changed.connect(refresh)
 
 	refresh()
 
@@ -42,7 +42,6 @@ func refresh_buy_list() -> void:
 	for child in buy_list.get_children():
 		child.queue_free()
 
-	print("BUY LIST: ", shop_items.size())
 
 	for item_data in shop_items:
 		var row = SHOP_ITEM_ROW_SCENE.instantiate()
@@ -62,7 +61,6 @@ func refresh_sell_list() -> void:
 	for child in sell_list.get_children():
 		child.queue_free()
 
-	print("SELL LIST: ", GameState.backpack.items.size())
 
 	for inventory_item in GameState.backpack.items:
 		var row = SHOP_ITEM_ROW_SCENE.instantiate()

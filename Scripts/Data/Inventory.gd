@@ -66,6 +66,9 @@ func add_item(
 	amount: int = 1,
 	emit_change: bool = true
 ) -> InventoryItem:
+	if item_data == null or amount <= 0:
+		return null
+
 	if not can_place_item(item_data, position):
 		return null
 
@@ -173,6 +176,9 @@ func try_add_item(
 	item_data: ItemData,
 	amount: int = 1
 ) -> int:
+	if item_data == null or amount <= 0:
+		return max(amount, 0)
+
 	var remaining := amount
 
 	# 1. Először töltsük fel a már meglévő stackeket.
@@ -213,7 +219,8 @@ func try_add_item(
 		var new_item = add_item(
 			item_data,
 			position,
-			stack_amount
+			stack_amount,
+			false
 		)
 
 		if new_item == null:

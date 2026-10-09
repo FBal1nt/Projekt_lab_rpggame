@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#101a35"/><stop offset=".42" stop-color="#344c65"/><stop offset=".72" stop-color="#bf825d"/><stop offset="1" stop-color="#edba7a"/></linearGradient>
+  <radialGradient id="glow"><stop stop-color="#ffe1a0" stop-opacity=".9"/><stop offset="1" stop-color="#f9b66a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="farMountain" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#485a78"/><stop offset="1" stop-color="#27364d"/></linearGradient>
+  <linearGradient id="nearMountain" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#384b59"/><stop offset="1" stop-color="#172d36"/></linearGradient>
+  <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4d6b50"/><stop offset="1" stop-color="#172f2d"/></linearGradient>
+  <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9b8b76"/><stop offset="1" stop-color="#4b4b4b"/></linearGradient>
+  <linearGradient id="roof" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#ad6954"/><stop offset="1" stop-color="#522f37"/></linearGradient>
+  <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8b6042"/><stop offset="1" stop-color="#3d302a"/></linearGradient>
+  <linearGradient id="road" x1="0" y1="0" x2="0.6" y2="1"><stop stop-color="#a99a82"/><stop offset="1" stop-color="#5e594d"/></linearGradient>
+  <linearGradient id="windowGlow" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0a8"/><stop offset="1" stop-color="#df8e3c"/></linearGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="26"/></filter>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="9"/><feOffset dy="10"/><feComponentTransfer><feFuncA type="linear" slope=".45"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <g id="pine"><path d="M0 0 L-54 93 L-24 93 L-76 164 L-32 164 L-91 244 L91 244 L32 164 L76 164 L24 93 L54 93 Z" fill="#132a2b"/><path d="M0 14 L-37 91 L-15 91 L-56 158 L-26 158 L-70 223 L0 214 Z" fill="#25453b" opacity=".65"/></g>
+  <g id="window"><rect width="31" height="52" rx="4" fill="#221f29" stroke="#332c2b" stroke-width="5"/><rect x="5" y="5" width="21" height="42" rx="2" fill="url(#windowGlow)"/><path d="M15 5 V47 M5 26 H26" stroke="#714b32" stroke-width="3"/></g>
+  <g id="smallHouse"><path d="M0 66 L95 0 L195 66 V190 H0 Z" fill="url(#stone)" stroke="#3b3032" stroke-width="9"/><path d="M-13 69 L95 -9 L207 69 L194 80 L95 17 L0 80 Z" fill="url(#roof)" stroke="#382a31" stroke-width="9"/><path d="M20 82 V177 M171 82 V177" stroke="#3d2d2a" stroke-width="10"/><rect x="76" y="112" width="40" height="78" rx="18" fill="#352b2d"/><rect x="83" y="119" width="26" height="65" rx="13" fill="#d98d43" opacity=".55"/><use href="#window" x="24" y="94"/><use href="#window" x="137" y="94"/></g>
+</defs>
+<rect width="1920" height="1080" fill="url(#sky)"/>
+<ellipse cx="1040" cy="445" rx="390" ry="260" fill="url(#glow)" opacity=".65"/>
+<circle cx="1060" cy="382" r="74" fill="#ffdc9a" opacity=".85"/>
+<g fill="#f2cf9d" opacity=".12"><ellipse cx="360" cy="250" rx="220" ry="50"/><ellipse cx="1420" cy="280" rx="260" ry="42"/><ellipse cx="750" cy="315" rx="290" ry="55"/></g>
+<!-- distant mountain skyline -->
+<path d="M0 565 L120 420 L210 475 L367 292 L491 470 L608 350 L738 500 L900 280 L1048 450 L1190 300 L1341 470 L1483 345 L1644 480 L1786 370 L1920 480 V770 H0Z" fill="url(#farMountain)"/>
+<path d="M235 435 L367 292 L427 379 L383 362 L359 390 L325 365 Z M820 374 L900 280 L958 365 L919 346 L899 367 L872 350 Z M1121 368 L1190 300 L1242 375 L1206 353 L1188 370 L1160 354 Z M1417 411 L1483 345 L1546 410 L1504 389 L1484 403 L1460 388 Z" fill="#c1c4bc" opacity=".62"/>
+<path d="M0 620 L170 496 L282 554 L480 415 L590 558 L745 432 L906 594 L1085 430 L1242 565 L1414 430 L1577 566 L1715 470 L1920 575 V810 H0Z" fill="url(#nearMountain)"/>
+<!-- pine forest on the horizon -->
+<g opacity=".95">
+ <use href="#pine" transform="translate(40 500) scale(.9)"/><use href="#pine" transform="translate(132 490) scale(.72)"/><use href="#pine" transform="translate(250 520) scale(.85)"/>
+ <use href="#pine" transform="translate(1480 510) scale(.82)"/><use href="#pine" transform="translate(1600 490) scale(.93)"/><use href="#pine" transform="translate(1740 515) scale(.7)"/><use href="#pine" transform="translate(1850 505) scale(.9)"/>
+</g>
+<!-- distant river -->
+<path d="M1060 578 C985 641 1067 680 1005 728 C951 778 1001 835 891 910 L1322 1080 L1597 1080 C1457 930 1353 857 1298 786 C1245 714 1180 672 1200 620 Z" fill="#315c68" opacity=".88"/>
+<path d="M1123 590 C1067 653 1134 690 1069 740 C1025 782 1073 838 965 922" fill="none" stroke="#9bd0c2" stroke-width="10" opacity=".35"/>
+<!-- rolling green land -->
+<path d="M0 665 C240 616 355 675 548 638 C745 600 839 684 1038 641 C1243 596 1444 669 1596 626 C1732 589 1846 640 1920 625 V1080 H0Z" fill="url(#grass)"/>
+<path d="M0 770 C260 710 420 776 618 720 S1007 765 1209 711 S1616 741 1920 692 V1080 H0Z" fill="#254335" opacity=".92"/>
+<!-- town wall -->
+<path d="M120 626 L180 565 L260 575 L320 535 L415 550 L462 600 L462 720 L120 746Z" fill="#66635a" stroke="#343a39" stroke-width="12"/>
+<path d="M136 615 L180 565 L204 575 L204 620 L245 618 L245 578 L282 582 L282 624 L324 617 L324 548 L354 554 L354 611 L400 602 L400 563 L434 572 L449 612" fill="none" stroke="#aaa08a" stroke-width="14"/>
+<!-- wizard tower -->
+<g filter="url(#shadow)">
+ <path d="M533 566 L542 380 L593 335 L644 380 L655 566 Z" fill="#6e7775" stroke="#333940" stroke-width="10"/>
+ <path d="M525 386 L593 294 L663 386 L645 394 L593 328 L545 394 Z" fill="#303448" stroke="#1a2131" stroke-width="10"/>
+ <path d="M574 374 V337 L592 306 L611 337 V374Z" fill="#7a7d81"/>
+ <rect x="565" y="428" width="25" height="48" rx="12" fill="#ffdc8e"/><rect x="606" y="428" width="25" height="48" rx="12" fill="#ffdc8e"/>
+ <path d="M567 500 Q593 468 620 500 V566 H567Z" fill="#29303b" stroke="#41434a" stroke-width="7"/>
+ <path d="M550 408 L638 408 M548 520 L641 520" stroke="#96998e" stroke-width="7" opacity=".65"/>
+</g>
+<!-- central guild hall -->
+<g filter="url(#shadow)">
+ <path d="M727 515 L743 390 L826 338 L911 390 L928 515 Z" fill="#a89a81" stroke="#35343a" stroke-width="12"/>
+ <path d="M714 398 L826 305 L940 398 L918 414 L826 340 L737 414Z" fill="url(#roof)" stroke="#372b30" stroke-width="12"/>
+ <path d="M779 383 V347 L826 312 L873 347 V383Z" fill="#47363c"/>
+ <rect x="765" y="421" width="34" height="54" rx="3" fill="url(#windowGlow)" stroke="#473832" stroke-width="6"/>
+ <rect x="853" y="421" width="34" height="54" rx="3" fill="url(#windowGlow)" stroke="#473832" stroke-width="6"/>
+ <path d="M800 515 V460 Q826 432 852 460 V515Z" fill="#342a31" stroke="#55463b" stroke-width="6"/>
+ <path d="M826 464 V514" stroke="#c18a4e" stroke-width="4"/>
+ <path d="M744 492 H911" stroke="#c2ad8e" stroke-width="7" opacity=".7"/>
+</g>
+<!-- shop / tavern left -->
+<g transform="translate(190 470) scale(1.1)" filter="url(#shadow)">
+ <use href="#smallHouse"/>
+ <path d="M-10 84 H206" stroke="#322d30" stroke-width="12"/>
+ <path d="M5 83 L27 63 H168 L190 83 Z" fill="#d2b276" stroke="#423034" stroke-width="7"/>
+ <path d="M27 65 V83 M62 65 V83 M97 65 V83 M132 65 V83 M167 65 V83" stroke="#8c4c3e" stroke-width="18"/>
+ <rect x="49" y="132" width="98" height="42" rx="5" fill="#3c2e27" stroke="#c4a16a" stroke-width="5"/><path d="M59 143 H137" stroke="#d8b67c" stroke-width="4"/>
+</g>
+<!-- blacksmith right -->
+<g transform="translate(1110 455) scale(1.08)" filter="url(#shadow)">
+ <use href="#smallHouse"/>
+ <path d="M27 63 L27 25 L52 25 L52 48 L67 48 L67 7 L92 7 L92 49" fill="#3d3c3c" stroke="#282d31" stroke-width="9"/>
+ <path d="M69 21 C55 -4 75 -18 92 5 C111 18 99 33 87 34Z" fill="#f19b45" opacity=".8"/>
+ <path d="M60 95 H140 V115 H60Z" fill="#332b2b" stroke="#c28a53" stroke-width="5"/>
+ <path d="M70 101 L132 101" stroke="#ffb65c" stroke-width="7"/>
+</g>
+<!-- dungeon / cave right foreground -->
+<g filter="url(#shadow)">
+ <path d="M1375 748 L1352 665 L1384 621 L1420 597 L1465 599 L1505 634 L1535 690 L1524 775Z" fill="#555652" stroke="#30383a" stroke-width="13"/>
+ <path d="M1386 738 Q1390 631 1446 629 Q1503 633 1510 738Z" fill="#151d2b" stroke="#8b8c7f" stroke-width="10"/>
+ <path d="M1413 738 L1428 686 L1445 657 L1463 687 L1481 738Z" fill="#3d6270" opacity=".9"/>
+ <path d="M1446 661 L1446 725" stroke="#a4e4dc" stroke-width="6" opacity=".9"/>
+ <circle cx="1446" cy="668" r="42" fill="#77c5c0" opacity=".12"/>
+ <path d="M1399 745 H1495" stroke="#b0a18b" stroke-width="9"/>
+</g>
+<!-- winding stone path -->
+<path d="M785 1080 C818 973 856 922 907 853 C968 772 972 721 930 674 C900 640 857 630 829 607 L896 604 C968 635 1034 689 1017 746 C1000 817 941 880 927 934 C913 996 941 1033 966 1080Z" fill="url(#road)"/>
+<path d="M828 1080 C862 980 889 928 935 863 C987 788 997 734 957 689" fill="none" stroke="#d4c2a2" stroke-width="8" opacity=".3"/>
+<g fill="#c0ae92" opacity=".35"><ellipse cx="836" cy="944" rx="28" ry="10" transform="rotate(-48 836 944)"/><ellipse cx="895" cy="861" rx="23" ry="8" transform="rotate(-50 895 861)"/><ellipse cx="951" cy="770" rx="22" ry="8" transform="rotate(-20 951 770)"/><ellipse cx="918" cy="690" rx="18" ry="8" transform="rotate(26 918 690)"/></g>
+<!-- foreground cottages -->
+<g transform="translate(55 700) scale(.86)" opacity=".98"><use href="#smallHouse"/><path d="M-10 70 L95 5 L203 70" fill="none" stroke="#c18c61" stroke-width="9"/></g>
+<g transform="translate(1630 680) scale(.94)" opacity=".96"><use href="#smallHouse"/><path d="M-10 70 L95 5 L203 70" fill="none" stroke="#c18c61" stroke-width="9"/></g>
+<!-- foreground foliage -->
+<g opacity=".98"><use href="#pine" transform="translate(40 770) scale(1.25)"/><use href="#pine" transform="translate(180 835) scale(1.5)"/><use href="#pine" transform="translate(320 875) scale(1.15)"/><use href="#pine" transform="translate(1810 795) scale(1.25)"/><use href="#pine" transform="translate(1670 865) scale(1.15)"/></g>
+<g fill="#d5b86f" opacity=".7"><circle cx="95" cy="935" r="5"/><circle cx="128" cy="955" r="4"/><circle cx="1670" cy="932" r="5"/><circle cx="1712" cy="954" r="4"/><circle cx="1560" cy="882" r="4"/><circle cx="420" cy="956" r="4"/></g>
+<!-- cinematic edge shade -->
+<rect width="1920" height="1080" fill="none" stroke="#0a1120" stroke-width="34"/>
+<rect width="1920" height="1080" fill="#06101c" opacity=".12"/>
+</svg>

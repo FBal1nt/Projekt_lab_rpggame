@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dj1xsf57w6sbd"]
 
-[ext_resource type="Script" uid="uid://c6cqjvi61acb6" path="res://Scripts/UI/main_menu.gd" id="1_a2ivp"]
+[ext_resource type="Script" uid="uid://c6cqjvi61acb6" path="res://Scripts/UI/main_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://coajw5t3gf612" path="res://Arts/UI/lobby_background.png" id="2_background"]
 
 [node name="MainMenu" type="Control" unique_id=844555518]
 layout_mode = 3
@@ -9,22 +10,98 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_a2ivp")
+script = ExtResource("1_script")
 
-[node name="Title" type="Label" parent="." unique_id=2069315836]
-layout_mode = 0
-offset_left = 523.0
-offset_top = 136.0
-offset_right = 602.0
-offset_bottom = 159.0
-text = "RPG game"
+[node name="Background" type="TextureRect" parent="." unique_id=2069315836]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="StartButton" type="Button" parent="." unique_id=2022940165]
-layout_mode = 0
-offset_left = 504.0
-offset_top = 256.0
-offset_right = 617.0
-offset_bottom = 287.0
+[node name="Overlay" type="ColorRect" parent="." unique_id=800103001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0156863, 0.0313726, 0.0627451, 0.48)
+
+[node name="MenuPanel" type="PanelContainer" parent="." unique_id=900200301]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.055
+anchor_top = 0.105
+anchor_right = 0.405
+anchor_bottom = 0.895
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuPanel" unique_id=900200302]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="MenuVBox" type="VBoxContainer" parent="MenuPanel/MarginContainer" unique_id=900200303]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200304]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "RPG KALANDOK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200305]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "A TE TÖRTÉNETED ITT KEZDŐDIK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" type="HSeparator" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200306]
+layout_mode = 2
+
+[node name="TopSpacer" type="Control" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200307]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=2022940165]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
 text = "Játék indítása"
 
-[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[node name="SettingsButton" type="Button" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200308]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+text = "Beállítások"
+
+[node name="ExitButton" type="Button" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200309]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+text = "Kilépés"
+
+[node name="BottomSpacer" type="Control" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200310]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VersionLabel" type="Label" parent="MenuPanel/MarginContainer/MenuVBox" unique_id=900200311]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "PROTOTÍPUS • 0.1.0"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="MenuPanel/MarginContainer/MenuVBox/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="MenuPanel/MarginContainer/MenuVBox/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MenuPanel/MarginContainer/MenuVBox/ExitButton" to="." method="_on_exit_button_pressed"]
