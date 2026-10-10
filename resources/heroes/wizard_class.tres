@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://bcwire0gd5ndr"]
 
-[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_t3klc"]
-[ext_resource type="PackedScene" uid="uid://tjop60ao78bn" path="res://scenes/wizard_spell.tscn" id="1_wyu87"]
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/Player/character_class.gd" id="1_t3klc"]
+[ext_resource type="PackedScene" uid="uid://tjop60ao78bn" path="res://scenes/Projectiles/wizard_spell.tscn" id="1_wyu87"]
 [ext_resource type="SpriteFrames" uid="uid://b1a8aph4sjuaf" path="res://resources/heroes/wizard_frames.tres" id="3_g82w1"]
 
 [resource]

@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://bu35svkkyd021"]
 
-[ext_resource type="Script" uid="uid://bjn17co80q44d" path="res://scripts/MapGenerator.gd" id="1_elqb8"]
-[ext_resource type="PackedScene" uid="uid://dscjbrnyg4cnt" path="res://scenes/player.tscn" id="1_q8u5g"]
-[ext_resource type="Script" uid="uid://h2s735pkiobj" path="res://scripts/fog_of_war.gd" id="2_0bbpv"]
+[ext_resource type="Script" uid="uid://bjn17co80q44d" path="res://scripts/World/MapGenerator.gd" id="1_elqb8"]
+[ext_resource type="PackedScene" uid="uid://dscjbrnyg4cnt" path="res://scenes/Player/player.tscn" id="1_q8u5g"]
+[ext_resource type="Script" uid="uid://h2s735pkiobj" path="res://scripts/World/fog_of_war.gd" id="2_0bbpv"]
 [ext_resource type="PackedScene" uid="uid://ckjoiicio0un2" path="res://scenes/Rooms/Start_room.tscn" id="2_rvslj"]
 [ext_resource type="PackedScene" uid="uid://du8qgs7ostht7" path="res://scenes/Rooms/bal_jobb_folyoso.tscn" id="3_nxtc6"]
 [ext_resource type="PackedScene" uid="uid://ex8y0fu2hq5m" path="res://scenes/Rooms/fent_lent_folyoso.tscn" id="4_jlsqs"]
 [ext_resource type="PackedScene" uid="uid://bjln4u6ica7hn" path="res://scenes/Rooms/L_also_jobb.tscn" id="5_q8u5g"]
 [ext_resource type="PackedScene" uid="uid://c6et03m7m843p" path="res://scenes/Rooms/L_felso_bal.tscn" id="6_lhr70"]
 [ext_resource type="PackedScene" uid="uid://6cm8qjk3jic2" path="res://scenes/Rooms/Negy_iranyu_szoba.tscn" id="7_wp0k4"]
-[ext_resource type="PackedScene" uid="uid://c645dfdo7w2qv" path="res://scenes/battle_dialog.tscn" id="10_lhr70"]
-[ext_resource type="PackedScene" uid="uid://caf7n1p6wvnpn" path="res://scenes/hud.tscn" id="10_wp0k4"]
+[ext_resource type="PackedScene" uid="uid://c645dfdo7w2qv" path="res://scenes/UI/battle_dialog.tscn" id="10_lhr70"]
+[ext_resource type="PackedScene" uid="uid://caf7n1p6wvnpn" path="res://scenes/UI/hud.tscn" id="10_wp0k4"]
 
 [node name="Main" type="Node2D" unique_id=221779206]
 

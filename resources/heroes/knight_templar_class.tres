@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://cvhn77pr5csyc"]
 
-[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_hn4m7"]
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/Player/character_class.gd" id="1_hn4m7"]
 [ext_resource type="SpriteFrames" uid="uid://fq7uv5nnq4vj" path="res://resources/heroes/knight_templar_frames.tres" id="2_qurvj"]
 
 [resource]

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dscjbrnyg4cnt"]
+
+[ext_resource type="Script" uid="uid://bwpum47fhfrax" path="res://scripts/Player/HeroController.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://x6e1ci7n7u21" path="res://scripts/Player/hero_visuals.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/Player/character_class.gd" id="2_qlg0r"]
+[ext_resource type="Script" uid="uid://d1pyivisar2jd" path="res://scripts/Player/hero_mover.gd" id="3_qlg0r"]
+[ext_resource type="Resource" uid="uid://c0n8ixafdrpcq" path="res://resources/heroes/archer_class.tres" id="3_tuyoq"]
+[ext_resource type="Resource" uid="uid://4slxp47x5vsl" path="res://resources/heroes/knight_class.tres" id="4_fjrip"]
+[ext_resource type="Script" uid="uid://duwxr2ul5bd7h" path="res://scripts/Player/hero_combat.gd" id="4_tuyoq"]
+[ext_resource type="Script" uid="uid://cgfq55ag41sen" path="res://scripts/Player/hero_progression.gd" id="5_fjrip"]
+[ext_resource type="Resource" uid="uid://v0mhclqh6gts" path="res://resources/heroes/priest_class.tres" id="7_smehm"]
+[ext_resource type="Resource" uid="uid://bg2m7h8jugg76" path="res://resources/heroes/soldier_class.tres" id="8_y4r1p"]
+[ext_resource type="Resource" uid="uid://bpdtmk7mp61y6" path="res://resources/heroes/swordsman_class.tres" id="9_d2wvv"]
+[ext_resource type="Resource" uid="uid://cvhn77pr5csyc" path="res://resources/heroes/knight_templar_class.tres" id="9_jej6c"]
+[ext_resource type="Resource" uid="uid://bcwire0gd5ndr" path="res://resources/heroes/wizard_class.tres" id="10_3v2ag"]
+
+[node name="Player" type="Node2D" unique_id=5222753]
+script = ExtResource("1_3vyb7")
+
+[node name="Visuals" type="AnimatedSprite2D" parent="." unique_id=813379180]
+offset = Vector2(-6, -6)
+script = ExtResource("2_g2els")
+
+[node name="Mover" type="Node" parent="." unique_id=463877498]
+script = ExtResource("3_qlg0r")
+
+[node name="Combat" type="Node" parent="." unique_id=687862021]
+script = ExtResource("4_tuyoq")
+
+[node name="Progression" type="Node" parent="." unique_id=285262472]
+script = ExtResource("5_fjrip")
+available_classes = Array[ExtResource("2_qlg0r")]([ExtResource("3_tuyoq"), ExtResource("4_fjrip"), ExtResource("9_jej6c"), ExtResource("7_smehm"), ExtResource("8_y4r1p"), ExtResource("9_d2wvv"), ExtResource("10_3v2ag")])
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1301946732]
+zoom = Vector2(4, 4)

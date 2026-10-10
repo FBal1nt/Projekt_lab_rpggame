@@ -1,31 +1,20 @@
 extends Camera2D
 
-var speed = 900 # A kamera mozgási sebessége
+@export var min_zoom: Vector2 = Vector2(0.5, 0.5)
+@export var max_zoom: Vector2 = Vector2(2.5, 2.5)
+@export var zoom_step: Vector2 = Vector2(0.1, 0.1)
 
-func _ready():
-	# Kódmal kényszerítjük, hogy ez legyen az aktív kamera
+func _ready() -> void:
 	enabled = true
-	print("Kamera elindult és aktív!")
+	# Bekapcsoljuk a Godot beépített simított követését:
+	position_smoothing_enabled = true
+	position_smoothing_speed = 8.0
+	# Biztosítjuk, hogy pontosan a játékos közepén álljon:
+	position = Vector2.ZERO
 
-func _process(delta):
-	var input_dir = Vector2.ZERO
-	
-	# Nyilak és WASD is figyelése a biztonság kedvéért
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D): input_dir.x += 1
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_D) == false and Input.is_key_pressed(KEY_A): 
-		pass # Egyszerűsítve alább:
-		
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_action_pressed("ui_right"): input_dir.x += 1
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_action_pressed("ui_left"): input_dir.x -= 1
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_action_pressed("ui_down"): input_dir.y += 1
-	if Input.is_key_pressed(KEY_UP) or Input.is_action_pressed("ui_up"): input_dir.y -= 1
-	
-	if input_dir != Vector2.ZERO:
-		position += input_dir.normalized() * speed * delta
-
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			zoom -= Vector2(0.1, 0.1)
+			zoom = (zoom - zoom_step).clamp(min_zoom, max_zoom)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			zoom += Vector2(0.1, 0.1)
+			zoom = (zoom + zoom_step).clamp(min_zoom, max_zoom)

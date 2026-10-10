@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="RPG_Game_My"
-run/main_scene="uid://bu35svkkyd021"
+config/name="RPG_Game_ProjektLabor"
+run/main_scene="uid://do4rxf1f7ac0t"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 

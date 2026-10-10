@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://r12ap6qmh7xr" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Attack.png" id="1_3uj8c"]
 [ext_resource type="Texture2D" uid="uid://csf4sspqfr3ou" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Death.png" id="2_sgnj3"]
-[ext_resource type="Texture2D" uid="uid://2r6546bdwjbs" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Heal(With magic effects).png" id="3_pje0q"]
+[ext_resource type="Texture2D" uid="uid://bi7hyy3ody2fl" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Heal.png" id="3_3uj8c"]
 [ext_resource type="Texture2D" uid="uid://yr4cyexc63ux" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Hurt.png" id="4_kpypv"]
 [ext_resource type="Texture2D" uid="uid://duj18c7e7jnyp" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Idle.png" id="5_tdgbd"]
 [ext_resource type="Texture2D" uid="uid://b6fc3iw5ojiva" path="res://assets/Characters(100x100 split)/Priest/Priest with shadows/Priest_Walk.png" id="6_llcau"]
@@ -59,28 +59,28 @@ region = Rect2(200, 0, 100, 100)
 atlas = ExtResource("2_sgnj3")
 region = Rect2(300, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ri8f4"]
-atlas = ExtResource("3_pje0q")
+[sub_resource type="AtlasTexture" id="AtlasTexture_6d0be"]
+atlas = ExtResource("3_3uj8c")
 region = Rect2(0, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fwjbv"]
-atlas = ExtResource("3_pje0q")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rne7"]
+atlas = ExtResource("3_3uj8c")
 region = Rect2(100, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3tiqt"]
-atlas = ExtResource("3_pje0q")
+[sub_resource type="AtlasTexture" id="AtlasTexture_3u1i6"]
+atlas = ExtResource("3_3uj8c")
 region = Rect2(200, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ixuu2"]
-atlas = ExtResource("3_pje0q")
+[sub_resource type="AtlasTexture" id="AtlasTexture_hngj7"]
+atlas = ExtResource("3_3uj8c")
 region = Rect2(300, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_h0uas"]
-atlas = ExtResource("3_pje0q")
+[sub_resource type="AtlasTexture" id="AtlasTexture_em1m7"]
+atlas = ExtResource("3_3uj8c")
 region = Rect2(400, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ggc4t"]
-atlas = ExtResource("3_pje0q")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ri8f4"]
+atlas = ExtResource("3_3uj8c")
 region = Rect2(500, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rc6o4"]
@@ -208,22 +208,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_6d0be")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1rne7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3u1i6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hngj7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_em1m7")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ri8f4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fwjbv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3tiqt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ixuu2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_h0uas")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ggc4t")
 }],
 "loop": 0,
 "name": &"heal",

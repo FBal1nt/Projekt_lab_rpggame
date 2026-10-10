@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://cl27unj5602rc"]
 
-[ext_resource type="PackedScene" uid="uid://dscjbrnyg4cnt" path="res://scenes/player.tscn" id="1_uwrxv"]
-[ext_resource type="Script" uid="uid://0o3kbmervuoy" path="res://scenes/fog_of_war.gd" id="2_lnu2h"]
-[ext_resource type="Texture2D" uid="uid://dsoev2mjfdb1p" path="res://assets/Overworld_Tileset.png" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://dscjbrnyg4cnt" path="res://scenes/Player/player.tscn" id="1_uwrxv"]
+[ext_resource type="Script" path="res://scenes/fog_of_war.gd" id="2_lnu2h"]
+[ext_resource type="Texture2D" path="res://assets/Overworld_Tileset.png" id="2_yqjtg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("2_yqjtg")

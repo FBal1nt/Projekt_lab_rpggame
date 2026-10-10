@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://0ffffmy3jt80" path="res://PNG/fire_animation.png" id="6_g08yb"]
 [ext_resource type="PackedScene" uid="uid://bpgkhlglc204l" path="res://scenes/skeleton.tscn" id="7_g08yb"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kv38i"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ggb5j"]
 texture = ExtResource("1_kv38i")
 0:0/0 = 0
 1:0/0 = 0
@@ -130,7 +130,7 @@ texture = ExtResource("1_kv38i")
 6:14/0 = 0
 7:14/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i77fk"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_npr5x"]
 texture = ExtResource("2_i77fk")
 0:0/0 = 0
 1:0/0 = 0
@@ -415,10 +415,10 @@ texture = ExtResource("2_i77fk")
 
 [sub_resource type="TileSet" id="TileSet_yf5fn"]
 physics_layer_0/collision_layer = 1
-sources/1 = SubResource("TileSetAtlasSource_kv38i")
-sources/6 = SubResource("TileSetAtlasSource_i77fk")
+sources/1 = SubResource("TileSetAtlasSource_ggb5j")
+sources/6 = SubResource("TileSetAtlasSource_npr5x")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ggb5j"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g08yb"]
 texture = ExtResource("3_ggb5j")
 0:0/0 = 0
 0:0/0/custom_data_0 = true
@@ -933,7 +933,7 @@ texture = ExtResource("3_ggb5j")
 7:31/0 = 0
 7:31/0/custom_data_0 = true
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_npr5x"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p8g84"]
 texture = ExtResource("2_i77fk")
 0:0/0 = 0
 0:0/0/custom_data_0 = true
@@ -1420,7 +1420,7 @@ texture = ExtResource("2_i77fk")
 11:22/0 = 0
 12:22/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g08yb"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8uskw"]
 texture = ExtResource("4_npr5x")
 0:0/0 = 0
 2:0/0 = 0
@@ -1635,9 +1635,9 @@ texture = ExtResource("4_npr5x")
 physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "IsWall"
 custom_data_layer_0/type = 1
-sources/1 = SubResource("TileSetAtlasSource_ggb5j")
-sources/2 = SubResource("TileSetAtlasSource_npr5x")
-sources/3 = SubResource("TileSetAtlasSource_g08yb")
+sources/1 = SubResource("TileSetAtlasSource_g08yb")
+sources/2 = SubResource("TileSetAtlasSource_p8g84")
+sources/3 = SubResource("TileSetAtlasSource_8uskw")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eemwj"]
 texture = ExtResource("4_npr5x")

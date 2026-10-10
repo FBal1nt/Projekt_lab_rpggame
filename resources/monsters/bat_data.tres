@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MonsterData" format=3 uid="uid://sdq1tu61m0ei"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_6yuw2"]
+
+[resource]
+script = ExtResource("1_6yuw2")
+monster_id = "bat"
+monster_name = "Denevér"
+defense = 0
+initiative = 16.5
+dodge_chance = 0.25
+life_steal_ratio = 0.2
+metadata/_custom_type_script = "uid://jfeoccywjufa"

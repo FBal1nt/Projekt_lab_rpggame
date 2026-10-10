@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CharacterClass" format=3 uid="uid://v0mhclqh6gts"]
 
-[ext_resource type="PackedScene" uid="uid://ba7habqlv5hmi" path="res://scenes/holy_spell.tscn" id="1_jvt0x"]
-[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/character_class.gd" id="1_tw7u2"]
+[ext_resource type="PackedScene" uid="uid://ba7habqlv5hmi" path="res://scenes/Projectiles/holy_spell.tscn" id="1_jvt0x"]
+[ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/Player/character_class.gd" id="1_tw7u2"]
 [ext_resource type="SpriteFrames" uid="uid://2ptcmc64pm4m" path="res://resources/heroes/priest_frames.tres" id="3_gp8hb"]
 
 [resource]
@@ -9,8 +9,7 @@ script = ExtResource("1_tw7u2")
 class_name_id = "Priest"
 max_hp = 95
 base_damage = 17
-initiative = 11
-move_duration = 0.15
+initiative = 11.0
 is_ranged = true
 attack_range = 4
 projectile_scene = ExtResource("1_jvt0x")
