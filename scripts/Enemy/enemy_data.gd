@@ -2,11 +2,18 @@
 extends Resource
 class_name EnemyData
 
+enum SpecialProfile {
+	STANDARD,
+	ARMORED_SKELETON,
+	ARMORED_ORC,
+	ARMORED_AXEMAN
+}
+
 @export_group("Alapadatok")
-@export var monster_id: String = "skeleton"
-@export var monster_name: String = "Csontváz"
+@export var monster_id: String = "enemy"
+@export var monster_name: String = "Name"
 @export var title: String = ""
-@export var xp_reward: int = 25
+@export var xp_reward: int = 1
 
 @export_group("Megjelenés")
 @export var sprite_frames: SpriteFrames
@@ -14,12 +21,42 @@ class_name EnemyData
 @export var sprite_offset: Vector2 = Vector2.ZERO
 
 @export_group("Harci Statisztikák")
-@export var max_hp: int = 45
-@export var base_damage: int = 12
+@export var max_hp: int = 1
+@export var base_damage: int = 1
 @export var defense: int = 1
-@export var initiative: float = 9.0
+@export var initiative: float = 1
+
+@export_group("Páncél és Speciális Profil")
+## Fix elnyelt sebzés minden egyes bekapott találatból (pl. 6)
+@export var flat_armor: int = 0
+## A szörny egyedi támadási és harci viselkedése
+@export var special_profile: SpecialProfile = SpecialProfile.STANDARD
+
+@export_group("Hátralökési Képkockák (Impact Frames)")
+## Az attack_1 hányadik képkockájánál (0-tól indexelve) lökjön hátra (pl. Csontváz és Fejszés bökés/suhintás):
+@export var knockback_frame_attack_1: int = 2
+
+## Az attack_2 hányadik képkockájánál (0-tól indexelve) lökjön hátra (pl. Ork erős bökés):
+@export var knockback_frame_attack_2: int = 2
+
+## Az attack_3 hányadik képkockájánál (0-tól indexelve) történjen a lecsapás és a nagy lökés (pl. Ork és Fejszés zúzás):
+@export var knockback_frame_attack_3: int = 3
+
+## Segédfüggvény a képkocka lekéréséhez az animáció neve alapján
+func get_knockback_frame(anim_name: String) -> int:
+	match anim_name:
+		"attack_1": return knockback_frame_attack_1
+		"attack_2": return knockback_frame_attack_2
+		"attack_3": return knockback_frame_attack_3
+	return 2
+
+@export_group("Kombó és Támadási Szorzók")
+@export var light_attack_multiplier: float = 0.9     # Normál/gyorsabb fejszecsapás
+@export var heavy_attack_multiplier: float = 1.5     # Felkészült, erősebb zúzás
+@export_range(0.0, 1.0) var heavy_attack_chance: float = 0.25 # 25% eséllyel adja be az erős ütést
 
 ## 1: Közelharc (csak balról/jobbról!), >1: Távolsági
+@export_group("Támadási Hatótávolság")
 @export var attack_range: int = 1:
 	set(value):
 		attack_range = value
@@ -35,13 +72,17 @@ class_name EnemyData
 @export var aggro_range: int = 3
 
 @export_group("Egyedi Képességek")
-## Csontváz: 0 HP-kor újraéled
-@export var can_resurrect: bool = false:
+## 0 HP-kor újraéled a földről
+@export var can_self_revive: bool = false:
 	set(value):
-		can_resurrect = value
+		can_self_revive = value
 		notify_property_list_changed()
 
-@export var resurrect_hp_percent: float = 0.5
+## Életerő arány feltámadáskor (pl. 0.5 = 50% HP)
+@export_range(0.1, 1.0) var resurrect_hp_percent: float = 0.5
+
+## Hány másodpercig heverjen a földön a feltámadás előtt:
+@export var resurrect_delay: float = 3.0
 
 ## Blokk mechanika (Csontváz védekezés): esély és tompítás mértéke
 @export var can_block: bool = true:
@@ -71,8 +112,8 @@ func _validate_property(property: Dictionary) -> void:
 	if property.name == "projectile_scene" and attack_range <= 1:
 		property.usage &= ~PROPERTY_USAGE_EDITOR
 
-	# 2. Ha can_resurrect == false, elrejtjük a feltámadási HP százalékot:
-	elif property.name == "resurrect_hp_percent" and not can_resurrect:
+	# 2. Ha nincs feltámadás, elrejtjük a százalékot és a késleltetést is:
+	elif (property.name == "resurrect_hp_percent" or property.name == "resurrect_delay") and not can_self_revive:
 		property.usage &= ~PROPERTY_USAGE_EDITOR
 
 	# 3. Ha can_block == false, elrejtjük a blokkolási esélyt és tompítást:
@@ -82,6 +123,11 @@ func _validate_property(property: Dictionary) -> void:
 	# 4. Ha can_split == false, elrejtjük a duplázódási esélyt:
 	elif property.name == "split_chance_on_death" and not can_split:
 		property.usage &= ~PROPERTY_USAGE_EDITOR
+		
+	# 5. Ha nem STANDARD szörnyről van szó, elrejtjük a véletlenszerű kombócsúszkákat:
+	elif property.name in ["light_attack_multiplier", "heavy_attack_multiplier", "heavy_attack_chance"]:
+		if special_profile != SpecialProfile.STANDARD:
+			property.usage &= ~PROPERTY_USAGE_EDITOR
 
 # --- BELSŐ ÁLLAPOT ÉS HARCI LOGIKA ---
 

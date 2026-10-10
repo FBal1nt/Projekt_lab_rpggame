@@ -46,30 +46,34 @@ func _ready() -> void:
 	var button_row = find_child("ButtonRow", true, false)
 	if button_row: button_row.visible = false
 
-## Harc indítása – az enemy_initiated jelzi, ki támadott először!
 func open_battle(hero: HeroController, enemy: Node2D, enemy_initiated: bool = false) -> void:
 	if combat_active: return
 
-	# 1. BIZTONSÁGI ZÁR: Közelharc esetén szigorúan csak balról vagy jobbról állhatnak egymás mellett!
+	var hero_is_ranged: bool = false
+	if hero.combat and hero.combat.has_method("is_hero_ranged_attack"):
+		hero_is_ranged = hero.combat.is_hero_ranged_attack(enemy.grid_pos)
+	elif hero.get("is_ranged") != null:
+		hero_is_ranged = bool(hero.get("is_ranged"))
+
 	var enemy_range: int = 1
 	if enemy.has_method("get_attack_range"):
 		enemy_range = enemy.get_attack_range()
 	elif enemy.get("attack_range") != null:
 		enemy_range = enemy.get("attack_range")
+	var enemy_is_ranged: bool = enemy_range > 1
 
-	if enemy_range <= 1:
+	if not hero_is_ranged or not enemy_is_ranged:
 		var diff = hero.grid_pos - enemy.grid_pos
-		# Ha a hős az utolsó pillanatban fel/le lépett (diff.y != 0) vagy nem közvetlen szomszédos:
 		if diff.y != 0 or absi(diff.x) != 1:
-			print("[BattleDialog] Érvénytelen közelharci pozíció! Harc megszakítva, a hős sikeresen elugrott.")
+			print("[BattleDialog] Érvénytelen közelharci pozíció! Harc megszakítva.")
 			return
 
-	# 2. MOZGÁS AZONNALI LEVÁGÁSA: Ha mégis elkapott, megöljük a futó Tween-t, hogy ne csússzon tovább:
 	if hero.has_method("cancel_movement_immediately"):
 		hero.cancel_movement_immediately()
 	else:
 		hero.is_moving = false
-		hero.path_queue.clear()
+		if hero.get("path_queue") != null:
+			hero.path_queue.clear()
 
 	hero_ref = hero
 	enemy_ref = enemy
@@ -85,66 +89,32 @@ func open_battle(hero: HeroController, enemy: Node2D, enemy_initiated: bool = fa
 	var enemy_init = _get_enemy_initiative()
 	var enemy_name = _get_enemy_name()
 
-	# DÖNTÉS AZ ELSŐ TÁMADÓRÓL:
+	is_hero_turn = (hero_init >= enemy_init)
+	first_attacker_was_hero = is_hero_turn
+
 	if enemy_initiated:
-		# A szörny támadott ránk a mezőn -> KÖTELEZŐEN Ő TÁMAD ELŐSZÖR!
-		is_hero_turn = false
-		first_attacker_was_hero = false
-		_append_log("[b]=== RAJTAÜTÉS! ===[/b]")
-		_append_log("%s megrohanta a hőst és támadást indított!" % enemy_name)
-		_append_log("[color=red]-> %s támad először![/color]\n" % enemy_name.to_upper())
+		_append_log("[b]=== ELLENSÉG MEGKÖZELÍTETTE A HŐST! ===[/b]")
+		_append_log("%s harcba lépett a hőssel!" % enemy_name)
 	else:
-		# A hős kezdeményezett a kattintással -> Kezdeményezés vizsgálata
-		is_hero_turn = (hero_init >= enemy_init)
-		first_attacker_was_hero = is_hero_turn
 		_append_log("[b]=== PÁRBAJ KEZDŐDIK ===[/b]")
-		_append_log("Kezdeményezés: %s (%.1f) vs %s (%.1f)" % [hero_ref.hero_name, hero_init, enemy_name, enemy_init])
-		_append_log("[color=yellow]-> %s támad először![/color]\n" % ("A HŐS" if is_hero_turn else enemy_name.to_upper()))
+		_append_log("%s megtámadta %s ellenfelét!" % [hero_ref.hero_name, enemy_name])
+
+	_append_log("Kezdeményezés: %s (%.1f) vs %s (%.1f)" % [hero_ref.hero_name, hero_init, enemy_name, enemy_init])
+	if is_hero_turn:
+		_append_log("[color=yellow]-> A HŐS gyorsabb, ő támad először![/color]\n")
+	else:
+		_append_log("[color=red]-> %s gyorsabb, ő támad először![/color]\n" % enemy_name.to_upper())
 
 	_update_ui_cards()
 
 	await get_tree().create_timer(0.35).timeout
 	_run_world_combat_loop()
 
-## Harc indítása a térképen már lezajlott távolsági lövés után
-func open_battle_after_ranged_shot(hero: HeroController, enemy: Node2D, next_attacker: String = "ENEMY_NEXT") -> void:
-	if combat_active: return
-
-	hero_ref = hero
-	enemy_ref = enemy
-	combat_active = true
-	current_round = 1
-
-	hero_ref.in_battle = true
-	if hero_ref.has_method("cancel_movement_immediately"):
-		hero_ref.cancel_movement_immediately()
-	else:
-		hero_ref.is_moving = false
-
-	visible = true
-	if log_text: log_text.clear()
-
-	var enemy_name = _get_enemy_name()
-
-	if next_attacker == "HERO_NEXT":
-		# A szörny lőtt a térképen -> a harci ablakban a HŐS jön válasszal!
-		is_hero_turn = true
-		first_attacker_was_hero = false
-		_append_log("[b]=== PÁRBAJ TÁVOLSÁGI CSAPÁS UTÁN ===[/b]")
-		_append_log("%s rád lőtt a távolból!" % enemy_name)
-		_append_log("[color=yellow]-> Te következel a válaszcsapással![/color]\n")
-	else:
-		# A hős lőtt a térképen -> a harci ablakban a SZÖRNY visszatámadása jön!
-		is_hero_turn = false
-		first_attacker_was_hero = true
-		_append_log("[b]=== PÁRBAJ TÁVOLSÁGI CSAPÁS UTÁN ===[/b]")
-		_append_log("Eltaláltad %s-t a távolból!" % enemy_name)
-		_append_log("[color=red]-> %s visszatámad![/color]\n" % enemy_name.to_upper())
-
-	_update_ui_cards()
-
-	await get_tree().create_timer(0.35).timeout
-	_run_world_combat_loop()
+func interrupt_combat_due_to_knockback() -> void:
+	combat_active = false
+	visible = false
+	if is_instance_valid(hero_ref):
+		hero_ref.in_battle = false
 
 func _run_world_combat_loop() -> void:
 	while combat_active and is_instance_valid(hero_ref) and is_instance_valid(enemy_ref):
@@ -159,7 +129,15 @@ func _execute_tile_turn() -> void:
 	var enemy_name = _get_enemy_name()
 
 	if is_hero_turn:
-		# --- A HŐS KÖRE ---
+		if hero_ref.is_stunned:
+			_append_log("[b]-- %d. KÖR: A Hős köre --[/b]" % current_round)
+			_append_log("[color=purple]💫 A Hős kábultan fekszik a földön, kimarad a köre![/color]\n")
+			hero_ref.is_stunned = false
+			is_hero_turn = false
+			current_round += 1
+			_update_ui_cards()
+			return
+
 		_append_log("[b]-- %d. KÖR: A Hős támad --[/b]" % current_round)
 		var raw_dmg = await hero_ref.perform_combat_turn(enemy_ref)
 		_append_log("A Hős tüzel/lecsap! Dobás: %d sebzés." % raw_dmg)
@@ -169,7 +147,6 @@ func _execute_tile_turn() -> void:
 			await _finish_combat("HERO")
 			return
 	else:
-		# --- AZ ELLENSÉG KÖRE (SZÖRNY TÁMADÁSA) ---
 		_append_log("[b]-- %d. KÖR: %s támad --[/b]" % [current_round, enemy_name])
 		var dealt = await enemy_ref.perform_combat_turn(hero_ref)
 		_append_log("%s rácsap a hősre! Kiosztott sebzés: %d." % [enemy_name, dealt])
@@ -179,10 +156,8 @@ func _execute_tile_turn() -> void:
 			await _finish_combat("MONSTER")
 			return
 
-	# Váltás a másik félre
 	is_hero_turn = not is_hero_turn
 
-	# Ha lefutott mindkét fél támadása (visszatért a kezdőhöz), szintet lép a kör:
 	if is_hero_turn == first_attacker_was_hero:
 		current_round += 1
 
@@ -194,7 +169,10 @@ func _finish_combat(victor: String) -> void:
 		_append_log("\n[color=gold][b]★★★ GYŐZELEM! %s elesett! ★★★[/b][/color]" % enemy_name)
 		var title = _get_enemy_title()
 		if title != "":
-			hero_ref.award_title(title)
+			if hero_ref.has_method("award_title"):
+				hero_ref.award_title(title)
+			elif hero_ref.get("progression") != null and hero_ref.progression.has_method("award_title"):
+				hero_ref.progression.award_title(title)
 			_append_log("[color=cyan]Új titulus: %s[/color]" % hero_ref.hero_name)
 	else:
 		_append_log("\n[color=red][b]☠ ☠ ☠ A HŐS ELESETT! ☠ ☠ ☠[/b][/color]")
@@ -204,11 +182,9 @@ func _finish_combat(victor: String) -> void:
 	await get_tree().create_timer(result_display_time).timeout
 	visible = false
 
-	# 1. KISZÁLLUNK A HARCBÓL: A hős azonnal szabadon mozoghat és elmenekülhet!
 	if is_instance_valid(hero_ref):
 		hero_ref.in_battle = false
 
-	# 2. A szörny a térképen önállóan játssza le a halált és az esetleges feltámadást:
 	if victor == "HERO":
 		if is_instance_valid(enemy_ref) and enemy_ref.has_method("play_overworld_death"):
 			enemy_ref.play_overworld_death()

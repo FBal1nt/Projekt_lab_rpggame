@@ -17,7 +17,6 @@ var controller: EnemyController
 ## Komponens inicializálása a szülő EnemyController által
 func setup(p_controller: EnemyController) -> void:
 	controller = p_controller
-
 	sprite = self
 
 	if fog_of_war == null:
@@ -30,11 +29,25 @@ func _setup_visuals() -> void:
 	if not sprite: return
 
 	var data = controller.enemy_data if controller else null
+	var target_frames: SpriteFrames = null
 
 	if custom_frames != null:
-		sprite.sprite_frames = custom_frames
+		target_frames = custom_frames
 	elif data and data.sprite_frames != null:
-		sprite.sprite_frames = data.sprite_frames
+		target_frames = data.sprite_frames
+
+	if target_frames != null:
+		# Megkeressük az első érvényes alapértelmezett animációt a hibák elkerülésére:
+		var safe_anim = "idle"
+		if not target_frames.has_animation(safe_anim):
+			var all_anims = target_frames.get_animation_names()
+			if all_anims.size() > 0:
+				safe_anim = all_anims[0]
+
+		# Előbb átállítjuk a sprite-ot a biztonságos névre, majd átadjuk a frame-eket:
+		sprite.sprite_frames = target_frames
+		if sprite.sprite_frames.has_animation(safe_anim):
+			sprite.animation = safe_anim
 
 	if data and data.sprite_scale != Vector2.ONE:
 		sprite.scale = data.sprite_scale
@@ -66,7 +79,29 @@ func play_move_anim() -> void:
 			return
 	play_idle_anim()
 
-# --- HARCI ÉS HALÁL ANIMÁCIÓK (HIÁNYZÓ METÓDUSOK) ---
+# --- HARCI ÉS VÁLTAKOZÓ TÁMADÁSI ANIMÁCIÓK ---
+
+## Megvizsgálja, hogy a szörny rendelkezik-e mindkét támadási fázissal (pl. Ork)
+func has_combo_attacks() -> bool:
+	return _get_anim_for_step(0) != "" and _get_anim_for_step(1) != ""
+
+## Visszaadja a kívánt fázishoz tartozó animációt (0: gyenge csapás, 1: erős csapás)
+func get_combo_anim(step: int) -> String:
+	var anim = _get_anim_for_step(step)
+	return anim if anim != "" else _get_attack_anim_name()
+
+func _get_anim_for_step(step: int) -> String:
+	if not sprite or not sprite.sprite_frames: return ""
+	var candidates: Array[String] = []
+	if step == 0:
+		candidates = ["attack_1", "Attack01", "attack_01", "attack"]
+	else:
+		candidates = ["attack_2", "Attack02", "attack_02"]
+
+	for anim in candidates:
+		if sprite.sprite_frames.has_animation(anim):
+			return anim
+	return ""
 
 func play_attack_animation() -> String:
 	var anim = _get_attack_anim_name()
@@ -158,7 +193,6 @@ func play_respawn_animation() -> void:
 	play_idle_anim()
 	update_fog_visibility()
 
-## Forgás a célpont koordinátája alapján (javított szóközökkel)
 func update_facing(target_grid_x: int) -> void:
 	if not sprite or controller == null: return
 	if target_grid_x < controller.grid_pos.x:
@@ -166,7 +200,6 @@ func update_facing(target_grid_x: int) -> void:
 	elif target_grid_x > controller.grid_pos.x:
 		sprite.flip_h = false
 
-## Láthatóság állítása a köd alapján
 func update_fog_visibility() -> void:
 	if controller == null: return
 	if fog_of_war and fog_of_war.is_initialized:

@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dobctk5swp35g"]
 
 [ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_l6xko"]
-[ext_resource type="SpriteFrames" uid="uid://h4mnsbl6cf5x" path="res://resources/monsters/slime_frames.tres" id="2_ukdu2"]
+[ext_resource type="SpriteFrames" uid="uid://h4mnsbl6cf5x" path="res://resources/Monsters/slime_frames.tres" id="2_ukdu2"]
 
 [resource]
 script = ExtResource("1_l6xko")
 monster_id = "slime"
 monster_name = "Nyálka"
+xp_reward = 25
 sprite_frames = ExtResource("2_ukdu2")
 max_hp = 35
 base_damage = 9

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://ek12iv4bg308"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_0wayw"]
+[ext_resource type="SpriteFrames" uid="uid://dlop4tv2c18o5" path="res://resources/Monsters/orc_frames.tres" id="2_hpptu"]
+
+[resource]
+script = ExtResource("1_0wayw")
+monster_id = "orc"
+monster_name = "Ork"
+sprite_frames = ExtResource("2_hpptu")
+max_hp = 70
+base_damage = 20
+defense = 2
+initiative = 6.0
+flat_armor = null
+special_profile = null
+move_duration = 0.35
+action_interval = 2.0
+metadata/_custom_type_script = "uid://jfeoccywjufa"

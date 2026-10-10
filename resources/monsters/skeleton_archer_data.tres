@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b2rb3eieyvbkx" path="res://scenes/Projectiles/arrow.tscn" id="1_8ji02"]
 [ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_rstjd"]
-[ext_resource type="SpriteFrames" uid="uid://djpvjolaq245" path="res://resources/monsters/skeleton_archer_frames.tres" id="3_jog5s"]
+[ext_resource type="SpriteFrames" uid="uid://djpvjolaq245" path="res://resources/Monsters/skeleton_archer_frames.tres" id="3_jog5s"]
 
 [resource]
 script = ExtResource("1_rstjd")
@@ -19,7 +19,7 @@ projectile_scene = ExtResource("1_8ji02")
 move_duration = 0.45
 action_interval = 1.4
 aggro_range = 5
-can_resurrect = true
+can_self_revive = null
 can_block = false
 block_chance = 0.0
 block_reduction = 0.0

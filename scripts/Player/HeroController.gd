@@ -34,6 +34,11 @@ var is_attacking: bool:
 	get: return combat.is_attacking if combat else false
 	set(val):
 		if combat: combat.is_attacking = val
+		
+var is_stunned: bool:
+	get: return combat.is_stunned if combat else false
+	set(val):
+		if combat: combat.is_stunned = val
 
 var in_battle: bool:
 	get: return combat.in_battle if combat else false
@@ -72,6 +77,8 @@ var floor_layer: TileMapLayer:
 var decoratives_layer: TileMapLayer:
 	get: return mover.grid_manager.decoratives_layer if (mover and mover.grid_manager) else null
 
+var is_death_played: bool = false
+
 func _ready() -> void:
 	add_to_group("player")
 	z_index = 10
@@ -87,7 +94,7 @@ func _process(_delta: float) -> void:
 		visuals.process_hover()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_alive() or in_battle or is_attacking:
+	if not is_alive() or in_battle or is_attacking or is_stunned:
 		return
 
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -118,12 +125,15 @@ func trigger_monsters_turn() -> void:
 		if is_instance_valid(enemy) and enemy.has_method("take_turn"):
 			enemy.take_turn(self)
 
-
 func get_initiative() -> float: return progression.get_initiative() if progression else 10.0
 func get_defense() -> int: return progression.get_defense() if progression else 0
 func get_current_hp() -> int: return current_hp
 func get_max_hp() -> int: return max_hp
 func is_alive() -> bool: return current_hp > 0
+
+func award_title(new_title: String) -> void:
+	if progression and progression.has_method("award_title"):
+		progression.award_title(new_title)
 
 func take_damage(incoming_raw_damage: int) -> int:
 	return combat.take_damage(incoming_raw_damage) if combat else 0
@@ -133,6 +143,11 @@ func try_trigger_block() -> bool:
 
 func play_hurt_reaction() -> void:
 	if visuals: await visuals.play_hurt_reaction()
+	
+func apply_stun(duration: float = 0.8) -> void:
+	is_stunned = true
+	if visuals and visuals.has_method("play_stun_sequence"):
+		await visuals.play_stun_sequence(duration)
 
 func perform_combat_turn(target_enemy: Node2D) -> int:
 	if combat: return await combat.perform_combat_turn(target_enemy)
@@ -146,3 +161,24 @@ func can_attack_cell(target_cell: Vector2i) -> bool:
 
 func is_tile_in_vision(cell: Vector2i) -> bool:
 	return visuals.is_tile_in_vision(cell) if visuals else true
+
+## A hős elterülése és földön maradása halál esetén
+func play_overworld_death() -> void:
+	if is_death_played: return
+	is_death_played = true
+
+	if mover:
+		mover.cancel_movement_immediately()
+		mover.is_moving = false
+		mover.path_queue.clear()
+
+	in_battle = false
+	is_attacking = false
+
+	var spr = sprite
+	if spr and spr.sprite_frames and spr.sprite_frames.has_animation("death"):
+		spr.play("death")
+		await spr.animation_finished
+		var last_frame = spr.sprite_frames.get_frame_count("death") - 1
+		spr.frame = last_frame
+		spr.pause()

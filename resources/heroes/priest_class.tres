@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ba7habqlv5hmi" path="res://scenes/Projectiles/holy_spell.tscn" id="1_jvt0x"]
 [ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/Player/character_class.gd" id="1_tw7u2"]
-[ext_resource type="SpriteFrames" uid="uid://2ptcmc64pm4m" path="res://resources/heroes/priest_frames.tres" id="3_gp8hb"]
+[ext_resource type="SpriteFrames" uid="uid://2ptcmc64pm4m" path="res://resources/Heroes/priest_frames.tres" id="3_gp8hb"]
 
 [resource]
 script = ExtResource("1_tw7u2")

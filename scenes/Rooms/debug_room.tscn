@@ -8,11 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://dscjbrnyg4cnt" path="res://scenes/Player/player.tscn" id="5_po8ae"]
 [ext_resource type="Script" uid="uid://b2ggcgia3c3po" path="res://scripts/Core/grid_manager.gd" id="6_xyns3"]
 [ext_resource type="PackedScene" uid="uid://caf7n1p6wvnpn" path="res://scenes/UI/hud.tscn" id="8_8tdd3"]
-[ext_resource type="Resource" uid="uid://bknvjeyo72itf" path="res://resources/monsters/skeleton_data.tres" id="8_n2pli"]
 [ext_resource type="PackedScene" uid="uid://c645dfdo7w2qv" path="res://scenes/UI/battle_dialog.tscn" id="9_n2pli"]
 [ext_resource type="PackedScene" uid="uid://c4cbj1slbcvun" path="res://scenes/Enemy/enemy.tscn" id="9_vl0ty"]
+[ext_resource type="Resource" uid="uid://dkbjkijkx161m" path="res://resources/Monsters/armored_skeleton_data.tres" id="11_862kq"]
+[ext_resource type="Resource" uid="uid://d1ejveulyjcvt" path="res://resources/Monsters/armored_axeman_data.tres" id="12_862kq"]
 [ext_resource type="Resource" uid="uid://dobctk5swp35g" path="res://resources/monsters/slime_data.tres" id="14_7rd71"]
-[ext_resource type="Resource" uid="uid://ybpxylsxjnin" path="res://resources/monsters/skeleton_archer_data.tres" id="16_8ko21"]
+[ext_resource type="Resource" uid="uid://cphuye4imkemx" path="res://resources/Monsters/armored_orc_data.tres" id="14_862kq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmn7p"]
 texture = ExtResource("1_3n7md")
@@ -1675,17 +1676,27 @@ wall_layer = NodePath("../Wall")
 
 [node name="BattleDialog" parent="." unique_id=1849918493 instance=ExtResource("9_n2pli")]
 
-[node name="Skeleton1" parent="." unique_id=132133333 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
+[node name="Skeleton" parent="." unique_id=132133333 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
 position = Vector2(48, 32)
-enemy_data = ExtResource("8_n2pli")
+enemy_data = ExtResource("11_862kq")
 fog_of_war = NodePath("../FogOfWar")
 
-[node name="SkeletonArcher1" parent="." unique_id=1761615091 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
-position = Vector2(0, 48)
-enemy_data = ExtResource("16_8ko21")
+[node name="Axeman" parent="." unique_id=1761615091 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
+position = Vector2(0, 128)
+enemy_data = ExtResource("12_862kq")
+fog_of_war = NodePath("../FogOfWar")
+
+[node name="Orc" parent="." unique_id=1224827150 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
+position = Vector2(80, 144)
+enemy_data = ExtResource("14_862kq")
+fog_of_war = NodePath("../FogOfWar")
+
+[node name="Orc2" parent="." unique_id=136652803 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
+position = Vector2(-80, -16)
+enemy_data = ExtResource("14_862kq")
 fog_of_war = NodePath("../FogOfWar")
 
 [node name="Slime" parent="." unique_id=699168628 node_paths=PackedStringArray("fog_of_war") instance=ExtResource("9_vl0ty")]
-position = Vector2(-48, 128)
+position = Vector2(-96, -144)
 enemy_data = ExtResource("14_7rd71")
 fog_of_war = NodePath("../FogOfWar")

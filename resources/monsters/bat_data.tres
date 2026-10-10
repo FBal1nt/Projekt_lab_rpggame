@@ -1,13 +1,19 @@
-[gd_resource type="Resource" script_class="MonsterData" format=3 uid="uid://sdq1tu61m0ei"]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://sdq1tu61m0ei"]
 
 [ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_6yuw2"]
+[ext_resource type="SpriteFrames" uid="uid://cg1w1npd4vpll" path="res://resources/Monsters/bat_frames.tres" id="2_uly0v"]
 
 [resource]
 script = ExtResource("1_6yuw2")
 monster_id = "bat"
 monster_name = "Denevér"
+xp_reward = 25
+sprite_frames = ExtResource("2_uly0v")
+max_hp = 45
+base_damage = 12
 defense = 0
 initiative = 16.5
+can_self_revive = null
 dodge_chance = 0.25
 life_steal_ratio = 0.2
 metadata/_custom_type_script = "uid://jfeoccywjufa"

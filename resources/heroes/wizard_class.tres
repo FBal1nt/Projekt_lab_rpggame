@@ -2,15 +2,14 @@
 
 [ext_resource type="Script" uid="uid://bewq3fbkpsbt7" path="res://scripts/Player/character_class.gd" id="1_t3klc"]
 [ext_resource type="PackedScene" uid="uid://tjop60ao78bn" path="res://scenes/Projectiles/wizard_spell.tscn" id="1_wyu87"]
-[ext_resource type="SpriteFrames" uid="uid://b1a8aph4sjuaf" path="res://resources/heroes/wizard_frames.tres" id="3_g82w1"]
+[ext_resource type="SpriteFrames" uid="uid://b1a8aph4sjuaf" path="res://resources/Heroes/wizard_frames.tres" id="3_g82w1"]
 
 [resource]
 script = ExtResource("1_t3klc")
 class_name_id = "Wizard"
 max_hp = 80
 base_damage = 28
-initiative = 12
-move_duration = 0.15
+initiative = 12.0
 is_ranged = true
 attack_range = 5
 projectile_scene = ExtResource("1_wyu87")

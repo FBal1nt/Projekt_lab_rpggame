@@ -18,12 +18,14 @@ var max_class_range: int = 1
 var in_battle: bool = false
 var is_attacking: bool = false
 var is_blocking_active: bool = false
+var is_stunned: bool = false
 
 func setup(p_controller: HeroController) -> void:
 	controller = p_controller
 	in_battle = false
 	is_attacking = false
 	is_blocking_active = false
+	is_stunned = false
 
 func roll_attack_damage() -> int:
 	var power = controller.progression.attack_power if (controller and controller.progression) else 10
@@ -41,6 +43,12 @@ func take_damage(incoming_raw_damage: int) -> int:
 	var actual_damage = maxi(0, raw - def)
 	controller.current_hp = maxi(0, controller.current_hp - actual_damage)
 	controller.progression.update_hud()
+
+	# --- FREE ROAM HALÁL ELLENŐRZÉSE ---
+	if controller.current_hp <= 0 and not in_battle:
+		if controller.has_method("play_overworld_death"):
+			controller.play_overworld_death()
+
 	return actual_damage
 
 func try_trigger_block() -> bool:
@@ -76,9 +84,10 @@ func can_attack_cell(target_cell: Vector2i) -> bool:
 	var diff = target_cell - controller.grid_pos
 	return diff.y == 0 and absi(diff.x) == 1
 
+## TÁMADÁSI KATTINTÁS
 func handle_attack_click() -> void:
-	var fl = controller.mover.grid_manager.floor_layer if (controller.mover and controller.mover.grid_manager) else null
-	if not fl or controller.is_moving or in_battle or is_attacking or not controller.is_alive():
+	var fl = controller.mover.grid_manager.floor_layer if (controller and controller.mover and controller.mover.grid_manager) else null
+	if not fl or controller.is_moving or in_battle or is_attacking or not controller.is_alive() or controller.is_stunned:
 		return
 
 	var target_cell = fl.local_to_map(fl.to_local(controller.get_global_mouse_position()))
@@ -89,32 +98,39 @@ func handle_attack_click() -> void:
 		if can_attack_cell(target_cell):
 			controller.mover.cancel_movement_immediately()
 
-			var grid_mgr = controller.mover.grid_manager
-			var dist = grid_mgr.get_grid_distance(controller.grid_pos, target_cell) if grid_mgr else 1
 			var is_ranged_shot = is_hero_ranged_attack(target_cell)
-
 			var enemy_range: int = enemy.get_attack_range() if enemy.has_method("get_attack_range") else 1
 			var enemy_is_ranged: bool = enemy_range > 1
-			var enemy_can_reach: bool = enemy.can_attack_hero(controller.grid_pos) if enemy.has_method("can_attack_hero") else (dist <= enemy_range)
+			var diff = target_cell - controller.grid_pos
+			var is_adjacent: bool = (diff.y == 0 and absi(diff.x) == 1)
 
-			if is_ranged_shot:
-				await perform_standalone_ranged_shot(enemy, false)
-				if is_instance_valid(enemy) and enemy.is_monster_alive() and (enemy_is_ranged or enemy_can_reach):
+			# 1. SZABÁLY: Távolsági vs Távolsági
+			if is_ranged_shot and enemy_is_ranged:
+				var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
+				if battle_ui != null and not battle_ui.combat_active:
+					battle_ui.open_battle(controller, enemy, false)
+				return
+
+			# 2. SZABÁLY: Távolsági vs Közelharci
+			elif is_ranged_shot and not enemy_is_ranged:
+				if is_adjacent:
 					var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
 					if battle_ui != null and not battle_ui.combat_active:
-						battle_ui.open_battle_after_ranged_shot(controller, enemy, "ENEMY_NEXT")
-				elif is_instance_valid(enemy) and enemy.is_monster_alive():
-					controller.trigger_monsters_turn()
-			else:
-				if enemy_can_reach or enemy_is_ranged:
-					var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
-					if battle_ui != null:
 						battle_ui.open_battle(controller, enemy, false)
 				else:
-					perform_standalone_ranged_shot(enemy, true)
+					await perform_standalone_ranged_shot(enemy, true)
+				return
+
+			# 3. SZABÁLY: Közelharci hős
+			else:
+				var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
+				if battle_ui != null and not battle_ui.combat_active:
+					battle_ui.open_battle(controller, enemy, false)
+				return
 		else:
 			print("[Harcrendszer] Nem éred el a célpontot szabályosan!")
 
+## KÖR VÉGREHAJTÁSA A PÁRBAJABLAKBAN (BATTLE DIALOG)
 func perform_combat_turn(target_enemy: Node2D) -> int:
 	if not controller.is_alive() or not is_instance_valid(target_enemy): return 0
 	if controller.visuals: controller.visuals.update_facing(target_enemy.grid_pos.x)
@@ -129,17 +145,11 @@ func perform_combat_turn(target_enemy: Node2D) -> int:
 
 	if is_action_ranged:
 		if sprite and sprite.sprite_frames.has_animation(anim_name): sprite.play(anim_name)
-		if projectile_delay > 0.0: await get_tree().create_timer(projectile_delay).timeout
+		
+		var delay = _get_projectile_delay()
+		if delay > 0.0: await get_tree().create_timer(delay).timeout
 
-		if projectile_scene != null:
-			var proj = projectile_scene.instantiate()
-			controller.get_parent().add_child(proj)
-			if proj.has_method("launch"): proj.launch(controller.global_position, target_enemy, raw_damage, controller)
-			elif proj.has_method("spawn_at"): proj.spawn_at(target_enemy, raw_damage, controller)
-			await proj.tree_exited
-		else:
-			target_enemy.take_damage(raw_damage)
-			controller.progression.gain_combat_xp(1)
+		await _fire_projectile_at_enemy(target_enemy, raw_damage)
 	else:
 		if sprite and sprite.sprite_frames.has_animation(anim_name):
 			sprite.play(anim_name)
@@ -154,6 +164,7 @@ func perform_combat_turn(target_enemy: Node2D) -> int:
 
 	return raw_damage
 
+## TÉRKÉPI TÁVOLSÁGI LÖVÉS (PÁRBAJ NÉLKÜL)
 func perform_standalone_ranged_shot(target_enemy: Node2D, triggers_turn: bool = true) -> void:
 	is_attacking = true
 	if controller.visuals: controller.visuals.update_facing(target_enemy.grid_pos.x)
@@ -165,19 +176,13 @@ func perform_standalone_ranged_shot(target_enemy: Node2D, triggers_turn: bool = 
 
 	var sprite = controller.sprite
 	if sprite and sprite.sprite_frames.has_animation(anim_name): sprite.play(anim_name)
-	if projectile_delay > 0.0: await get_tree().create_timer(projectile_delay).timeout
+
+	var delay = _get_projectile_delay()
+	if delay > 0.0: await get_tree().create_timer(delay).timeout
 
 	if target_enemy.has_method("try_trigger_block"): target_enemy.try_trigger_block()
 
-	if projectile_scene != null:
-		var proj = projectile_scene.instantiate()
-		controller.get_parent().add_child(proj)
-		if proj.has_method("launch"): proj.launch(controller.global_position, target_enemy, raw_damage, controller)
-		elif proj.has_method("spawn_at"): proj.spawn_at(target_enemy, raw_damage, controller)
-		await proj.tree_exited
-	else:
-		target_enemy.take_damage(raw_damage)
-		controller.progression.gain_combat_xp(1)
+	await _fire_projectile_at_enemy(target_enemy, raw_damage)
 
 	if sprite and controller.is_alive(): sprite.play("idle")
 	is_attacking = false
@@ -191,10 +196,86 @@ func perform_standalone_ranged_shot(target_enemy: Node2D, triggers_turn: bool = 
 			if target_enemy.has_method("play_hurt_reaction"): await target_enemy.play_hurt_reaction()
 			if triggers_turn: controller.trigger_monsters_turn()
 
-func cast_priest_self_heal() -> void:
-	if not controller.is_alive() or in_battle or is_attacking or controller.is_moving: return
+## KÖZÖS LÖVEDÉKKEZELŐ (ARCHER, PRIEST, WIZARD)
+func _fire_projectile_at_enemy(target_enemy: Node2D, raw_damage: int) -> void:
 	var c_name = controller.active_class.class_name_id if controller.active_class else ""
-	if c_name != "Priest" and c_name != "Priestess": return
+	var p_scene = _get_active_projectile_scene()
+
+	# 1. VARÁZSLÓ
+	if c_name == "Wizard" and p_scene != null:
+		var spell = p_scene.instantiate()
+		controller.get_parent().add_child(spell)
+		if wizard_element == "ice":
+			if spell.has_method("spawn_ice"):
+				spell.spawn_ice(target_enemy, raw_damage, controller)
+		else:
+			if spell.has_method("launch_fire"):
+				spell.launch_fire(controller.global_position, target_enemy, raw_damage, controller)
+		await spell.tree_exited
+
+	# 2. PAPNŐ (PRIEST) – Közvetlenül az ellenség mezőjén jelenik meg
+	elif c_name == "Priest" and p_scene != null:
+		var spell = p_scene.instantiate()
+		controller.get_parent().add_child(spell)
+		spell.global_position = target_enemy.global_position
+		spell.z_index = 12
+
+		if spell.has_method("cast_attack"):
+			await spell.cast_attack(target_enemy, raw_damage, controller)
+		elif spell.has_method("spawn_at"):
+			spell.spawn_at(target_enemy, raw_damage, controller)
+			await spell.tree_exited
+		elif spell.has_method("launch"):
+			spell.launch(target_enemy.global_position, target_enemy, raw_damage, controller)
+			await spell.tree_exited
+		else:
+			var spell_sprite = spell as AnimatedSprite2D if spell is AnimatedSprite2D else spell.find_child("AnimatedSprite2D", true, false) as AnimatedSprite2D
+			if spell_sprite and spell_sprite.sprite_frames:
+				var s_anim = "attack_1" if spell_sprite.sprite_frames.has_animation("attack_1") else "default"
+				if spell_sprite.sprite_frames.has_animation(s_anim):
+					spell_sprite.play(s_anim)
+					await spell_sprite.animation_finished
+			else:
+				await get_tree().create_timer(0.35).timeout
+
+			target_enemy.take_damage(raw_damage)
+			controller.progression.gain_combat_xp(1)
+			if is_instance_valid(spell): spell.queue_free()
+
+	# 3. ÍJÁSZ ÉS ÁLTALÁNOS LÖVEDÉKEK
+	elif p_scene != null:
+		var proj = p_scene.instantiate()
+		controller.get_parent().add_child(proj)
+		if proj.has_method("launch"):
+			proj.launch(controller.global_position, target_enemy, raw_damage, controller)
+		elif proj.has_method("spawn_at"):
+			proj.spawn_at(target_enemy, raw_damage, controller)
+		await proj.tree_exited
+
+	# 4. TARTALÉK
+	else:
+		target_enemy.take_damage(raw_damage)
+		controller.progression.gain_combat_xp(1)
+
+func _get_active_projectile_scene() -> PackedScene:
+	if controller and controller.active_class and controller.active_class.projectile_scene != null:
+		return controller.active_class.projectile_scene
+	return projectile_scene
+
+func _get_projectile_delay() -> float:
+	if projectile_delay > 0.0:
+		return projectile_delay
+	if controller and controller.active_class:
+		var c = controller.active_class
+		if c.get("attack_fps") != null and c.get("release_frame") != null and c.attack_fps > 0.0:
+			return float(c.release_frame) / c.attack_fps
+	return 0.0
+
+func cast_priest_self_heal() -> void:
+	if not controller.is_alive() or in_battle or is_attacking or controller.is_moving or controller.is_stunned:
+		return
+	var c_name = controller.active_class.class_name_id if controller.active_class else ""
+	if c_name != "Priest": return
 	if controller.current_hp >= controller.max_hp: return
 
 	is_attacking = true
@@ -203,11 +284,14 @@ func cast_priest_self_heal() -> void:
 		if sprite.sprite_frames.has_animation("heal"): sprite.play("heal")
 		elif sprite.sprite_frames.has_animation("attack_1"): sprite.play("attack_1")
 
-	if projectile_scene != null:
-		var spell = projectile_scene.instantiate()
+	var p_scene = _get_active_projectile_scene()
+	if p_scene != null:
+		var spell = p_scene.instantiate()
 		controller.get_parent().add_child(spell)
-		if spell.has_method("cast_heal_at"): await spell.cast_heal_at(controller.global_position)
-		else: spell.queue_free()
+		if spell.has_method("cast_heal_at"):
+			await spell.cast_heal_at(controller.global_position)
+		else:
+			spell.queue_free()
 
 	var heal_val = maxi(25, ceili(float(controller.max_hp) * 0.35))
 	controller.progression.heal(heal_val)
@@ -219,7 +303,7 @@ func cast_priest_self_heal() -> void:
 func is_hero_ranged_attack(target_cell: Vector2i) -> bool:
 	if controller.active_class == null: return is_ranged
 	var c_name = controller.active_class.class_name_id
-	if c_name in ["Archer", "Wizard", "Priest", "Priestess"]: return true
+	if c_name in ["Archer", "Wizard", "Priest"]: return true
 	if c_name == "Soldier":
 		var grid_mgr = controller.mover.grid_manager
 		var dist = grid_mgr.get_grid_distance(controller.grid_pos, target_cell) if grid_mgr else 1
@@ -230,7 +314,7 @@ func get_effective_attack_range() -> int:
 	if controller.active_class == null: return 1
 	var c_name = controller.active_class.class_name_id
 	var vis = controller.visuals.vision_limit if controller.visuals else 25
-	if c_name in ["Archer", "Priest", "Priestess"]: return vis
+	if c_name in ["Archer", "Priest"]: return vis
 	elif c_name == "Wizard": return mini(5, vis)
 	elif c_name == "Soldier": return mini(3, vis)
 	return 1
@@ -257,6 +341,9 @@ func _resolve_hero_attack_action(target_enemy: Node2D) -> Dictionary:
 		"Wizard":
 			ranged = true
 			anim = "attack_1" if wizard_element == "ice" else "attack_2"
+		"Priest":
+			ranged = true
+			anim = "attack_1"
 
 	return {"anim": anim, "multiplier": mult, "is_ranged": ranged}
 

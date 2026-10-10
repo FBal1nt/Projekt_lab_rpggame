@@ -18,6 +18,9 @@
 script = ExtResource("1_3vyb7")
 
 [node name="Visuals" type="AnimatedSprite2D" parent="." unique_id=813379180]
+animation = &""
+frame = 3
+frame_progress = 1.0
 offset = Vector2(-6, -6)
 script = ExtResource("2_g2els")
 

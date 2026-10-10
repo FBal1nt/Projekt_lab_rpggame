@@ -24,7 +24,7 @@ func setup(p_controller: HeroController) -> void:
 		current_step_target = grid_pos
 
 func handle_move_click() -> void:
-	if not grid_manager or not grid_manager.floor_layer or is_moving or controller.in_battle or not controller.is_alive():
+	if not grid_manager or not grid_manager.floor_layer or is_moving or controller.in_battle or not controller.is_alive() or controller.is_stunned:
 		return
 
 	var fl = grid_manager.floor_layer
@@ -116,5 +116,43 @@ func _on_step_finished() -> void:
 	if controller.visuals:
 		controller.visuals.update_fog_of_war()
 
+	# 1. HA MEGÉRKEZTÜNK A CÉLMEZŐRE (a játékos ide kattintott, a sor kiürült):
+	if path_queue.is_empty():
+		is_moving = false
+		current_step_target = grid_pos
+		if controller.visuals:
+			controller.visuals.play_idle_anim()
+
+		# Megvizsgáljuk, hogy közelharcosként szomszédosak vagyunk-e egy ellenséggel:
+		var target_enemy = _find_adjacent_melee_enemy()
+		if target_enemy != null:
+			var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
+			if battle_ui != null and not battle_ui.combat_active:
+				# Azonnal indul a párbaj, a BattleDialog-ban a kezdeményezés dönt az első ütésről!
+				battle_ui.open_battle(controller, target_enemy, false)
+				return # Harc indult, nem hívunk külső szörnyköröket!
+
+		# Ha nem áll melletünk ellenség, a szokásos módon lefut a szörnyek köre:
+		controller.trigger_monsters_turn()
+		return
+
+	# 2. HA CSAK ÁTHALADUNK EGY MEZŐN (még vannak csempék a sorban):
+	# Nem indítunk harcot, haladunk tovább a következő csempére!
 	controller.trigger_monsters_turn()
 	_step_next_in_queue()
+
+## Megkeresi, hogy a megérkezett mezőnk szomszédos-e olyan szörnnyel, akivel közelharcba tudunk lépni
+func _find_adjacent_melee_enemy() -> Node2D:
+	if controller == null or controller.combat == null:
+		return null
+
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	for enemy in enemies:
+		if is_instance_valid(enemy) and enemy.has_method("is_monster_alive") and enemy.is_monster_alive():
+			# Csak akkor, ha a hős ezzel a szörnnyel szemben közelharci módban van (nem íjász/varázsló távolsági):
+			if not controller.combat.is_hero_ranged_attack(enemy.grid_pos):
+				# És a szabályok szerint elérhető szomszédos mezőn áll (vízszintesen balról vagy jobbról):
+				if controller.combat.can_attack_cell(enemy.grid_pos):
+					return enemy
+
+	return null

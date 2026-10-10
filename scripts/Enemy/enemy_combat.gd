@@ -2,16 +2,24 @@ extends Node
 class_name EnemyCombat
 
 var controller: EnemyController
+var armored_combat: ArmoredEnemyCombat
+
+@export_group("Kábítás és Időzítés")
+@export var stun_duration: float = 1.5
 
 var is_attacking: bool = false
 var is_blocking_active: bool = false
 var is_dead: bool = false
 
-## Komponens inicializálása
 func setup(p_controller: EnemyController) -> void:
 	controller = p_controller
+	is_attacking = false
+	is_blocking_active = false
+	armored_combat = ArmoredEnemyCombat.new(self)
 
-# --- TÁMADÁSI ÉS SEBZÉSI FELTÉTELEK ---
+func is_armored_enemy() -> bool:
+	if controller == null or controller.enemy_data == null: return false
+	return controller.enemy_data.special_profile != 0 # Nem STANDARD
 
 func can_attack_hero(hero_cell: Vector2i) -> bool:
 	if controller == null: return false
@@ -21,7 +29,6 @@ func can_attack_hero(hero_cell: Vector2i) -> bool:
 	if a_range > 1:
 		return maxi(absi(diff.x), absi(diff.y)) <= a_range
 	else:
-		# Közelharc: SZIGORÚAN csak vízszintesen balról vagy jobbról!
 		return diff.y == 0 and absi(diff.x) == 1
 
 func roll_attack_damage() -> int:
@@ -31,19 +38,23 @@ func take_damage(incoming_raw_damage: int) -> int:
 	if is_dead or controller == null or controller.enemy_data == null: return 0
 	var data = controller.enemy_data
 
-	# Denevér kitérés
 	if data.check_dodge():
 		print("💨 [%s KITÉRT] Elsuhant a támadás elől!" % controller.monster_name)
 		return 0
 
 	var actual_raw = incoming_raw_damage
+
 	if is_blocking_active:
 		var reduction = data.block_reduction if data.get("block_reduction") != null else 0.5
 		actual_raw = ceili(float(incoming_raw_damage) * (1.0 - reduction))
 
+	if data.get("flat_armor") != null and data.flat_armor > 0:
+		var absorbed = mini(actual_raw, data.flat_armor)
+		actual_raw = maxi(0, actual_raw - data.flat_armor)
+		print("🛡️ [%s PÁNCÉL] -%d sebzés elnyelve! (Maradt: %d)" % [controller.monster_name, absorbed, actual_raw])
+
 	var dealt = data.take_damage(actual_raw)
 
-	# AI és mozgás leállítása halál esetén
 	if not data.is_alive():
 		is_dead = true
 		if controller.brain and controller.brain.ai_timer and is_instance_valid(controller.brain.ai_timer):
@@ -71,26 +82,15 @@ func try_trigger_block() -> bool:
 	is_blocking_active = false
 	return false
 
-# --- TÁMADÁSOK LEVEZÉNYLÉSE ---
-
 func attack_hero(target_hero: HeroController) -> void:
 	if is_dead or is_attacking or not controller.is_monster_alive(): return
 	if not is_instance_valid(target_hero): return
-
-	# Ha a hős épp ellép a csempéről, nem rántjuk be harcba
-	if target_hero.is_moving:
-		return
-
-	# Pozíció újraellenőrzése az indítás pillanatában
-	if not can_attack_hero(target_hero.grid_pos):
-		return
+	if target_hero.is_moving or not can_attack_hero(target_hero.grid_pos): return
 
 	var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
 	if battle_ui != null and not battle_ui.combat_active:
 		if target_hero.has_method("cancel_movement_immediately"):
 			target_hero.cancel_movement_immediately()
-
-		# FONTOS: controller-t adunk át a harci dialógusnak, NEM self-et!
 		battle_ui.open_battle(target_hero, controller, true)
 
 func opportunity_attack(target_hero: HeroController) -> void:
@@ -99,26 +99,50 @@ func opportunity_attack(target_hero: HeroController) -> void:
 	print("[%s ELLÉPÉSI CSAPÁS] Ráüt a menekülő hősre: %d sebzéssel!" % [controller.monster_name, dmg])
 	target_hero.take_damage(dmg)
 
-func perform_combat_turn(target_hero: HeroController) -> int:
+## KÖR VÉGREHAJTÁSA A PÁRBAJBAN
+func perform_combat_turn(target_hero: HeroController, is_extra_attack: bool = false) -> int:
 	if is_dead or not is_instance_valid(target_hero): return 0
+
+	# Ha a hős korábban hátralökődött, odalépünk mellé:
+	if controller.attack_range <= 1 and not can_attack_hero(target_hero.grid_pos):
+		await armored_combat.step_closer_to_hero(target_hero)
+
 	if controller.visuals:
 		controller.visuals.update_facing(target_hero.grid_pos.x)
 
-	var anim = controller.visuals._get_attack_anim_name() if controller.visuals else ""
-	var sprite = controller.visuals.sprite if controller.visuals else null
+	# 1. PÁNCÉLOZOTT ELLENSÉG: ÁTADJUK A VEZÉRLÉST AZ ARMORED COMBAT OSZTÁLYNAK!
+	if is_armored_enemy():
+		return await armored_combat.perform_turn(target_hero, is_extra_attack)
 
-	if anim != "" and sprite:
+	# 2. STANDARD / SIMA ELLENSÉGEK ALAP TÁMADÁSA:
+	var data = controller.enemy_data
+	var heavy_chance = data.heavy_attack_chance if data else 0.35
+	var heavy_mult = data.heavy_attack_multiplier if data else 1.5
+	var light_mult = data.light_attack_multiplier if data else 0.9
+
+	var anim = controller.visuals._get_attack_anim_name() if controller.visuals else "attack_1"
+	var multiplier = 1.0
+
+	if controller.visuals and controller.visuals.has_combo_attacks():
+		if randf() < heavy_chance:
+			anim = controller.visuals.get_combo_anim(1)
+			multiplier = heavy_mult
+		else:
+			anim = controller.visuals.get_combo_anim(0)
+			multiplier = light_mult
+
+	var sprite = controller.visuals.sprite if controller.visuals else null
+	if anim != "" and sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
 		sprite.play(anim)
-		if target_hero.has_method("try_trigger_block"):
-			target_hero.try_trigger_block()
+		if target_hero.has_method("try_trigger_block"): target_hero.try_trigger_block()
 		await sprite.animation_finished
 		if not is_dead and controller.visuals:
 			controller.visuals.play_idle_anim()
 
-	var raw_dmg = roll_attack_damage()
+	var raw_dmg = ceili(float(roll_attack_damage()) * multiplier)
 
-	if controller.enemy_data.projectile_scene != null:
-		var proj = controller.enemy_data.projectile_scene.instantiate()
+	if data and data.projectile_scene != null:
+		var proj = data.projectile_scene.instantiate()
 		controller.get_parent().add_child(proj)
 		if proj.has_method("launch"):
 			proj.launch(controller.global_position, target_hero, raw_dmg, controller)
@@ -126,8 +150,7 @@ func perform_combat_turn(target_hero: HeroController) -> int:
 	else:
 		target_hero.take_damage(raw_dmg)
 
-	# Vámpírizmus
-	var drained = controller.enemy_data.apply_life_steal(raw_dmg)
+	var drained = data.apply_life_steal(raw_dmg) if data else 0
 	if drained > 0:
 		print("🩸 [%s VÁMPÍRIZMUS] Visszaszívott %d HP-t!" % [controller.monster_name, drained])
 
@@ -136,10 +159,29 @@ func perform_combat_turn(target_hero: HeroController) -> int:
 
 	return raw_dmg
 
+func set_all_monsters_ai_frozen(frozen: bool) -> void:
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if is_instance_valid(enemy) and enemy.get("brain") != null:
+			if enemy.brain.get("ai_timer") != null and is_instance_valid(enemy.brain.ai_timer):
+				enemy.brain.ai_timer.paused = frozen
+
 func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 	if is_dead or is_attacking or not controller.is_monster_alive(): return
 	var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
 	if battle_ui != null and battle_ui.combat_active: return
+
+	var hero_is_ranged: bool = false
+	if hero.combat and hero.combat.has_method("is_hero_ranged_attack"):
+		hero_is_ranged = hero.combat.is_hero_ranged_attack(controller.grid_pos)
+	elif hero.get("is_ranged") != null:
+		hero_is_ranged = bool(hero.get("is_ranged"))
+
+	if hero_is_ranged:
+		if battle_ui != null and not battle_ui.combat_active:
+			if hero.has_method("cancel_movement_immediately"):
+				hero.cancel_movement_immediately()
+			battle_ui.open_battle(hero, controller, true)
+		return
 
 	is_attacking = true
 	if controller.visuals:
@@ -171,11 +213,6 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 		if is_instance_valid(hero):
 			hero.take_damage(raw_dmg)
 
-	if controller.enemy_data:
-		var drained = controller.enemy_data.apply_life_steal(raw_dmg)
-		if drained > 0:
-			print("🩸 [%s VÁMPÍRIZMUS] Visszaszívott %d HP-t!" % [controller.monster_name, drained])
-
 	if is_instance_valid(hero) and hero.is_alive():
 		if hero.has_method("try_trigger_block"):
 			hero.try_trigger_block()
@@ -183,33 +220,6 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 			hero.play_hurt_reaction()
 
 	is_attacking = false
-
-	# Harcindítás ellenőrzése
-	if is_instance_valid(hero) and hero.is_alive():
-		var is_in_vision = true
-		if hero.has_method("is_tile_in_vision"):
-			is_in_vision = hero.is_tile_in_vision(controller.grid_pos)
-
-		if not is_in_vision:
-			hero.in_battle = false
-			print("🏃 [MENEKÜLÉS] A hős elszaladt és a szörny kilépett a látótérből! Harc elkerülve.")
-			return
-
-		var hero_can_counter = false
-		if hero.has_method("can_attack_cell"):
-			hero_can_counter = hero.can_attack_cell(controller.grid_pos)
-
-		if is_in_vision and hero_can_counter:
-			if battle_ui != null and not battle_ui.combat_active:
-				battle_ui.open_battle_after_ranged_shot(hero, controller, "HERO_NEXT")
-		else:
-			hero.in_battle = false
-			print("🏹 [SZABAD LÖVÉS] Eltalált, de nem nyílik harci ablak.")
-	else:
-		if is_instance_valid(hero) and hero.has_method("play_overworld_death"):
-			hero.play_overworld_death()
-
-# --- HALÁL, FELTÁMADÁS ÉS OSZTÓDÁS ---
 
 func play_overworld_death() -> void:
 	if controller.visuals:
@@ -222,11 +232,10 @@ func play_overworld_death() -> void:
 		sprite.play(d_anim)
 		await sprite.animation_finished
 
-	# Csontváz feltámadás
 	var data = controller.enemy_data
-	if data and data.can_resurrect and not data.has_resurrected():
+	if data and data.can_self_revive and not data.has_resurrected():
 		print("💀 [%s ELTERÜLT] A csontok a földön hevernek..." % controller.monster_name)
-		var delay = controller.visuals.resurrect_delay if controller.visuals else 0.7
+		var delay = data.resurrect_delay if data.get("resurrect_delay") != null else 3.0
 		await get_tree().create_timer(delay).timeout
 
 		print("✨ [%s FELTÁMADT] A csontok újra összeállnak!" % controller.monster_name)
@@ -246,12 +255,10 @@ func play_overworld_death() -> void:
 			controller.brain.ai_timer.start()
 		return
 
-	# Slime osztódás
 	if data and data.can_split:
 		if randf() < data.split_chance_on_death:
 			_spawn_split_slimes()
 
-	# Végleges halál: a teljes entitást töröljük a csoportból és a fából!
 	controller.remove_from_group("enemies")
 	controller.queue_free()
 
@@ -268,20 +275,17 @@ func _spawn_split_slimes() -> void:
 		if controller.mover.is_cell_walkable(spawn_cell):
 			var small_slime = controller.duplicate() as EnemyController
 
-			# 1. Előbb beállítjuk a felezett adatmodellt:
 			var child_data = controller.enemy_data.duplicate() as EnemyData
-			child_data.can_split = false # A kis nyálkák már nem duplázódhatnak
+			child_data.can_split = false
 			child_data.max_hp = ceili(float(controller.enemy_data.max_hp) * 0.5)
 			child_data.base_damage = maxi(4, ceili(float(controller.enemy_data.base_damage) * 0.6))
 			child_data.initialize()
 			small_slime.enemy_data = child_data
 
-			# 2. Hozzáadás a fához és koordináták beállítása:
 			controller.get_parent().add_child(small_slime)
 			small_slime.grid_pos = spawn_cell
 			small_slime.position = controller.mover.floor_layer.map_to_local(spawn_cell)
 
-			# 3. Életre keltés és méretcsökkentés (EZ HIÁNYZOTT):
 			small_slime.is_dead = false
 			small_slime.visible = true
 
