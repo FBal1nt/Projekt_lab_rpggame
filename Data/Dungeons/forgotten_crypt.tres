@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DungeonDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/DungeonDefinition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"forgotten_crypt"
+display_name = "Elfeledett Kripta"
+description = "Egy omladozó föld alatti sírkamra, ahol csontvázak és eltévedt lények járőröznek. Ez az első elérhető dungeon prototípusa."
+scene_path = ""
+base_spawn_rate_multiplier = 1.0
+recommended_level_min = 1
+recommended_level_max = 5

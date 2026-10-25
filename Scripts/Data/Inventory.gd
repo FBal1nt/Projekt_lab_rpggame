@@ -115,6 +115,54 @@ func remove_item(inventory_item: InventoryItem) -> bool:
 
 	return true
 
+
+func transfer_item_to(
+	inventory_item: InventoryItem,
+	target_inventory: Inventory,
+	target_position: Vector2i
+) -> bool:
+	# The source and target are only changed after destination validation,
+	# so a failed transfer cannot delete or duplicate an item.
+	if inventory_item == null or target_inventory == null:
+		return false
+
+	if target_inventory == self or not items.has(inventory_item):
+		return false
+
+	var target_item := target_inventory.get_item_at_cell(target_position)
+
+	# A stack target takes as many items as it has room for.
+	if target_item != null:
+		if not target_inventory.can_stack(inventory_item, target_item):
+			return false
+
+		var free_space: int = target_item.item_data.max_stack - target_item.amount
+		var transfer_amount: int = min(inventory_item.amount, free_space)
+
+		if transfer_amount <= 0:
+			return false
+
+		target_item.amount += transfer_amount
+		inventory_item.amount -= transfer_amount
+
+		if inventory_item.amount <= 0:
+			items.erase(inventory_item)
+	else:
+		# Empty destination cell: validate the item's complete footprint first.
+		if not target_inventory.can_place_item(
+			inventory_item.item_data,
+			target_position
+		):
+			return false
+
+		items.erase(inventory_item)
+		inventory_item.position = target_position
+		target_inventory.items.append(inventory_item)
+
+	inventory_changed.emit()
+	target_inventory.inventory_changed.emit()
+	return true
+
 func can_stack(
 	source: InventoryItem,
 	target: InventoryItem
@@ -122,7 +170,17 @@ func can_stack(
 	if source == null or target == null:
 		return false
 
+	if source.item_data == null or target.item_data == null:
+		return false
 	if source.item_data.id != target.item_data.id:
+		return false
+	if source.upgrade_level != target.upgrade_level:
+		return false
+	var source_enchantments: PackedStringArray = source.enchantment_ids.duplicate()
+	var target_enchantments: PackedStringArray = target.enchantment_ids.duplicate()
+	source_enchantments.sort()
+	target_enchantments.sort()
+	if source_enchantments != target_enchantments:
 		return false
 
 	if target.amount >= target.item_data.max_stack:
@@ -174,7 +232,8 @@ func find_free_position(item_data: ItemData) -> Vector2i:
 
 func try_add_item(
 	item_data: ItemData,
-	amount: int = 1
+	amount: int = 1,
+	emit_change: bool = true
 ) -> int:
 	if item_data == null or amount <= 0:
 		return max(amount, 0)
@@ -187,6 +246,10 @@ func try_add_item(
 			break
 
 		if inventory_item.item_data.id != item_data.id:
+			continue
+		# try_add_item adds an unupgraded, unenchanted item definition.
+		# Never merge it into an upgraded/enchantened stack.
+		if inventory_item.upgrade_level != 0 or not inventory_item.enchantment_ids.is_empty():
 			continue
 
 		if inventory_item.amount >= item_data.max_stack:
@@ -228,7 +291,8 @@ func try_add_item(
 
 		remaining -= stack_amount
 
-	inventory_changed.emit()
+	if emit_change:
+		inventory_changed.emit()
 
 	return remaining
 
@@ -247,6 +311,8 @@ func can_add_item(
 		copy.item_data = existing_item.item_data
 		copy.position = existing_item.position
 		copy.amount = existing_item.amount
+		copy.upgrade_level = existing_item.upgrade_level
+		copy.enchantment_ids = existing_item.enchantment_ids.duplicate()
 
 		simulation.items.append(copy)
 

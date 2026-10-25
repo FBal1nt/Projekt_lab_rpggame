@@ -12,4 +12,15 @@ icon = ExtResource("1_f2y2x")
 size = Vector2i(2, 3)
 buy_price = 150
 sell_price = 75
+item_type = &"weapon"
+equipment_slot = &"weapon"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"damage": 8.0,
+"accuracy": 0.0
+}
+upgrade_stat_bonuses = {
+"damage": 2.0
+}
 metadata/_custom_type_script = "uid://4qjcof5xncfd"

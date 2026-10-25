@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"vitality"
+display_name = "Életerő áldása"
+description = "Mágikus életerőt ad a felszerelés viselőjének, és harcon kívül lassan regenerálja a HP-t."
+workshop_type = &"wizard"
+option_category = &"utility_boost"
+element = &"arcane"
+applicable_item_types = PackedStringArray("armor", "ring", "earring", "shield", "helmet", "boots", "gloves")
+ingredient_item_ids = PackedStringArray("arcane_dust", "silver_ingot")
+ingredient_amounts = PackedInt32Array(3, 2)
+gold_cost = 140
+stat_modifiers = {"max_health": 10.0, "out_of_combat_hp_regen": 2.0}

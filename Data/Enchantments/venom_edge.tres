@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"venom_edge"
+display_name = "Mérgezett fegyver"
+description = "Mérget von a fegyverre: extra méregsebzést, méregtámadási bónuszt és mérgezési esélyt ad."
+workshop_type = &"wizard"
+option_category = &"weapon_element"
+element = &"poison"
+applicable_item_types = PackedStringArray("weapon")
+ingredient_item_ids = PackedStringArray("arcane_dust", "leather_strip")
+ingredient_amounts = PackedInt32Array(1, 2)
+gold_cost = 80
+stat_modifiers = {"poison_damage": 2.0, "poison_attack_bonus": 1.0, "poison_chance": 20.0, "poison_extra_attack_chance": 2.0}

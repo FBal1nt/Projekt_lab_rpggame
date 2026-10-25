@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"scout"
+display_name = "Felderítő"
+role = "Mozgékonyság / utility"
+description = "Fürge felderítő, aki gyorsan mozog, felderíti a veszélyeket és gyenge pontokat keres."
+placeholder_color = Color(0.34, 0.52, 0.45, 1)
+base_health = 27
+base_damage_min = 3
+base_damage_max = 7
+base_defense = 1
+base_speed = 8
+base_accuracy = 93
+base_crit_chance = 7.0
+base_dodge = 20
+base_healing_power = 0
+base_stress_resistance = 35
+health_per_level = 2
+damage_min_per_level = 0
+damage_max_per_level = 1
+defense_per_level = 0
+skill_ids = PackedStringArray("quick_step", "reveal_weakness", "disarm_trap")
+skill_names = PackedStringArray("Fürge lépés", "Gyenge pont felfedése", "Csapda hatástalanítása")
+starting_equipment_ids = PackedStringArray()

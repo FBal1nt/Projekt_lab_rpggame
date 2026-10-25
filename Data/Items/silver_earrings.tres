@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"silver_earrings"
+display_name = "Ezüst fülbevaló"
+description = "Finom ezüst ékszer, amely gyorsabb reakciókat segíthet."
+buy_price = 110
+sell_price = 45
+item_type = &"earring"
+equipment_slot = &"earring"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"speed": 1.0,
+"crit_chance": 2.0
+}
+upgrade_stat_bonuses = {
+"crit_chance": 1.0
+}

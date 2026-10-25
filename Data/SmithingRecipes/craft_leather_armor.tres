@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SmithingRecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/SmithingRecipeData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"craft_leather_armor"
+display_name = "Megerősített bőrvért"
+description = "Könnyű páncél a kalandoroknak."
+recipe_type = &"craft"
+result_item_id = &"leather_armor"
+target_upgrade_level = 1
+ingredient_item_ids = PackedStringArray("leather_strip", "iron_ingot")
+ingredient_amounts = PackedInt32Array(6, 2)
+gold_cost = 95

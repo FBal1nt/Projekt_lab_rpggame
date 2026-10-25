@@ -3,31 +3,53 @@
 [ext_resource type="Script" uid="uid://cgo47jgwpnyjl" path="res://Scripts/UI/ShopItemRow.gd" id="1_8nyil"]
 
 [node name="ShopItemRow" type="PanelContainer" unique_id=1841047857]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 92)
+size_flags_horizontal = 3
 script = ExtResource("1_8nyil")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1316055105]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1769558771]
 layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1833206960]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(68, 68)
 layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Info" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=559137091]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 3
 
 [node name="Name" type="Label" parent="MarginContainer/HBoxContainer/Info" unique_id=2038497272]
 layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Tárgy neve"
 
-[node name="Price" type="Label" parent="MarginContainer/HBoxContainer/Info" unique_id=750915008]
+[node name="Description" type="Label" parent="MarginContainer/HBoxContainer/Info" unique_id=2038497273]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+text = "Tárgyleírás"
 
-[node name="ActionButton" type="Button" parent="MarginContainer/HBoxContainer" unique_id=1573197332]
-custom_minimum_size = Vector2(120, 45)
+[node name="PricePanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=2038497274]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
-text = "ACTION"
+size_flags_vertical = 4
+
+[node name="Price" type="Label" parent="MarginContainer/HBoxContainer/PricePanel" unique_id=2038497275]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "50 ARANY"
+horizontal_alignment = 1
+vertical_alignment = 1

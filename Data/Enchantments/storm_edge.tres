@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"storm_edge"
+display_name = "Viharfegyver"
+description = "Villámot vezet a fegyverbe, növeli a villámsebzést és a támadási bónuszt, ritkán pedig további támadást tehet lehetővé."
+workshop_type = &"wizard"
+option_category = &"weapon_element"
+element = &"lightning"
+applicable_item_types = PackedStringArray("weapon")
+ingredient_item_ids = PackedStringArray("arcane_dust", "silver_ingot")
+ingredient_amounts = PackedInt32Array(2, 1)
+gold_cost = 100
+stat_modifiers = {"lightning_damage": 2.0, "lightning_attack_bonus": 1.0, "shock_chance": 10.0, "lightning_extra_attack_chance": 2.0}

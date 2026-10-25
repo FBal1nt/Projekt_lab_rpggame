@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"silver_ingot"
+display_name = "Ezüstrúd"
+description = "Finom ékszerek és mágikus felszerelések alapanyaga."
+max_stack = 99
+buy_price = 24
+sell_price = 10
+item_type = &"material"

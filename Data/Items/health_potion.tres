@@ -10,6 +10,7 @@ display_name = "Health Potion"
 description = "Restores health."
 icon = ExtResource("1_pnwwy")
 max_stack = 5
+item_type = &"consumable"
 buy_price = 50
 sell_price = 25
 metadata/_custom_type_script = "uid://4qjcof5xncfd"

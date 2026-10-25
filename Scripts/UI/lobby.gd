@@ -19,6 +19,7 @@ const BACKGROUND_PATH := "res://Arts/UI/lobby_background.png"
 
 var windows: Array[Panel] = []
 var main_menu_button: Button
+var main_menu_confirm_dialog: ConfirmationDialog
 var heading_label: Label
 
 const BUILDINGS := [
@@ -216,25 +217,26 @@ func _layout_building_buttons() -> void:
 
 
 func _setup_windows() -> void:
-	var placeholder_descriptions := {
-		"CharacterWindow": "Itt jelennek majd meg a karakter tulajdonságai, felszerelése és szintlépései.",
-		"BlacksmithWindow": "Fegyverek és páncélok fejlesztése, javítása és egyedi készítése.",
-		"WizardWindow": "Varázslatok, képességek és mágikus fejlesztések kezelése.",
-		"DungeonWindow": "Válassz küldetést, győzd le az ellenfeleket, és térj vissza zsákmánnyal."
-	}
+	# The Dungeon window now has its own data-driven selector; keep only true placeholders here.
+	var placeholder_descriptions := {}
 
 	for window_name in ["CharacterWindow", "BlacksmithWindow", "ShopWindow", "WizardWindow", "DungeonWindow", "InventoryWindow"]:
 		var window := $UI/WindowLayer.get_node_or_null(window_name) as Panel
 		if window == null:
 			continue
-		UI_THEME.style_panel(window, Color(0.78, 0.60, 0.32, 1.0), Color(0.025, 0.045, 0.07, 0.98))
+		var window_accent := Color(0.78, 0.60, 0.32, 1.0)
+		if window_name == "BlacksmithWindow":
+			window_accent = Color(0.84, 0.54, 0.26, 1.0)
+		elif window_name == "WizardWindow":
+			window_accent = Color(0.58, 0.48, 0.88, 1.0)
+		UI_THEME.style_panel(window, window_accent, Color(0.025, 0.045, 0.07, 0.98))
 		var title := window.find_child("Title", true, false) as Label
 		if title != null:
 			title.add_theme_color_override("font_color", UI_THEME.IVORY)
 			title.add_theme_font_size_override("font_size", 28)
 		var close_button := window.find_child("CloseButton", true, false) as Button
 		if close_button != null:
-			UI_THEME.style_button(close_button, Color(0.78, 0.60, 0.32, 1.0), true)
+			UI_THEME.style_button(close_button, window_accent, true)
 			close_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 		if placeholder_descriptions.has(window_name):
@@ -284,6 +286,8 @@ func open_window(window: Panel) -> void:
 	close_all_windows()
 	if window == shop_window:
 		shop_window.refresh()
+	elif window == dungeon_window:
+		dungeon_window.call("refresh")
 	window.show()
 	window.move_to_front()
 
@@ -317,6 +321,36 @@ func _on_inventory_building_pressed() -> void:
 
 
 func _on_main_menu_pressed() -> void:
+	if main_menu_confirm_dialog == null:
+		main_menu_confirm_dialog = ConfirmationDialog.new()
+		main_menu_confirm_dialog.title = "Vissza a főmenübe?"
+		main_menu_confirm_dialog.dialog_text = "Szeretnéd menteni a játékot, mielőtt visszatérsz a főmenübe?"
+		main_menu_confirm_dialog.ok_button_text = "Mentés és kilépés"
+		main_menu_confirm_dialog.cancel_button_text = "Mégse"
+		main_menu_confirm_dialog.add_button("Mentés nélkül", true, "discard")
+		main_menu_confirm_dialog.confirmed.connect(_return_to_main_menu_after_save)
+		main_menu_confirm_dialog.custom_action.connect(_on_main_menu_save_choice)
+		add_child(main_menu_confirm_dialog)
+	main_menu_confirm_dialog.popup_centered()
+
+
+func _on_main_menu_save_choice(action: StringName) -> void:
+	if action == &"discard":
+		_return_to_main_menu_without_save()
+
+
+func _return_to_main_menu_after_save() -> void:
+	if not GameState.save_game():
+		push_warning("A mentés nem sikerült; a főmenübe lépés megszakadt.")
+		return
+	_change_to_main_menu()
+
+
+func _return_to_main_menu_without_save() -> void:
+	_change_to_main_menu()
+
+
+func _change_to_main_menu() -> void:
 	var result := get_tree().change_scene_to_file("res://Scenes/Menu/MainMenu.tscn")
 	if result != OK:
 		push_error("Nem sikerült visszalépni a főmenübe.")

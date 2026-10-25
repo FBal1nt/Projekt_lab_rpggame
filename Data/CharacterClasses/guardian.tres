@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"guardian"
+display_name = "Védelmező"
+role = "Tank / védelem"
+description = "Nagy életerejű védő, aki csökkenti a veszélyt és fedezi a társait."
+placeholder_color = Color(0.3, 0.43, 0.58, 1)
+base_health = 42
+base_damage_min = 3
+base_damage_max = 6
+base_defense = 6
+base_speed = 2
+base_accuracy = 85
+base_crit_chance = 3.0
+base_dodge = 0
+base_healing_power = 0
+base_stress_resistance = 60
+health_per_level = 4
+damage_min_per_level = 0
+damage_max_per_level = 1
+defense_per_level = 1
+skill_ids = PackedStringArray("shield_bash", "protect_ally", "fortify")
+skill_names = PackedStringArray("Pajzsütés", "Társ védelme", "Megerősítés")
+starting_equipment_ids = PackedStringArray()

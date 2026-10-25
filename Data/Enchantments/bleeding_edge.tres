@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"bleeding_edge"
+display_name = "Vérző él"
+description = "Fogazott, mély sebet ejtő él: növeli a vérzés esélyét és sebzését, valamint eggyel emeli a maximális vérzésrétegek számát."
+workshop_type = &"blacksmith"
+option_category = &"bleeding"
+element = &"physical"
+applicable_item_types = PackedStringArray("weapon")
+ingredient_item_ids = PackedStringArray("iron_ingot", "leather_strip")
+ingredient_amounts = PackedInt32Array(2, 1)
+gold_cost = 85
+stat_modifiers = {"bleed_chance": 15.0, "bleed_damage": 2.0, "max_bleed_stacks": 1.0}

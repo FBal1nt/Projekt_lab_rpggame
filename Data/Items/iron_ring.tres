@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"iron_ring"
+display_name = "Vasgyűrű"
+description = "Egyszerű, masszív gyűrű. Kis védelmet biztosít."
+buy_price = 90
+sell_price = 40
+item_type = &"ring"
+equipment_slot = &"ring"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"defense": 1.0
+}
+upgrade_stat_bonuses = {
+"defense": 1.0
+}

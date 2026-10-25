@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"ice_ward"
+display_name = "Jégvédő rúna"
+description = "Jégellenállást ad, és a hideg mágia harcon kívül lassan helyreállítja a viselő életerejét."
+workshop_type = &"wizard"
+option_category = &"resistance"
+element = &"ice"
+applicable_item_types = PackedStringArray("armor", "ring", "earring", "shield", "helmet", "boots", "gloves")
+ingredient_item_ids = PackedStringArray("arcane_dust", "silver_ingot")
+ingredient_amounts = PackedInt32Array(2, 1)
+gold_cost = 95
+stat_modifiers = {"ice_resistance": 20.0, "out_of_combat_hp_regen": 2.0}

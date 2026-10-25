@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"frostbite"
+display_name = "Jégmetszés"
+description = "A találat jégsebzést okoz, erősíti az elemi támadást, és eséllyel lelassítja a célpontot."
+workshop_type = &"wizard"
+option_category = &"weapon_element"
+element = &"ice"
+applicable_item_types = PackedStringArray("weapon")
+ingredient_item_ids = PackedStringArray("arcane_dust", "silver_ingot")
+ingredient_amounts = PackedInt32Array(2, 1)
+gold_cost = 90
+stat_modifiers = {"ice_damage": 2.0, "ice_attack_bonus": 1.0, "ice_slow_chance": 15.0, "ice_extra_attack_chance": 2.0}

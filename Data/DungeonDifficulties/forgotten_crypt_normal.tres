@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="DungeonDifficultyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/DungeonDifficultyData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+dungeon_id = &"forgotten_crypt"
+id = &"normal"
+display_name = "Közepes"
+description = "Kiegyensúlyozott spawnráta, vegyes ellenféltípusok és a csapat fejlődéséhez igazított kihívás."
+spawn_rate_multiplier = 1.0
+enemy_level_min = 2
+enemy_level_max = 4
+enemy_type_ids = PackedStringArray("skeleton", "bone_archer", "crypt_cultist")
+enemy_type_names = PackedStringArray("Csontváz", "Csontíjász", "Kriptakultista")
+elite_spawn_chance = 0.08
+encounter_count_multiplier = 1.0
+sort_order = 1

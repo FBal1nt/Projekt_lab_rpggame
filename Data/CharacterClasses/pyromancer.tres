@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"pyromancer"
+display_name = "Tűzmágus"
+role = "Mágia / területsebzés"
+description = "Erős tűzvarázslatokkal több ellenfelet is veszélyeztethet, de törékeny és kockázatos."
+placeholder_color = Color(0.72, 0.29, 0.15, 1)
+base_health = 24
+base_damage_min = 5
+base_damage_max = 12
+base_defense = 0
+base_speed = 4
+base_accuracy = 88
+base_crit_chance = 8.0
+base_dodge = 5
+base_healing_power = 0
+base_stress_resistance = 20
+health_per_level = 2
+damage_min_per_level = 0
+damage_max_per_level = 2
+defense_per_level = 0
+skill_ids = PackedStringArray("fire_bolt", "flare_burst", "cinder_mark")
+skill_names = PackedStringArray("Tűzgömb", "Lángrobbanás", "Parázsjel")
+starting_equipment_ids = PackedStringArray()

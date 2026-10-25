@@ -57,6 +57,11 @@ text = "STASH"
 [node name="StashGrid" parent="MarginContainer/VBoxContainer/InventoryContainer/StashPanel/VBoxContainer" unique_id=533027285 instance=ExtResource("1_a1eca")]
 layout_mode = 2
 
+[node name="FeedbackLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=620184303]
+layout_mode = 2
+text = "Kattints egy tárgyra, majd a célrács egy üres helyére."
+horizontal_alignment = 1
+
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1613142188]
 layout_mode = 2
 text = "BEZÁRÁS"

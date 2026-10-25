@@ -4,6 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://tyslssobm4ap" path="res://Scenes/Shop/ShopWindow.tscn" id="2_q0a3m"]
 [ext_resource type="PackedScene" uid="uid://dbbx8xkxlo7eh" path="res://Scenes/Inventory/InventoryWindow.tscn" id="2_t6nvb"]
 [ext_resource type="Texture2D" path="res://Arts/UI/lobby_background.png" id="3_background"]
+[ext_resource type="Script" path="res://Scripts/UI/CharacterWindow.gd" id="4_character_window"]
+[ext_resource type="Script" path="res://Scripts/UI/BlacksmithWindow.gd" id="5_blacksmith_window"]
+[ext_resource type="Script" path="res://Scripts/UI/WizardWindow.gd" id="6_wizard_window"]
+[ext_resource type="Script" path="res://Scripts/UI/DungeonWindow.gd" id="7_dungeon_window"]
 
 [node name="Lobby" type="Control" unique_id=1294276721]
 layout_mode = 3
@@ -115,29 +119,32 @@ mouse_filter = 2
 
 [node name="ShopWindow" parent="UI/WindowLayer" unique_id=1915880606 instance=ExtResource("2_q0a3m")]
 visible = false
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 258.0
-offset_top = 134.0
-offset_right = 858.0
-offset_bottom = 534.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="CharacterWindow" type="Panel" parent="UI/WindowLayer" unique_id=152919397]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+offset_left = -600.0
+offset_top = -285.0
+offset_right = 600.0
+offset_bottom = 285.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterWindow" type="Panel" parent="UI/WindowLayer" unique_id=152919397]
+visible = false
+script = ExtResource("4_character_window")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -310.0
+offset_right = 450.0
+offset_bottom = 310.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -159,16 +166,17 @@ text = "Bezárás"
 
 [node name="BlacksmithWindow" type="Panel" parent="UI/WindowLayer" unique_id=376969783]
 visible = false
+script = ExtResource("5_blacksmith_window")
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+anchors_preset = 0
+anchor_left = 0.025
+anchor_top = 0.035
+anchor_right = 0.975
+anchor_bottom = 0.965
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -190,16 +198,17 @@ text = "Bezárás"
 
 [node name="WizardWindow" type="Panel" parent="UI/WindowLayer" unique_id=393921317]
 visible = false
+script = ExtResource("6_wizard_window")
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+anchors_preset = 0
+anchor_left = 0.025
+anchor_top = 0.035
+anchor_right = 0.975
+anchor_bottom = 0.965
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -221,6 +230,7 @@ text = "Bezárás"
 
 [node name="DungeonWindow" type="Panel" parent="UI/WindowLayer" unique_id=934430006]
 visible = false
+script = ExtResource("7_dungeon_window")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

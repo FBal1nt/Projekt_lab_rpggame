@@ -1,47 +1,41 @@
-# RPG projekt – fejlesztési terv és jelenlegi állapot
+# RPG projekt – jelenlegi állapot és fejlesztési terv
 
-## Mi került be ebbe a változatba?
+## Jelenlegi alap
 
-- Új, saját készítésű, középkori-fantasy hangulatú Lobby-háttér és hozzá illő épületikonok.
-- Újratervezett, méretezéshez alkalmazkodó főmenü: **Játék indítása**, **Beállítások**, **Kilépés**.
-- Működő alapbeállítások: fő hangerő és teljes képernyős mód, helyi mentés a `user://settings.cfg` fájlba.
-- Grafikailag egységes épületgombok, hover/lenyomott állapotokkal és eszköztippekkel.
-- A Lobby felső sávja most az aranyat és a szintet mutatja, és hozzáadódott a visszalépés a főmenübe.
-- A karakter, kovács, varázsló és dungeon ablakok a mostani prototípusban már röviden jelzik, mi kerülhet majd beléjük.
-- Javítva a `GameState` kezdőtárgyainak kis-/nagybetű-érzékeny erőforrásútvonala és a főmenü Lobby-jelenetváltása.
-- Az inventory tárgyfelvétele a több új stack létrehozásakor egyetlen `inventory_changed` jelet küld, nem minden új stack után külön.
-- A bolt a vásárlás/eladás utáni állapotváltozásra frissít, és megnyitáskor is újratölti az eladási listát.
+A projekt már tartalmazza a Lobby/főmenü felületet, a karakterosztály-választást, a karakterenkénti hátizsákokat, a közös Stash-t, a vásárlás/eladás alapfunkciókat, a Kovács és Varázsló adatvezérelt fejlesztéseit, a globális beállításokat, valamint a Dungeon és nehézség kiválasztását.
+
+A tartalmi definíciók nagyrészt a `Data/` alatti `.tres` erőforrásokban vannak. A karakterek és a közös raktár a `user://savegame.json` fájlba, a játékbeállítások a `user://settings.cfg` fájlba kerülnek.
+
+## Könyvtárak röviden
+
+- `Scenes/` – Godot-jelenetek.
+- `Scripts/Data/` – adatmodellek (`Resource`-ok).
+- `Scripts/Managers/` – globális állapot és játék-szolgáltatások.
+- `Scripts/UI/` – a felhasználói felületek.
+- `Scripts/Utils/` – általános, több rendszer által használt segédfunkciók.
+- `Data/` – osztályok, tárgyak, receptek, enchantok és dungeon-konfigurációk.
+- `Arts/` – UI-ikonok, hátterek és tárgyképek.
+
+A részletes felelősségi körök és kódolási szabályok a [`CODEBASE_GUIDE.md`](CODEBASE_GUIDE.md) fájlban találhatók. A legutóbbi alacsony kockázatú refaktorálás rövid összefoglalója: [`REFACTOR_NOTES.md`](REFACTOR_NOTES.md).
 
 ## Javasolt fejlesztési sorrend
 
-### 1. Egy teljesen végigjátszható alapciklus
+### 1. Dungeon-jelenet és harci alapciklus
 
-A következő nagy lépés a dungeon prototípus. Legyen egy rövid, egyszerű küldetés, egy ellenfél, játékos- és ellenfél-életerő, győzelem/vereség állapot, majd a végén jutalom aranyban és XP-ben. A jutalom után vissza lehessen térni a Lobbyba. Ezzel a projekt már nemcsak menükből és rendszerekből áll, hanem van egy ismételhető játékmeneti köre.
+A kiválasztott Dungeon-konfigurációt át kell kötni a valódi pályajelenetbe. Az első játszható verzióban elég egy rövid pálya, egy-két ellenféltípus, körönkénti támadás, HP/MP-kezelés, győzelem/vereség, XP és aranyjutalom, valamint a Lobbyba visszatérés.
 
-### 2. Karakterfejlődés és felszerelés
+### 2. Karakterfelszerelés és harcrendszer integrációja
 
-- A karakterablak mutassa az életerőt, támadást, védelmet, szintet és XP-t.
-- A felszerelés az inventoryból kerüljön a karakter megfelelő slotjaiba.
-- A szintlépés adjon látható statnövekedést vagy választható fejlesztést.
-- A boltban vásárolt tárgyak hassanak ténylegesen a karakterre.
+A már létrehozott equipment-slotokat, az osztálystatisztikákat, a +1–+5 fejlesztést és az enchantok statkulcsait a harci számításokban is alkalmazni kell. A tényleges extra támadás, vérzés, méreg, lassítás és harcon kívüli regeneráció a Dungeon/harcrendszer feladata marad.
 
-### 3. Mentés és folytatás
+### 3. Integrációs és regressziós tesztek
 
-Érdemes csak azután bevezetni a főmenü **Folytatás** gombját, amikor már van mit menteni. A mentés első körben JSON-fájlba kerülhet (`user://savegame.json`): arany, szint, XP, hátizsák, raktár és a tárgyak pozíciói/mennyiségei. A betöltésnél ellenőrizni kell a fájl érvényességét, a tárgyazonosítókat és a verziót. Később több mentési hely is támogatható.
+A teljes csapat közös ága előtt érdemes végigtesztelni: karakterlétrehozás és váltás, hátizsák–Stash mozgatás, bolt vásárlás/eladás, craft/fejlesztés/enchant, mentés és visszatöltés, beállítások minden jelenetből, Dungeon-konfiguráció átadása a pályának.
 
-### 4. Inventory minőségjavítása
+### 4. Nagyobb architekturális refaktorálás
 
-- Hátizsák és raktár közötti kétkattintásos áthelyezés.
-- Egyértelmű visszajelzés, ha egy tárgy nem fér el vagy egy stack megtelt.
-- Tárgyadatok külön `Resource` fájlokban, a játéklogika és a megjelenítés további szétválasztásával.
-- A bolt és inventory UI-jának újraépítése csak akkor fusson le, amikor tényleg változott az adat.
+A jelenlegi `GameState.gd` több felelősséget fog össze. A harcrendszer első integrációja után külön, tesztelhető lépésekben érdemes kiválasztani belőle a mentést/betöltést, a karakterkezelést és a tárgygazdaságot. Ez ne egyetlen nagy átnevezési kör legyen, mert több csapattársi rendszer is a jelenlegi API-ra építhet.
 
-### 5. Utolsó vizuális kör
+## Tesztelési megjegyzés
 
-- A főmenü és a Lobby ikon-, szín- és betűrendszere már közös `ui_theme.gd` segédfájlt használ.
-- Következőnek érdemes közös stílust adni a bolt és inventory belső elemeinek is.
-- Ezután animációk jöhetnek: finom hover-fény, panelnyitás, vásárlási visszajelzés és rövid hanghatások.
-
-## Fontos megjegyzés
-
-Ez a csomag a projektfájlok és útvonalak statikus ellenőrzésén esett át. Ebben a futtatókörnyezetben nem volt telepített Godot Editor/engine, ezért a jelenetek tényleges elindítását és kattintásos tesztelését itt nem tudtam lefuttatni. Első megnyitáskor Godotban kérlek futtasd a projektet, és ha a parser vagy az import bármilyen hibát jelez, a pontos hibaüzenet alapján lehet tovább javítani.
+A fejlesztési ZIP statikus fájl- és hivatkozásellenőrzésen esett át. A Godot Editor/engine nem volt elérhető ebben a környezetben, ezért a tényleges jelenetindítás és a kattintásos tesztelés a csapat gépén továbbra is szükséges.

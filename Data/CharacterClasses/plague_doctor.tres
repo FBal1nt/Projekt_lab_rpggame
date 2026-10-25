@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"plague_doctor"
+display_name = "Járványorvos"
+role = "Állapotok / támogatás"
+description = "Mérgekkel és gyengítő hatásokkal kontrollálja az ellenfeleket, miközben hasznos segédkezelést biztosít."
+placeholder_color = Color(0.39, 0.51, 0.29, 1)
+base_health = 26
+base_damage_min = 3
+base_damage_max = 7
+base_defense = 1
+base_speed = 6
+base_accuracy = 90
+base_crit_chance = 5.0
+base_dodge = 12
+base_healing_power = 3
+base_stress_resistance = 35
+health_per_level = 2
+damage_min_per_level = 0
+damage_max_per_level = 1
+defense_per_level = 0
+skill_ids = PackedStringArray("toxic_dart", "volatile_mix", "field_remedy")
+skill_names = PackedStringArray("Mérgezett tű", "Illékony keverék", "Sebellátás")
+starting_equipment_ids = PackedStringArray()

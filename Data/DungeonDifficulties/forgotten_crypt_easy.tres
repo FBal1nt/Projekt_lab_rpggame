@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="DungeonDifficultyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/DungeonDifficultyData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+dungeon_id = &"forgotten_crypt"
+id = &"easy"
+display_name = "Könnyű"
+description = "Ritkább ellenfél-megjelenés, alacsonyabb szintek és egyszerűbb ellenfelek. Kezdő csapatoknak ajánlott."
+spawn_rate_multiplier = 0.7
+enemy_level_min = 1
+enemy_level_max = 2
+enemy_type_ids = PackedStringArray("crypt_rat", "skeleton")
+enemy_type_names = PackedStringArray("Kriptapatkány", "Csontváz")
+elite_spawn_chance = 0.0
+encounter_count_multiplier = 0.75
+sort_order = 0

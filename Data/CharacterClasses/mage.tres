@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"mage"
+display_name = "Mágus"
+role = "Mágia / sokoldalú"
+description = "Alacsony védelemmel rendelkezik, de távolról is képes változatos mágikus sebzésre és támogatásra."
+placeholder_color = Color(0.42, 0.31, 0.67, 1)
+base_health = 23
+base_damage_min = 4
+base_damage_max = 11
+base_defense = 0
+base_speed = 5
+base_accuracy = 88
+base_crit_chance = 7.0
+base_dodge = 8
+base_healing_power = 2
+base_stress_resistance = 20
+health_per_level = 2
+damage_min_per_level = 0
+damage_max_per_level = 2
+defense_per_level = 0
+skill_ids = PackedStringArray("arcane_bolt", "mana_ward", "disrupt")
+skill_names = PackedStringArray("Arkán lövedék", "Mágikus védőpajzs", "Megzavarás")
+starting_equipment_ids = PackedStringArray()
