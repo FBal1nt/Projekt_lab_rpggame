@@ -1,425 +1,317 @@
-
 extends Node2D
 
+# === INSPECTOR BEÁLLÍTÁSOK ===
+@export_group("Szobák")
 @export var starter_scene: PackedScene
-@export var room_scenes: Array[PackedScene]
-@export var exit_scenes: Array[PackedScene]
+@export var room_scenes: Array[PackedScene]     # 2-4 ajtós normál szobák
+@export var boss_scene: PackedScene             # 4-ajtós Boss szoba
+@export var exit_scenes: Array[PackedScene]     # 1-ajtós zsákutcák / Reward szobák
 
-# Falak
+@export_group("Falazó Elemek (Vakajtók lezárásához)")
 @export var wall_felso: PackedScene
 @export var wall_also: PackedScene
 @export var wall_jobb: PackedScene
 @export var wall_bal: PackedScene
 
-# Generálási korlátok
-@export var max_rooms: int = 15
-@export var max_depth: int = 10
-@export var max_exits: int = 1
+@export_group("Generálási Korlátok")
+@export var max_rooms: int = 30
+@export var max_depth: int = 5
 
-var open_doors: Array[Dictionary] = []
+enum Difficulty { EASY, MEDIUM, HARD }
 
+func apply_difficulty(diff: Difficulty):
+	match diff:
+		Difficulty.EASY:
+			max_rooms = 15
+			max_depth = 4
+		Difficulty.MEDIUM:
+			max_rooms = 25
+			max_depth = 6
+		Difficulty.HARD:
+			max_rooms = 35
+			max_depth = 8
+
+# === BELSŐ VÁLTOZÓK ===
+var open_doors: Array = []
 var rooms_spawned: int = 0
-var exits_spawned: int = 0
 
-var opposites: Dictionary = {
+const OPPOSITES = {
 	"felso": "also",
 	"also": "felso",
 	"jobb": "bal",
 	"bal": "jobb"
 }
 
-
-func _ready() -> void:
+func _ready():
 	generate_map()
 
-
-# ==================================================
-# PÁLYAGENERÁLÁS
-# ==================================================
-
-func generate_map() -> void:
-	if starter_scene == null:
-		push_error("HIBA: Nincs beállítva a starter_scene!")
+# === FŐ GENERÁLÁSI FOLYAMAT ===
+func generate_map(p_max_rooms: int = -1, p_max_depth: int = -1):
+	_reset_generator()
+	
+	# Ha a Hívó (Lobby / Main) felülbírálja a nehézség alapján:
+	if p_max_rooms > 0:
+		max_rooms = p_max_rooms
+	if p_max_depth > 0:
+		max_depth = p_max_depth
+		
+	print("Pálya generálása indítva -> Max szobák: ", max_rooms, " | Max mélység: ", max_depth)
+	
+	# 1. Kezdőszoba lerakása
+	if not _spawn_starter_room():
 		return
+		
+	print("--- 1. LÉPÉS: Kezdőszoba lerakva ---")
+	
+	# 2. Normál szobák fűzése
+	await _generate_branches()
+	print("--- 2. LÉPÉS: Normál szobák lerakva (", rooms_spawned, " db) ---")
 
+	# 3. Boss szoba + Reward szoba + 2 Fal lehelyezése
+	await _place_boss_room()
+
+	# 4. Maradék nyitott folyosóvégek (normál szobák) lefalazása
+	_close_remaining_doors()
+	print("--- GENERÁLÁS KÉSZ! Összesen lerakott szoba: ", rooms_spawned, " ---")
+
+
+func _reset_generator():
 	open_doors.clear()
 	rooms_spawned = 0
-	exits_spawned = 0
+	for child in get_children():
+		child.queue_free()
 
-	print("--- PÁLYAGENERÁLÁS INDÍTÁSA ---")
 
-	# Kezdőszoba
-	var start_room = starter_scene.instantiate() as Node2D
-
-	if start_room == null:
-		push_error("A kezdőszoba gyökérnode-ja Node2D legyen!")
-		return
-
+func _spawn_starter_room() -> bool:
+	if starter_scene == null:
+		push_error("MapGenerator: Nincs beállítva a 'starter_scene'!")
+		return false
+		
+	var start_room = starter_scene.instantiate()
 	add_child(start_room)
 	start_room.global_position = Vector2.ZERO
-
 	rooms_spawned += 1
+	_register_doors(start_room, 1, "")
+	return true
 
-	await get_tree().physics_frame
 
-	# A kezdőszoba összes ajtajának regisztrálása
-	register_doors(start_room, 1, "")
+func _generate_branches():
+	var unplaced_doors: Array = []
 
-	# Fő generáló ciklus
-	while not open_doors.is_empty() and rooms_spawned < max_rooms:
+	while open_doors.size() > 0 and rooms_spawned < max_rooms:
+		var door_index = randi() % open_doors.size()
+		var target_door = open_doors[door_index]
+		open_doors.remove_at(door_index)
 
-		# FONTOS JAVÍTÁS:
-		# A feldolgozandó ajtót AZONNAL kivesszük a listából.
-		# Ez még azelőtt történik, hogy az új szoba ajtóit
-		# hozzáadnánk az open_doors listához.
-		var target_door: Dictionary = open_doors.pop_back()
-
-		var parent_room = target_door["room"] as Node2D
-
-		if not is_instance_valid(parent_room):
+		if target_door["depth"] > max_depth:
+			unplaced_doors.append(target_door)
 			continue
 
-		var depth: int = int(target_door["depth"])
-
-		print(
-			"Ajtó feldolgozása: ",
-			target_door["dir"],
-			" | Mélység: ",
-			depth,
-			" | Várakozó ajtók: ",
-			open_doors.size()
-		)
-
-		# Maximális mélység elérése
-		if depth > max_depth:
-			var exit_placed := false
-
-			if exits_spawned < max_exits:
-				exit_placed = await try_place_exit_room(target_door)
-
-			if not exit_placed:
-				place_wall(target_door)
-
-			continue
-
-		# A csatlakozó ajtó iránya
-		var required_dir: String = str(
-			opposites.get(target_door["dir"], "")
-		)
-
+		var required_dir = OPPOSITES.get(target_door["dir"], "")
 		if required_dir == "":
-			push_warning("Ismeretlen ajtóirány!")
-			place_wall(target_door)
+			unplaced_doors.append(target_door)
 			continue
 
-		# Szobák véletlenszerű sorrendben
-		var shuffled_scenes: Array[PackedScene] = room_scenes.duplicate()
-		shuffled_scenes.shuffle()
+		room_scenes.shuffle()
+		var room_placed = false
 
-		var room_placed := false
+		for scene in room_scenes:
+			var room = scene.instantiate()
+			add_child(room)
+			room.visible = false
 
-		for scene in shuffled_scenes:
-			if scene == null:
-				continue
-
-			var new_room = scene.instantiate() as Node2D
-
-			if new_room == null:
-				continue
-
-			add_child(new_room)
-			new_room.visible = false
-
-			# Megkeressük a csatlakozó ajtót.
-			var matching_door = new_room.get_node_or_null("Ajtok/" + required_dir + "_ajto")
-
-			# Ha a szobának nincs ilyen ajtaja,
-			# akkor ez a szobatípus nem használható.
+			var matching_door = room.get_node_or_null("Ajtok/" + required_dir + "_ajto")
 			if matching_door == null:
-				new_room.queue_free()
+				room.queue_free()
 				continue
 
-			# Ajtók pontos illesztése
-			new_room.global_position = target_door["pos"] - new_room.to_local(matching_door.global_position)
+			var raw_pos = target_door["pos"] - matching_door.position
+			room.global_position = Vector2(snapped(raw_pos.x, 32), snapped(raw_pos.y, 32))
 
-			# Megvárjuk a fizikai ütközések frissítését.
 			await get_tree().physics_frame
 			await get_tree().physics_frame
 
-			var hitbox = new_room.get_node_or_null("Hitbox")
-			var overlaps := false
-
-			if hitbox != null and hitbox is Area2D:
-				for area in hitbox.get_overlapping_areas():
-					var area_owner = get_room_owner(area)
-					# A szülőszobával való ajtókapcsolat megengedett.
-					if area_owner == null:
-						continue
-					if area_owner == new_room:
-						continue
-					if area_owner == parent_room:
-						continue
-					# Másik már lerakott szobával ütközik.
-					overlaps = true
-					break
-			if overlaps:
-				print(
-					"Szoba elutasítva ütközés miatt: ",
-					new_room.name
-				)
-				new_room.queue_free()
+			if _check_hitbox_collision(room):
+				room.queue_free()
 				continue
 
-			# SIKERES SZOBALERAKÁS
-			new_room.visible = true
+			room.visible = true
 			rooms_spawned += 1
+			_register_doors(room, target_door["depth"] + 1, required_dir)
 			room_placed = true
-
-			print(
-				"Szoba lerakva: ",
-				new_room.name,
-				" | ",
-				rooms_spawned,
-				"/",
-				max_rooms,
-				" | Mélység: ",
-				depth
-			)
-
-			# A legfontosabb lépés:
-			# Az új szoba összes további ajtaját hozzáadjuk
-			# a feldolgozásra váró ajtók listájához.
-			register_doors(
-				new_room,
-				depth + 1,
-				required_dir
-			)
-
-			# Egy ajtóhoz elegendő egy szobát lerakni.
 			break
 
-		# Ha egyik szobatípus sem illeszthető,
-		# csak az aktuális ajtót zárjuk le.
 		if not room_placed:
-			print(
-				"Nem található megfelelő szoba ehhez az ajtóhoz."
-			)
-			place_wall(target_door)
+			unplaced_doors.append(target_door)
 
-	# Ha elértük a maximális szobaszámot,
-	# a fennmaradó ajtókat falakkal lezárjuk.
-	close_remaining_doors()
-
-	print(
-		"--- PÁLYAGENERÁLÁS KÉSZ: ",
-		rooms_spawned,
-		" szoba, ",
-		exits_spawned,
-		" kijárat/zsákutca. ---"
-	)
+	open_doors.append_array(unplaced_doors)
 
 
-# ==================================================
-# AJTÓK REGISZTRÁLÁSA
-# ==================================================
-
-func register_doors(
-	room: Node2D,
-	depth: int,
-	entry_dir: String
-) -> void:
-
-	var doors_node = room.get_node_or_null("Ajtok")
-
-	if doors_node == null:
-		push_warning(
-			"Hiányzik az Ajtok node: " + room.name
-		)
+func _place_boss_room():
+	if boss_scene == null or open_doors.is_empty():
+		print("Figyelem: Nincs 'boss_scene' beállítva vagy nincs nyitott ajtó!")
 		return
 
-	var new_doors: Array[Dictionary] = []
+	# Mélység szerint csökkenő sorrendbe rendezzük az ajtókat (a legmélyebb van elöl)
+	open_doors.sort_custom(func(a, b): return a["depth"] > b["depth"])
 
-	# Csak a ténylegesen létező ajtókat dolgozzuk fel.
-	for door in doors_node.get_children():
+	for i in range(open_doors.size()):
+		var target_door = open_doors[i]
+		var required_dir = OPPOSITES.get(target_door["dir"], "")
 
-		var door_name: String = str(door.name).replace(
-			"_ajto", ""
-		)
+		var boss_room = boss_scene.instantiate()
+		add_child(boss_room)
+		boss_room.visible = false
 
-		# A belépési ajtót nem nyitjuk meg újra.
-		if door_name == entry_dir:
-			continue
+		var matching_door = boss_room.get_node_or_null("Ajtok/" + required_dir + "_ajto")
+		if matching_door != null:
+			var raw_pos = target_door["pos"] - matching_door.position
+			boss_room.global_position = Vector2(snapped(raw_pos.x, 32), snapped(raw_pos.y, 32))
 
-		if not opposites.has(door_name):
-			push_warning(
-				"Ismeretlen ajtónév: " + str(door.name)
-			)
-			continue
+			await get_tree().physics_frame
+			await get_tree().physics_frame
 
-		new_doors.append({
-			"pos": door.global_position,
-			"dir": door_name,
-			"depth": depth,
-			"room": room
-		})
+			if _check_hitbox_collision(boss_room):
+				boss_room.queue_free()
+				continue
+			else:
+				boss_room.visible = true
+				rooms_spawned += 1
+				open_doors.remove_at(i) # Kiemeljük a bejárati ajtót
+				
+				print("--- BOSS SZOBA elhelyezve! Pozíció: ", boss_room.global_position, " ---")
+				
+				# CÉLZOTTEN KEZELJÜK A BOSS SZOBA MARADÉK 3 AJTAJÁT (1 Reward + 2 Fal)
+				await _handle_boss_room_exits(boss_room, required_dir)
+				return
+		else:
+			boss_room.queue_free()
 
-	new_doors.shuffle()
-
-	# A korábban feldolgozott ajtókhoz nem nyúlunk.
-	# Az új ajtókat a lista végére tesszük.
-	open_doors.append_array(new_doors)
-
-	print(
-		"Ajtók regisztrálva: ",
-		room.name,
-		" | Új ajtók: ",
-		new_doors.size(),
-		" | Összes várakozó: ",
-		open_doors.size()
-	)
+	print("Hiba: Egyetlen nyitott ajtóra sem sikerült ráilleszteni a Boss szobát!")
 
 
-# ==================================================
-# SZOBATULAJDONOS MEGKERESÉSE
-# ==================================================
+func _handle_boss_room_exits(boss_room: Node2D, entry_dir: String):
+	var boss_doors_node = boss_room.get_node_or_null("Ajtok")
+	if boss_doors_node == null:
+		return
 
-func get_room_owner(node: Node) -> Node2D:
-	var current: Node = node
+	# A Boss szoba 3 megmaradt kivezető ajtójának kigyűjtése
+	var remaining_boss_doors: Array = []
+	for door in boss_doors_node.get_children():
+		var dir_name = door.name.replace("_ajto", "")
+		if dir_name != entry_dir:
+			remaining_boss_doors.append({
+				"pos": boss_room.global_position + door.position,
+				"dir": dir_name
+			})
 
-	while current != null and current != self:
-		if current.get_parent() == self and current is Node2D:
-			return current as Node2D
+	remaining_boss_doors.shuffle()
 
-		current = current.get_parent()
+	var reward_placed = false
+	var reward_door_index = -1
 
-	return null
+	# 1. Megpróbálunk 1 db Reward / Exit szobát ráilleszteni az egyik szabad ajtóra
+	if not exit_scenes.is_empty():
+		for idx in range(remaining_boss_doors.size()):
+			var b_door = remaining_boss_doors[idx]
+			var required_dir = OPPOSITES.get(b_door["dir"], "")
 
+			exit_scenes.shuffle()
+			for scene in exit_scenes:
+				var reward_room = scene.instantiate()
+				add_child(reward_room)
+				reward_room.visible = false
 
-# ==================================================
-# KIJÁRAT / ZSÁKUTCA
-# ==================================================
+				var matching_door = reward_room.get_node_or_null("Ajtok/" + required_dir + "_ajto")
+				if matching_door != null:
+					var raw_pos = b_door["pos"] - matching_door.position
+					reward_room.global_position = Vector2(snapped(raw_pos.x, 32), snapped(raw_pos.y, 32))
 
-func try_place_exit_room(door: Dictionary) -> bool:
-	if exit_scenes.is_empty():
-		return false
+					await get_tree().physics_frame
+					await get_tree().physics_frame
 
-	var required_dir: String = str(
-		opposites.get(door["dir"], "")
-	)
+					if _check_hitbox_collision(reward_room):
+						reward_room.queue_free()
+						continue
+					else:
+						reward_room.visible = true
+						rooms_spawned += 1
+						reward_placed = true
+						reward_door_index = idx
+						print(" -> Reward Room csatlakoztatva a Boss szoba '", b_door["dir"], "' ajtajára!")
+						break
+				else:
+					reward_room.queue_free()
 
-	if required_dir == "":
-		return false
-
-	var parent_room = door["room"] as Node2D
-
-	if not is_instance_valid(parent_room):
-		return false
-
-	var shuffled_exits: Array[PackedScene] = exit_scenes.duplicate()
-	shuffled_exits.shuffle()
-
-	for scene in shuffled_exits:
-		if scene == null:
-			continue
-
-		var temp_room = scene.instantiate() as Node2D
-
-		if temp_room == null:
-			continue
-
-		add_child(temp_room)
-		temp_room.visible = false
-
-		var matching_door = temp_room.get_node_or_null(
-			"Ajtok/" + required_dir + "_ajto"
-		)
-
-		if matching_door == null:
-			temp_room.queue_free()
-			continue
-
-		temp_room.global_position = (
-			door["pos"] - matching_door.position
-		)
-
-		await get_tree().physics_frame
-		await get_tree().physics_frame
-
-		var hitbox = temp_room.get_node_or_null("Hitbox")
-		var overlaps := false
-
-		if hitbox != null and hitbox is Area2D:
-			for area in hitbox.get_overlapping_areas():
-				var area_owner = get_room_owner(area)
-
-				if area_owner == null:
-					continue
-
-				if area_owner == temp_room:
-					continue
-
-				if area_owner == parent_room:
-					continue
-
-				overlaps = true
+			if reward_placed:
 				break
 
-		if overlaps:
-			temp_room.queue_free()
-			continue
-
-		# Kijárat sikeresen lerakva.
-		temp_room.visible = true
-
-		rooms_spawned += 1
-		exits_spawned += 1
-
-		print(
-			"Kijárat/zsákutca lerakva. Mélység: ",
-			door["depth"]
-		)
-
-		return true
-
-	return false
-
-
-# ==================================================
-# FALAK
-# ==================================================
-
-func place_wall(door: Dictionary) -> void:
-	var wall_dict: Dictionary = {
+	# 2. A megmaradt ajtókat (2 db, vagy mind a 3-at, ha a Reward nem fért el) lefalazzuk
+	var walls = {
 		"felso": wall_felso,
 		"also": wall_also,
 		"jobb": wall_jobb,
 		"bal": wall_bal
 	}
 
-	var direction: String = str(door["dir"])
-	var scene_to_spawn = wall_dict.get(direction)
+	for idx in range(remaining_boss_doors.size()):
+		if idx == reward_door_index:
+			continue # Ezen az ajtón van a Reward szoba, ezt nem falazzuk le!
 
-	if scene_to_spawn == null:
-		push_warning(
-			"Nincs beállítva fal ehhez az irányhoz: "
-			+ direction
-		)
-		return
-
-	var wall = scene_to_spawn.instantiate() as Node2D
-
-	if wall == null:
-		return
-
-	add_child(wall)
-	wall.global_position = door["pos"]
+		var b_door = remaining_boss_doors[idx]
+		var wall_scene = walls.get(b_door["dir"])
+		if wall_scene != null:
+			var wall = wall_scene.instantiate()
+			add_child(wall)
+			wall.global_position = Vector2(snapped(b_door["pos"].x, 32), snapped(b_door["pos"].y, 32))
+			print(" -> Boss szoba '", b_door["dir"], "' ajtaja lefalazva.")
 
 
-# ==================================================
-# MARADÉK AJTÓK LEZÁRÁSA
-# ==================================================
+func _close_remaining_doors():
+	var walls = {
+		"felso": wall_felso,
+		"also": wall_also,
+		"jobb": wall_jobb,
+		"bal": wall_bal
+	}
 
-func close_remaining_doors() -> void:
-	while not open_doors.is_empty():
-		var door: Dictionary = open_doors.pop_back()
-		place_wall(door)
+	for door in open_doors:
+		var scene = walls.get(door["dir"])
+		if scene != null:
+			var wall = scene.instantiate()
+			add_child(wall)
+			wall.global_position = Vector2(snapped(door["pos"].x, 32), snapped(door["pos"].y, 32))
+
+	open_doors.clear()
+
+
+func _check_hitbox_collision(room: Node2D) -> bool:
+	var hitbox = room.get_node_or_null("Hitbox")
+	if hitbox != null and hitbox is Area2D:
+		return hitbox.get_overlapping_areas().size() > 0
+	return false
+
+
+func _register_doors(room: Node2D, depth: int, entry_dir: String) -> Array:
+	var added_doors: Array = []
+	var doors_node = room.get_node_or_null("Ajtok")
+	if doors_node == null: 
+		return added_doors
+
+	for door in doors_node.get_children():
+		var dir_name = door.name.replace("_ajto", "")
+		if dir_name == entry_dir:
+			continue
+
+		var calculated_global_pos = room.global_position + door.position
+
+		var door_info = {
+			"pos": calculated_global_pos,
+			"dir": dir_name,
+			"depth": depth
+		}
+		
+		open_doors.append(door_info)
+		added_doors.append(door_info)
+		
+	return added_doors

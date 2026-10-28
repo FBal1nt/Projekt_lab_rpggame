@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cuiofrd3gnpxr" path="res://scenes/Rooms/normal_rooms/T_fel_szoba.tscn" id="11_yxlcp"]
 [ext_resource type="PackedScene" uid="uid://dyrusar7nwoq5" path="res://scenes/Rooms/normal_rooms/T_jobb_szoba.tscn" id="12_ebg2g"]
 [ext_resource type="PackedScene" uid="uid://o3a4etxi7ake" path="res://scenes/Rooms/normal_rooms/T_szoba.tscn" id="13_2ofn6"]
+[ext_resource type="PackedScene" uid="uid://b5a8bwxu51821" path="res://scenes/Rooms/BOSS_szoba.tscn" id="14_ebg2g"]
 [ext_resource type="PackedScene" uid="uid://bxvo66rmpsf71" path="res://scenes/Rooms/Kapu/Kapu_Szoba_Also.tscn" id="18_yxlcp"]
 [ext_resource type="PackedScene" uid="uid://duksxaoeh65x7" path="res://scenes/Rooms/Kapu/Kapu_Szoba_Bal.tscn" id="19_ebg2g"]
 [ext_resource type="PackedScene" uid="uid://dou2e7aurigoj" path="res://scenes/Rooms/Kapu/Kapu_Szoba_Felso.tscn" id="20_2ofn6"]
@@ -27,11 +28,12 @@
 script = ExtResource("1_elqb8")
 starter_scene = ExtResource("2_rvslj")
 room_scenes = Array[PackedScene]([ExtResource("6_jlsqs"), ExtResource("7_q8u5g"), ExtResource("5_bb450"), ExtResource("4_c01mt"), ExtResource("5_c01mt"), ExtResource("8_nfivy"), ExtResource("9_1nqs0"), ExtResource("10_1iba3"), ExtResource("11_yxlcp"), ExtResource("12_ebg2g"), ExtResource("13_2ofn6")])
-exit_scenes = Array[PackedScene]([ExtResource("18_yxlcp"), ExtResource("19_ebg2g"), ExtResource("21_xa025"), ExtResource("20_2ofn6")])
-wall_felso = ExtResource("22_xa025")
-wall_also = ExtResource("23_36rkl")
-wall_jobb = ExtResource("24_fs0b5")
-wall_bal = ExtResource("25_36rkl")
+boss_scene = ExtResource("14_ebg2g")
+exit_scenes = Array[PackedScene]([ExtResource("18_yxlcp"), ExtResource("19_ebg2g"), ExtResource("20_2ofn6"), ExtResource("21_xa025")])
+wall_felso = ExtResource("23_36rkl")
+wall_also = ExtResource("22_xa025")
+wall_jobb = ExtResource("25_36rkl")
+wall_bal = ExtResource("24_fs0b5")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1414560673]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=452455933]
 script = ExtResource("3_0bbpv")
