@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"keen_edge"
+display_name = "Élesítés"
+description = "A kovács újraélezi a fegyver élét, így nagyobb lesz a fizikai sebzés és a kritikus találat esélye."
+workshop_type = &"blacksmith"
+option_category = &"sharpen"
+element = &"physical"
+applicable_item_types = PackedStringArray("weapon")
+ingredient_item_ids = PackedStringArray("iron_ingot")
+ingredient_amounts = PackedInt32Array(2)
+gold_cost = 55
+stat_modifiers = {"damage": 3.0, "crit_chance": 2.0}

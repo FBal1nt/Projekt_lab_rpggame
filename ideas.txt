@@ -1,0 +1,50 @@
+Az ellenségek adaptálása a Loop Hero mechanikáira
+A felsorolt ellenfeleket az alábbi mechanikai profilokkal lehet a legstílusosabban beilleszteni az auto-battler formulába:
+
+1. Normál ellenfelek (Alap statisztikai mechanikák)
+Nyálka (Slime): Lassú támadási sebesség, alacsony sebzés, de halálakor $50%$ eséllyel két kisebb nyálkára oszlik szét az üres harci pozíciókra.
+
+Denevér (Bat): Nagyon magas támadási sebesség, magas kitérési esély (Evasion: $30%$), és minden sikeres csapása életlopást (Vampirism: $20%$) biztosít neki.
+Csontváz (Skeleton): Kiegyensúlyozott alapegység. Halálakor esélye van repedt csontvázként újjáéledni fele életerővel.
+
+Csontváz íjász (Skeleton Archer): Hátsó soros (Backline) egység. Amíg van előtte élő szövetséges, a közelharcos karakterek nem tudják közvetlenül célozni, ő viszont folyamatosan lövi a csapatot.
+
+Ork (Orc): Magasabb nyers sebzés, de lassú mozgás és alacsony kezdeményezés.
+
+
+2. Erősebb ellenfelek (Páncél és státuszeffektek)
+Páncélozott csontváz / Ork: Bevezeti a fix sebzéscsökkentést (Armor / Flat Defense). Minden bekapott csapásból levon egy fix értéket (pl. $-6$ sebzés), ami a gyors, de kis sebzésű hősöket (pl. íjász gyorslövések) erősen tompítja, míg a nagyot ütő lovag vagy varázsló ellen kevésbé hatásos.
+
+Páncélozott fejszés: Minden $3.$ támadása vérzést (Bleed – másodpercenkénti életerő-vesztést) vagy rövid kábítást (Stun – az ellenfél támadási sávjának lenullázását) okoz.
+
+
+3. Főellenségek és fél-főellenségek (Fázisok és egyedi viselkedés)
+
+Nekromanta (Necromancer): A hátsó sorban áll, gyenge közvetlen támadással. A támadási sávja betelésekor nem üt, hanem újabb csontvázat idéz le az üres pozíciókra, vagy feltölti az élőholtak életerejét. Csak a frontvonal áttörése vagy távolsági hősök (íjász, varázsló) révén sebezhető hatékonyan.
+
+Elit ork: Beépített dühöngés (Frenzy): minél kevesebb életereje van, annál gyakrabban használja a legerősebb támadásait, valamint hiányzó HP arányában skálázódó támadási sebzés.
+
+Nagy kardos csontváz: Nagyon lomha támadási sebesség, viszont minden csapása páncéltörő tiszta sebzés (True Damage) vagy garantált kritikus csapás.
+
+Farkasember és Medveember: Óriási életerő-tartalék (HP pool). A medve fokozott védelemmel és sebzéscsökkentéssel rendelkezik, valamint képes vérzést is okozni ami 3-5s tartó hp vesztés, 
+a farkasember pedig folyamatos passzív életerő-regenerációval küzd.
+
+?Ork lovas? (Charge only): Nem rendelkezik hagyományos közelharci adok-kapok ciklussal. A harc kezdetén azonnal rohamoz egy automatikus első csapással (First Strike), majd minden támadási köre egy roham, amelyhez először egy hosszabb felkészülési sávot tölt fel, cserébe hatalmas lendületi sebzést oszt ki.
+
+
+
+
+Prompt: "További ötletek:
+- A nyálka 50%-75% esetén további két kisebb nyálkára tud szétoszlani.
+- Denevér nagy kitérési esély, és 20% életerő lopás (Vampirism)
+- Csontváz a halála esetén a teljes életerejének felével képes újraéledni
+- Páncélozott ellenségek esetén tompítja a beérkezett sebzést számukra a páncélzat miatt, például íjászos karakterek esetén csak gyengén hatásos, az ultimátum támadások pedig csak az alapsebzést adják míg az alaptámadások is nagyon minimálisabb sebzést adnak, pl.: 0.8x vagy 0.9x
+- Páncélozott fejszés képes legyen rövid esetenként kábítást okozni, ezzel a mi támadásunk kimaradását okozva (stun)
+- Elit ork-nak legyen egy Beépített dühöngés (Frenzy)-e, minél kevesebb életereje van annál többet sebez, maximum talán 1.75x vagy 2x, ha kritikus szint alá csökken az életereje akkor már mindig a harmadik támadását használja ami kritikus csapásokat mér a hősökre
+- Nagy kardos csontváz csak minden második körben üthet, de kifizetődően nagyot (garantált kritikus csapás)
+- A medveembernek Óriási életerő-tartálya (HP pool) van, valamint a karmos támadásai miatt képes legyen ütései esetén vérzést okozni három körön keresztül, harmadik támadása egy dühöngő lecsapás
+- A farkasembernek is Óriási életerő-tartálya (HP pool) van, ő karddal támad
+
+- A Nekromanta tud idézni csatlósokat (csak páncélozott ellenségeket), tud támadni (hogyha már nem maradt csatlósa), valamint saját magát és a csatlósait is gyógyítani. Ő rá úgy gondolok mint a játékunk végső főellensége.
+
+Minden ellenség implementálása előtt beszéljük át a támadásainak animációt!"

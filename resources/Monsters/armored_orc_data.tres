@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://cphuye4imkemx"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_6ssq0"]
+[ext_resource type="SpriteFrames" uid="uid://jqom7bqw00xm" path="res://resources/Monsters/armored_orc_frames.tres" id="2_dg5jr"]
+
+[resource]
+script = ExtResource("1_6ssq0")
+monster_id = "armored_orc"
+monster_name = "Páncélozott Ork"
+title = "a Törhetetlen Pajzsú"
+xp_reward = 6
+sprite_frames = ExtResource("2_dg5jr")
+max_hp = 65
+base_damage = 14
+defense = 2
+initiative = 5.5
+flat_armor = 6
+special_profile = 2
+knockback_frame_attack_1 = null
+knockback_frame_attack_2 = 5
+knockback_frame_attack_3 = 4
+move_duration = 0.35
+action_interval = 1.8
+block_chance = 0.4
+metadata/_custom_type_script = "uid://jfeoccywjufa"

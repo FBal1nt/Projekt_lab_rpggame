@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"alchemist"
+display_name = "Alkimista"
+role = "Fogyóeszközök / utility"
+description = "Elixírekkel, robbanó főzetekkel és helyzetfüggő támogatással alkalmazkodik a csatához."
+placeholder_color = Color(0.25, 0.58, 0.57, 1)
+base_health = 27
+base_damage_min = 3
+base_damage_max = 8
+base_defense = 1
+base_speed = 5
+base_accuracy = 90
+base_crit_chance = 6.0
+base_dodge = 10
+base_healing_power = 5
+base_stress_resistance = 30
+health_per_level = 3
+damage_min_per_level = 0
+damage_max_per_level = 1
+defense_per_level = 0
+skill_ids = PackedStringArray("acid_flask", "combat_tonic", "volatile_bomb")
+skill_names = PackedStringArray("Savampulla", "Harci tonik", "Robbanó főzet")
+starting_equipment_ids = PackedStringArray()

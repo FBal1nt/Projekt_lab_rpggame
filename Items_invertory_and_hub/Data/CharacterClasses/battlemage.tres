@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"battlemage"
+display_name = "Harci mágus"
+role = "Hibrid / frontline"
+description = "Mágikus és fizikai harcot ötvöz. Kevésbé specializált, de több helyzetben is bevethető."
+placeholder_color = Color(0.47, 0.37, 0.62, 1)
+base_health = 30
+base_damage_min = 4
+base_damage_max = 9
+base_defense = 3
+base_speed = 4
+base_accuracy = 90
+base_crit_chance = 6.0
+base_dodge = 5
+base_healing_power = 3
+base_stress_resistance = 35
+health_per_level = 3
+damage_min_per_level = 0
+damage_max_per_level = 1
+defense_per_level = 0
+skill_ids = PackedStringArray("spellblade", "warding_strike", "mana_surge")
+skill_names = PackedStringArray("Varázspenge", "Védőcsapás", "Manaáradat")
+starting_equipment_ids = PackedStringArray()

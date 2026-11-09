@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"soldier"
+display_name = "Katona"
+role = "Taktikai lövész és közelharcos (Lőtáv: 4)"
+description = "Fegyelmezett veterán harcos. 115 HP életerővel, 18-as sebzéssel és 4 mezős távolsági lándzsás/lövedékes támadással rendelkezik."
+placeholder_color = Color(0.6, 0.4, 0.3, 1)
+base_health = 115
+base_damage_min = 14
+base_damage_max = 18
+base_defense = 1
+base_speed = 11
+base_accuracy = 92
+base_crit_chance = 7.0
+base_dodge = 8
+base_healing_power = 0
+base_stress_resistance = 40
+health_per_level = 10
+damage_min_per_level = 1
+damage_max_per_level = 2
+defense_per_level = 1
+skill_ids = PackedStringArray("spear_throw", "tactical_strike")
+skill_names = PackedStringArray("Lándzsadobás (4 mező)", "Taktikai vágás")
+starting_equipment_ids = PackedStringArray()

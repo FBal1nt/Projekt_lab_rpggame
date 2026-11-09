@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"knight_templar"
+display_name = "Templomos lovag"
+role = "Nehézpáncélos élharcos"
+description = "A templomos rend rettenthetetlen bajnoka. A csapat legmagasabb (160 HP) életerejével, 24-es sebzéssel és kiváló pajzsos védelmével bír."
+placeholder_color = Color(0.8, 0.7, 0.3, 1)
+base_health = 160
+base_damage_min = 19
+base_damage_max = 24
+base_defense = 3
+base_speed = 8
+base_accuracy = 92
+base_crit_chance = 8.0
+base_dodge = 4
+base_healing_power = 0
+base_stress_resistance = 50
+health_per_level = 10
+damage_min_per_level = 1
+damage_max_per_level = 2
+defense_per_level = 1
+skill_ids = PackedStringArray("holy_shield", "smite")
+skill_names = PackedStringArray("Templomos hárítás", "Szent csapás")
+starting_equipment_ids = PackedStringArray()

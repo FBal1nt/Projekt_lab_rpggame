@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"flame"
+display_name = "Lángoló fegyver"
+description = "Tűzenergiával vonja be a fegyvert: extra tűzsebzést és támadási bónuszt ad, a hatás időnként fellobbanhat."
+workshop_type = &"wizard"
+option_category = &"weapon_element"
+element = &"fire"
+applicable_item_types = PackedStringArray("weapon")
+ingredient_item_ids = PackedStringArray("arcane_dust")
+ingredient_amounts = PackedInt32Array(2)
+gold_cost = 75
+stat_modifiers = {"fire_damage": 3.0, "fire_attack_bonus": 1.0, "fire_proc_chance": 15.0, "fire_extra_attack_chance": 3.0}

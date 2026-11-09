@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SmithingRecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/SmithingRecipeData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"upgrade_2"
+display_name = "Fejlesztés +2"
+description = "Erősebb megerősítés."
+recipe_type = &"upgrade"
+result_item_id = &""
+target_upgrade_level = 2
+ingredient_item_ids = PackedStringArray("iron_ingot", "arcane_dust")
+ingredient_amounts = PackedInt32Array(3, 1)
+gold_cost = 60

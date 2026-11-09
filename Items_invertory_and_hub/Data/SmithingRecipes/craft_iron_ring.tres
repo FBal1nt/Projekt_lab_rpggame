@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SmithingRecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/SmithingRecipeData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"craft_iron_ring"
+display_name = "Vasgyűrű"
+description = "Alapgyűrű csekély védelemmel."
+recipe_type = &"craft"
+result_item_id = &"iron_ring"
+target_upgrade_level = 1
+ingredient_item_ids = PackedStringArray("iron_ingot", "leather_strip")
+ingredient_amounts = PackedInt32Array(3, 1)
+gold_cost = 55

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"fortification"
+display_name = "Kovácsolt megerősítés"
+description = "Megvastagítja és megerősíti a páncélt vagy az ékszert, javítva a fizikai védelmet."
+workshop_type = &"blacksmith"
+option_category = &"defense"
+element = &"physical"
+applicable_item_types = PackedStringArray("armor", "ring", "earring", "shield", "helmet", "boots", "gloves")
+ingredient_item_ids = PackedStringArray("iron_ingot", "leather_strip")
+ingredient_amounts = PackedInt32Array(2, 1)
+gold_cost = 75
+stat_modifiers = {"defense": 2.0, "max_health": 5.0}

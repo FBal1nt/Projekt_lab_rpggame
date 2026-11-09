@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"leather_armor"
+display_name = "Megerősített bőrvért"
+description = "Könnyű, megerősített vért. A kovács továbbfejlesztheti."
+size = Vector2i(2, 2)
+buy_price = 180
+sell_price = 80
+item_type = &"armor"
+equipment_slot = &"armor"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"defense": 3.0,
+"max_health": 5.0
+}
+upgrade_stat_bonuses = {
+"defense": 1.0,
+"max_health": 2.0
+}

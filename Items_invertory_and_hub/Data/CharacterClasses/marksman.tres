@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"marksman"
+display_name = "Mesterlövész"
+role = "Távolsági / burst"
+description = "Alacsonyabb túlélőképességét kiemelkedő pontossággal és erős célzott lövésekkel ellensúlyozza."
+placeholder_color = Color(0.36, 0.49, 0.38, 1)
+base_health = 25
+base_damage_min = 5
+base_damage_max = 10
+base_defense = 1
+base_speed = 4
+base_accuracy = 100
+base_crit_chance = 10.0
+base_dodge = 5
+base_healing_power = 0
+base_stress_resistance = 30
+health_per_level = 2
+damage_min_per_level = 0
+damage_max_per_level = 2
+defense_per_level = 0
+skill_ids = PackedStringArray("focused_shot", "mark_target", "covering_fire")
+skill_names = PackedStringArray("Fókuszált lövés", "Célpont megjelölése", "Fedezőtűz")
+starting_equipment_ids = PackedStringArray()

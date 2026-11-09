@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://d1ejveulyjcvt"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://scripts/Enemy/enemy_data.gd" id="1_oggg3"]
+[ext_resource type="SpriteFrames" uid="uid://cffgyaihk3q6u" path="res://resources/Monsters/armored_axeman_frames.tres" id="2_q1sda"]
+
+[resource]
+script = ExtResource("1_oggg3")
+monster_id = "armored_axeman"
+monster_name = "Páncélozott Fejszés"
+title = "a Földhasító"
+xp_reward = 8
+sprite_frames = ExtResource("2_q1sda")
+max_hp = 50
+base_damage = 16
+defense = 2
+initiative = 7.0
+flat_armor = 8
+special_profile = 3
+knockback_frame_attack_1 = 4
+knockback_frame_attack_2 = null
+knockback_frame_attack_3 = 7
+move_duration = 0.3
+aggro_range = 4
+can_block = false
+metadata/_custom_type_script = "uid://jfeoccywjufa"

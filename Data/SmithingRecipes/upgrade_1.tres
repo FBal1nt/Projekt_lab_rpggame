@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SmithingRecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/SmithingRecipeData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"upgrade_1"
+display_name = "Fejlesztés +1"
+description = "Alap megerősítés."
+recipe_type = &"upgrade"
+result_item_id = &""
+target_upgrade_level = 1
+ingredient_item_ids = PackedStringArray("iron_ingot")
+ingredient_amounts = PackedInt32Array(2)
+gold_cost = 35

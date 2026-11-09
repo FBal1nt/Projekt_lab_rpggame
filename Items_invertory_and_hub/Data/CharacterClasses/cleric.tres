@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"cleric"
+display_name = "Pap"
+role = "Gyógyítás / támogatás"
+description = "Megbízható gyógyító és támogató, aki a csapat életben tartásában jeleskedik."
+placeholder_color = Color(0.72, 0.65, 0.35, 1)
+base_health = 31
+base_damage_min = 3
+base_damage_max = 6
+base_defense = 3
+base_speed = 3
+base_accuracy = 90
+base_crit_chance = 4.0
+base_dodge = 5
+base_healing_power = 8
+base_stress_resistance = 55
+health_per_level = 3
+damage_min_per_level = 0
+damage_max_per_level = 1
+defense_per_level = 0
+skill_ids = PackedStringArray("healing_light", "blessing", "purge")
+skill_names = PackedStringArray("Gyógyító fény", "Áldás", "Megtisztítás")
+starting_equipment_ids = PackedStringArray()

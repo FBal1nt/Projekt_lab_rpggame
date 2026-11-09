@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"archer"
+display_name = "Íjász"
+role = "Távolsági sebző (Lőtáv: 5)"
+description = "Gyors és pontos távolsági harcos. Lőtávolsága 5 mező, alap életereje 85 HP, sebzése 15, magas (14.0) kezdeményezéssel."
+placeholder_color = Color(0.2, 0.6, 0.3, 1)
+base_health = 85
+base_damage_min = 12
+base_damage_max = 15
+base_defense = 0
+base_speed = 14
+base_accuracy = 95
+base_crit_chance = 12.0
+base_dodge = 15
+base_healing_power = 0
+base_stress_resistance = 35
+health_per_level = 10
+damage_min_per_level = 1
+damage_max_per_level = 2
+defense_per_level = 1
+skill_ids = PackedStringArray("arrow_shot")
+skill_names = PackedStringArray("Nyíllövés (5 mező)")
+starting_equipment_ids = PackedStringArray()

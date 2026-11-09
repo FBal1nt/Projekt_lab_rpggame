@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnchantmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/EnchantmentData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"flame_ward"
+display_name = "Parázsellenállás"
+description = "Tűzellenállást és egy kis többlet életerőt ad a páncélnak vagy ékszernek."
+workshop_type = &"wizard"
+option_category = &"resistance"
+element = &"fire"
+applicable_item_types = PackedStringArray("armor", "ring", "earring", "shield", "helmet", "boots", "gloves")
+ingredient_item_ids = PackedStringArray("arcane_dust", "iron_ingot")
+ingredient_amounts = PackedInt32Array(2, 1)
+gold_cost = 90
+stat_modifiers = {"fire_resistance": 20.0, "max_health": 5.0}

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SmithingRecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/SmithingRecipeData.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"craft_iron_sword"
+display_name = "Vaskard"
+description = "Egyszerű, megbízható vaskard."
+recipe_type = &"craft"
+result_item_id = &"iron_sword"
+target_upgrade_level = 1
+ingredient_item_ids = PackedStringArray("iron_ingot", "leather_strip")
+ingredient_amounts = PackedInt32Array(5, 2)
+gold_cost = 80

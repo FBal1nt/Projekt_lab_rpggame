@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+<defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0bc"/><stop offset=".45" stop-color="#d8b56c"/><stop offset="1" stop-color="#9a6c35"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<g fill="url(#metal)" stroke="#362a2c" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)"><path d="M21 50 L31 35 H97 L107 50 V101 H21Z"/><path d="M18 50 H110 V68 H18Z" fill="#be9351"/><path d="M30 35 V26 H98 V35" fill="none" stroke-width="6"/><path d="M56 69 H72 V85 H56Z" fill="#172235" stroke="#efcf8c" stroke-width="4"/><path d="M25 101 H103" stroke-width="7"/></g>
+<g fill="none" stroke="#fff0bd" stroke-width="2" opacity=".7"><path d="M18 17 H34 M17 18 V34 M94 17 H110 M110 18 V34 M18 94 V110 H34 M94 110 H110 V94"/></g>
+</svg>

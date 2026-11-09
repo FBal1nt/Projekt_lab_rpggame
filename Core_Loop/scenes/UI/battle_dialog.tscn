@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://c645dfdo7w2qv"]
+
+[ext_resource type="Script" uid="uid://b3q24efey7ssb" path="res://scripts/UI/battle_dialog.gd" id="1_jngcs"]
+
+[node name="BattleDialog" type="CanvasLayer" unique_id=1849918493]
+layer = 100
+script = ExtResource("1_jngcs")
+
+[node name="Hero" type="PanelContainer" parent="." unique_id=579562526]
+anchors_preset = -1
+offset_right = 256.0
+offset_bottom = 640.0
+
+[node name="HeroBox" type="VBoxContainer" parent="Hero" unique_id=1184170511]
+layout_mode = 2
+alignment = 1
+
+[node name="HeroNameLabel" type="Label" parent="Hero/HeroBox" unique_id=1676262350]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="HeroHpBar" type="ProgressBar" parent="Hero/HeroBox" unique_id=11144223]
+layout_mode = 2
+
+[node name="HeroStatsLabel" type="Label" parent="Hero/HeroBox" unique_id=115047906]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Enemy" type="PanelContainer" parent="." unique_id=1379205553]
+anchors_preset = -1
+offset_left = 896.0
+offset_right = 1152.0
+offset_bottom = 640.0
+
+[node name="EnemyBox" type="VBoxContainer" parent="Enemy" unique_id=1723515112]
+layout_mode = 2
+alignment = 1
+
+[node name="EnemyNameLabel" type="Label" parent="Enemy/EnemyBox" unique_id=75021570]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnemyHpBar" type="ProgressBar" parent="Enemy/EnemyBox" unique_id=1153726435]
+layout_mode = 2
+
+[node name="EnemyStatsLabel" type="Label" parent="Enemy/EnemyBox" unique_id=1024475017]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="." unique_id=350221307]
+offset_left = 384.00003
+offset_top = 48.000008
+offset_right = 570.0
+offset_bottom = 87.00001
+scale = Vector2(2.065, 2.065)
+theme_type_variation = &"HeaderLarge"
+text = "HARC"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="VSLabel" type="Label" parent="." unique_id=1497590523]
+offset_left = 512.0
+offset_top = 128.0
+offset_right = 553.0
+offset_bottom = 167.0
+scale = Vector2(3.12, 3.12)
+theme_type_variation = &"HeaderLarge"
+text = "VS."
+horizontal_alignment = 1

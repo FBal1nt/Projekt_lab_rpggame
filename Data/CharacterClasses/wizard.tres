@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterClassData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/CharacterClassData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"wizard"
+display_name = "Varázsló"
+role = "Tűz és Jég elemi mágia (Lőtáv: 5)"
+description = "A pusztító elemek ura. A legmagasabb alapsebzésű (28 sebzés, 80 HP) távolsági mágus. Az F billentyűvel váltható a Tűz és Fagyasztó Jég elem."
+placeholder_color = Color(0.3, 0.2, 0.8, 1)
+base_health = 80
+base_damage_min = 22
+base_damage_max = 28
+base_defense = 0
+base_speed = 12
+base_accuracy = 96
+base_crit_chance = 10.0
+base_dodge = 6
+base_healing_power = 0
+base_stress_resistance = 35
+health_per_level = 10
+damage_min_per_level = 1
+damage_max_per_level = 2
+defense_per_level = 1
+skill_ids = PackedStringArray("fireball", "ice_spike")
+skill_names = PackedStringArray("Tűzgolyó (F)", "Jégtüske (F)")
+starting_equipment_ids = PackedStringArray()
