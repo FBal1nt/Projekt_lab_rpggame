@@ -124,14 +124,14 @@ func update_vision(hero_pos: Vector2i, vision_limit: int) -> void:
 		cell_states[cell] = CellState.IN_FOG
 	current_visible_cells.clear()
 
-	var max_range: int = ceili(sqrt(vision_limit))
-	for dx in range(-max_range, max_range + 1):
-		for dy in range(-max_range, max_range + 1):
-			if (dx * dx) + (dy * dy) <= vision_limit:
-				var target_cell = hero_pos + Vector2i(dx, dy)
-				if real_map_cells.has(target_cell):
-					cell_states[target_cell] = CellState.VISIBLE
-					current_visible_cells.append(target_cell)
+	# Négyzetes látótávolság (Chebyshev rádiusz):
+	# vision_limit = 2 esetén dx és dy [-2, 2] tartományban mozog (pontosan 5x5-ös négyzet)
+	for dx in range(-vision_limit, vision_limit + 1):
+		for dy in range(-vision_limit, vision_limit + 1):
+			var target_cell = hero_pos + Vector2i(dx, dy)
+			if real_map_cells.has(target_cell):
+				cell_states[target_cell] = CellState.VISIBLE
+				current_visible_cells.append(target_cell)
 
 	apply_torch_lights()
 	queue_redraw()

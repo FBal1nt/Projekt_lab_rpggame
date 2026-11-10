@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://p57bk5si0iif"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_gijx8"]
+[ext_resource type="SpriteFrames" uid="uid://babvtov8h1x4m" path="res://resources/Monsters/greatsword_skeleton_frames.tres" id="2_a18hv"]
+
+[resource]
+script = ExtResource("1_gijx8")
+monster_id = "greatsword_skeleton"
+monster_name = "Nagy Kardos Csontváz"
+title = "a Zúzó"
+xp_reward = 8
+sprite_frames = ExtResource("2_a18hv")
+max_hp = 60
+base_damage = 30
+initiative = 3.0
+flat_armor = 4
+special_profile = 6
+can_self_revive = true
+resurrect_delay = 4.0
+can_block = false
+metadata/_custom_type_script = "uid://jfeoccywjufa"

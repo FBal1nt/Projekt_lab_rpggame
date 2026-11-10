@@ -72,7 +72,7 @@ var attack_power: int:
 	get: return progression.attack_power if progression else 10
 
 var vision_limit: int:
-	get: return visuals.vision_limit if visuals else 25
+	get: return visuals.vision_limit if visuals else 2
 
 var _floor_layer: TileMapLayer = null
 var _wall_layer: TileMapLayer = null

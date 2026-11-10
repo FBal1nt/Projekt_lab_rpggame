@@ -1,50 +1,508 @@
-[gd_scene format=3 uid="uid://caf7n1p6wvnpn"]
+[gd_scene load_steps=14 format=3 uid="uid://caf7n1p6wvnpn"]
 
 [ext_resource type="Script" uid="uid://d27t50r8ivv6r" path="res://Scripts/UI/hud.gd" id="1_ahhtf"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.08, 0.09, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.34, 0.48, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.12, 0.14, 0.22, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.32, 0.44, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_bg"]
+bg_color = Color(0.12, 0.13, 0.18, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.28, 0.38, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.85, 0.15, 0.22, 1)
+border_width_top = 1
+border_color = Color(0.98, 0.35, 0.40, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_bg"]
+bg_color = Color(0.12, 0.13, 0.18, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.28, 0.38, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
+bg_color = Color(0.88, 0.62, 0.12, 1)
+border_width_top = 1
+border_color = Color(1, 0.8, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_minimap_panel"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.06, 0.07, 0.11, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.58, 0.46, 0.26, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_minimap_canvas"]
+bg_color = Color(0.04, 0.05, 0.08, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.28, 0.38, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bigmap_panel"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.06, 0.07, 0.11, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.68, 0.54, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bigmap_canvas"]
+bg_color = Color(0.03, 0.04, 0.06, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.36, 0.48, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.18, 0.12, 0.12, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.25, 0.25, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.32, 0.16, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9, 0.35, 0.35, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.12, 0.08, 0.08, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.15, 0.15, 1)
+anti_aliasing = false
+
 [node name="HUD" type="CanvasLayer" unique_id=1857166180]
+layer = 10
 script = ExtResource("1_ahhtf")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2013330426]
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 12
+[node name="StatsMargin" type="MarginContainer" parent="." unique_id=2013330426]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 356.0
+offset_bottom = 276.0
 
-[node name="MainStatsPanel" type="PanelContainer" parent="MarginContainer" unique_id=1621978366]
+[node name="MainStatsPanel" type="PanelContainer" parent="StatsMargin" unique_id=1621978366]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StatsMargin/MainStatsPanel" unique_id=1867384867]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderBox" type="HBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IconBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox"]
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="IconLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox/IconBadge"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 18
+text = "⚔️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameLevelBox" type="VBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="HeroTitleLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox/NameLevelBox" unique_id=521085002]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.92, 0.8, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 15
+text = "Kardforgató"
+
+[node name="ClassLevelLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox/NameLevelBox" unique_id=235543099]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.75, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "Kardforgató  •  Szint 1"
+
+[node name="BarsBox" type="VBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HpContainer" type="MarginContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/BarsBox" unique_id=962998472]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MainStatsPanel" unique_id=1867384867]
+[node name="HpBar" type="ProgressBar" parent="StatsMargin/MainStatsPanel/VBoxContainer/BarsBox/HpContainer" unique_id=11144223]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HpText" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/BarsBox/HpContainer" unique_id=1268196201]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "HP: 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XpContainer" type="MarginContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/BarsBox" unique_id=1663595082]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="HeroTitleLabel" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer" unique_id=521085002]
+[node name="XpBar" type="ProgressBar" parent="StatsMargin/MainStatsPanel/VBoxContainer/BarsBox/XpContainer" unique_id=11144224]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_xp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
+max_value = 10.0
+value = 0.0
+show_percentage = false
+
+[node name="XpText" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/BarsBox/XpContainer" unique_id=2005382066]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "XP: 0 / 10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsGrid" type="GridContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer" unique_id=1518514740]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="AtkBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="AtkLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/AtkBadge" unique_id=705700582]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.7, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "⚔️ Támadás: 18"
+horizontal_alignment = 1
+
+[node name="DefBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="DefLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/DefBadge" unique_id=2065000700]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.8, 0.95, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "🛡️ Védelem: 1"
+horizontal_alignment = 1
+
+[node name="InitBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="InitLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/InitBadge" unique_id=1265225090]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "⚡ Kezdeményezés: 15.0"
+horizontal_alignment = 1
+
+[node name="VisionBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="VisionLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/VisionBadge" unique_id=1767290060]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.95, 0.85, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "👁️ Látótáv: 2 (5x5)"
+horizontal_alignment = 1
+
+[node name="TileInfoBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="TileInfoLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/TileInfoBadge" unique_id=1894120301]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.84, 0.9, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "📍 Mező: (0, 0) - Szoba / Folyosó padlója"
+horizontal_alignment = 1
+
+[node name="MinimapMargin" type="MarginContainer" parent="." unique_id=1948201948]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 244.0
+grow_horizontal = 0
+
+[node name="MinimapPanel" type="PanelContainer" parent="MinimapMargin" unique_id=1948201949]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_minimap_panel")
+
+[node name="MinimapVBox" type="VBoxContainer" parent="MinimapMargin/MinimapPanel" unique_id=1948201950]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MinimapHeader" type="HBoxContainer" parent="MinimapMargin/MinimapPanel/MinimapVBox" unique_id=1948201951]
 layout_mode = 2
 
-[node name="ClassLevelLabel" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer" unique_id=235543099]
+[node name="MinimapTitle" type="Label" parent="MinimapMargin/MinimapPanel/MinimapVBox/MinimapHeader" unique_id=1948201952]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.94, 0.85, 0.62, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "🗺️ TÉRKÉP [M]"
 
-[node name="HpContainer" type="HBoxContainer" parent="MarginContainer/MainStatsPanel/VBoxContainer" unique_id=962998472]
+[node name="MinimapCoordsLabel" type="Label" parent="MinimapMargin/MinimapPanel/MinimapVBox/MinimapHeader" unique_id=1948201953]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.85, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "[0, 0]"
+horizontal_alignment = 2
 
-[node name="HpText" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer/HpContainer" unique_id=1268196201]
+[node name="MinimapFrame" type="PanelContainer" parent="MinimapMargin/MinimapPanel/MinimapVBox" unique_id=1948201954]
+custom_minimum_size = Vector2(188, 188)
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_minimap_canvas")
 
-[node name="XpContainer" type="HBoxContainer" parent="MarginContainer/MainStatsPanel/VBoxContainer" unique_id=1663595082]
+[node name="MinimapCanvas" type="Control" parent="MinimapMargin/MinimapPanel/MinimapVBox/MinimapFrame" unique_id=1948201955]
 layout_mode = 2
+clip_contents = true
 
-[node name="XpText" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer/XpContainer" unique_id=2005382066]
-layout_mode = 2
+[node name="FullscreenMapOverlay" type="Control" parent="." unique_id=2233445566]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="StatsGrid" type="GridContainer" parent="MarginContainer/MainStatsPanel/VBoxContainer" unique_id=1518514740]
-layout_mode = 2
+[node name="MapBackdrop" type="ColorRect" parent="FullscreenMapOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.04, 0.07, 0.88)
 
-[node name="AtkLabel" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=705700582]
-layout_mode = 2
+[node name="MapCenter" type="CenterContainer" parent="FullscreenMapOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="DefLabel" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=2065000700]
+[node name="BigMapPanel" type="PanelContainer" parent="FullscreenMapOverlay/MapCenter"]
+custom_minimum_size = Vector2(640, 640)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bigmap_panel")
 
-[node name="InitLabel" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=1265225090]
+[node name="BigMapVBox" type="VBoxContainer" parent="FullscreenMapOverlay/MapCenter/BigMapPanel"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="VisionLabel" type="Label" parent="MarginContainer/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=1767290060]
+[node name="BigMapHeader" type="HBoxContainer" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BigMapTitle" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.55, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "🗺️ DUNGEON TÉRKÉP"
+
+[node name="BigMapCoords" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.75, 0.82, 0.92, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "Pozíció: [0, 0]"
+horizontal_alignment = 1
+
+[node name="CloseMapButton" type="Button" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.7, 0.7, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "✕ BEZÁRÁS [M/ESC]"
+
+[node name="BigMapFrame" type="PanelContainer" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox"]
+custom_minimum_size = Vector2(600, 540)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bigmap_canvas")
+
+[node name="BigMapCanvas" type="Control" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapFrame"]
+layout_mode = 2
+clip_contents = true
+
+[node name="BigMapLegend" type="HBoxContainer" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="LegendHero" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapLegend"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "■ Hős"
+
+[node name="LegendEnemy" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapLegend"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.25, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "■ Ellenség"
+
+[node name="LegendTorch" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapLegend"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "■ Fáklya"
+
+[node name="LegendFloor" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapLegend"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.7, 0.82, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "■ Felfedezett"

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://cd7cppa2ngud"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_1t38j"]
+[ext_resource type="PackedScene" uid="uid://cy5ycl5laye4r" path="res://Scenes/Projectiles/necromancer_attack.tscn" id="1_hujp1"]
+
+[resource]
+script = ExtResource("1_1t38j")
+monster_id = "necromancer"
+monster_name = "Nekromanta"
+title = "a Sötétség Ura"
+xp_reward = 50
+max_hp = 150
+base_damage = 15
+defense = 2
+initiative = 12.0
+special_profile = 4
+attack_range = 10
+projectile_scene = ExtResource("1_hujp1")
+action_interval = 2.0
+aggro_range = 12
+can_block = false
+metadata/_custom_type_script = "uid://jfeoccywjufa"

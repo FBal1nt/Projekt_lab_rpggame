@@ -127,7 +127,8 @@ func _level_up() -> void:
 	heal_to_max()
 	initiative *= 1.1
 	if controller and controller.visuals:
-		controller.visuals.vision_limit *= 3
+		# Lineáris növekedés (+1 sugár = 5x5 -> 7x7 -> 9x9...), ésszerű maximummal (pl. max 5 sugár = 11x11)
+		controller.visuals.vision_limit = mini(controller.visuals.vision_limit + 1, 5)
 		controller.visuals.update_fog_of_war()
 	update_hud()
 

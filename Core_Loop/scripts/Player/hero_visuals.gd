@@ -6,7 +6,8 @@ var controller: HeroController
 @export_group("Megjelenés és Köd")
 var sprite: AnimatedSprite2D
 @export var fog_of_war: FogOfWar
-@export var vision_limit: int = 25
+## A látótávolság négyzetsugara rácscellákban (2 = 5x5 mező, 3 = 7x7 mező)
+@export var vision_limit: int = 2
 
 var hovered_cell: Vector2i = Vector2i(-99999, -99999)
 
@@ -81,7 +82,7 @@ func is_tile_in_vision(cell: Vector2i) -> bool:
 		return cell in fog_of_war.current_visible_cells
 	if controller:
 		var diff = cell - controller.grid_pos
-		return (diff.x * diff.x + diff.y * diff.y) <= vision_limit
+		return maxi(absi(diff.x), absi(diff.y)) <= vision_limit
 	return true
 
 func process_hover() -> void:

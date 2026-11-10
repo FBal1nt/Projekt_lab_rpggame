@@ -803,7 +803,7 @@ func _create_new_game() -> void:
 
 	var starter := CharacterProfile.new()
 	starter.id = _generate_character_id()
-	starter.character_name = "Vándor"
+	starter.character_name = "Kardforgató"
 	starter.class_id = &"swordsman"
 	starter.level = 1
 	starter.xp = 0
@@ -1145,7 +1145,7 @@ func _load_game(path: String) -> bool:
 		character.id = str(character_entry.get("id", ""))
 		if character.id.is_empty():
 			character.id = _generate_character_id()
-		character.character_name = str(character_entry.get("name", "Vándor"))
+		character.character_name = str(character_entry.get("name", "Kardforgató"))
 		var stored_class_id := StringName(str(character_entry.get("class_id", character_entry.get("archetype", "warrior"))))
 		if get_character_class(stored_class_id) == null:
 			push_warning("A mentett karakter osztálya nem található (" + String(stored_class_id) + "); alapértelmezett osztályra állítva.")

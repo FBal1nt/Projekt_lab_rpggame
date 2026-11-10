@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://yr17mptcdg7e"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_b6h33"]
+[ext_resource type="SpriteFrames" uid="uid://4qi5cbrpifx8" path="res://resources/Monsters/werebear_frames.tres" id="2_5lf8n"]
+
+[resource]
+script = ExtResource("1_b6h33")
+monster_id = "werebear"
+monster_name = "Medveember"
+title = "a Megtörhetetlen"
+xp_reward = 10
+sprite_frames = ExtResource("2_5lf8n")
+max_hp = 120
+base_damage = 14
+defense = 4
+initiative = 6.0
+flat_armor = 3
+special_profile = 7
+can_block = false
+metadata/_custom_type_script = "uid://jfeoccywjufa"

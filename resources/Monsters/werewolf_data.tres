@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://d421sq3pg8xf"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_8d1tr"]
+[ext_resource type="SpriteFrames" uid="uid://cgr8xbdjle8u3" path="res://resources/Monsters/werewolf_frames.tres" id="2_kpmti"]
+
+[resource]
+script = ExtResource("1_8d1tr")
+monster_id = "werewolf"
+monster_name = "Farkasember"
+title = "az Éjszakai Vadász"
+xp_reward = 10
+sprite_frames = ExtResource("2_kpmti")
+max_hp = 100
+base_damage = 20
+defense = 2
+initiative = 9.5
+flat_armor = 1
+special_profile = 8
+can_block = false
+dodge_chance = 0.15
+metadata/_custom_type_script = "uid://jfeoccywjufa"

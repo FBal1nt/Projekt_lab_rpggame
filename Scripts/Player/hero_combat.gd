@@ -315,7 +315,7 @@ func is_hero_ranged_attack(target_cell: Vector2i) -> bool:
 func get_effective_attack_range() -> int:
 	if controller.active_class == null: return 1
 	var c_name = controller.active_class.class_name_id
-	var vis = controller.visuals.vision_limit if controller.visuals else 25
+	var vis = controller.visuals.vision_limit if controller.visuals else 2
 	if c_name in ["Archer", "Priest"]: return vis
 	elif c_name == "Wizard": return mini(5, vis)
 	elif c_name == "Soldier": return mini(3, vis)

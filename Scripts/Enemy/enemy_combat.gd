@@ -3,6 +3,7 @@ class_name EnemyCombat
 
 var controller: EnemyController
 var armored_combat: ArmoredEnemyCombat
+var elite_combat: EliteEnemyCombat
 
 @export_group("Kábítás és Időzítés")
 @export var stun_duration: float = 1.5
@@ -16,10 +17,27 @@ func setup(p_controller: EnemyController) -> void:
 	is_attacking = false
 	is_blocking_active = false
 	armored_combat = ArmoredEnemyCombat.new(self)
+	elite_combat = EliteEnemyCombat.new(self)
 
 func is_armored_enemy() -> bool:
 	if controller == null or controller.enemy_data == null: return false
-	return controller.enemy_data.special_profile != 0 # Nem STANDARD
+	var profile = controller.enemy_data.special_profile
+	return profile in [
+		EnemyData.SpecialProfile.ARMORED_SKELETON,
+		EnemyData.SpecialProfile.ARMORED_ORC,
+		EnemyData.SpecialProfile.ARMORED_AXEMAN
+	] or (profile >= 1 and profile <= 3)
+
+func is_elite_enemy() -> bool:
+	if controller == null or controller.enemy_data == null: return false
+	var profile = controller.enemy_data.special_profile
+	return profile in [
+		EnemyData.SpecialProfile.NECROMANCER,
+		EnemyData.SpecialProfile.ELITE_ORC,
+		EnemyData.SpecialProfile.GREATSWORD_SKELETON,
+		EnemyData.SpecialProfile.WEREBEAR,
+		EnemyData.SpecialProfile.WEREWOLF
+	] or (EnemyData.SpecialProfile.get("BEARMAN") != null and profile == EnemyData.SpecialProfile.BEARMAN) or (profile >= 4 and profile <= 8)
 
 func can_attack_hero(hero_cell: Vector2i) -> bool:
 	if controller == null: return false
@@ -110,7 +128,11 @@ func perform_combat_turn(target_hero: HeroController, is_extra_attack: bool = fa
 	if controller.visuals:
 		controller.visuals.update_facing(target_hero.grid_pos.x)
 
-	# 1. PÁNCÉLOZOTT ELLENSÉG: ÁTADJUK A VEZÉRLÉST AZ ARMORED COMBAT OSZTÁLYNAK!
+	# 1. ELIT / BOSS ELLENSÉGEK: ÁTADJUK A VEZÉRLÉST AZ ELITE COMBAT OSZTÁLYNAK!
+	if is_elite_enemy():
+		return await elite_combat.perform_turn(target_hero, is_extra_attack)
+
+	# 2. PÁNCÉLOZOTT ELLENSÉG: ÁTADJUK A VEZÉRLÉST AZ ARMORED COMBAT OSZTÁLYNAK!
 	if is_armored_enemy():
 		return await armored_combat.perform_turn(target_hero, is_extra_attack)
 

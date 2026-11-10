@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://d4mesb8lkf43i"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_i8x5v"]
+[ext_resource type="SpriteFrames" uid="uid://bn4idbwdwdfn8" path="res://resources/Monsters/elite_orc_frames.tres" id="2_dc1gc"]
+
+[resource]
+script = ExtResource("1_i8x5v")
+monster_id = "elite_orc"
+monster_name = "Elit Ork"
+title = "a Vérszomjas"
+xp_reward = 12
+sprite_frames = ExtResource("2_dc1gc")
+max_hp = 90
+base_damage = 18
+defense = 3
+initiative = 7.0
+flat_armor = 2
+special_profile = 5
+knockback_frame_attack_3 = 4
+can_block = false
+metadata/_custom_type_script = "uid://jfeoccywjufa"

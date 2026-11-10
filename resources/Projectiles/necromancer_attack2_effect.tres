@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dlajbe3ryb1oe"]
+
+[ext_resource type="Texture2D" uid="uid://dbj8ehid27t5j" path="res://assets/Characters(100x100 split)/Necromancer/Magic(projectile)/Necromancer_Attack02_Effect.png" id="1_gdrqg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x4qsa"]
+atlas = ExtResource("1_gdrqg")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x6uc8"]
+atlas = ExtResource("1_gdrqg")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmo0o"]
+atlas = ExtResource("1_gdrqg")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ql43m"]
+atlas = ExtResource("1_gdrqg")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ljdi"]
+atlas = ExtResource("1_gdrqg")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mltkw"]
+atlas = ExtResource("1_gdrqg")
+region = Rect2(500, 0, 100, 100)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x4qsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x6uc8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gmo0o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ql43m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ljdi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mltkw")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 8.0
+}]

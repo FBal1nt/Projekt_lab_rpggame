@@ -5,7 +5,7 @@ extends Resource
 ## CharacterClassData resources so class definitions can be extended safely.
 
 @export var id: String = ""
-@export var character_name: String = "Vándor"
+@export var character_name: String = "Kardforgató"
 ## Kept for save-file and teammate-script compatibility; this stores the class ID.
 @export var archetype: StringName = &"warrior"
 @export var level: int = 1

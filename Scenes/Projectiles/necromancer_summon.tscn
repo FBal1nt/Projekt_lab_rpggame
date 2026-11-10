@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bqt2xu3j7kjau"]
+
+[ext_resource type="Script" uid="uid://ktub1p3dstr0" path="res://Scripts/Projectiles/wizard_spell.gd" id="1_0dnyo"]
+[ext_resource type="SpriteFrames" uid="uid://b78vcmcblgjdm" path="res://resources/Projectiles/necromancer_summon_effect.tres" id="2_0dnyo"]
+
+[node name="Summon" type="Node2D" unique_id=631529737]
+script = ExtResource("1_0dnyo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=615361163]
+sprite_frames = ExtResource("2_0dnyo")
+frame = 12
+frame_progress = 1.0
