@@ -1,5 +1,6 @@
 extends Panel
 
+## Lobby-side dungeon selector only. Actual generator/gameplay is supplied by the team.
 const UI_THEME = preload("res://Scripts/UI/ui_theme.gd")
 
 var _title: Label
@@ -10,15 +11,11 @@ var _dungeon_description: Label
 var _dungeon_meta: Label
 var _difficulty_details: Label
 var _status_label: Label
-var _start_button: Button
+var _submit_button: Button
 var _selected_dungeon_id: StringName = &""
 var _selected_difficulty_id: StringName = &"normal"
 var _ui_built: bool = false
 
-
-# -----------------------------------------------------------------------------
-# Window layout and control creation
-# -----------------------------------------------------------------------------
 
 func _ready() -> void:
 	_set_window_layout()
@@ -27,11 +24,10 @@ func _ready() -> void:
 
 
 func _set_window_layout() -> void:
-	# Keep the complete dialog inside the viewport on typical 720p and larger screens.
-	anchor_left = 0.08
-	anchor_top = 0.075
-	anchor_right = 0.92
-	anchor_bottom = 0.925
+	anchor_left = 0.06
+	anchor_top = 0.055
+	anchor_right = 0.94
+	anchor_bottom = 0.945
 	offset_left = 0.0
 	offset_top = 0.0
 	offset_right = 0.0
@@ -47,7 +43,7 @@ func _set_window_layout() -> void:
 		_title.anchor_bottom = 0.0
 		_title.offset_left = 24.0
 		_title.offset_top = 14.0
-		_title.offset_right = -210.0
+		_title.offset_right = -190.0
 		_title.offset_bottom = 58.0
 		_title.text = "DUNGEONVÁLASZTÁS"
 		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -82,17 +78,16 @@ func _build_ui() -> void:
 	content.anchor_right = 1.0
 	content.anchor_bottom = 1.0
 	content.offset_left = 24.0
-	content.offset_top = 72.0
+	content.offset_top = 74.0
 	content.offset_right = -24.0
 	content.offset_bottom = -18.0
-	content.add_theme_constant_override("separation", 7)
+	content.add_theme_constant_override("separation", 8)
 	add_child(content)
 
 	var intro := Label.new()
-	intro.name = "DungeonIntro"
-	intro.text = "Válaszd ki a felfedezni kívánt helyszínt és a kihívás szintjét. A részletek a választás alapján frissülnek."
+	intro.text = "Válaszd ki a felfedezni kívánt helyszínt és a kihívás szintjét. A tényleges pályagenerálást a külön Dungeon-rendszer végzi."
 	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	intro.custom_minimum_size.y = 28
+	intro.custom_minimum_size.y = 42
 	intro.add_theme_color_override("font_color", UI_THEME.MUTED)
 	intro.add_theme_font_size_override("font_size", 14)
 	content.add_child(intro)
@@ -112,7 +107,7 @@ func _build_ui() -> void:
 	content.add_child(_dungeon_meta)
 
 	_dungeon_description = _make_body_label("Válassz egy dungeont a leírás megjelenítéséhez.", 15)
-	_dungeon_description.custom_minimum_size.y = 42
+	_dungeon_description.custom_minimum_size.y = 44
 	_dungeon_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(_dungeon_description)
 
@@ -122,10 +117,10 @@ func _build_ui() -> void:
 	detail_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	detail_scroll.custom_minimum_size.y = 80
+	detail_scroll.custom_minimum_size.y = 88
 	content.add_child(detail_scroll)
 
-	_difficulty_details = _make_body_label("Válassz nehézségi fokozatot a spawnráták, az ellenfélszintek és az ellenféltípusok megtekintéséhez.", 15)
+	_difficulty_details = _make_body_label("Válassz nehézségi fokozatot a konfiguráció részleteinek megtekintéséhez.", 14)
 	_difficulty_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_difficulty_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_scroll.add_child(_difficulty_details)
@@ -133,7 +128,7 @@ func _build_ui() -> void:
 	var footer := HBoxContainer.new()
 	footer.name = "DungeonFooter"
 	footer.add_theme_constant_override("separation", 12)
-	footer.custom_minimum_size.y = 50
+	footer.custom_minimum_size.y = 52
 	content.add_child(footer)
 
 	_status_label = _make_body_label("Válassz dungeont és nehézséget.", 13)
@@ -142,15 +137,15 @@ func _build_ui() -> void:
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	footer.add_child(_status_label)
 
-	_start_button = Button.new()
-	_start_button.name = "StartDungeonButton"
-	_start_button.text = "KALAND ELŐKÉSZÍTÉSE"
-	_start_button.custom_minimum_size = Vector2(246, 50)
-	_start_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	UI_THEME.style_button(_start_button, Color("d6a34e"), true)
-	_start_button.add_theme_font_size_override("font_size", 15)
-	_start_button.pressed.connect(_on_start_pressed)
-	footer.add_child(_start_button)
+	_submit_button = Button.new()
+	_submit_button.name = "SubmitDungeonSelectionButton"
+	_submit_button.text = "VÁLASZTÁS ÁTADÁSA"
+	_submit_button.custom_minimum_size = Vector2(224, 50)
+	_submit_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	UI_THEME.style_button(_submit_button, Color("d6a34e"), true)
+	_submit_button.add_theme_font_size_override("font_size", 14)
+	_submit_button.pressed.connect(_on_submit_pressed)
+	footer.add_child(_submit_button)
 
 
 func _create_option_button(node_name: String, placeholder_text: String) -> OptionButton:
@@ -179,25 +174,19 @@ func _make_selection_row(label_text: String, option: OptionButton) -> HBoxContai
 	return row
 
 
-# -----------------------------------------------------------------------------
-# Data-driven dungeon and difficulty selection
-# -----------------------------------------------------------------------------
-
 func refresh() -> void:
 	if not _ui_built or _dungeon_option == null or _difficulty_option == null:
 		return
 
-	var preferred_dungeon := StringName(str(GameState.run_state.get("dungeon_id", "forgotten_crypt")))
-	var preferred_difficulty := StringName(str(GameState.run_state.get("difficulty_id", "normal")))
-	if _selected_dungeon_id != &"":
-		preferred_dungeon = _selected_dungeon_id
-		if _selected_difficulty_id != &"":
-			preferred_difficulty = _selected_difficulty_id
-	if _selected_difficulty_id != &"":
-		preferred_difficulty = _selected_difficulty_id
+	var preferred_dungeon := _selected_dungeon_id
+	var preferred_difficulty := _selected_difficulty_id
+	if preferred_dungeon == &"":
+		var previous := DungeonSelection.get_selected_configuration()
+		preferred_dungeon = StringName(str(previous.get("dungeon_id", "forgotten_crypt")))
+		preferred_difficulty = StringName(str(previous.get("difficulty_id", "normal")))
 
 	_dungeon_option.clear()
-	var available_dungeons := DungeonManager.get_available_dungeons()
+	var available_dungeons := DungeonSelection.get_available_dungeons()
 	var selected_index := -1
 	for i in range(available_dungeons.size()):
 		var dungeon := available_dungeons[i]
@@ -216,7 +205,7 @@ func refresh() -> void:
 		_dungeon_meta.text = "Ajánlott csapatszint: —"
 		_difficulty_option.clear()
 		_difficulty_details.text = "Nem érhető el nehézségi beállítás."
-		_start_button.disabled = true
+		_submit_button.disabled = true
 		return
 
 	_dungeon_option.select(selected_index)
@@ -236,13 +225,13 @@ func _load_selected_dungeon(preferred_difficulty: StringName) -> void:
 	if _dungeon_option.selected < 0 or _dungeon_option.selected >= _dungeon_option.item_count:
 		return
 	_selected_dungeon_id = StringName(str(_dungeon_option.get_item_metadata(_dungeon_option.selected)))
-	var dungeon := DungeonManager.get_dungeon(_selected_dungeon_id)
+	var dungeon := DungeonSelection.get_dungeon(_selected_dungeon_id)
 	if dungeon == null:
 		_dungeon_description.text = "A kiválasztott dungeon definíciója nem tölthető be."
 		_dungeon_meta.text = "Ajánlott csapatszint: —"
 		_difficulty_option.clear()
 		_difficulty_details.text = "Nincs elérhető nehézségi konfiguráció."
-		_start_button.disabled = true
+		_submit_button.disabled = true
 		return
 
 	_dungeon_description.text = dungeon.description
@@ -252,7 +241,7 @@ func _load_selected_dungeon(preferred_difficulty: StringName) -> void:
 
 func _populate_difficulties(preferred_difficulty: StringName) -> void:
 	_difficulty_option.clear()
-	var available := DungeonManager.get_available_difficulties(_selected_dungeon_id)
+	var available := DungeonSelection.get_available_difficulties(_selected_dungeon_id)
 	var selected_index := -1
 	for i in range(available.size()):
 		var difficulty := available[i]
@@ -271,14 +260,14 @@ func _populate_difficulties(preferred_difficulty: StringName) -> void:
 
 	if selected_index < 0:
 		_selected_difficulty_id = &""
-		_difficulty_details.text = "Ehhez a dungeonhoz még nincs nehézségi szint konfigurálva. Adj hozzá adatfájlt a Data/DungeonDifficulties mappában."
-		_start_button.disabled = true
+		_difficulty_details.text = "Ehhez a dungeonhoz még nincs nehézségi konfiguráció. Adj hozzá adatfájlt a Data/DungeonDifficulties mappában."
+		_submit_button.disabled = true
 		return
 
 	_difficulty_option.select(selected_index)
 	_selected_difficulty_id = StringName(str(_difficulty_option.get_item_metadata(selected_index)))
 	_refresh_details()
-	_update_start_button()
+	_update_submit_button()
 
 
 func _on_difficulty_option_selected(index: int) -> void:
@@ -286,21 +275,17 @@ func _on_difficulty_option_selected(index: int) -> void:
 		return
 	_selected_difficulty_id = StringName(str(_difficulty_option.get_item_metadata(index)))
 	_refresh_details()
-	_update_start_button()
-	var dungeon := DungeonManager.get_dungeon(_selected_dungeon_id)
-	var difficulty := DungeonManager.get_difficulty(_selected_dungeon_id, _selected_difficulty_id)
+	_update_submit_button()
+	var dungeon := DungeonSelection.get_dungeon(_selected_dungeon_id)
+	var difficulty := DungeonSelection.get_difficulty(_selected_dungeon_id, _selected_difficulty_id)
 	if dungeon != null and difficulty != null:
 		_status_label.text = "Kiválasztva: %s — %s" % [dungeon.display_name, difficulty.display_name]
 		_status_label.add_theme_color_override("font_color", UI_THEME.MUTED)
 
 
-# -----------------------------------------------------------------------------
-# Details panel and launch feedback
-# -----------------------------------------------------------------------------
-
 func _refresh_details() -> void:
-	var difficulty := DungeonManager.get_difficulty(_selected_dungeon_id, _selected_difficulty_id)
-	var dungeon := DungeonManager.get_dungeon(_selected_dungeon_id)
+	var difficulty := DungeonSelection.get_difficulty(_selected_dungeon_id, _selected_difficulty_id)
+	var dungeon := DungeonSelection.get_dungeon(_selected_dungeon_id)
 	if difficulty == null or dungeon == null:
 		_difficulty_details.text = "Válassz egy elérhető nehézségi szintet."
 		return
@@ -313,7 +298,7 @@ func _refresh_details() -> void:
 			display_names.append(String(difficulty.enemy_type_ids[i]).replace("_", " ").capitalize())
 
 	var combined_spawn_rate: float = dungeon.base_spawn_rate_multiplier * difficulty.spawn_rate_multiplier
-	_difficulty_details.text = "%s\n\nSpawn gyakoriság: ×%.2f\nTalálkozások mennyisége: ×%.2f\nEllenségszint: %d–%d\nElit megjelenési esély: %d%%\nLehetséges ellenfelek: %s" % [
+	_difficulty_details.text = "%s\n\nSpawn gyakoriság: ×%.2f\nTalálkozások mennyisége: ×%.2f\nEllenfélszint: %d–%d\nElit megjelenési esély: %d%%\nLehetséges ellenfelek: %s" % [
 		difficulty.description,
 		combined_spawn_rate,
 		difficulty.encounter_count_multiplier,
@@ -325,10 +310,10 @@ func _refresh_details() -> void:
 	_difficulty_details.add_theme_color_override("font_color", UI_THEME.IVORY)
 
 
-func _on_start_pressed() -> void:
+func _on_submit_pressed() -> void:
 	if _selected_dungeon_id == &"" or _selected_difficulty_id == &"":
 		return
-	var result: Dictionary = DungeonManager.start_dungeon(_selected_dungeon_id, _selected_difficulty_id)
+	var result: Dictionary = DungeonSelection.submit_selection(_selected_dungeon_id, _selected_difficulty_id)
 	_status_label.text = str(result.get("message", "A művelet befejeződött."))
 	_status_label.add_theme_color_override(
 		"font_color",
@@ -336,15 +321,11 @@ func _on_start_pressed() -> void:
 	)
 
 
-func _update_start_button() -> void:
-	if _start_button == null:
+func _update_submit_button() -> void:
+	if _submit_button == null:
 		return
-	var dungeon := DungeonManager.get_dungeon(_selected_dungeon_id)
-	_start_button.disabled = dungeon == null or _selected_difficulty_id == &""
-	if dungeon != null and not dungeon.scene_path.is_empty() and ResourceLoader.exists(dungeon.scene_path):
-		_start_button.text = "DUNGEON INDÍTÁSA"
-	else:
-		_start_button.text = "KALAND ELŐKÉSZÍTÉSE"
+	var dungeon := DungeonSelection.get_dungeon(_selected_dungeon_id)
+	_submit_button.disabled = dungeon == null or _selected_difficulty_id == &""
 
 
 func _make_section_label(text_value: String, font_size: int, color: Color) -> Label:

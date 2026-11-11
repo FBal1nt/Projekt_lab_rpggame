@@ -7,16 +7,6 @@ func _configure_workshop() -> void:
 	accent_color = Color(0.84, 0.54, 0.26, 1.0)
 	option_configs = [
 		{
-			"id": &"craft",
-			"label": "KÉSZÍTÉS",
-			"description": "Új fegyverek és felszerelések kovácsolása nyersanyagokból."
-		},
-		{
-			"id": &"upgrade",
-			"label": "FEJLESZTÉS",
-			"description": "A kiválasztott felszerelés fejlesztése +1-től +5-ig."
-		},
-		{
 			"id": &"sharpen",
 			"label": "ÉLESÍTÉS",
 			"description": "Fegyverek fizikai sebzésének és kritikus esélyének növelése."

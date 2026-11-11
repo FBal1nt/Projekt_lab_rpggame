@@ -17,7 +17,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TEXT_EXTENSIONS = {".gd", ".tscn", ".tres", ".godot", ".svg", ".md"}
-RESOURCE_REFERENCE = re.compile(r"res://[A-Za-z0-9_./-]+")
+RESOURCE_REFERENCE = re.compile(r'["\'](res://[^"\']+)["\']')
 STRING_ID = re.compile(r'^\s*id\s*=\s*&?"([^"]+)"', re.MULTILINE)
 
 
@@ -59,9 +59,14 @@ def check_resource_paths(errors: list[str]) -> int:
             continue
         for match in RESOURCE_REFERENCE.finditer(read_text(path)):
             checked += 1
-            relative_target = match.group(0).removeprefix("res://")
+            resource_path = match.group(1)
+            relative_target = resource_path.removeprefix("res://")
+            # Godot creates imported .ctex cache files from the checked-in .import
+            # metadata when the project is opened; they are not source assets.
+            if relative_target.startswith(".godot/imported/"):
+                continue
             if not (PROJECT_ROOT / relative_target).exists():
-                errors.append(f"Missing res:// reference in {path.relative_to(PROJECT_ROOT)}: {match.group(0)}")
+                errors.append(f"Missing res:// reference in {path.relative_to(PROJECT_ROOT)}: {resource_path}")
     return checked
 
 

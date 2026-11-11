@@ -17,7 +17,6 @@ extends Resource
 
 ## Base stats at level 1. Percent-based values use 0-100.
 @export_range(1, 999, 1) var base_health: int = 30
-@export_range(0, 999, 1) var base_mana: int = 0
 @export_range(0, 999, 1) var base_damage_min: int = 4
 @export_range(0, 999, 1) var base_damage_max: int = 8
 @export_range(0, 999, 1) var base_defense: int = 2
@@ -27,12 +26,9 @@ extends Resource
 @export_range(0, 100, 1) var base_dodge: int = 8
 @export_range(0, 100, 1) var base_healing_power: int = 0
 @export_range(0, 100, 1) var base_stress_resistance: int = 35
-## Optional primary attributes (e.g. strength, agility, intellect, vitality).
-@export var base_attributes: Dictionary = {}
 
 ## Simple default growth. Gameplay can replace this formula later if needed.
 @export_range(0, 99, 1) var health_per_level: int = 3
-@export_range(0, 99, 1) var mana_per_level: int = 0
 @export_range(0, 99, 1) var damage_min_per_level: int = 0
 @export_range(0, 99, 1) var damage_max_per_level: int = 1
 @export_range(0, 99, 1) var defense_per_level: int = 0
@@ -46,9 +42,8 @@ extends Resource
 
 func get_stats_at_level(character_level: int = 1) -> Dictionary:
 	var level_steps := maxi(character_level - 1, 0)
-	var result: Dictionary = {
+	return {
 		"max_health": base_health + health_per_level * level_steps,
-		"max_mana": base_mana + mana_per_level * level_steps,
 		"damage_min": base_damage_min + damage_min_per_level * level_steps,
 		"damage_max": base_damage_max + damage_max_per_level * level_steps,
 		"defense": base_defense + defense_per_level * level_steps,
@@ -59,6 +54,3 @@ func get_stats_at_level(character_level: int = 1) -> Dictionary:
 		"healing_power": base_healing_power,
 		"stress_resistance": base_stress_resistance
 	}
-	for attribute_id in base_attributes:
-		result[String(attribute_id)] = base_attributes[attribute_id]
-	return result

@@ -1,37 +1,26 @@
-# Dungeonválasztás és nehézségi beállítások
+# Dungeonválasztás és nehézségpanel – Lobby-integráció
 
-## Játékos felület
+A Lobby ebben a projektben kizárólag a dungeon és a nehézségi fokozat kiválasztását biztosítja. Nincs benne pályagenerálás, jelenetváltás, enemy spawn, harcrendszer vagy dungeon-játékmenet.
 
-A Dungeon ablak egyetlen, a képernyőn belül maradó dialógus. Két legördülő lista van benne:
+## Kiválasztófelület
 
-1. **Dungeon** – a `Data/Dungeons/` mappából automatikusan betöltött helyszínek.
-2. **Nehézség** – az adott dungeonhoz tartozó, `Data/DungeonDifficulties/` mappában lévő konfigurációk.
+A `Scenes/Lobby/Lobby.tscn` jelenet `DungeonWindow` panelje a `Scripts/UI/DungeonWindow.gd` scriptet használja. A lista adatvezérelt: a dungeont a `Data/Dungeons`, a hozzá tartozó fokozatokat a `Data/DungeonDifficulties` mappából tölti be.
 
-A kiválasztás alatt azonnal frissül a dungeon leírása, az ajánlott csapatszint és a nehézség részletes összefoglalója. A nehézség részletei között szerepel a spawn-szorzó, a találkozások mennyisége, az ellenfelek szinttartománya, az elit spawn esélye és a lehetséges ellenfelek neve.
+## Integráció a generátorral
 
-A hosszabb részletek egy belső görgethető területen jelennek meg, így kisebb ablakméretnél sem lógnak ki a dialógusból.
+A `DungeonSelection` autoload felel a definíciók beolvasásáért és a kiválasztás átadásáért. A generátoroldal csatlakozzon ehhez:
 
-## Új dungeon hozzáadása
+```gdscript
+func _ready() -> void:
+    DungeonSelection.dungeon_launch_requested.connect(_on_dungeon_launch_requested)
 
-1. Hozz létre egy `DungeonDefinition` erőforrást a `Data/Dungeons/` mappában.
-2. Adj neki egyedi `id`-t, `display_name`-t, `description`-t, ajánlott szinttartományt és (ha elkészül) `scene_path` értéket.
-3. Adj hozzá legalább egy `DungeonDifficultyData` erőforrást a `Data/DungeonDifficulties/` mappában, és állítsd be a `dungeon_id` mezőt.
-4. A Dungeon-választó automatikusan felismeri a definíciókat; a UI-kódot nem kell módosítani.
+func _on_dungeon_launch_requested(configuration: Dictionary) -> void:
+    # A kapott konfiguráció alapján a saját generátor indítható.
+    print(configuration.get("dungeon_id"), configuration.get("difficulty_id"))
+```
 
-## Nehézség hangolása
+A teljes Dictionary mezőinek leírását a `README_LOBBY_MODUL.md` tartalmazza. A Lobby csak kiválasztási adatokat ad át; a generátor oldalának kell a seedet, a map paramétereit, a pályát és az indulást kezelnie.
 
-A `DungeonDifficultyData` mezők jelentése:
+## Fontos
 
-- `spawn_rate_multiplier`: az adott dungeon alap spawnrátáját szorozza.
-- `encounter_count_multiplier`: a találkozások számának skálázója.
-- `enemy_level_min`, `enemy_level_max`: az ellenfelek véletlenszerű szinttartománya.
-- `enemy_type_ids`: a spawnrendszer által feloldandó ellenfél-azonosítók.
-- `enemy_type_names`: a menüben látható nevek, az ID-listával azonos sorrendben.
-- `elite_spawn_chance`: elit találkozás esélye 0.0–1.0 tartományban.
-- `sort_order`: a nehézségi szintek megjelenítési sorrendje.
-
-## Dungeon-mechanika integráció
-
-A „Kaland előkészítése” művelet a `DungeonManager.start_dungeon(dungeon_id, difficulty_id)` függvényt hívja. A kiválasztott teljes konfiguráció a `GameState.run_state` mezőbe kerül, többek között `spawn_rate_multiplier`, `encounter_count_multiplier`, `enemy_level_min`, `enemy_level_max`, `enemy_type_ids`, `elite_spawn_chance`, `seed`, `floor` és `room_index` értékekkel.
-
-A csapattársak a `DungeonManager.get_run_configuration()`, `get_spawn_rate_multiplier()`, `roll_enemy_level()` és `roll_enemy_type_id()` metódusokat használhatják. A tényleges pályajelenetet a Dungeon erőforrás `scene_path` mezőjében kell majd megadni.
+A `Data/Dungeons/forgotten_crypt.tres` `scene_path` mezője szándékosan üres. Nincs jelenetútvonal vagy pályageneráló kód a Lobby-modulban.

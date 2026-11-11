@@ -12,26 +12,18 @@ extends Resource
 @export var xp: int = 0
 ## -1 means "initialize from the class's maximum health" when loading.
 @export var current_health: int = -1
-## Mana is optional. Classes without a mana pool have max_mana == 0.
-@export var current_mana: int = -1
 ## Darkest-Dungeon-style stress is character-specific and persistent.
 @export_range(0, 100, 1) var stress: int = 0
 ## Optional per-character traits; IDs can be registered by future gameplay systems.
 @export var quirk_ids: PackedStringArray = PackedStringArray()
-## Persistent named attribute values (e.g. strength, agility, intellect). Empty values fall back to class data.
-@export var attributes: Dictionary = {}
-## Persistent additive modifiers granted by equipment, quests, traits, or mechanics.
-@export var stat_modifiers: Dictionary = {}
-## Equipment slot -> InventoryItem instance. Items remain the same instances when equipped.
-var equipment: Dictionary = {}
-## Dungeon effects should be JSON-compatible dictionaries, e.g. {"id":"poison", "turns_left":2}.
-var status_effects: Array[Dictionary] = []
-## Skill/ability ID -> remaining cooldown turns.
-@export var ability_cooldowns: Dictionary = {}
-## Extensible per-character payload for future mechanics and quest systems.
-@export var persistent_data: Dictionary = {}
 
 var inventory: Inventory
+## Character-specific equipment. Keys are ItemData.equipment_slot IDs and values are InventoryItem instances.
+@export var equipment: Dictionary = {}
+## Cached class/level stats before equipment modifiers.
+@export var base_stats: Dictionary = {}
+## Cached final stats after all currently equipped items, upgrades and enchantments.
+@export var derived_stats: Dictionary = {}
 
 ## Preferred name for new code; archetype remains as a compatibility alias.
 var class_id: StringName:

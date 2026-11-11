@@ -1,7 +1,6 @@
 extends Panel
 
 const UI_THEME = preload("res://Scripts/UI/ui_theme.gd")
-const RESOURCE_CATALOG := preload("res://Scripts/Utils/ResourceCatalog.gd")
 const SHOP_ITEM_ROW_SCENE = preload("res://Scenes/Shop/ShopItemRow.tscn")
 const ITEM_DATA_DIRECTORY := "res://Data/Items"
 
@@ -22,10 +21,6 @@ const ITEM_DATA_DIRECTORY := "res://Data/Items"
 var shop_items: Array[ItemData] = []
 var selected_inventory_item: InventoryItem = null
 
-
-# -----------------------------------------------------------------------------
-# Initialization and data binding
-# -----------------------------------------------------------------------------
 
 func _ready() -> void:
 	_style_ui()
@@ -96,13 +91,11 @@ func _on_active_character_changed(_character_id: String) -> void:
 	_set_feedback("Aktív karakter hátizsákja betöltve.", true)
 
 
-# -----------------------------------------------------------------------------
-# Catalog-driven shop stock
-# -----------------------------------------------------------------------------
-
 func _load_shop_items() -> void:
 	shop_items.clear()
-	var paths: Array[String] = RESOURCE_CATALOG.collect_resource_paths(ITEM_DATA_DIRECTORY)
+	var paths: Array[String] = []
+	_collect_resource_paths(ITEM_DATA_DIRECTORY, paths)
+	paths.sort()
 
 	var seen_ids: Dictionary = {}
 	for resource_path in paths:
@@ -118,6 +111,23 @@ func _load_shop_items() -> void:
 		shop_items.append(item_data)
 
 	shop_items.sort_custom(_sort_items_by_name)
+
+
+func _collect_resource_paths(directory_path: String, output: Array[String]) -> void:
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return
+
+	directory.list_dir_begin()
+	var entry := directory.get_next()
+	while not entry.is_empty():
+		if directory.current_is_dir():
+			if not entry.begins_with("."):
+				_collect_resource_paths(directory_path.path_join(entry), output)
+		elif entry.ends_with(".tres") or entry.ends_with(".res"):
+			output.append(directory_path.path_join(entry))
+		entry = directory.get_next()
+	directory.list_dir_end()
 
 
 func _sort_items_by_name(a: ItemData, b: ItemData) -> bool:
@@ -172,10 +182,6 @@ func refresh_selection_details() -> void:
 	sell_button.text = "ELADÁS — %d ARANY" % sell_value
 	sell_button.disabled = sell_value <= 0
 
-
-# -----------------------------------------------------------------------------
-# Selling, feedback and presentation
-# -----------------------------------------------------------------------------
 
 func _on_sell_button_pressed() -> void:
 	var active_inventory := GameState.get_active_inventory()

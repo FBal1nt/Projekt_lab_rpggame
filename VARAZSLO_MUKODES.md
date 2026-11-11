@@ -1,6 +1,6 @@
 # Varázslótorony – fejlesztői útmutató
 
-A Varázsló ugyanazt a teljes ablakot kitöltő, nagyobb felületet használja, mint a Kovács. Bal oldalon a karakterkártya és a felszereléslista, jobb oldalon a három mágikus kategória és az elérhető fejlesztések jelennek meg. Három opciója van:
+A Varázsló ugyanazt a felületet használja, mint a Kovács, de mágikus fejlesztésekre szűr. Három opciója van:
 
 - `weapon_element`: fegyverek elemi hatásai (tűz, jég, méreg, villám), extra elemi sebzéssel, támadási bónusszal és opcionális proc/extra-támadás eséllyel.
 - `resistance`: páncélra és ékszerekre alkalmazható elemi ellenállások, néha életerő- vagy regenerációs bónusszal.

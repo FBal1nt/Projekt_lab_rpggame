@@ -25,10 +25,6 @@ var selected_class_id: StringName = &"warrior"
 var _is_refreshing: bool = false
 
 
-# -----------------------------------------------------------------------------
-# UI construction
-# -----------------------------------------------------------------------------
-
 func _ready() -> void:
 	title_label.position = Vector2(24, 18)
 	title_label.size = Vector2(852, 42)
@@ -61,7 +57,7 @@ func _build_content() -> void:
 	# Active character row.
 	var active_row := HBoxContainer.new()
 	active_row.name = "ActiveCharacterRow"
-	active_row.custom_minimum_size = Vector2(0, 34)
+	active_row.custom_minimum_size = Vector2(0, 76)
 	active_row.add_theme_constant_override("separation", 10)
 	content.add_child(active_row)
 
@@ -85,7 +81,7 @@ func _build_content() -> void:
 	character_details.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	character_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	character_details.add_theme_color_override("font_color", UI_THEME.IVORY)
-	character_details.add_theme_font_size_override("font_size", 12)
+	character_details.add_theme_font_size_override("font_size", 11)
 	active_row.add_child(character_details)
 
 	content.add_child(HSeparator.new())
@@ -216,10 +212,6 @@ func _build_content() -> void:
 	content.add_child(status_label)
 
 
-# -----------------------------------------------------------------------------
-# Character/class selection and preview
-# -----------------------------------------------------------------------------
-
 func _populate_class_selector() -> void:
 	class_selector.clear()
 	var all_classes := GameState.get_character_classes()
@@ -266,16 +258,47 @@ func refresh() -> void:
 		if active != null:
 			var active_class := GameState.get_character_class(active.class_id)
 			var stats := GameState.get_character_stats(active)
-			var max_health := int(stats.get("max_health", 0))
+			var max_health := int(round(float(stats.get("max_health", 0))))
+			var base_health := int(round(float(active.base_stats.get("max_health", max_health))))
 			var class_name_text := active_class.display_name if active_class != null else String(active.class_id)
-			character_details.text = "%s · %d. szint · ÉP %d/%d · Stressz %d" % [
+			var base := active.base_stats
+			var base_damage_min := int(round(float(base.get("damage_min", 0))))
+			var base_damage_max := int(round(float(base.get("damage_max", 0))))
+			var damage_min := int(round(float(stats.get("damage_min", 0))))
+			var damage_max := int(round(float(stats.get("damage_max", 0))))
+			var damage_bonus := damage_min - base_damage_min
+			var defense := int(round(float(stats.get("defense", 0))))
+			var base_defense := int(round(float(base.get("defense", 0))))
+			var defense_bonus := defense - base_defense
+			character_details.text = "%s · %d. szint · ÉP %d/%d (alap %d → %d) · Stressz %d\nSebzés: %d–%d → %d–%d%s · Védelem: %d → %d%s · Sebesség: %s · Pontosság: %s%% · Kritikus: %s%% · Kitérés: %s%% · Gyógyítás: %s · Stressztűrés: %s%%" % [
 				class_name_text,
 				active.level,
 				active.current_health if active.current_health >= 0 else max_health,
 				max_health,
-				active.stress
+				base_health,
+				max_health,
+				active.stress,
+				base_damage_min,
+				base_damage_max,
+				damage_min,
+				damage_max,
+				(" (+%d)" % damage_bonus) if damage_bonus > 0 else "",
+				base_defense,
+				defense,
+				(" (+%d)" % defense_bonus) if defense_bonus > 0 else "",
+				_format_stat_value(stats.get("speed", 0)),
+				_format_stat_value(stats.get("accuracy", 0)),
+				_format_stat_value(stats.get("crit_chance", 0)),
+				_format_stat_value(stats.get("dodge", 0)),
+				_format_stat_value(stats.get("healing_power", 0)),
+				_format_stat_value(stats.get("stress_resistance", 0))
 			]
 	_is_refreshing = false
+
+
+func _format_stat_value(value: Variant) -> String:
+	var number := float(value)
+	return str(int(round(number))) if is_equal_approx(number, round(number)) else String.num(number, 1)
 
 
 func _update_class_preview() -> void:
@@ -332,10 +355,6 @@ func _update_class_preview() -> void:
 	else:
 		skills_label.text = "Kezdő képességek: " + " · ".join(class_data.skill_names)
 
-
-# -----------------------------------------------------------------------------
-# User actions and feedback
-# -----------------------------------------------------------------------------
 
 func _on_character_selected(index: int) -> void:
 	if _is_refreshing or index < 0 or index >= character_selector.item_count:

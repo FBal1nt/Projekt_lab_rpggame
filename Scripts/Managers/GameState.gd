@@ -1,13 +1,5 @@
 extends Node
 
-# -----------------------------------------------------------------------------
-# Shared game state and compatibility properties
-# -----------------------------------------------------------------------------
-
-const RESOURCE_CATALOG := preload("res://Scripts/Utils/ResourceCatalog.gd")
-const SAVE_SERIALIZER := preload("res://Scripts/Managers/GameSaveSerializer.gd")
-const SAVE_VERSION := 4
-
 signal state_changed
 signal characters_changed
 signal active_character_changed(character_id: String)
@@ -17,9 +9,6 @@ const MANUAL_SAVE_PATH_TEMPLATE := "user://save_slot_%d.json"
 const AUTOSAVE_PATH := "user://autosave.json"
 const MANUAL_SAVE_SLOT_COUNT := 3
 const AUTOSAVE_INTERVAL_SECONDS := 60.0
-
-var current_save_slot: int = 1
-var _autosave_timer: Timer
 const ITEM_DATA_DIRECTORY := "res://Data/Items"
 const CHARACTER_CLASS_DIRECTORY := "res://Data/CharacterClasses"
 const SMITHING_RECIPE_DIRECTORY := "res://Data/SmithingRecipes"
@@ -36,11 +25,11 @@ var smithing_recipes: Array[SmithingRecipeData] = []
 var enchantments: Dictionary = {}
 var active_character_id: String = ""
 var stash: Inventory
-## Shared, persistent dungeon/run data. Use JSON-compatible values only.
-## Example: {"dungeon_id":"crypt_01", "floor":2, "seed":12345, "turn":8}.
-var run_state: Dictionary = {}
 
 var _loading_save: bool = false
+var current_save_slot: int = 1
+var game_started: bool = false
+var _autosave_timer: Timer
 
 ## Backwards-compatible access for older scripts. This now always resolves to
 ## the active character's backpack, so teammates can keep using GameState.backpack.
@@ -79,18 +68,13 @@ var xp: int:
 		_save_and_emit_state()
 
 
-# -----------------------------------------------------------------------------
-# Lifecycle and initialization
-# -----------------------------------------------------------------------------
-
 func _ready() -> void:
 	_load_character_classes()
 	_load_smithing_data()
-	# Do not silently load an old campaign on startup. The main menu explicitly
-	# decides whether to start fresh or load one of the three manual slots.
 	_migrate_legacy_save_if_needed()
 	_create_new_game()
 	_connect_all_inventories()
+	_recalculate_all_character_stats()
 	_start_autosave_timer()
 
 	state_changed.emit()
@@ -98,33 +82,11 @@ func _ready() -> void:
 	active_character_changed.emit(active_character_id)
 
 
-func _migrate_legacy_save_if_needed() -> void:
-	# Preserve existing users' old single-save file as manual slot 1 without
-	# automatically loading it; the player can choose it from the main menu.
-	if FileAccess.file_exists(_manual_save_path(1)) or not FileAccess.file_exists(LEGACY_SAVE_PATH):
-		return
-	var source := FileAccess.open(LEGACY_SAVE_PATH, FileAccess.READ)
-	if source == null:
-		return
-	var contents := source.get_as_text()
-	source.close()
-	var destination := FileAccess.open(_manual_save_path(1), FileAccess.WRITE)
-	if destination == null:
-		push_warning("A régi mentést nem sikerült átmásolni az 1. mentési helyre.")
-		return
-	destination.store_string(contents)
-	destination.close()
-
-
 func _exit_tree() -> void:
-	# Manual slots are only changed by explicit save/new-game actions.
-	# Autosave is maintained separately by the timer.
+	# Manual save slots are only changed by explicit save/new-game actions.
+	# The timer maintains the independent autosave while a campaign is active.
 	pass
 
-
-# -----------------------------------------------------------------------------
-# Character lookup and persistent gameplay state
-# -----------------------------------------------------------------------------
 
 func get_active_character() -> CharacterProfile:
 	for character in characters:
@@ -182,136 +144,6 @@ func set_active_character_health(current_health: int) -> bool:
 	return set_character_health(character.id, current_health)
 
 
-func set_character_mana(character_id: String, current_mana: int) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null:
-		return false
-	var stats := get_character_stats(character)
-	var max_mana := maxi(int(stats.get("max_mana", 0)), 0)
-	character.current_mana = clampi(current_mana, 0, max_mana)
-	_save_and_emit_state()
-	return true
-
-
-func set_active_character_mana(current_mana: int) -> bool:
-	var character := get_active_character()
-	if character == null:
-		return false
-	return set_character_mana(character.id, current_mana)
-
-
-func damage_character(character_id: String, damage: int) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or damage < 0:
-		return false
-	return set_character_health(character_id, character.current_health - damage)
-
-
-func heal_character(character_id: String, amount: int) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or amount < 0:
-		return false
-	return set_character_health(character_id, character.current_health + amount)
-
-
-func spend_character_mana(character_id: String, amount: int) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or amount < 0 or character.current_mana < amount:
-		return false
-	return set_character_mana(character_id, character.current_mana - amount)
-
-
-func restore_character_mana(character_id: String, amount: int) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or amount < 0:
-		return false
-	return set_character_mana(character_id, character.current_mana + amount)
-
-
-func set_character_stat_modifier(character_id: String, stat_id: StringName, value: float) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or String(stat_id).strip_edges().is_empty():
-		return false
-	character.stat_modifiers[String(stat_id)] = value
-	_clamp_character_resources(character)
-	_save_and_emit_state()
-	return true
-
-
-func set_character_attribute(character_id: String, attribute_id: StringName, value: float) -> bool:
-	## Set a persistent named attribute, such as strength, agility or intellect.
-	var character := get_character_by_id(character_id)
-	if character == null or String(attribute_id).strip_edges().is_empty():
-		return false
-	character.attributes[String(attribute_id)] = value
-	_clamp_character_resources(character)
-	_save_and_emit_state()
-	return true
-
-
-func add_character_stat_modifier(character_id: String, stat_id: StringName, amount: float) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or String(stat_id).strip_edges().is_empty():
-		return false
-	character.stat_modifiers[String(stat_id)] = float(character.stat_modifiers.get(String(stat_id), 0.0)) + amount
-	_clamp_character_resources(character)
-	_save_and_emit_state()
-	return true
-
-
-func set_character_status_effects(character_id: String, effects: Array[Dictionary]) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null:
-		return false
-	character.status_effects = effects.duplicate(true)
-	_save_and_emit_state()
-	return true
-
-
-func set_character_ability_cooldowns(character_id: String, cooldowns: Dictionary) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null:
-		return false
-	character.ability_cooldowns = cooldowns.duplicate(true)
-	_save_and_emit_state()
-	return true
-
-
-func set_character_persistent_data(character_id: String, data: Dictionary) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null:
-		return false
-	character.persistent_data = data.duplicate(true)
-	_save_and_emit_state()
-	return true
-
-
-func commit_character_state(character_id: String) -> bool:
-	## Call after a dungeon turn when gameplay has directly changed several profile fields.
-	var character := get_character_by_id(character_id)
-	if character == null:
-		return false
-	_clamp_character_resources(character)
-	_save_and_emit_state()
-	return true
-
-
-func set_run_state(data: Dictionary) -> void:
-	run_state = data.duplicate(true)
-	_save_and_emit_state()
-
-
-func update_run_state(key: StringName, value: Variant) -> void:
-	## Store only JSON-compatible values (numbers, strings, bools, arrays, and dictionaries).
-	run_state[String(key)] = value
-	_save_and_emit_state()
-
-
-func clear_run_state() -> void:
-	run_state.clear()
-	_save_and_emit_state()
-
-
 func set_character_stress(character_id: String, stress_value: int) -> bool:
 	var character := get_character_by_id(character_id)
 	if character == null:
@@ -330,110 +162,143 @@ func set_character_quirks(character_id: String, quirk_ids: PackedStringArray) ->
 	return true
 
 
-# -----------------------------------------------------------------------------
-# Effective stats and equipment slots
-# -----------------------------------------------------------------------------
-
 func get_character_stats(character: CharacterProfile = null) -> Dictionary:
-	## Authoritative effective-stat calculation for UI, equipment and dungeon combat.
-	## Returns class growth + persistent modifiers + equipped item/enchantment bonuses.
 	var target := character if character != null else get_active_character()
 	if target == null:
 		return {}
-	var class_data := get_character_class(target.class_id)
+	return recalculate_character_stats(target)
+
+
+func recalculate_character_stats(character: CharacterProfile) -> Dictionary:
+	if character == null:
+		return {}
+	var class_data := get_character_class(character.class_id)
 	if class_data == null:
 		return {}
-	var result: Dictionary = class_data.get_stats_at_level(target.level).duplicate(true)
-	for attribute_id in target.attributes:
-		result[String(attribute_id)] = target.attributes[attribute_id]
-	for stat_id in target.stat_modifiers:
-		var stat_key := String(stat_id)
-		result[stat_key] = float(result.get(stat_key, 0.0)) + float(target.stat_modifiers[stat_id])
-	for equipped_value in target.equipment.values():
-		if not equipped_value is InventoryItem:
+
+	var base := class_data.get_stats_at_level(character.level)
+	var final_stats := base.duplicate(true)
+	for slot in character.equipment:
+		var equipped_item := character.equipment[slot] as InventoryItem
+		if equipped_item == null or equipped_item.item_data == null:
 			continue
-		var equipped_item := equipped_value as InventoryItem
-		var item_stats := get_item_stats(equipped_item)
-		for stat_id in item_stats:
-			var stat_key := String(stat_id)
-			result[stat_key] = float(result.get(stat_key, 0.0)) + float(item_stats[stat_id])
-	return result
+		var modifiers := get_item_stats(equipped_item)
+		for stat_key in modifiers:
+			var bonus := float(modifiers[stat_key])
+			if String(stat_key) == "damage":
+				final_stats["damage_min"] = float(final_stats.get("damage_min", 0.0)) + bonus
+				final_stats["damage_max"] = float(final_stats.get("damage_max", 0.0)) + bonus
+			else:
+				final_stats[stat_key] = float(final_stats.get(stat_key, 0.0)) + bonus
+
+	character.base_stats = base.duplicate(true)
+	character.derived_stats = final_stats.duplicate(true)
+	var max_health := maxi(int(round(float(final_stats.get("max_health", 1)))), 1)
+	if character.current_health < 0:
+		character.current_health = max_health
+	else:
+		character.current_health = mini(character.current_health, max_health)
+	return character.derived_stats.duplicate(true)
 
 
-func _clamp_character_resources(character: CharacterProfile) -> void:
-	if character == null:
-		return
-	var stats := get_character_stats(character)
-	character.current_health = clampi(character.current_health, 0, maxi(int(stats.get("max_health", 1)), 1))
-	character.current_mana = clampi(character.current_mana, 0, maxi(int(stats.get("max_mana", 0)), 0))
+func _recalculate_all_character_stats() -> void:
+	for character in characters:
+		recalculate_character_stats(character)
 
 
-func get_equipped_item(character_id: String, slot: StringName) -> InventoryItem:
-	var character := get_character_by_id(character_id)
-	if character == null:
+func get_character_equipment(character: CharacterProfile = null) -> Dictionary:
+	var target := character if character != null else get_active_character()
+	if target == null:
+		return {}
+	return target.equipment
+
+
+func get_equipped_item(slot: StringName, character: CharacterProfile = null) -> InventoryItem:
+	var target := character if character != null else get_active_character()
+	if target == null:
 		return null
-	return character.equipment.get(slot, null) as InventoryItem
+	return target.equipment.get(slot, null) as InventoryItem
 
 
-func equip_item(character_id: String, inventory_item: InventoryItem) -> bool:
-	## Move an item from the specified character's backpack into its equipment slot.
-	## If the slot was occupied, the previous item is returned to the backpack if it fits.
-	var character := get_character_by_id(character_id)
-	if character == null or character.inventory == null or inventory_item == null or inventory_item.item_data == null:
+func can_equip_item(item: InventoryItem, character: CharacterProfile = null) -> bool:
+	var target := character if character != null else get_active_character()
+	if target == null or target.inventory == null or item == null or item.item_data == null:
 		return false
-	var inventory := character.inventory
-	var item_index := inventory.items.find(inventory_item)
-	if item_index < 0 or inventory_item.amount != 1:
+	if item.amount != 1 or not target.inventory.items.has(item):
 		return false
-	var slot := inventory_item.item_data.equipment_slot
+	var slot := item.item_data.equipment_slot
 	if String(slot).is_empty() or slot == &"none":
 		return false
+	if not target.equipment.has(slot):
+		return true
+	var currently_equipped := target.equipment[slot] as InventoryItem
+	if currently_equipped == null:
+		return true
 
-	var previous_item := character.equipment.get(slot, null) as InventoryItem
-	var replacement_position := Vector2i(-1, -1)
-	if previous_item != null:
-		var simulation := _copy_inventory(inventory)
-		simulation.items.remove_at(item_index)
-		replacement_position = simulation.find_free_position(previous_item.item_data)
-		if replacement_position == Vector2i(-1, -1):
+	# Test the swap in a temporary inventory before mutating the real state.
+	var simulation := _copy_inventory(target.inventory)
+	var simulated_source := simulation.get_item_at_cell(item.position)
+	if simulated_source == null:
+		return false
+	simulation.items.erase(simulated_source)
+	return simulation.find_free_position(currently_equipped.item_data) != Vector2i(-1, -1)
+
+
+func equip_item(item: InventoryItem, character: CharacterProfile = null) -> bool:
+	var target := character if character != null else get_active_character()
+	if not can_equip_item(item, target):
+		return false
+	var slot := item.item_data.equipment_slot
+	var previous := target.equipment.get(slot, null) as InventoryItem
+	if previous != null:
+		var simulation := _copy_inventory(target.inventory)
+		var simulated_source := simulation.get_item_at_cell(item.position)
+		if simulated_source == null:
 			return false
-
-	inventory.items.erase(inventory_item)
-	if previous_item != null:
-		previous_item.position = replacement_position
-		inventory.items.append(previous_item)
-	inventory_item.position = Vector2i(-1, -1)
-	character.equipment[slot] = inventory_item
-	_clamp_character_resources(character)
-	inventory.inventory_changed.emit()
+		simulation.items.erase(simulated_source)
+		var return_position := simulation.find_free_position(previous.item_data)
+		if return_position == Vector2i(-1, -1):
+			return false
+		target.inventory.items.erase(item)
+		previous.position = return_position
+		target.inventory.items.append(previous)
+	else:
+		target.inventory.items.erase(item)
+	target.equipment[slot] = item
+	recalculate_character_stats(target)
+	target.inventory.inventory_changed.emit()
 	return true
 
 
-func unequip_item(character_id: String, slot: StringName) -> bool:
-	var character := get_character_by_id(character_id)
-	if character == null or character.inventory == null:
+func can_unequip_item(slot: StringName, character: CharacterProfile = null) -> bool:
+	var target := character if character != null else get_active_character()
+	if target == null or target.inventory == null:
 		return false
-	var inventory_item := character.equipment.get(slot, null) as InventoryItem
-	if inventory_item == null or inventory_item.item_data == null:
+	var equipped := target.equipment.get(slot, null) as InventoryItem
+	return equipped != null and target.inventory.find_free_position(equipped.item_data) != Vector2i(-1, -1)
+
+
+func unequip_item(slot: StringName, character: CharacterProfile = null) -> bool:
+	var target := character if character != null else get_active_character()
+	if not can_unequip_item(slot, target):
 		return false
-	var free_position := character.inventory.find_free_position(inventory_item.item_data)
-	if free_position == Vector2i(-1, -1):
+	var equipped := target.equipment[slot] as InventoryItem
+	var position := target.inventory.find_free_position(equipped.item_data)
+	if position == Vector2i(-1, -1):
 		return false
-	character.equipment.erase(slot)
-	inventory_item.position = free_position
-	character.inventory.items.append(inventory_item)
-	_clamp_character_resources(character)
-	character.inventory.inventory_changed.emit()
+	target.equipment.erase(slot)
+	equipped.position = position
+	target.inventory.items.append(equipped)
+	recalculate_character_stats(target)
+	target.inventory.inventory_changed.emit()
 	return true
 
-
-# -----------------------------------------------------------------------------
-# Character-class registry
-# -----------------------------------------------------------------------------
 
 func _load_character_classes() -> void:
 	character_classes.clear()
-	var paths: Array[String] = RESOURCE_CATALOG.collect_resource_paths(CHARACTER_CLASS_DIRECTORY)
+	var paths: Array[String] = []
+	_collect_resource_paths(CHARACTER_CLASS_DIRECTORY, paths)
+	paths.sort()
 
 	for resource_path in paths:
 		var loaded_resource := load(resource_path)
@@ -452,9 +317,22 @@ func _load_character_classes() -> void:
 		push_error("Nem található karakterosztály a következő mappában: " + CHARACTER_CLASS_DIRECTORY)
 
 
-# -----------------------------------------------------------------------------
-# Character creation and selection
-# -----------------------------------------------------------------------------
+func _collect_resource_paths(directory_path: String, output: Array[String]) -> void:
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return
+
+	directory.list_dir_begin()
+	var entry := directory.get_next()
+	while not entry.is_empty():
+		if directory.current_is_dir():
+			if not entry.begins_with("."):
+				_collect_resource_paths(directory_path.path_join(entry), output)
+		elif entry.ends_with(".tres") or entry.ends_with(".res"):
+			output.append(directory_path.path_join(entry))
+		entry = directory.get_next()
+	directory.list_dir_end()
+
 
 func create_character(character_name: String, archetype: StringName = &"warrior") -> bool:
 	var clean_name := character_name.strip_edges()
@@ -474,16 +352,14 @@ func create_character(character_name: String, archetype: StringName = &"warrior"
 	character.class_id = archetype
 	character.level = 1
 	character.xp = 0
-	var initial_stats := get_character_class(archetype).get_stats_at_level(1)
-	character.current_health = int(initial_stats.get("max_health", 30))
-	character.current_mana = int(initial_stats.get("max_mana", 0))
+	character.current_health = int(get_character_class(archetype).get_stats_at_level(1).get("max_health", 30))
 	character.stress = 0
-	character.equipment = {}
 	character.inventory = _new_inventory(BACKPACK_WIDTH, BACKPACK_HEIGHT)
 
 	characters.append(character)
 	_connect_inventory(character.inventory)
 	active_character_id = character.id
+	recalculate_character_stats(character)
 
 	save_autosave()
 	characters_changed.emit()
@@ -500,6 +376,7 @@ func select_character(character_id: String) -> bool:
 			return true
 
 		active_character_id = character_id
+		recalculate_character_stats(character)
 		save_autosave()
 		active_character_changed.emit(active_character_id)
 		state_changed.emit()
@@ -507,13 +384,11 @@ func select_character(character_id: String) -> bool:
 	return false
 
 
-# -----------------------------------------------------------------------------
-# Recipe and enchantment registry
-# -----------------------------------------------------------------------------
-
 func _load_smithing_data() -> void:
 	smithing_recipes.clear()
-	var recipe_paths: Array[String] = RESOURCE_CATALOG.collect_resource_paths(SMITHING_RECIPE_DIRECTORY)
+	var recipe_paths: Array[String] = []
+	_collect_resource_paths(SMITHING_RECIPE_DIRECTORY, recipe_paths)
+	recipe_paths.sort()
 	for resource_path in recipe_paths:
 		var loaded_resource := load(resource_path)
 		if not loaded_resource is SmithingRecipeData:
@@ -525,7 +400,9 @@ func _load_smithing_data() -> void:
 		smithing_recipes.append(recipe)
 
 	enchantments.clear()
-	var enchantment_paths: Array[String] = RESOURCE_CATALOG.collect_resource_paths(ENCHANTMENT_DIRECTORY)
+	var enchantment_paths: Array[String] = []
+	_collect_resource_paths(ENCHANTMENT_DIRECTORY, enchantment_paths)
+	enchantment_paths.sort()
 	for resource_path in enchantment_paths:
 		var loaded_resource := load(resource_path)
 		if not loaded_resource is EnchantmentData:
@@ -608,10 +485,6 @@ func _find_upgrade_recipe(target_level: int) -> SmithingRecipeData:
 			return recipe
 	return null
 
-
-# -----------------------------------------------------------------------------
-# Crafting, upgrades and enchantment transactions
-# -----------------------------------------------------------------------------
 
 func get_item_count(item_id: StringName, include_stash: bool = true) -> int:
 	var total := 0
@@ -729,9 +602,24 @@ func craft_recipe(recipe: SmithingRecipeData) -> bool:
 	return true
 
 
+
+
+func _character_has_equipped_item(character: CharacterProfile, item: InventoryItem) -> bool:
+	if character == null or item == null:
+		return false
+	for slot in character.equipment:
+		if character.equipment[slot] == item:
+			return true
+	return false
+
+
 func can_upgrade_item(item: InventoryItem) -> bool:
 	var inventory := get_active_inventory()
-	if item == null or item.item_data == null or inventory == null or not inventory.items.has(item):
+	var active := get_active_character()
+	if item == null or item.item_data == null or inventory == null:
+		return false
+	var is_owned := inventory.items.has(item) or _character_has_equipped_item(active, item)
+	if not is_owned:
 		return false
 	if not item.item_data.can_upgrade or item.amount != 1:
 		return false
@@ -762,8 +650,12 @@ func upgrade_item(item: InventoryItem) -> bool:
 
 func can_apply_enchantment(item: InventoryItem, enchantment_id: StringName) -> bool:
 	var inventory := get_active_inventory()
+	var active := get_active_character()
 	var enchantment := get_enchantment(enchantment_id)
-	if item == null or item.item_data == null or inventory == null or not inventory.items.has(item):
+	if item == null or item.item_data == null or inventory == null:
+		return false
+	var is_owned := inventory.items.has(item) or _character_has_equipped_item(active, item)
+	if not is_owned:
 		return false
 	if enchantment == null or not enchantment.enabled or item.amount != 1:
 		return false
@@ -791,14 +683,9 @@ func apply_enchantment(item: InventoryItem, enchantment_id: StringName) -> bool:
 	return true
 
 
-# -----------------------------------------------------------------------------
-# New-game setup and inventory factories
-# -----------------------------------------------------------------------------
-
 func _create_new_game() -> void:
 	characters.clear()
 	gold = 500
-	run_state.clear()
 	stash = _new_inventory(STASH_WIDTH, STASH_HEIGHT)
 
 	var starter := CharacterProfile.new()
@@ -808,11 +695,8 @@ func _create_new_game() -> void:
 	starter.level = 1
 	starter.xp = 0
 	var starter_class := get_character_class(starter.class_id)
-	var starter_stats := starter_class.get_stats_at_level(1) if starter_class != null else {"max_health": 30, "max_mana": 0}
-	starter.current_health = int(starter_stats.get("max_health", 30))
-	starter.current_mana = int(starter_stats.get("max_mana", 0))
+	starter.current_health = int(starter_class.get_stats_at_level(1).get("max_health", 30)) if starter_class != null else 30
 	starter.stress = 0
-	starter.equipment = {}
 	starter.inventory = _new_inventory(BACKPACK_WIDTH, BACKPACK_HEIGHT)
 	characters.append(starter)
 	active_character_id = starter.id
@@ -857,10 +741,6 @@ func _setup_starting_inventory(target_inventory: Inventory) -> void:
 		target_inventory.add_item(potion, Vector2i(2, 0), 3, false)
 		target_inventory.add_item(potion, Vector2i(5, 0), 4, false)
 
-
-# -----------------------------------------------------------------------------
-# Economy: purchases and sales
-# -----------------------------------------------------------------------------
 
 func buy_item(item_data: ItemData, amount: int = 1) -> bool:
 	var inventory := get_active_inventory()
@@ -958,10 +838,6 @@ func sell_item(inventory_item: InventoryItem) -> bool:
 	return true
 
 
-# -----------------------------------------------------------------------------
-# Change notifications and persistence entry points
-# -----------------------------------------------------------------------------
-
 func _connect_all_inventories() -> void:
 	for character in characters:
 		if character.inventory == null:
@@ -982,19 +858,17 @@ func _connect_inventory(inventory: Inventory) -> void:
 func _on_inventory_changed() -> void:
 	if _loading_save:
 		return
+	_recalculate_all_character_stats()
 	save_autosave()
 	state_changed.emit()
 
 
 func _save_and_emit_state() -> void:
 	if not _loading_save:
+		_recalculate_all_character_stats()
 		save_autosave()
 	state_changed.emit()
 
-
-# -----------------------------------------------------------------------------
-# Save serialization
-# -----------------------------------------------------------------------------
 
 func save_game() -> bool:
 	return save_to_slot(current_save_slot)
@@ -1008,36 +882,69 @@ func save_to_slot(slot: int) -> bool:
 
 
 func save_autosave() -> bool:
-	if _loading_save or characters.is_empty():
+	if _loading_save or not game_started:
 		return false
 	return _write_save_file(AUTOSAVE_PATH)
 
 
 func _write_save_file(path: String) -> bool:
-	var save_payload := SAVE_SERIALIZER.build_payload(
-		characters,
-		gold,
-		active_character_id,
-		stash,
-		run_state,
-		SAVE_VERSION,
-		Vector2i(BACKPACK_WIDTH, BACKPACK_HEIGHT),
-		Vector2i(STASH_WIDTH, STASH_HEIGHT)
-	)
-	return SAVE_SERIALIZER.save_payload(path, save_payload)
-
-
-func load_from_slot(slot: int) -> bool:
-	if slot < 1 or slot > MANUAL_SAVE_SLOT_COUNT:
+	if _loading_save:
 		return false
-	if not _load_game(_manual_save_path(slot)):
+	_recalculate_all_character_stats()
+	var character_entries: Array[Dictionary] = []
+	for character in characters:
+		character_entries.append({
+			"id": character.id,
+			"name": character.character_name,
+			"class_id": String(character.class_id),
+			"archetype": String(character.archetype),
+			"level": character.level,
+			"xp": character.xp,
+			"current_health": character.current_health,
+			"stress": character.stress,
+			"quirk_ids": Array(character.quirk_ids),
+			"base_stats": character.base_stats.duplicate(true),
+			"derived_stats": character.derived_stats.duplicate(true),
+			"inventory": _serialize_inventory(character.inventory),
+			"equipment": _serialize_equipment(character.equipment)
+		})
+
+	var save_data := {
+		"version": 5,
+		"current_save_slot": current_save_slot,
+		"gold": gold,
+		"active_character_id": active_character_id,
+		"characters": character_entries,
+		"stash": _serialize_inventory(stash)
+	}
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		push_error("Nem sikerült megnyitni a mentési fájlt: " + path)
 		return false
-	current_save_slot = slot
-	save_to_slot(slot) # Persist any migration back to the slot that was loaded.
-	state_changed.emit()
-	characters_changed.emit()
-	active_character_changed.emit(active_character_id)
+	file.store_string(JSON.stringify(save_data, "\t"))
+	file.close()
 	return true
+
+
+func _serialize_equipment(equipment: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	for slot in equipment:
+		var item := equipment[slot] as InventoryItem
+		if item != null and item.item_data != null:
+			result[String(slot)] = _serialize_inventory_item(item)
+	return result
+
+
+func _serialize_inventory_item(item: InventoryItem) -> Dictionary:
+	return {
+		"resource_path": item.item_data.resource_path,
+		"id": String(item.item_data.id),
+		"x": item.position.x,
+		"y": item.position.y,
+		"amount": item.amount,
+		"upgrade_level": item.upgrade_level,
+		"enchantment_ids": Array(item.enchantment_ids)
+	}
 
 
 func has_save_slot(slot: int) -> bool:
@@ -1048,33 +955,75 @@ func has_autosave() -> bool:
 	return FileAccess.file_exists(AUTOSAVE_PATH)
 
 
-func load_autosave() -> bool:
-	if not has_autosave() or not _load_game(AUTOSAVE_PATH):
-		return false
-	state_changed.emit()
-	characters_changed.emit()
-	active_character_changed.emit(active_character_id)
-	return true
-
-
 func get_save_slot_summary(slot: int) -> Dictionary:
 	var path := _manual_save_path(slot)
-	if slot < 1 or slot > MANUAL_SAVE_SLOT_COUNT or not FileAccess.file_exists(path):
+	if not has_save_slot(slot):
 		return {"exists": false, "label": "Üres mentési hely"}
+	var details := _read_save_summary(path)
+	if bool(details.get("exists", false)):
+		details["label"] = "Kézi mentés %d" % slot
+	return details
+
+
+func get_autosave_summary() -> Dictionary:
+	if not has_autosave():
+		return {"exists": false, "label": "Nincs automatikus mentés"}
+	var details := _read_save_summary(AUTOSAVE_PATH)
+	if bool(details.get("exists", false)):
+		details["label"] = "Automatikus mentés"
+	return details
+
+
+func _read_save_summary(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return {"exists": false, "label": "Nem olvasható mentés"}
 	var parser := JSON.new()
-	var error := parser.parse(file.get_as_text())
+	var parse_result := parser.parse(file.get_as_text())
 	file.close()
-	if error != OK or typeof(parser.data) != TYPE_DICTIONARY:
+	if parse_result != OK or typeof(parser.data) != TYPE_DICTIONARY:
 		return {"exists": false, "label": "Hibás mentés"}
-	var data: Dictionary = parser.data
-	var characters_data: Array = data.get("characters", [])
-	var first_name := "Kaland"
-	if not characters_data.is_empty() and typeof(characters_data[0]) == TYPE_DICTIONARY:
-		first_name = str(characters_data[0].get("name", "Kaland"))
-	return {"exists": true, "label": "Hely %d — %s · %d karakter · %d arany" % [slot, first_name, characters_data.size(), int(data.get("gold", 0))]}
+	var save_data: Dictionary = parser.data
+	var stored_characters: Array = save_data.get("characters", [])
+	var names: Array[String] = []
+	for entry in stored_characters:
+		if typeof(entry) == TYPE_DICTIONARY:
+			names.append(str(entry.get("name", "Névtelen")))
+	return {
+		"exists": true,
+		"characters": names,
+		"gold": int(save_data.get("gold", 0)),
+		"modified": FileAccess.get_modified_time(path)
+	}
+
+
+func load_from_slot(slot: int) -> bool:
+	if not has_save_slot(slot):
+		return false
+	if not _load_game(_manual_save_path(slot)):
+		return false
+	current_save_slot = slot
+	game_started = true
+	_connect_all_inventories()
+	_recalculate_all_character_stats()
+	# Persist any schema migration back to the selected slot.
+	var saved := save_to_slot(slot)
+	state_changed.emit()
+	characters_changed.emit()
+	active_character_changed.emit(active_character_id)
+	return saved
+
+
+func load_autosave() -> bool:
+	if not has_autosave() or not _load_game(AUTOSAVE_PATH):
+		return false
+	game_started = true
+	_connect_all_inventories()
+	_recalculate_all_character_stats()
+	state_changed.emit()
+	characters_changed.emit()
+	active_character_changed.emit(active_character_id)
+	return true
 
 
 func start_new_game(slot: int) -> bool:
@@ -1084,36 +1033,68 @@ func start_new_game(slot: int) -> bool:
 	_create_new_game()
 	_loading_save = false
 	current_save_slot = slot
+	game_started = true
 	_connect_all_inventories()
-	var saved := save_to_slot(slot)
+	_recalculate_all_character_stats()
+	if not save_to_slot(slot):
+		return false
+	save_autosave()
 	state_changed.emit()
 	characters_changed.emit()
 	active_character_changed.emit(active_character_id)
-	return saved
+	return true
 
 
 func _manual_save_path(slot: int) -> String:
 	return MANUAL_SAVE_PATH_TEMPLATE % slot
 
 
+func _migrate_legacy_save_if_needed() -> void:
+	if FileAccess.file_exists(LEGACY_SAVE_PATH) and not has_save_slot(1):
+		var legacy := FileAccess.open(LEGACY_SAVE_PATH, FileAccess.READ)
+		if legacy == null:
+			return
+		var contents := legacy.get_as_text()
+		legacy.close()
+		var migrated := FileAccess.open(_manual_save_path(1), FileAccess.WRITE)
+		if migrated != null:
+			migrated.store_string(contents)
+			migrated.close()
+
+
 func _start_autosave_timer() -> void:
+	if _autosave_timer != null:
+		return
 	_autosave_timer = Timer.new()
 	_autosave_timer.name = "AutosaveTimer"
 	_autosave_timer.wait_time = AUTOSAVE_INTERVAL_SECONDS
 	_autosave_timer.one_shot = false
 	_autosave_timer.autostart = true
-	_autosave_timer.timeout.connect(_on_autosave_timeout)
 	add_child(_autosave_timer)
+	_autosave_timer.timeout.connect(_on_autosave_timeout)
 
 
 func _on_autosave_timeout() -> void:
-	if not characters.is_empty():
+	if game_started:
 		save_autosave()
 
 
-# -----------------------------------------------------------------------------
-# Save loading, validation and version migration
-# -----------------------------------------------------------------------------
+func _serialize_inventory(inventory: Inventory) -> Dictionary:
+	if inventory == null:
+		return {"width": BACKPACK_WIDTH, "height": BACKPACK_HEIGHT, "items": []}
+
+	var item_entries: Array[Dictionary] = []
+	for item in inventory.items:
+		if item == null or item.item_data == null:
+			continue
+		item_entries.append(_serialize_inventory_item(item))
+
+	return {
+		"width": inventory.width,
+		"height": inventory.height,
+		"items": item_entries
+	}
+
 
 func _load_game(path: String) -> bool:
 	if not FileAccess.file_exists(path):
@@ -1133,6 +1114,7 @@ func _load_game(path: String) -> bool:
 
 	var save_data: Dictionary = parser.data
 	var save_version := int(save_data.get("version", 1))
+	current_save_slot = clampi(int(save_data.get("current_save_slot", current_save_slot)), 1, MANUAL_SAVE_SLOT_COUNT)
 	_loading_save = true
 	gold = int(save_data.get("gold", 500))
 	characters.clear()
@@ -1159,39 +1141,21 @@ func _load_game(path: String) -> bool:
 		character.quirk_ids = PackedStringArray()
 		for quirk_id in stored_quirks:
 			character.quirk_ids.append(str(quirk_id))
-		var stored_attributes: Variant = character_entry.get("attributes", {})
-		character.attributes = stored_attributes.duplicate(true) if typeof(stored_attributes) == TYPE_DICTIONARY else {}
-		var stored_modifiers: Variant = character_entry.get("stat_modifiers", {})
-		character.stat_modifiers = stored_modifiers.duplicate(true) if typeof(stored_modifiers) == TYPE_DICTIONARY else {}
-		var stored_effects: Variant = character_entry.get("status_effects", [])
-		character.status_effects = []
-		if typeof(stored_effects) == TYPE_ARRAY:
-			for effect in stored_effects:
-				if typeof(effect) == TYPE_DICTIONARY:
-					var effect_dictionary: Dictionary = effect
-					character.status_effects.append(effect_dictionary.duplicate(true))
-		var stored_cooldowns: Variant = character_entry.get("ability_cooldowns", {})
-		character.ability_cooldowns = stored_cooldowns.duplicate(true) if typeof(stored_cooldowns) == TYPE_DICTIONARY else {}
-		var stored_custom_data: Variant = character_entry.get("persistent_data", {})
-		character.persistent_data = stored_custom_data.duplicate(true) if typeof(stored_custom_data) == TYPE_DICTIONARY else {}
-		character.equipment = _deserialize_equipment(character_entry.get("equipment", {}))
+		var stored_health := int(character_entry.get("current_health", -1))
+		# Keep the saved current HP until equipment has been restored; the final
+		# maximum is recalculated below from class, level and equipped modifiers.
+		character.current_health = maxi(stored_health, -1)
 		character.inventory = _deserialize_inventory(
 			character_entry.get("inventory", {}),
 			BACKPACK_WIDTH,
 			BACKPACK_HEIGHT
 		)
+		character.equipment = _deserialize_equipment(character_entry.get("equipment", {}))
+		character.base_stats = character_entry.get("base_stats", {}).duplicate(true)
+		character.derived_stats = character_entry.get("derived_stats", {}).duplicate(true)
 		characters.append(character)
-		var stats_after_load := get_character_stats(character)
-		var max_health := maxi(int(stats_after_load.get("max_health", 30)), 1)
-		var max_mana := maxi(int(stats_after_load.get("max_mana", 0)), 0)
-		var saved_health := int(character_entry.get("current_health", -1))
-		var saved_mana := int(character_entry.get("current_mana", -1))
-		character.current_health = clampi(saved_health if saved_health >= 0 else max_health, 0, max_health)
-		character.current_mana = clampi(saved_mana if saved_mana >= 0 else max_mana, 0, max_mana)
 
 	stash = _deserialize_inventory(save_data.get("stash", {}), STASH_WIDTH, STASH_HEIGHT)
-	var stored_run_state: Variant = save_data.get("run_state", {})
-	run_state = stored_run_state.duplicate(true) if typeof(stored_run_state) == TYPE_DICTIONARY else {}
 	active_character_id = str(save_data.get("active_character_id", ""))
 	if get_active_character() == null and not characters.is_empty():
 		active_character_id = characters[0].id
@@ -1203,14 +1167,47 @@ func _load_game(path: String) -> bool:
 	if save_version < 3:
 		_seed_starting_smithing_materials()
 	_connect_all_inventories()
-	# Version 4 adds mana, equipped items, status effects and dungeon run_state.
-	# The caller persists migrated data to the correct selected slot.
+	_recalculate_all_character_stats()
 	return true
 
 
-# -----------------------------------------------------------------------------
-# Resource restoration from saved item IDs and paths
-# -----------------------------------------------------------------------------
+func _deserialize_equipment(data: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if typeof(data) != TYPE_DICTIONARY:
+		return result
+	for slot_key in data:
+		var item_data_variant: Variant = data[slot_key]
+		if typeof(item_data_variant) != TYPE_DICTIONARY:
+			continue
+		var restored_item := _deserialize_inventory_item(item_data_variant)
+		if restored_item == null or restored_item.item_data == null:
+			continue
+		if restored_item.item_data.equipment_slot != StringName(str(slot_key)):
+			push_warning("A mentett felszerelési hely nem egyezik a tárggyal: " + str(slot_key))
+			continue
+		result[StringName(str(slot_key))] = restored_item
+	return result
+
+
+func _deserialize_inventory_item(item_info: Dictionary) -> InventoryItem:
+	var item_data := _resolve_item_data(
+		str(item_info.get("resource_path", "")),
+		StringName(str(item_info.get("id", "")))
+	)
+	if item_data == null:
+		return null
+	var restored_item := InventoryItem.new()
+	restored_item.item_data = item_data
+	restored_item.position = Vector2i(int(item_info.get("x", 0)), int(item_info.get("y", 0)))
+	restored_item.amount = max(int(item_info.get("amount", 1)), 1)
+	restored_item.upgrade_level = clampi(int(item_info.get("upgrade_level", 0)), 0, mini(item_data.max_upgrade_level, 5))
+	var stored_enchantments: Array = item_info.get("enchantment_ids", [])
+	restored_item.enchantment_ids = PackedStringArray()
+	for enchantment_id in stored_enchantments:
+		if get_enchantment(StringName(str(enchantment_id))) != null:
+			restored_item.enchantment_ids.append(str(enchantment_id))
+	return restored_item
+
 
 func _deserialize_inventory(data: Variant, default_width: int, default_height: int) -> Inventory:
 	var width := default_width
@@ -1227,71 +1224,17 @@ func _deserialize_inventory(data: Variant, default_width: int, default_height: i
 		if typeof(item_entry) != TYPE_DICTIONARY:
 			continue
 		var item_info: Dictionary = item_entry
-		var item_data := _resolve_item_data(
-			str(item_info.get("resource_path", "")),
-			StringName(str(item_info.get("id", "")))
-		)
-		if item_data == null:
+		var restored_item := _deserialize_inventory_item(item_info)
+		if restored_item == null or restored_item.item_data == null:
 			push_warning("A mentésben szereplő tárgy nem található: " + str(item_info.get("id", "ismeretlen")))
 			continue
-
-		var position := Vector2i(int(item_info.get("x", 0)), int(item_info.get("y", 0)))
-		var amount = max(int(item_info.get("amount", 1)), 1)
-		var restored_item := result.add_item(item_data, position, amount, false)
-		if restored_item == null:
-			push_warning("Egy tárgyat nem lehetett visszatölteni az inventoryba: " + String(item_data.id))
+		var added_item := result.add_item(restored_item.item_data, restored_item.position, restored_item.amount, false)
+		if added_item == null:
+			push_warning("Egy tárgyat nem lehetett visszatölteni az inventoryba: " + String(restored_item.item_data.id))
 			continue
-		restored_item.upgrade_level = clampi(int(item_info.get("upgrade_level", 0)), 0, mini(item_data.max_upgrade_level, 5))
-		var stored_enchantments: Array = item_info.get("enchantment_ids", [])
-		restored_item.enchantment_ids = PackedStringArray()
-		for enchantment_id in stored_enchantments:
-			if get_enchantment(StringName(str(enchantment_id))) != null:
-				restored_item.enchantment_ids.append(str(enchantment_id))
+		added_item.upgrade_level = restored_item.upgrade_level
+		added_item.enchantment_ids = restored_item.enchantment_ids.duplicate()
 	return result
-
-
-func _deserialize_equipment(data: Variant) -> Dictionary:
-	var result: Dictionary = {}
-	if typeof(data) != TYPE_DICTIONARY:
-		return result
-	for slot_key in data:
-		var slot := StringName(str(slot_key))
-		var item_info: Variant = data[slot_key]
-		if typeof(item_info) != TYPE_DICTIONARY:
-			continue
-		var item_dictionary: Dictionary = item_info
-		var item := _deserialize_item(item_dictionary, Vector2i(-1, -1))
-		if item == null or item.item_data == null:
-			continue
-		if item.item_data.equipment_slot != slot:
-			push_warning("A mentett felszerelési hely nem egyezik a tárggyal: " + String(slot))
-			continue
-		result[slot] = item
-	return result
-
-
-func _deserialize_item(item_info: Dictionary, position_override: Vector2i = Vector2i(-999, -999)) -> InventoryItem:
-	var item_data := _resolve_item_data(
-		str(item_info.get("resource_path", "")),
-		StringName(str(item_info.get("id", "")))
-	)
-	if item_data == null:
-		push_warning("A mentésben szereplő tárgy nem található: " + str(item_info.get("id", "ismeretlen")))
-		return null
-	var restored := InventoryItem.new()
-	restored.item_data = item_data
-	if position_override == Vector2i(-999, -999):
-		restored.position = Vector2i(int(item_info.get("x", 0)), int(item_info.get("y", 0)))
-	else:
-		restored.position = position_override
-	restored.amount = max(int(item_info.get("amount", 1)), 1)
-	restored.upgrade_level = clampi(int(item_info.get("upgrade_level", 0)), 0, mini(item_data.max_upgrade_level, 5))
-	var stored_enchantments: Array = item_info.get("enchantment_ids", [])
-	restored.enchantment_ids = PackedStringArray()
-	for enchantment_id in stored_enchantments:
-		if get_enchantment(StringName(str(enchantment_id))) != null:
-			restored.enchantment_ids.append(str(enchantment_id))
-	return restored
 
 
 func _resolve_item_data(resource_path: String, item_id: StringName) -> ItemData:
@@ -1305,8 +1248,25 @@ func _resolve_item_data(resource_path: String, item_id: StringName) -> ItemData:
 
 
 func _find_item_data_by_id(directory_path: String, target_id: StringName) -> ItemData:
-	for resource_path in RESOURCE_CATALOG.collect_resource_paths(directory_path):
-		var candidate := load(resource_path) as ItemData
-		if candidate != null and candidate.id == target_id:
-			return candidate
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return null
+
+	directory.list_dir_begin()
+	var entry := directory.get_next()
+	while not entry.is_empty():
+		if directory.current_is_dir():
+			if not entry.begins_with("."):
+				var nested_result := _find_item_data_by_id(directory_path.path_join(entry), target_id)
+				if nested_result != null:
+					directory.list_dir_end()
+					return nested_result
+		elif entry.ends_with(".tres") or entry.ends_with(".res"):
+			var resource_path := directory_path.path_join(entry)
+			var candidate := load(resource_path) as ItemData
+			if candidate != null and candidate.id == target_id:
+				directory.list_dir_end()
+				return candidate
+		entry = directory.get_next()
+	directory.list_dir_end()
 	return null

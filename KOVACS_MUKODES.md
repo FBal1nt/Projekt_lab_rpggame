@@ -1,14 +1,10 @@
 # Kovácsműhely – fejlesztői útmutató
 
-A Kovács UI a teljes ablakot használja, a karakterkártya és a felszereléslista a bal oldalon, a műveletek és részletek a jobb oldalon vannak. A jobb oldali módválasztóban öt opció található: **Készítés**, **Fejlesztés**, **Élesítés**, **Védelem** és **Vérzés**. A tartalom görgethető, így a hosszabb receptek és fejlesztési listák alacsonyabb ablakmagasságnál is elérhetők.
-
-- **Készítés**: a `Data/SmithingRecipes/` mappa `recipe_type = &"craft"` receptjeit sorolja fel, ellenőrzi a nyersanyagokat, az aranyat és a karakter Inventory-jában lévő szabad helyet, majd az elkészült tárgyat az aktív karakterhez adja.
-- **Fejlesztés**: a bal oldali listában kiválasztott, fejleszthető tárgyat a következő szintre emeli +1-től legfeljebb +5-ig. Az ár és az összetevők az adott szint `upgrade_*.tres` receptjéből jönnek.
-- **Élesítés**, **Védelem**, **Vérzés**: továbbra is adatvezérelt enchantokkal működő fizikai tárgyfejlesztések.
+A jelenlegi Kovács UI három fizikai tárgyfejlesztést kínál: **Élesítés**, **Védelem** és **Vérzés**. A karakterkártya a bal oldali panel tetején látható; alatta az aktív karakter Inventory-jában lévő fegyverek és felszerelések listája, a jobb panelen pedig a három opció és a hozzájuk tartozó, adatvezérelt fejlesztések jelennek meg.
 
 A fejlesztések `Data/Enchantments/` alatti `.tres` erőforrások. A `workshop_type = &"blacksmith"` és az `option_category` dönti el, hogy melyik Kovács-opcióban jelennek meg. A UI automatikusan szűri a fejlesztéseket a kiválasztott tárgy `item_type` értéke alapján. Az arany- és nyersanyagköltséget a rendszer a művelet végrehajtása előtt ellenőrzi; a nyersanyag a hátizsákból, majd a közös Stash-ből fogy.
 
-A készítési receptek és a +1…+5 fejlesztési API-k a Kovács UI-jába is be vannak kötve. Az alábbiak szerint lehet a listákat tartalommal bővíteni.
+A korábban elkészített alapanyag-kovácsolási receptek és a +1…+5 általános fejlesztési API-k továbbra is a projektben maradtak, de a Kovács jelenlegi háromopciós UI-ja nem mutatja őket. Az alábbi receptfejezetek akkor hasznosak, ha később visszakerül a kovácsolás külön fülként vagy más épület funkciójaként.
 
 > A tényleges karakterre szereléshez és a harci következményekhez a csapat felszerelés-/harci rendszerét kell bekötni. A Kovács jelenleg mentett tárgy-statokkal és fejlesztésazonosítókkal dolgozik.
 
@@ -75,13 +71,14 @@ A kovács a jelenlegi aktív karakter hátizsákjában lévő tárgyakat listáz
 ## Új UI: Kovács és Varázsló (adatvezérelt tárgyfejlesztések)
 
 - A két menü közös `Scripts/UI/ItemAugmentationWindow.gd` felületalapot használ. A karakterkártya a bal oldali panel tetején, a karakter hátizsákjában lévő felszerelések listája alatta, a három műveleti opció és a részletek a jobb oldali panelen találhatók.
-- A Kovács látható opciói: `craft` (készítés), `upgrade` (a kiválasztott tárgy +1…+5 fejlesztése), `sharpen` (élesítés), `defense` (fizikai védelem), `bleeding` (vérzés).
+- A Kovács látható opciói: `sharpen` (élesítés), `defense` (fizikai védelem), `bleeding` (vérzés).
 - A Varázsló látható opciói: `weapon_element` (tűz/jég/méreg/villám fegyverhatások), `resistance` (elemi ellenállások), `utility_boost` (életerő és harcon kívüli HP-regeneráció).
 - Új vagy módosított fejlesztéshez adj/szerkessz `.tres` fájlt a `Data/Enchantments/` mappában. A fontos mezők: `id`, `workshop_type`, `option_category`, `element`, `applicable_item_types`, `ingredient_item_ids`, `ingredient_amounts`, `gold_cost` és `stat_modifiers`.
 - `stat_modifiers` numerikus kulcsai összeadódnak a `GameState.get_item_stats(item)` eredményében. A kulcsokat a harcrendszer később a tényleges harci szabályokhoz kapcsolhatja. Példák: `damage`, `crit_chance`, `defense`, `bleed_chance`, `bleed_damage`, `max_bleed_stacks`, `fire_damage`, `fire_attack_bonus`, `fire_extra_attack_chance`, `ice_damage`, `ice_resistance`, `poison_damage`, `poison_resistance`, `max_health`, `out_of_combat_hp_regen`.
 - A bónusz és az enchant az `InventoryItem.enchantment_ids` mezőn tárolódik, ezért a már meglévő mentési rendszer új indítás után is visszaállítja. A UI nem enged többször ugyanazt az enchantot ugyanarra a tárgypéldányra alkalmazni.
-- A Kovács `KÉSZÍTÉS` és `FEJLESZTÉS` menüje közvetlenül a receptadatokat használja. Új recept hozzáadása automatikusan megjelenik a listában, külön UI-módosítás nélkül.
+- A korábbi kovácsolási receptek és a +1…+5 fejlesztési API-k továbbra is a projektben maradtak; a Kovács új, háromopciós felületén azonban most a kért fizikai bónuszok jelennek meg. Ha később szeretnétek gyártást is felületre tenni, egy negyedik opció vagy külön műhelyfázis hozzáadható.
 
 ### Fontos a csapattársaknak
 
 Az `out_of_combat_hp_regen`, `fire_extra_attack_chance`, `ice_slow_chance`, `poison_chance` és hasonló értékek jelenleg mentett, lekérdezhető tárgy-statok. A tényleges extra támadás, lassítás, DoT, ellenállás-számítás és harcon kívüli regeneráció triggerelését a Dungeon/harcrendszernek kell majd megvalósítania a statértékek alapján.
+

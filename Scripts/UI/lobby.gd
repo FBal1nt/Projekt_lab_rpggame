@@ -19,8 +19,8 @@ const BACKGROUND_PATH := "res://Arts/UI/lobby_background.png"
 
 var windows: Array[Panel] = []
 var main_menu_button: Button
-var main_menu_confirm_dialog: ConfirmationDialog
 var heading_label: Label
+var main_menu_confirm_dialog: ConfirmationDialog
 
 const BUILDINGS := [
 	{
@@ -35,7 +35,7 @@ const BUILDINGS := [
 		"node": "WizardBuilding",
 		"label": "VARÁZSLÓ",
 		"icon": "res://Arts/UI/Icons/wizard.png",
-		"tooltip": "Mágia, képességek és fejlesztések. (Későbbi fejlesztés)",
+		"tooltip": "Enchantok, mágikus fejlesztések és ellenállások kezelése.",
 		"anchor": Vector2(0.30, 0.37),
 		"accent": Color(0.64, 0.55, 0.90, 1.0)
 	},
@@ -43,7 +43,7 @@ const BUILDINGS := [
 		"node": "CharacterBuilding",
 		"label": "KARAKTER",
 		"icon": "res://Arts/UI/Icons/character.png",
-		"tooltip": "Karakteradatok és fejlődés. (Későbbi fejlesztés)",
+		"tooltip": "Karakteradatok, felszerelés és számított tulajdonságok.",
 		"anchor": Vector2(0.44, 0.43),
 		"accent": Color(0.51, 0.75, 0.88, 1.0)
 	},
@@ -51,7 +51,7 @@ const BUILDINGS := [
 		"node": "BlacksmithBuilding",
 		"label": "KOVÁCS",
 		"icon": "res://Arts/UI/Icons/blacksmith.png",
-		"tooltip": "Fegyverek és felszerelések fejlesztése. (Későbbi fejlesztés)",
+		"tooltip": "Fegyverek és felszerelések fejlesztése, illetve készítése.",
 		"anchor": Vector2(0.61, 0.49),
 		"accent": Color(0.91, 0.54, 0.31, 1.0)
 	},
@@ -59,7 +59,7 @@ const BUILDINGS := [
 		"node": "DungeonBuilding",
 		"label": "DUNGEON",
 		"icon": "res://Arts/UI/Icons/dungeon.png",
-		"tooltip": "A kalandok és harcok helyszíne. (Következő nagy fejlesztési lépés)",
+		"tooltip": "Dungeon kiválasztása és a nehézségi fokozat beállítása.",
 		"anchor": Vector2(0.77, 0.65),
 		"accent": Color(0.69, 0.44, 0.42, 1.0)
 	},
@@ -217,7 +217,7 @@ func _layout_building_buttons() -> void:
 
 
 func _setup_windows() -> void:
-	# The Dungeon window now has its own data-driven selector; keep only true placeholders here.
+	# A dungeon ablak valódi, adatvezérelt választófelület; nem placeholder.
 	var placeholder_descriptions := {}
 
 	for window_name in ["CharacterWindow", "BlacksmithWindow", "ShopWindow", "WizardWindow", "DungeonWindow", "InventoryWindow"]:
@@ -286,8 +286,6 @@ func open_window(window: Panel) -> void:
 	close_all_windows()
 	if window == shop_window:
 		shop_window.refresh()
-	elif window == dungeon_window:
-		dungeon_window.call("refresh")
 	window.show()
 	window.move_to_front()
 
@@ -323,34 +321,30 @@ func _on_inventory_building_pressed() -> void:
 func _on_main_menu_pressed() -> void:
 	if main_menu_confirm_dialog == null:
 		main_menu_confirm_dialog = ConfirmationDialog.new()
-		main_menu_confirm_dialog.title = "Vissza a főmenübe?"
-		main_menu_confirm_dialog.dialog_text = "Szeretnéd menteni a játékot, mielőtt visszatérsz a főmenübe?"
-		main_menu_confirm_dialog.ok_button_text = "Mentés és kilépés"
-		main_menu_confirm_dialog.cancel_button_text = "Mégse"
-		main_menu_confirm_dialog.add_button("Mentés nélkül", true, "discard")
-		main_menu_confirm_dialog.confirmed.connect(_return_to_main_menu_after_save)
-		main_menu_confirm_dialog.custom_action.connect(_on_main_menu_save_choice)
+		main_menu_confirm_dialog.title = "Visszatérés a főmenübe"
+		main_menu_confirm_dialog.dialog_text = "Szeretnéd elmenteni a jelenlegi játékállást a főmenübe való visszatérés előtt?"
+		main_menu_confirm_dialog.ok_button_text = "MENTÉS ÉS KILÉPÉS"
+		main_menu_confirm_dialog.cancel_button_text = "MÉGSE"
+		main_menu_confirm_dialog.add_button("MENTÉS NÉLKÜL", true, "discard")
+		main_menu_confirm_dialog.confirmed.connect(_on_save_and_return_to_menu)
+		main_menu_confirm_dialog.custom_action.connect(_on_return_without_saving)
 		add_child(main_menu_confirm_dialog)
-	main_menu_confirm_dialog.popup_centered()
+	main_menu_confirm_dialog.popup_centered(Vector2i(540, 190))
 
 
-func _on_main_menu_save_choice(action: StringName) -> void:
-	if action == &"discard":
-		_return_to_main_menu_without_save()
-
-
-func _return_to_main_menu_after_save() -> void:
+func _on_save_and_return_to_menu() -> void:
 	if not GameState.save_game():
-		push_warning("A mentés nem sikerült; a főmenübe lépés megszakadt.")
+		push_warning("A mentés nem sikerült; a lobbyban maradsz.")
 		return
-	_change_to_main_menu()
+	_return_to_main_menu()
 
 
-func _return_to_main_menu_without_save() -> void:
-	_change_to_main_menu()
+func _on_return_without_saving(action: StringName) -> void:
+	if action == &"discard":
+		_return_to_main_menu()
 
 
-func _change_to_main_menu() -> void:
+func _return_to_main_menu() -> void:
 	var result := get_tree().change_scene_to_file("res://Scenes/Menu/MainMenu.tscn")
 	if result != OK:
 		push_error("Nem sikerült visszalépni a főmenübe.")
