@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://b8chrcrtovly1"]
+
+[ext_resource type="Script" uid="uid://2jdrmp6k6uxw" path="res://Scripts/UI/character_creation_overlay.gd" id="1_charov"]
+
+[node name="CharacterCreationOverlay" type="Control" unique_id=1942851003]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_charov")

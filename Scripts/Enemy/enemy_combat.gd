@@ -54,6 +54,7 @@ func roll_attack_damage() -> int:
 
 func take_damage(incoming_raw_damage: int) -> int:
 	if is_dead or controller == null or controller.enemy_data == null: return 0
+	if elite_combat and elite_combat.is_necromancer_vanished(): return 0
 	var data = controller.enemy_data
 
 	if data.check_dodge():
@@ -71,7 +72,15 @@ func take_damage(incoming_raw_damage: int) -> int:
 		actual_raw = maxi(0, actual_raw - data.flat_armor)
 		print("🛡️ [%s PÁNCÉL] -%d sebzés elnyelve! (Maradt: %d)" % [controller.monster_name, absorbed, actual_raw])
 
+	var prev_hp: int = data.get_current_hp()
 	var dealt = data.take_damage(actual_raw)
+
+	# Boss phase barriers for the Necromancer so burst hits never skip the 75% or 50% summon waves.
+	if elite_combat and elite_combat.is_necromancer():
+		var hp_floor := elite_combat.get_necromancer_phase_hp_floor()
+		if hp_floor > 0 and data.get_current_hp() < hp_floor:
+			data._current_hp = hp_floor
+			dealt = maxi(0, prev_hp - hp_floor)
 
 	if not data.is_alive():
 		is_dead = true
@@ -181,6 +190,11 @@ func perform_combat_turn(target_hero: HeroController, is_extra_attack: bool = fa
 
 	return raw_dmg
 
+func handle_post_damage_phase_reaction(target_hero: HeroController = null) -> bool:
+	if elite_combat and elite_combat.has_method("handle_necromancer_post_damage"):
+		return await elite_combat.handle_necromancer_post_damage(target_hero)
+	return false
+
 func set_all_monsters_ai_frozen(frozen: bool) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if is_instance_valid(enemy) and enemy.get("brain") != null:
@@ -189,6 +203,8 @@ func set_all_monsters_ai_frozen(frozen: bool) -> void:
 
 func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 	if is_dead or is_attacking or not controller.is_monster_alive(): return
+	if elite_combat and (elite_combat.is_necromancer_vanished() or elite_combat.is_necromancer_out_of_magic()):
+		return
 	var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
 	if battle_ui != null and battle_ui.combat_active: return
 
@@ -208,6 +224,11 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 	is_attacking = true
 	if controller.visuals:
 		controller.visuals.update_facing(hero.grid_pos.x)
+
+	if elite_combat and elite_combat.is_necromancer():
+		await elite_combat._necromancer_cast_magic_attack(hero)
+		is_attacking = false
+		return
 
 	var anim = controller.visuals._get_attack_anim_name() if controller.visuals else ""
 	var sprite = controller.visuals.sprite if controller.visuals else null

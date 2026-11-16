@@ -56,7 +56,7 @@ size_flags_vertical = 4
 [node name="GoldLabel" type="Label" parent="MarginContainer/VBoxContainer/Header/GoldPanel" unique_id=135620404]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "500 ARANY"
+text = "200 ARANY"
 horizontal_alignment = 1
 vertical_alignment = 1
 

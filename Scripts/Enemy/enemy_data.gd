@@ -2,6 +2,13 @@
 extends Resource
 class_name EnemyData
 
+enum EnemyTier {
+	BASIC = 1,
+	ARMORED = 2,
+	ELITE = 3,
+	BOSS = 4
+}
+
 enum SpecialProfile {
 	STANDARD,
 	ARMORED_SKELETON,
@@ -19,6 +26,8 @@ enum SpecialProfile {
 @export var monster_id: String = "enemy"
 @export var monster_name: String = "Name"
 @export var title: String = ""
+@export var tier: EnemyTier = EnemyTier.BASIC
+@export var enemy_level: int = 1
 @export var xp_reward: int = 1
 
 @export_group("Megjelenés")
@@ -147,6 +156,40 @@ func initialize() -> void:
 	_is_alive = true
 	_has_resurrected = false
 	_just_resurrected = false
+
+## Szint- és nehézségfüggő finomhangolás a megidézett szörny példányán
+func apply_level_scaling(target_level: int, difficulty_id: String = "normal") -> void:
+	enemy_level = maxi(1, target_level)
+
+	if tier == EnemyTier.BOSS:
+		var diff_clean := difficulty_id.to_lower()
+		var hp_mult := 1.0
+		var dmg_mult := 1.0
+		if "easy" in diff_clean:
+			hp_mult = 0.80
+			dmg_mult = 0.85
+		elif "hard" in diff_clean:
+			hp_mult = 1.25
+			dmg_mult = 1.15
+		max_hp = maxi(1, roundi(float(max_hp) * hp_mult))
+		base_damage = maxi(1, roundi(float(base_damage) * dmg_mult))
+		_current_hp = max_hp
+		return
+
+	var tier_base_level := 1
+	match tier:
+		EnemyTier.ARMORED: tier_base_level = 3
+		EnemyTier.ELITE: tier_base_level = 5
+
+	var level_delta := clampi(enemy_level - tier_base_level, -2, 3)
+	if level_delta != 0:
+		var hp_scale := clampf(1.0 + float(level_delta) * 0.07, 0.85, 1.25)
+		var dmg_scale := clampf(1.0 + float(level_delta) * 0.05, 0.88, 1.18)
+		max_hp = maxi(1, roundi(float(max_hp) * hp_scale))
+		base_damage = maxi(1, roundi(float(base_damage) * dmg_scale))
+		if level_delta >= 2:
+			defense += 1
+		_current_hp = max_hp
 
 func get_current_hp() -> int: return _current_hp
 func get_max_hp() -> int: return max_hp

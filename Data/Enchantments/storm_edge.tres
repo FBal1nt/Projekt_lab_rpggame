@@ -9,7 +9,6 @@ display_name = "Viharfegyver"
 description = "Villámot vezet a fegyverbe, növeli a villámsebzést és a támadási bónuszt, ritkán pedig további támadást tehet lehetővé."
 workshop_type = &"wizard"
 option_category = &"weapon_element"
-element = &"lightning"
 applicable_item_types = PackedStringArray("weapon")
 ingredient_item_ids = PackedStringArray("arcane_dust", "silver_ingot")
 ingredient_amounts = PackedInt32Array(2, 1)

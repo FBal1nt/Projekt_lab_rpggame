@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dv6gqt581k6xj"]
+
+[ext_resource type="SpriteFrames" uid="uid://baeq0m02qytjk" path="res://Data/Props/torch_frames.tres" id="1_o1i38"]
+
+[node name="Torch" type="Node2D" groups=["torches"] unique_id=563503918]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=356510718]
+z_index = 3
+sprite_frames = ExtResource("1_o1i38")
+autoplay = "default"
+frame_progress = 0.13007793

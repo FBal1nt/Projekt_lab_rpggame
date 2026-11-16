@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://baeq0m02qytjk"]
+
+[ext_resource type="Texture2D" uid="uid://chvn17274760n" path="res://Assets/Tilesets/Dungeon/torch1.png" id="1_di8k3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cfstq"]
+atlas = ExtResource("1_di8k3")
+region = Rect2(4, 0, 26, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4emy"]
+atlas = ExtResource("1_di8k3")
+region = Rect2(4, 48, 26, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oj0w1"]
+atlas = ExtResource("1_di8k3")
+region = Rect2(4, 96, 26, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4c5ko"]
+atlas = ExtResource("1_di8k3")
+region = Rect2(4, 144, 26, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hmije"]
+atlas = ExtResource("1_di8k3")
+region = Rect2(4, 192, 26, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pdipr"]
+atlas = ExtResource("1_di8k3")
+region = Rect2(4, 240, 26, 48)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cfstq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4emy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oj0w1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4c5ko")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hmije")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pdipr")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 6.0
+}]

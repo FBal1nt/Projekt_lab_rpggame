@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://daloadui4k8p"]
+
+[ext_resource type="Script" uid="uid://dwkwbqgv1674k" path="res://Scripts/UI/loading_screen.gd" id="1_load"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loading_panel"]
+content_margin_left = 26.0
+content_margin_top = 22.0
+content_margin_right = 26.0
+content_margin_bottom = 22.0
+bg_color = Color(0.08, 0.09, 0.14, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.68, 0.54, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_crest_badge"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.14, 0.22, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.54, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_info_badge"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.11, 0.13, 0.21, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.32, 0.44, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0.1, 0.11, 0.17, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.26, 0.32, 0.44, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_fill"]
+bg_color = Color(0.88, 0.62, 0.16, 1)
+border_width_top = 1
+border_color = Color(1, 0.85, 0.38, 1)
+anti_aliasing = false
+
+[node name="LoadingScreen" type="CanvasLayer" unique_id=1943264258]
+process_mode = 3
+layer = 150
+script = ExtResource("1_load")
+
+[node name="Root" type="Control" parent="." unique_id=1401645862]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="Root" unique_id=837387532]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.05, 0.08, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="Root" unique_id=189760984]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadingPanel" type="PanelContainer" parent="Root/CenterContainer" unique_id=1858541949]
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_loading_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Root/CenterContainer/LoadingPanel" unique_id=1500937993]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="CrestCenter" type="CenterContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=477936133]
+layout_mode = 2
+
+[node name="CrestBadge" type="PanelContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/CrestCenter" unique_id=73567086]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_crest_badge")
+
+[node name="CrestIcon" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/CrestCenter/CrestBadge" unique_id=1182466840]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.86, 0.42, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 22
+text = "⚔️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=1221617053]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.9, 0.56, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 22
+text = "DUNGEON BETÖLTÉSE..."
+horizontal_alignment = 1
+
+[node name="DungeonInfoBadge" type="PanelContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=2006344921]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_info_badge")
+
+[node name="DungeonInfoLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/DungeonInfoBadge" unique_id=1056188896]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.9, 0.96, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "🏰 Elfeledett Kripta  •  Nehézség: Közepes"
+horizontal_alignment = 1
+
+[node name="ProgressBox" type="VBoxContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=575173535]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StageRow" type="HBoxContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/ProgressBox" unique_id=1166179771]
+layout_mode = 2
+
+[node name="StageLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/ProgressBox/StageRow" unique_id=1443571386]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.72, 0.82, 0.94, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "Előkészítés..."
+
+[node name="PercentLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/ProgressBox/StageRow" unique_id=1842638601]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.86, 0.45, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "0%"
+horizontal_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/ProgressBox" unique_id=1507563092]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bar_fill")
+show_percentage = false
+
+[node name="TipBadge" type="PanelContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=452227013]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_info_badge")
+
+[node name="TipLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/TipBadge" unique_id=1696931880]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.76, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "Tipp: Nyomd meg az [M] billentyűt a teljes dungeon térkép megnyitásához!"
+horizontal_alignment = 1
+autowrap_mode = 2

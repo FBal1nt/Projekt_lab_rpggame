@@ -6,7 +6,7 @@
 script = ExtResource("1_script")
 id = &"knight_templar"
 display_name = "Templomos lovag"
-role = "Nehézpáncélos élharcos"
+role = "Nehézpáncélos tank"
 description = "A templomos rend rettenthetetlen bajnoka. A csapat legmagasabb (160 HP) életerejével, 24-es sebzéssel és kiváló pajzsos védelmével bír."
 placeholder_color = Color(0.8, 0.7, 0.3, 1)
 base_health = 160
@@ -23,6 +23,5 @@ health_per_level = 10
 damage_min_per_level = 1
 damage_max_per_level = 2
 defense_per_level = 1
-skill_ids = PackedStringArray("holy_shield", "smite")
 skill_names = PackedStringArray("Templomos hárítás", "Szent csapás")
-starting_equipment_ids = PackedStringArray()
+starting_equipment_ids = PackedStringArray("templar_lance", "iron_shield")

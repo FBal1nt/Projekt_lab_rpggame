@@ -6,7 +6,7 @@
 script = ExtResource("1_script")
 id = &"knight"
 display_name = "Lovag"
-role = "Frontvonal / Pajzshárítás (Tank)"
+role = "Közelharci védő"
 description = "Pajzzsal és karddal felszerelt nehézlovas. Képes a beérkező támadások kivédésére és tompítására. Életereje 120 HP, sebzése 18, védelme 2."
 placeholder_color = Color(0.3, 0.5, 0.7, 1)
 base_health = 120
@@ -23,6 +23,5 @@ health_per_level = 10
 damage_min_per_level = 1
 damage_max_per_level = 2
 defense_per_level = 1
-skill_ids = PackedStringArray("shield_block", "sword_slash")
 skill_names = PackedStringArray("Pajzshárítás", "Kardvágás")
-starting_equipment_ids = PackedStringArray()
+starting_equipment_ids = PackedStringArray("iron_sword", "iron_shield")

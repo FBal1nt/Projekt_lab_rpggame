@@ -6,7 +6,7 @@
 script = ExtResource("1_script")
 id = &"swordsman"
 display_name = "Kardforgató"
-role = "Gyors, kritikus közelharci sebző"
+role = "Gyors közelharci sebző"
 description = "Villámgyors kardmester. A legmagasabb (15.0) kezdeményezéssel és halálos 25-ös sebzéssel (105 HP) azonnal lecsap az ellenfeleire."
 placeholder_color = Color(0.7, 0.2, 0.2, 1)
 base_health = 105
@@ -23,6 +23,5 @@ health_per_level = 10
 damage_min_per_level = 1
 damage_max_per_level = 2
 defense_per_level = 1
-skill_ids = PackedStringArray("blade_dance", "swift_strike")
 skill_names = PackedStringArray("Penge tánc", "Villámcsapás")
-starting_equipment_ids = PackedStringArray()
+starting_equipment_ids = PackedStringArray("light_longsword")

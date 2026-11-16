@@ -73,6 +73,8 @@ func handle_move_click() -> void:
 			start_move_along_path(path)
 
 func _is_cell_accessible_by_sight(cell: Vector2i) -> bool:
+	if controller and controller.visuals and not controller.visuals._is_tile_within_vision_limit(cell):
+		return false
 	var fow = controller.fog_of_war if controller else null
 	if fow and fow.is_initialized:
 		var state = fow.cell_states.get(cell, FogOfWar.CellState.UNEXPLORED)

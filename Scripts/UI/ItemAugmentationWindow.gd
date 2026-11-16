@@ -290,31 +290,45 @@ func _refresh_all() -> void:
 	_gold_label.text = "Arany: %d" % GameState.gold
 
 	var inventory := GameState.get_active_inventory()
-	if inventory == null or (_selected_item != null and not inventory.items.has(_selected_item)):
+	var equipped_items := GameState.get_character_equipment()
+	var selected_is_owned := inventory != null and inventory.items.has(_selected_item)
+	if not selected_is_owned:
+		for equipped_item in equipped_items.values():
+			if equipped_item == _selected_item:
+				selected_is_owned = true
+				break
+	if _selected_item != null and not selected_is_owned:
 		_selected_item = null
 
 	_clear_children(_items_container)
 	var eligible_item_count := 0
+	var items_to_display: Array[InventoryItem] = []
 	if inventory != null:
 		for item in inventory.items:
-			if item == null or item.item_data == null or not _is_equipment(item):
-				continue
-			eligible_item_count += 1
-			var item_button := Button.new()
-			item_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			item_button.custom_minimum_size.y = 58
-			item_button.add_theme_font_size_override("font_size", 16)
-			item_button.text = _get_item_display_name(item)
-			item_button.tooltip_text = item.item_data.description + "\n" + _format_stats(GameState.get_item_stats(item))
-			if item.item_data.icon != null:
-				item_button.icon = item.item_data.icon
-				item_button.expand_icon = true
-				item_button.add_theme_constant_override("icon_max_width", 36)
-			UI_THEME.style_button(item_button, accent_color, item == _selected_item)
-			item_button.pressed.connect(_select_item.bind(item))
-			_items_container.add_child(item_button)
+			if item != null and item.item_data != null and _is_equipment(item):
+				items_to_display.append(item)
+	for equipped_item in equipped_items.values():
+		if equipped_item is InventoryItem and equipped_item.item_data != null and _is_equipment(equipped_item) and not items_to_display.has(equipped_item):
+			items_to_display.append(equipped_item)
+
+	for item in items_to_display:
+		eligible_item_count += 1
+		var item_button := Button.new()
+		item_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		item_button.custom_minimum_size.y = 58
+		item_button.add_theme_font_size_override("font_size", 16)
+		var is_equipped := equipped_items.values().has(item)
+		item_button.text = _get_item_display_name(item) + ("  ·  FELSZERELVE" if is_equipped else "")
+		item_button.tooltip_text = item.item_data.description + "\n" + _format_stats(GameState.get_item_stats(item))
+		if item.item_data.icon != null:
+			item_button.icon = item.item_data.icon
+			item_button.expand_icon = true
+			item_button.add_theme_constant_override("icon_max_width", 36)
+		UI_THEME.style_button(item_button, accent_color, item == _selected_item)
+		item_button.pressed.connect(_select_item.bind(item))
+		_items_container.add_child(item_button)
 	if eligible_item_count == 0:
-		_items_container.add_child(_make_label("Nincs a hátizsákban fejleszthető fegyver vagy felszerelés.", 13, UI_THEME.MUTED))
+		_items_container.add_child(_make_label("Nincs fejleszthető fegyver vagy felszerelés a hátizsákban vagy a felszerelési helyeken.", 13, UI_THEME.MUTED))
 	_refresh_action_panel()
 
 
@@ -562,7 +576,7 @@ func _get_current_option() -> Dictionary:
 func _is_equipment(item: InventoryItem) -> bool:
 	if item == null or item.item_data == null:
 		return false
-	return item.item_data.item_type != &"material" and item.item_data.item_type != &"consumable" and item.item_data.item_type != &"other"
+	return item.item_data.item_type != &"material" and item.item_data.item_type != &"consumable" and item.item_data.item_type != &"ammo" and item.item_data.item_type != &"other"
 
 
 func _get_item_display_name(item: InventoryItem) -> String:

@@ -9,7 +9,6 @@ display_name = "Méregsemlegesítő rúna"
 description = "Méregellenállást ad, és a harcon kívüli regenerációval segíti a felépülést."
 workshop_type = &"wizard"
 option_category = &"resistance"
-element = &"poison"
 applicable_item_types = PackedStringArray("armor", "ring", "earring", "shield", "helmet", "boots", "gloves")
 ingredient_item_ids = PackedStringArray("arcane_dust", "leather_strip")
 ingredient_amounts = PackedInt32Array(2, 2)

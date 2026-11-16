@@ -34,6 +34,8 @@ static func build_payload(
 			"status_effects": character.status_effects.duplicate(true),
 			"ability_cooldowns": character.ability_cooldowns.duplicate(true),
 			"persistent_data": character.persistent_data.duplicate(true),
+			"base_stats": character.base_stats.duplicate(true),
+			"derived_stats": character.derived_stats.duplicate(true),
 			"equipment": serialize_equipment(character.equipment),
 			"inventory": serialize_inventory(character.inventory, default_backpack_size)
 		})
@@ -49,6 +51,9 @@ static func build_payload(
 
 
 static func save_payload(path: String, payload: Dictionary) -> bool:
+	var dir_path := path.get_base_dir()
+	if not dir_path.is_empty() and not DirAccess.dir_exists_absolute(dir_path):
+		DirAccess.make_dir_recursive_absolute(dir_path)
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
 		push_error("Nem sikerült megnyitni a mentési fájlt: " + path)

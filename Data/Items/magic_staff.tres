@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Weapons/magic_staff.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"magic_staff"
+display_name = "Mágikus bot"
+description = "Ősi fafaragású bot tűz- és jéggömbbel, amellyel a varázsló elemi lövedékeket szórhat távolról."
+icon = ExtResource("2")
+size = Vector2i(1, 3)
+max_stack = 1
+buy_price = 48
+sell_price = 24
+item_type = &"weapon"
+equipment_slot = &"weapon"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"damage": 8.0,
+"fire_damage": 3.0,
+"ice_damage": 3.0
+}
+upgrade_stat_bonuses = {
+"damage": 2.0
+}

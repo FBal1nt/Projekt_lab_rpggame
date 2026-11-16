@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Shields/iron_shield.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"iron_shield"
+display_name = "Vaspajzs"
+description = "Masszív, szegecselt acélkeretes pajzs, amely megbízhatóan felfogja az ellenséges csapásokat."
+icon = ExtResource("2")
+size = Vector2i(2, 2)
+max_stack = 1
+buy_price = 42
+sell_price = 21
+item_type = &"shield"
+equipment_slot = &"shield"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"defense": 3.0,
+"max_health": 5.0
+}
+upgrade_stat_bonuses = {
+"defense": 1.0
+}

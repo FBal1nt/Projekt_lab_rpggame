@@ -38,14 +38,27 @@ var _was_paused_before_open: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	layer = 100
+	layer = 110
 	_load_settings()
 	_build_ui()
 	_apply_all_settings()
 	_refresh_controls()
 
 
+func _mark_input_handled() -> void:
+	if not is_inside_tree():
+		return
+	var vp := get_viewport()
+	if vp != null and vp.is_inside_tree():
+		vp.set_input_as_handled()
+
+
 func _input(event: InputEvent) -> void:
+	if not is_inside_tree():
+		return
+	var dm := get_node_or_null("/root/DungeonManager")
+	if dm != null and dm.has_method("is_loading_dungeon") and dm.is_loading_dungeon():
+		return
 	if not event is InputEventKey:
 		return
 	var key_event := event as InputEventKey
@@ -53,10 +66,10 @@ func _input(event: InputEvent) -> void:
 		return
 	if key_event.keycode == KEY_F10:
 		toggle_settings()
-		get_viewport().set_input_as_handled()
+		_mark_input_handled()
 	elif key_event.keycode == KEY_ESCAPE and is_open():
 		close_settings()
-		get_viewport().set_input_as_handled()
+		_mark_input_handled()
 
 
 # -----------------------------------------------------------------------------
@@ -68,6 +81,9 @@ func is_open() -> bool:
 
 
 func open_settings() -> void:
+	var dm := get_node_or_null("/root/DungeonManager")
+	if dm != null and dm.has_method("is_loading_dungeon") and dm.is_loading_dungeon():
+		return
 	if _overlay == null or is_open():
 		return
 	_was_paused_before_open = get_tree().paused
@@ -153,7 +169,8 @@ func _build_ui() -> void:
 	_settings_button.offset_top = -76.0
 	_settings_button.offset_bottom = -20.0
 	_settings_button.text = ""
-	_settings_button.icon = load("res://Arts/UI/Icons/settings.png") as Texture2D
+	_settings_button.icon = load("res://Assets/UI/Icons/settings.png") as Texture2D
+	_settings_button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	_settings_button.tooltip_text = "Beállítások (F10)"
 	_settings_button.custom_minimum_size = Vector2(56, 56)
 	_settings_button.add_theme_font_size_override("font_size", 26)

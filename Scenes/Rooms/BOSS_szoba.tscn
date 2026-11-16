@@ -1,11 +1,12 @@
 [gd_scene format=4 uid="uid://b5a8bwxu51821"]
 
-[ext_resource type="Texture2D" uid="uid://5bkvwrivrdxv" path="res://PNG/decorative_cracks_floor.png" id="1_31cjb"]
-[ext_resource type="Texture2D" uid="uid://b727p7158rbhj" path="res://PNG/walls_floor.png" id="2_mjdch"]
-[ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://PNG/decorative_cracks_walls.png" id="3_877mh"]
-[ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://PNG/Objects.png" id="4_g5yhj"]
-[ext_resource type="Texture2D" uid="uid://cagx5r4ucdjr8" path="res://Tiled_files/Other_objects.png" id="5_sjeel"]
-[ext_resource type="Texture2D" uid="uid://ji3cglcrfjt1" path="res://Tiled_files/supplies_objects.png" id="6_tfkm1"]
+[ext_resource type="Texture2D" uid="uid://5bkvwrivrdxv" path="res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png" id="1_31cjb"]
+[ext_resource type="Texture2D" uid="uid://b727p7158rbhj" path="res://Assets/Tilesets/Dungeon/walls_floor.png" id="2_mjdch"]
+[ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png" id="3_877mh"]
+[ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://Assets/Tilesets/Dungeon/Objects.png" id="4_g5yhj"]
+[ext_resource type="Texture2D" uid="uid://cagx5r4ucdjr8" path="res://Assets/Tilesets/Tiled/Other_objects.png" id="5_sjeel"]
+[ext_resource type="Texture2D" uid="uid://ji3cglcrfjt1" path="res://Assets/Tilesets/Tiled/supplies_objects.png" id="6_tfkm1"]
+[ext_resource type="PackedScene" uid="uid://dv6gqt581k6xj" path="res://Scenes/Props/torch.tscn" id="7_tkxrh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1ha0"]
 texture = ExtResource("1_31cjb")
@@ -2693,3 +2694,15 @@ shape = SubResource("RectangleShape2D_a1ha0")
 [node name="BossSpawn" type="Marker2D" parent="Spawners" unique_id=1488234293]
 
 [node name="ExitSpawn" type="Marker2D" parent="Spawners" unique_id=919779699]
+
+[node name="Torch" parent="." unique_id=563503918 instance=ExtResource("7_tkxrh")]
+position = Vector2(-48, -120)
+
+[node name="Torch2" parent="." unique_id=565788533 instance=ExtResource("7_tkxrh")]
+position = Vector2(48, -120)
+
+[node name="Torch3" parent="." unique_id=36880135 instance=ExtResource("7_tkxrh")]
+position = Vector2(-144, -40)
+
+[node name="Torch4" parent="." unique_id=966180739 instance=ExtResource("7_tkxrh")]
+position = Vector2(144, -40)

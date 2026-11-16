@@ -1,9 +1,10 @@
 [gd_scene format=4 uid="uid://c4j2u3acc3jk1"]
 
-[ext_resource type="Texture2D" uid="uid://5bkvwrivrdxv" path="res://PNG/decorative_cracks_floor.png" id="1_eamtk"]
-[ext_resource type="Texture2D" uid="uid://b727p7158rbhj" path="res://PNG/walls_floor.png" id="2_lu3el"]
-[ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://PNG/decorative_cracks_walls.png" id="3_miwks"]
-[ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://PNG/Objects.png" id="4_2durb"]
+[ext_resource type="Texture2D" uid="uid://5bkvwrivrdxv" path="res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png" id="1_eamtk"]
+[ext_resource type="Texture2D" uid="uid://b727p7158rbhj" path="res://Assets/Tilesets/Dungeon/walls_floor.png" id="2_lu3el"]
+[ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png" id="3_miwks"]
+[ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://Assets/Tilesets/Dungeon/Objects.png" id="4_2durb"]
+[ext_resource type="PackedScene" uid="uid://dv6gqt581k6xj" path="res://Scenes/Props/torch.tscn" id="5_d4xp8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1ha0"]
 texture = ExtResource("1_eamtk")
@@ -2098,3 +2099,17 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=703402970]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_a1ha0")
+
+[node name="Torch" parent="." unique_id=563503918 instance=ExtResource("5_d4xp8")]
+position = Vector2(40, -104)
+
+[node name="Spawners" type="Node2D" parent="." unique_id=702995584]
+
+[node name="EnemySpawn_1" type="Marker2D" parent="Spawners" unique_id=178396188]
+position = Vector2(40, -32)
+
+[node name="EnemySpawn_2" type="Marker2D" parent="Spawners" unique_id=904099223]
+position = Vector2(-48, -8)
+
+[node name="EnemySpawn_3" type="Marker2D" parent="Spawners" unique_id=124005211]
+position = Vector2(24, 24)

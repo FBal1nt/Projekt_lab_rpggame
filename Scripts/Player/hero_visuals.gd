@@ -10,6 +10,8 @@ var sprite: AnimatedSprite2D
 @export var vision_limit: int = 2
 
 var hovered_cell: Vector2i = Vector2i(-99999, -99999)
+var _last_hover_hero_cell: Vector2i = Vector2i(-99999, -99999)
+var _last_hover_hero_pos: Vector2 = Vector2.INF
 
 func setup(p_controller: HeroController) -> void:
 	controller = p_controller
@@ -80,10 +82,14 @@ func update_fog_of_war() -> void:
 func is_tile_in_vision(cell: Vector2i) -> bool:
 	if fog_of_war and fog_of_war.is_initialized:
 		return cell in fog_of_war.current_visible_cells
-	if controller:
-		var diff = cell - controller.grid_pos
-		return maxi(absi(diff.x), absi(diff.y)) <= vision_limit
-	return true
+	return _is_tile_within_vision_limit(cell)
+
+func _is_tile_within_vision_limit(cell: Vector2i) -> bool:
+	if controller == null:
+		return true
+	var diff: Vector2i = cell - controller.grid_pos
+	var radius_tiles: float = float(vision_limit) + 0.5
+	return float(diff.x * diff.x + diff.y * diff.y) <= radius_tiles * radius_tiles
 
 func process_hover() -> void:
 	var grid_mgr = controller.mover.grid_manager if (controller and controller.mover) else null
@@ -91,8 +97,12 @@ func process_hover() -> void:
 
 	var fl = grid_mgr.floor_layer
 	var current_cell = fl.local_to_map(fl.to_local(get_global_mouse_position()))
-	if current_cell != hovered_cell:
+	var hero_cell: Vector2i = controller.grid_pos if controller else Vector2i.ZERO
+	var hero_pos: Vector2 = controller.global_position if controller else Vector2.ZERO
+	if current_cell != hovered_cell or hero_cell != _last_hover_hero_cell or not hero_pos.is_equal_approx(_last_hover_hero_pos):
 		hovered_cell = current_cell
+		_last_hover_hero_cell = hero_cell
+		_last_hover_hero_pos = hero_pos
 		queue_redraw()
 
 func _draw() -> void:
@@ -117,9 +127,31 @@ func _draw() -> void:
 		var border_color = Color(1.0, 0.2, 0.2, 1.0) if in_range else Color(0.6, 0.2, 0.2, 0.6)
 		draw_rect(rect, fill_color, true)
 		draw_rect(rect, border_color, false, 2.0)
-	else:
-		var blocked = grid_mgr.is_cell_solid(hovered_cell) or not in_vision
-		var fill_color = Color(0.9, 0.2, 0.2, 0.25) if blocked else Color(1.0, 1.0, 1.0, 0.15)
-		var border_color = Color(0.9, 0.2, 0.2, 0.9) if blocked else Color(1.0, 0.9, 0.3, 0.9)
-		draw_rect(rect, fill_color, true)
-		draw_rect(rect, border_color, false, 1.5)
+	elif hovered_cell != controller.grid_pos and in_vision and _is_tile_within_vision_limit(hovered_cell) and not grid_mgr.is_cell_solid(hovered_cell):
+		_draw_move_target_indicator(rect)
+
+func _draw_move_target_indicator(rect: Rect2) -> void:
+	var inner: Rect2 = rect.grow(-1.0)
+	if inner.size.x <= 2.0 or inner.size.y <= 2.0:
+		inner = rect
+
+	# Finom áttetsző mezőkiemelés és diszkrét belső keret
+	draw_rect(inner, Color(0.55, 0.85, 1.0, 0.14), true)
+	draw_rect(inner, Color(0.65, 0.90, 1.0, 0.28), false, 1.0)
+
+	# Négy sarkon L-alakú célkereszt (pixel-éles mozgásjelző)
+	var arm: float = clampf(minf(inner.size.x, inner.size.y) * 0.28, 3.0, 5.0)
+	var corner_col := Color(0.75, 0.94, 1.0, 0.92)
+	var l := inner.position.x
+	var r := inner.end.x
+	var t := inner.position.y
+	var b := inner.end.y
+
+	draw_line(Vector2(l, t), Vector2(l + arm, t), corner_col, 1.5)
+	draw_line(Vector2(l, t), Vector2(l, t + arm), corner_col, 1.5)
+	draw_line(Vector2(r - arm, t), Vector2(r, t), corner_col, 1.5)
+	draw_line(Vector2(r, t), Vector2(r, t + arm), corner_col, 1.5)
+	draw_line(Vector2(l, b), Vector2(l + arm, b), corner_col, 1.5)
+	draw_line(Vector2(l, b - arm), Vector2(l, b), corner_col, 1.5)
+	draw_line(Vector2(r - arm, b), Vector2(r, b), corner_col, 1.5)
+	draw_line(Vector2(r, b - arm), Vector2(r, b), corner_col, 1.5)

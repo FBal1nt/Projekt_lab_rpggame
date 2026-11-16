@@ -1,382 +1,584 @@
 extends Panel
 
 const UI_THEME = preload("res://Scripts/UI/ui_theme.gd")
+const CLASS_VISUAL_HELPER = preload("res://Scripts/Utils/ClassVisualHelper.gd")
+const CHARACTER_CREATION_OVERLAY_SCENE: PackedScene = preload("res://Scenes/UI/CharacterCreationOverlay.tscn")
+
+const SLOT_ORDER: Array[StringName] = [&"weapon", &"shield", &"armor", &"ring", &"earring"]
+const SLOT_LABELS := {
+	&"weapon": "Fegyver",
+	&"shield": "Pajzs",
+	&"armor": "Páncél",
+	&"ring": "Gyűrű",
+	&"earring": "Fülbevaló"
+}
 
 @onready var title_label: Label = $Title
 @onready var close_button: Button = $CloseButton
 
-var character_selector: OptionButton
-var character_details: Label
-var character_name_input: LineEdit
-var class_selector: OptionButton
+var roster_summary_label: Label
 var status_label: Label
-var create_button: Button
-
-var portrait_panel: Panel
-var portrait_texture: TextureRect
-var portrait_fallback: Label
-var class_heading: Label
-var role_label: Label
-var description_label: Label
-var stats_heading: Label
+var new_character_button: Button
+var character_list_vbox: VBoxContainer
+var detail_empty_label: Label
+var detail_content: VBoxContainer
+var preview_stage_panel: PanelContainer
+var preview_viewport: SubViewport
+var preview_sprite: AnimatedSprite2D
+var hero_name_label: Label
+var hero_sub_label: Label
+var hero_desc_label: Label
 var stats_grid: GridContainer
+var equipment_label: Label
 var skills_label: Label
-var selected_class_id: StringName = &"swordsman"
+
+var _creation_layer: CanvasLayer
+var _creation_overlay: CharacterCreationOverlay
 var _is_refreshing: bool = false
 
-
-# -----------------------------------------------------------------------------
-# UI construction
-# -----------------------------------------------------------------------------
 
 func _ready() -> void:
 	title_label.position = Vector2(24, 18)
 	title_label.size = Vector2(852, 42)
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_label.text = "KARAKTEREK ÉS OSZTÁLYOK"
+	title_label.text = "MENTETT KARAKTEREK"
 
 	close_button.position = Vector2(710, 558)
 	close_button.size = Vector2(160, 42)
 	close_button.text = "BEZÁRÁS"
 
 	_build_content()
+	_build_bottom_create_button()
+
 	if not GameState.characters_changed.is_connected(refresh):
 		GameState.characters_changed.connect(refresh)
 	if not GameState.state_changed.is_connected(refresh):
 		GameState.state_changed.connect(refresh)
 	if not GameState.active_character_changed.is_connected(_on_active_character_changed):
 		GameState.active_character_changed.connect(_on_active_character_changed)
+	if not visibility_changed.is_connected(_on_visibility_changed):
+		visibility_changed.connect(_on_visibility_changed)
 	refresh()
 
 
 func _build_content() -> void:
 	var content := VBoxContainer.new()
-	content.name = "CharacterManagerContent"
-	content.position = Vector2(24, 72)
-	content.size = Vector2(852, 472)
-	content.add_theme_constant_override("separation", 6)
+	content.name = "CharacterRosterContent"
+	content.position = Vector2(24, 70)
+	content.size = Vector2(852, 474)
+	content.add_theme_constant_override("separation", 10)
 	add_child(content)
 
-	# Active character row.
-	var active_row := HBoxContainer.new()
-	active_row.name = "ActiveCharacterRow"
-	active_row.custom_minimum_size = Vector2(0, 34)
-	active_row.add_theme_constant_override("separation", 10)
-	content.add_child(active_row)
+	var top_bar := HBoxContainer.new()
+	top_bar.add_theme_constant_override("separation", 12)
+	content.add_child(top_bar)
 
-	var select_label := Label.new()
-	select_label.text = "AKTÍV KARAKTER"
-	select_label.custom_minimum_size = Vector2(145, 0)
-	select_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	select_label.add_theme_color_override("font_color", UI_THEME.GOLD)
-	select_label.add_theme_font_size_override("font_size", 13)
-	active_row.add_child(select_label)
+	roster_summary_label = Label.new()
+	roster_summary_label.add_theme_color_override("font_color", UI_THEME.GOLD)
+	roster_summary_label.add_theme_font_size_override("font_size", 13)
+	top_bar.add_child(roster_summary_label)
 
-	character_selector = OptionButton.new()
-	character_selector.custom_minimum_size = Vector2(235, 34)
-	character_selector.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	character_selector.add_theme_font_size_override("font_size", 14)
-	active_row.add_child(character_selector)
-	character_selector.item_selected.connect(_on_character_selected)
+	status_label = Label.new()
+	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	status_label.add_theme_color_override("font_color", UI_THEME.MUTED)
+	status_label.add_theme_font_size_override("font_size", 12)
+	top_bar.add_child(status_label)
 
-	character_details = Label.new()
-	character_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	character_details.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	character_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	character_details.add_theme_color_override("font_color", UI_THEME.IVORY)
-	character_details.add_theme_font_size_override("font_size", 12)
-	active_row.add_child(character_details)
+	var split := HBoxContainer.new()
+	split.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	split.add_theme_constant_override("separation", 14)
+	content.add_child(split)
 
-	content.add_child(HSeparator.new())
+	# Left pane: Saved characters in current save
+	var list_panel := PanelContainer.new()
+	list_panel.custom_minimum_size = Vector2(300, 0)
+	list_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	list_panel.clip_contents = true
+	list_panel.add_theme_stylebox_override(
+		"panel",
+		UI_THEME.make_box(Color(0.03, 0.055, 0.085, 0.94), Color(0.35, 0.45, 0.56, 0.9), 2, 10)
+	)
+	split.add_child(list_panel)
 
-	# Class preview: portrait on the left, role/stats/skills on the right.
-	var preview_row := HBoxContainer.new()
-	preview_row.name = "ClassPreviewRow"
-	preview_row.custom_minimum_size = Vector2(0, 218)
-	preview_row.add_theme_constant_override("separation", 16)
-	content.add_child(preview_row)
+	var list_margin := MarginContainer.new()
+	list_margin.add_theme_constant_override("margin_left", 10)
+	list_margin.add_theme_constant_override("margin_top", 10)
+	list_margin.add_theme_constant_override("margin_right", 10)
+	list_margin.add_theme_constant_override("margin_bottom", 10)
+	list_panel.add_child(list_margin)
 
-	portrait_panel = Panel.new()
-	portrait_panel.name = "ClassPortraitPanel"
-	portrait_panel.custom_minimum_size = Vector2(174, 210)
-	UI_THEME.style_panel(portrait_panel, UI_THEME.GOLD, UI_THEME.INK)
-	preview_row.add_child(portrait_panel)
+	var list_vbox := VBoxContainer.new()
+	list_vbox.add_theme_constant_override("separation", 8)
+	list_margin.add_child(list_vbox)
 
-	portrait_texture = TextureRect.new()
-	portrait_texture.name = "ClassPortrait"
-	portrait_texture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	portrait_texture.offset_left = 10
-	portrait_texture.offset_top = 10
-	portrait_texture.offset_right = -10
-	portrait_texture.offset_bottom = -10
-	portrait_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	portrait_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	portrait_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	portrait_panel.add_child(portrait_texture)
+	var list_heading := Label.new()
+	list_heading.text = "MENTÉS KARAKTEREI"
+	list_heading.add_theme_color_override("font_color", UI_THEME.GOLD)
+	list_heading.add_theme_font_size_override("font_size", 12)
+	list_vbox.add_child(list_heading)
 
-	portrait_fallback = Label.new()
-	portrait_fallback.name = "PortraitFallback"
-	portrait_fallback.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	portrait_fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	portrait_fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	portrait_fallback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	portrait_fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	portrait_fallback.add_theme_color_override("font_color", UI_THEME.IVORY)
-	portrait_fallback.add_theme_font_size_override("font_size", 15)
-	portrait_panel.add_child(portrait_fallback)
+	var list_scroll := ScrollContainer.new()
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	list_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	list_vbox.add_child(list_scroll)
 
-	var details := VBoxContainer.new()
-	details.name = "ClassDetails"
-	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	details.add_theme_constant_override("separation", 4)
-	preview_row.add_child(details)
+	character_list_vbox = VBoxContainer.new()
+	character_list_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	character_list_vbox.add_theme_constant_override("separation", 7)
+	list_scroll.add_child(character_list_vbox)
 
-	class_heading = Label.new()
-	class_heading.add_theme_color_override("font_color", UI_THEME.GOLD)
-	class_heading.add_theme_font_size_override("font_size", 23)
-	details.add_child(class_heading)
+	# Right pane: Selected/Active character inspector
+	var detail_panel := PanelContainer.new()
+	detail_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail_panel.clip_contents = true
+	detail_panel.add_theme_stylebox_override(
+		"panel",
+		UI_THEME.make_box(Color(0.035, 0.06, 0.095, 0.95), Color(0.55, 0.45, 0.25, 0.9), 2, 10)
+	)
+	split.add_child(detail_panel)
 
-	role_label = Label.new()
-	role_label.add_theme_color_override("font_color", UI_THEME.MUTED)
-	role_label.add_theme_font_size_override("font_size", 13)
-	details.add_child(role_label)
+	var detail_margin := MarginContainer.new()
+	detail_margin.add_theme_constant_override("margin_left", 16)
+	detail_margin.add_theme_constant_override("margin_top", 14)
+	detail_margin.add_theme_constant_override("margin_right", 16)
+	detail_margin.add_theme_constant_override("margin_bottom", 14)
+	detail_panel.add_child(detail_margin)
 
-	description_label = Label.new()
-	description_label.custom_minimum_size = Vector2(0, 42)
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.add_theme_color_override("font_color", UI_THEME.IVORY)
-	description_label.add_theme_font_size_override("font_size", 13)
-	details.add_child(description_label)
+	var detail_stack := Control.new()
+	detail_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail_stack.clip_contents = true
+	detail_margin.add_child(detail_stack)
 
-	stats_heading = Label.new()
-	stats_heading.text = "ALAPSTATISZTIKÁK · 1. SZINT"
+	detail_empty_label = Label.new()
+	detail_empty_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	detail_empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail_empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	detail_empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail_empty_label.text = "Ebben a mentésben még nincs karakter.\nKattints lent az 'Új karakter létrehozása' gombra!"
+	detail_empty_label.add_theme_color_override("font_color", UI_THEME.MUTED)
+	detail_empty_label.add_theme_font_size_override("font_size", 15)
+	detail_stack.add_child(detail_empty_label)
+
+	detail_content = VBoxContainer.new()
+	detail_content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	detail_content.add_theme_constant_override("separation", 10)
+	detail_content.visible = false
+	detail_stack.add_child(detail_content)
+
+	var hero_header := HBoxContainer.new()
+	hero_header.add_theme_constant_override("separation", 14)
+	detail_content.add_child(hero_header)
+
+	preview_stage_panel = PanelContainer.new()
+	preview_stage_panel.custom_minimum_size = Vector2(104, 104)
+	preview_stage_panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	preview_stage_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	preview_stage_panel.add_theme_stylebox_override("panel", _make_stage_box(UI_THEME.GOLD))
+	hero_header.add_child(preview_stage_panel)
+
+	var vp_margin := MarginContainer.new()
+	vp_margin.add_theme_constant_override("margin_left", 4)
+	vp_margin.add_theme_constant_override("margin_top", 4)
+	vp_margin.add_theme_constant_override("margin_right", 4)
+	vp_margin.add_theme_constant_override("margin_bottom", 4)
+	preview_stage_panel.add_child(vp_margin)
+
+	var vp_container := SubViewportContainer.new()
+	vp_container.stretch = true
+	vp_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vp_container.focus_mode = Control.FOCUS_NONE
+	vp_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vp_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vp_margin.add_child(vp_container)
+	vp_container.set_process_input(false)
+	vp_container.set_process_unhandled_input(false)
+	vp_container.set_process_unhandled_key_input(false)
+
+	preview_viewport = SubViewport.new()
+	preview_viewport.transparent_bg = true
+	preview_viewport.handle_input_locally = false
+	preview_viewport.gui_disable_input = true
+	preview_viewport.physics_object_picking = false
+	preview_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	preview_viewport.size = Vector2i(92, 92)
+	preview_viewport.size_changed.connect(_center_preview_sprite)
+	vp_container.add_child(preview_viewport)
+
+	preview_sprite = AnimatedSprite2D.new()
+	preview_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	preview_sprite.scale = Vector2(2.8, 2.8)
+	preview_sprite.position = Vector2(46, 46)
+	preview_viewport.add_child(preview_sprite)
+
+	var hero_info := VBoxContainer.new()
+	hero_info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hero_info.alignment = BoxContainer.ALIGNMENT_CENTER
+	hero_info.add_theme_constant_override("separation", 3)
+	hero_header.add_child(hero_info)
+
+	hero_name_label = Label.new()
+	hero_name_label.add_theme_color_override("font_color", UI_THEME.IVORY)
+	hero_name_label.add_theme_font_size_override("font_size", 23)
+	hero_info.add_child(hero_name_label)
+
+	hero_sub_label = Label.new()
+	hero_sub_label.add_theme_color_override("font_color", UI_THEME.GOLD)
+	hero_sub_label.add_theme_font_size_override("font_size", 13)
+	hero_info.add_child(hero_sub_label)
+
+	hero_desc_label = Label.new()
+	hero_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hero_desc_label.add_theme_color_override("font_color", UI_THEME.MUTED)
+	hero_desc_label.add_theme_font_size_override("font_size", 12)
+	hero_info.add_child(hero_desc_label)
+
+	var sep1 := HSeparator.new()
+	sep1.add_theme_color_override("color", Color(0.32, 0.42, 0.54, 0.7))
+	detail_content.add_child(sep1)
+
+	var stats_scroll := ScrollContainer.new()
+	stats_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stats_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	detail_content.add_child(stats_scroll)
+
+	var stats_vbox := VBoxContainer.new()
+	stats_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stats_vbox.add_theme_constant_override("separation", 8)
+	stats_scroll.add_child(stats_vbox)
+
+	var stats_heading := Label.new()
+	stats_heading.text = "KARAKTER STATISZTIKÁK"
 	stats_heading.add_theme_color_override("font_color", UI_THEME.GOLD)
 	stats_heading.add_theme_font_size_override("font_size", 12)
-	details.add_child(stats_heading)
+	stats_vbox.add_child(stats_heading)
 
 	stats_grid = GridContainer.new()
-	stats_grid.name = "ClassStatsGrid"
-	stats_grid.columns = 3
+	stats_grid.columns = 2
 	stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stats_grid.add_theme_constant_override("h_separation", 14)
-	stats_grid.add_theme_constant_override("v_separation", 2)
-	details.add_child(stats_grid)
+	stats_grid.add_theme_constant_override("h_separation", 20)
+	stats_grid.add_theme_constant_override("v_separation", 6)
+	stats_vbox.add_child(stats_grid)
+
+	var sep2 := HSeparator.new()
+	sep2.add_theme_color_override("color", Color(0.32, 0.42, 0.54, 0.7))
+	stats_vbox.add_child(sep2)
+
+	equipment_label = Label.new()
+	equipment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	equipment_label.add_theme_color_override("font_color", Color("cfd8e3"))
+	equipment_label.add_theme_font_size_override("font_size", 12)
+	stats_vbox.add_child(equipment_label)
 
 	skills_label = Label.new()
 	skills_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	skills_label.add_theme_color_override("font_color", UI_THEME.MUTED)
 	skills_label.add_theme_font_size_override("font_size", 12)
-	details.add_child(skills_label)
-
-	content.add_child(HSeparator.new())
-
-	var create_heading := Label.new()
-	create_heading.text = "ÚJ KARAKTER LÉTREHOZÁSA"
-	create_heading.add_theme_color_override("font_color", UI_THEME.GOLD)
-	create_heading.add_theme_font_size_override("font_size", 13)
-	content.add_child(create_heading)
-
-	var create_row := HBoxContainer.new()
-	create_row.name = "CreateCharacterRow"
-	create_row.custom_minimum_size = Vector2(0, 38)
-	create_row.add_theme_constant_override("separation", 8)
-	content.add_child(create_row)
-
-	character_name_input = LineEdit.new()
-	character_name_input.placeholder_text = "Karakter neve"
-	character_name_input.custom_minimum_size = Vector2(235, 38)
-	character_name_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	character_name_input.max_length = 28
-	create_row.add_child(character_name_input)
-
-	class_selector = OptionButton.new()
-	class_selector.custom_minimum_size = Vector2(220, 38)
-	class_selector.add_theme_font_size_override("font_size", 14)
-	create_row.add_child(class_selector)
-	class_selector.item_selected.connect(_on_class_selected)
-	_populate_class_selector()
-
-	create_button = Button.new()
-	create_button.text = "KARAKTER LÉTREHOZÁSA"
-	create_button.custom_minimum_size = Vector2(255, 38)
-	create_button.size_flags_horizontal = Control.SIZE_SHRINK_END
-	UI_THEME.style_button(create_button, Color(0.45, 0.75, 0.52, 1.0), true)
-	create_button.add_theme_font_size_override("font_size", 13)
-	create_row.add_child(create_button)
-	create_button.pressed.connect(_on_create_character_pressed)
-	character_name_input.text_submitted.connect(_on_name_submitted)
-
-	status_label = Label.new()
-	status_label.text = "16 osztálydefiníció betöltve · A portrék és harci sprite-ok később kapcsolhatók hozzá."
-	status_label.custom_minimum_size = Vector2(0, 28)
-	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.add_theme_color_override("font_color", UI_THEME.MUTED)
-	status_label.add_theme_font_size_override("font_size", 11)
-	content.add_child(status_label)
+	stats_vbox.add_child(skills_label)
 
 
-# -----------------------------------------------------------------------------
-# Character/class selection and preview
-# -----------------------------------------------------------------------------
-
-func _populate_class_selector() -> void:
-	class_selector.clear()
-	var all_classes := GameState.get_character_classes()
-	for index in range(all_classes.size()):
-		var class_data: CharacterClassData = all_classes[index]
-		class_selector.add_item(class_data.display_name)
-		class_selector.set_item_metadata(index, String(class_data.id))
-
-	if all_classes.is_empty():
-		_set_status("Nem található karakterosztály a Data/CharacterClasses mappában.", false)
-		return
-
-	var active := GameState.get_active_character()
-	var default_id: StringName = active.class_id if active != null else &"warrior"
-	var selected_index := 0
-	for index in range(class_selector.item_count):
-		if StringName(str(class_selector.get_item_metadata(index))) == default_id:
-			selected_index = index
-			break
-	class_selector.select(selected_index)
-	selected_class_id = StringName(str(class_selector.get_item_metadata(selected_index)))
-	_update_class_preview()
+func _build_bottom_create_button() -> void:
+	new_character_button = Button.new()
+	new_character_button.name = "CreateNewCharacterButton"
+	new_character_button.position = Vector2(24, 558)
+	new_character_button.size = Vector2(280, 42)
+	new_character_button.text = "ÚJ KARAKTER LÉTREHOZÁSA"
+	new_character_button.icon = load("res://Assets/UI/Icons/play_sword.png")
+	UI_THEME.style_button(new_character_button, Color(0.45, 0.78, 0.52, 1.0), true)
+	new_character_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	new_character_button.pressed.connect(_open_character_creation_overlay)
+	add_child(new_character_button)
 
 
 func refresh() -> void:
-	if character_selector == null or _is_refreshing:
+	if character_list_vbox == null or _is_refreshing:
 		return
 	_is_refreshing = true
-	character_selector.clear()
-	var selected_index := 0
+
+	for child in character_list_vbox.get_children():
+		child.queue_free()
+
+	var count := GameState.characters.size()
 	var active := GameState.get_active_character()
+	var active_name := active.character_name if active != null else "Nincs"
+	roster_summary_label.text = "%d mentett karakter · Aktív hős: %s" % [count, active_name]
 
-	for index in range(GameState.characters.size()):
-		var character: CharacterProfile = GameState.characters[index]
-		character_selector.add_item(character.character_name)
-		character_selector.set_item_metadata(index, character.id)
-		if character.id == GameState.active_character_id:
-			selected_index = index
+	for character in GameState.characters:
+		_add_character_card(character)
 
-	if GameState.characters.is_empty():
-		character_details.text = "Még nincs karakter. Hozz létre egyet lent."
-	else:
-		character_selector.select(selected_index)
-		if active != null:
-			var active_class := GameState.get_character_class(active.class_id)
-			var stats := GameState.get_character_stats(active)
-			var max_health := int(stats.get("max_health", 0))
-			var class_name_text := active_class.display_name if active_class != null else String(active.class_id)
-			character_details.text = "%s · %d. szint · ÉP %d/%d · Stressz %d" % [
-				class_name_text,
-				active.level,
-				active.current_health if active.current_health >= 0 else max_health,
-				max_health,
-				active.stress
-			]
+	_refresh_active_character_details(active)
 	_is_refreshing = false
 
 
-func _update_class_preview() -> void:
-	if class_selector == null or class_selector.item_count == 0:
-		return
-	var index := class_selector.selected
-	if index < 0 or index >= class_selector.item_count:
+func _add_character_card(character: CharacterProfile) -> void:
+	var class_data := GameState.get_character_class(character.class_id)
+	var is_active: bool = character.id == GameState.active_character_id
+	var accent: Color = class_data.placeholder_color.lightened(0.2) if class_data != null else UI_THEME.GOLD
+
+	var card := Button.new()
+	card.custom_minimum_size = Vector2(0, 58)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.clip_contents = true
+	card.text = ""
+	card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	card.pressed.connect(_on_character_card_pressed.bind(character.id))
+	if is_active:
+		card.add_theme_stylebox_override("normal", UI_THEME.make_box(Color("1c2d3e"), UI_THEME.GOLD, 3, 8))
+		card.add_theme_stylebox_override("hover", UI_THEME.make_box(Color("24394d"), Color("ffe39e"), 3, 8))
+		card.add_theme_stylebox_override("pressed", UI_THEME.make_box(Color("142230"), UI_THEME.GOLD, 3, 8))
+		card.add_theme_stylebox_override("focus", UI_THEME.make_box(Color(0, 0, 0, 0), accent, 2, 8))
+	else:
+		card.add_theme_stylebox_override("normal", UI_THEME.make_box(Color("0d1723"), Color("324456"), 1, 8))
+		card.add_theme_stylebox_override("hover", UI_THEME.make_box(Color("172738"), accent, 2, 8))
+		card.add_theme_stylebox_override("pressed", UI_THEME.make_box(Color("091019"), accent, 2, 8))
+		card.add_theme_stylebox_override("focus", UI_THEME.make_box(Color(0, 0, 0, 0), accent, 1, 8))
+	character_list_vbox.add_child(card)
+
+	var margin := MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(row)
+
+	var thumb_box := UI_THEME.make_box(Color(0.02, 0.03, 0.05, 0.95), accent, 2, 6)
+	thumb_box.content_margin_left = 3
+	thumb_box.content_margin_right = 3
+	thumb_box.content_margin_top = 3
+	thumb_box.content_margin_bottom = 3
+	thumb_box.shadow_size = 0
+	var thumb_frame := PanelContainer.new()
+	thumb_frame.custom_minimum_size = Vector2(44, 44)
+	thumb_frame.add_theme_stylebox_override("panel", thumb_box)
+	thumb_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(thumb_frame)
+
+	var thumb := TextureRect.new()
+	thumb.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	thumb.texture = CLASS_VISUAL_HELPER.get_portrait_texture(character.class_id, class_data)
+	thumb.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	thumb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	thumb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	thumb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	thumb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	thumb_frame.add_child(thumb)
+
+	var text_col := VBoxContainer.new()
+	text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_col.alignment = BoxContainer.ALIGNMENT_CENTER
+	text_col.add_theme_constant_override("separation", 2)
+	text_col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(text_col)
+
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 6)
+	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_col.add_child(title_row)
+
+	var name_lbl := Label.new()
+	name_lbl.text = character.character_name
+	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_lbl.add_theme_color_override("font_color", UI_THEME.GOLD if is_active else UI_THEME.IVORY)
+	name_lbl.add_theme_font_size_override("font_size", 15)
+	name_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(name_lbl)
+
+	if is_active:
+		var badge := Label.new()
+		badge.text = "AKTÍV"
+		badge.add_theme_color_override("font_color", Color("a9d4b6"))
+		badge.add_theme_font_size_override("font_size", 11)
+		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		title_row.add_child(badge)
+
+	var class_name_text := class_data.display_name if class_data != null else String(character.class_id)
+	var sub_lbl := Label.new()
+	sub_lbl.text = "%s · %d. szint" % [class_name_text, character.level]
+	sub_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	sub_lbl.add_theme_color_override("font_color", UI_THEME.MUTED)
+	sub_lbl.add_theme_font_size_override("font_size", 11)
+	sub_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_col.add_child(sub_lbl)
+
+
+func _refresh_active_character_details(active: CharacterProfile) -> void:
+	if active == null:
+		detail_empty_label.visible = true
+		detail_content.visible = false
+		if preview_sprite:
+			preview_sprite.stop()
 		return
 
-	selected_class_id = StringName(str(class_selector.get_item_metadata(index)))
-	var class_data := GameState.get_character_class(selected_class_id)
-	if class_data == null:
-		return
+	detail_empty_label.visible = false
+	detail_content.visible = true
 
-	class_heading.text = class_data.display_name
-	role_label.text = class_data.role
-	description_label.text = class_data.description
-	portrait_panel.add_theme_stylebox_override(
-		"panel",
-		UI_THEME.make_box(UI_THEME.INK, class_data.placeholder_color, 2, 12)
-	)
-	portrait_texture.texture = class_data.portrait
-	portrait_texture.visible = class_data.portrait != null
-	portrait_fallback.visible = class_data.portrait == null
-	portrait_fallback.text = "%s\n\nPORTRÉ\nHOZZÁADÁSA" % class_data.display_name.substr(0, 1).to_upper()
-	portrait_fallback.add_theme_color_override("font_color", class_data.placeholder_color.lightened(0.75))
+	var class_data := GameState.get_character_class(active.class_id)
+	var accent: Color = class_data.placeholder_color.lightened(0.25) if class_data != null else UI_THEME.GOLD
+	preview_stage_panel.add_theme_stylebox_override("panel", _make_stage_box(accent))
+
+	var frames := ClassVisualHelper.get_sprite_frames(active.class_id)
+	preview_sprite.sprite_frames = frames
+	_center_preview_sprite()
+	call_deferred("_center_preview_sprite")
+	if frames != null:
+		if frames.has_animation(&"idle"):
+			preview_sprite.play(&"idle")
+		elif frames.has_animation(&"default"):
+			preview_sprite.play(&"default")
+
+	var class_title := class_data.display_name if class_data != null else String(active.class_id)
+	var role_text := class_data.role if class_data != null else ""
+	hero_name_label.text = active.character_name
+	hero_sub_label.text = "%s%s · %d. szint · Aktív karakter" % [
+		class_title,
+		(" (" + role_text + ")") if not role_text.is_empty() else "",
+		active.level
+	]
+	hero_desc_label.text = class_data.description if class_data != null else ""
 
 	for child in stats_grid.get_children():
-		stats_grid.remove_child(child)
 		child.queue_free()
 
-	var stats := class_data.get_stats_at_level(1)
-	var stat_lines: Array[String] = [
-		"Életerő: %d" % int(stats.get("max_health", 0)),
-		"Sebzés: %d–%d" % [int(stats.get("damage_min", 0)), int(stats.get("damage_max", 0))],
-		"Védelem: %d" % int(stats.get("defense", 0)),
-		"Sebesség: %d" % int(stats.get("speed", 0)),
-		"Pontosság: %d%%" % int(stats.get("accuracy", 0)),
-		"Kritikus: %d%%" % int(stats.get("crit_chance", 0.0)),
-		"Kitérés: %d%%" % int(stats.get("dodge", 0)),
-		"Gyógyítás: %d" % int(stats.get("healing_power", 0)),
-		"Stressztűrés: %d%%" % int(stats.get("stress_resistance", 0))
+	var stats := GameState.get_character_stats(active)
+	var max_health := int(round(float(stats.get("max_health", 0))))
+	var current_health := active.current_health if active.current_health >= 0 else max_health
+	var damage_min := int(round(float(stats.get("damage_min", 0))))
+	var damage_max := int(round(float(stats.get("damage_max", 0))))
+	var defense := int(round(float(stats.get("defense", 0))))
+
+	var stat_items: Array[String] = [
+		"Életerő: %d / %d HP" % [current_health, max_health],
+		"Stressz: %d" % active.stress,
+		"Sebzés: %d–%d" % [damage_min, damage_max],
+		"Védelem: %d" % defense,
+		"Sebesség: %s" % _format_stat_value(stats.get("speed", 0)),
+		"Pontosság: %s%%" % _format_stat_value(stats.get("accuracy", 0)),
+		"Kritikus: %s%%" % _format_stat_value(stats.get("crit_chance", 0)),
+		"Kitérés: %s%%" % _format_stat_value(stats.get("dodge", 0)),
+		"Gyógyerő: %s" % _format_stat_value(stats.get("healing_power", 0)),
+		"Stressztűrés: %s%%" % _format_stat_value(stats.get("stress_resistance", 0))
 	]
-	for stat_text in stat_lines:
-		var stat_label := Label.new()
-		stat_label.text = stat_text
-		stat_label.custom_minimum_size = Vector2(132, 21)
-		stat_label.add_theme_color_override("font_color", UI_THEME.IVORY)
-		stat_label.add_theme_font_size_override("font_size", 12)
-		stats_grid.add_child(stat_label)
+	for item_text in stat_items:
+		var lbl := Label.new()
+		lbl.text = item_text
+		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		lbl.add_theme_color_override("font_color", UI_THEME.IVORY)
+		lbl.add_theme_font_size_override("font_size", 13)
+		stats_grid.add_child(lbl)
 
-	if class_data.skill_names.is_empty():
-		skills_label.text = "Képességek: később definiálhatók."
+	var eq_parts: Array[String] = []
+	for slot in SLOT_ORDER:
+		var slot_title := str(SLOT_LABELS.get(slot, String(slot)))
+		var equipped_item := active.equipment.get(slot, null) as InventoryItem
+		if equipped_item != null and equipped_item.item_data != null:
+			var plus := (" +%d" % equipped_item.upgrade_level) if equipped_item.upgrade_level > 0 else ""
+			eq_parts.append("%s: %s%s" % [slot_title, equipped_item.item_data.display_name, plus])
+		else:
+			eq_parts.append("%s: —" % slot_title)
+	equipment_label.text = "Felszerelés: " + " · ".join(eq_parts)
+
+	if class_data != null and not class_data.skill_names.is_empty():
+		skills_label.text = "Képességek: " + " · ".join(class_data.skill_names)
 	else:
-		skills_label.text = "Kezdő képességek: " + " · ".join(class_data.skill_names)
+		skills_label.text = "Képességek: Alap támadás"
 
 
-# -----------------------------------------------------------------------------
-# User actions and feedback
-# -----------------------------------------------------------------------------
+func _format_stat_value(value: Variant) -> String:
+	var number := float(value)
+	return str(int(round(number))) if is_equal_approx(number, round(number)) else String.num(number, 1)
 
-func _on_character_selected(index: int) -> void:
-	if _is_refreshing or index < 0 or index >= character_selector.item_count:
-		return
-	var selected_id := str(character_selector.get_item_metadata(index))
-	if GameState.select_character(selected_id):
+
+func _on_character_card_pressed(character_id: String) -> void:
+	if GameState.select_character(character_id):
 		var active := GameState.get_active_character()
 		if active != null:
 			_set_status("Aktív karakter: " + active.character_name, true)
 	refresh()
 
 
-func _on_class_selected(_index: int) -> void:
-	_update_class_preview()
+func _open_character_creation_overlay() -> void:
+	_ensure_creation_overlay()
+	_creation_layer.visible = true
+	_creation_overlay.open_for_new_character()
 
 
-func _on_create_character_pressed() -> void:
-	var clean_name := character_name_input.text.strip_edges()
-	if clean_name.is_empty():
-		_set_status("Adj nevet az új karakternek.", false)
+func _ensure_creation_overlay() -> void:
+	if _creation_layer != null:
 		return
+	_creation_layer = CanvasLayer.new()
+	_creation_layer.name = "InGameCharacterCreationLayer"
+	_creation_layer.layer = 60
+	_creation_layer.visible = false
+	add_child(_creation_layer)
 
-	for character in GameState.characters:
-		if character.character_name.strip_edges().to_lower() == clean_name.to_lower():
-			_set_status("Már létezik karakter ezzel a névvel.", false)
-			return
+	_creation_overlay = CHARACTER_CREATION_OVERLAY_SCENE.instantiate() as CharacterCreationOverlay
+	_creation_overlay.name = "CharacterCreationOverlay"
+	_creation_overlay.character_confirmed.connect(_on_new_character_confirmed)
+	_creation_overlay.back_requested.connect(_close_character_creation_overlay)
+	_creation_layer.add_child(_creation_overlay)
 
-	if GameState.create_character(clean_name, selected_class_id):
-		character_name_input.clear()
-		_set_status("Karakter létrehozva és aktiválva: " + clean_name, true)
+
+func _close_character_creation_overlay() -> void:
+	if _creation_overlay != null:
+		_creation_overlay.close_overlay()
+	if _creation_layer != null:
+		_creation_layer.visible = false
+
+
+func _on_new_character_confirmed(character_name: String, class_id: StringName) -> void:
+	if GameState.create_character(character_name, class_id):
+		_close_character_creation_overlay()
+		_set_status("Új karakter létrehozva és aktiválva: " + character_name, true)
 		refresh()
 	else:
-		_set_status("Nem sikerült létrehozni a karaktert. Ellenőrizd az osztályt és a nevet.", false)
-
-
-func _on_name_submitted(_text: String) -> void:
-	_on_create_character_pressed()
+		_close_character_creation_overlay()
+		_set_status("Nem sikerült létrehozni a karaktert.", false)
 
 
 func _on_active_character_changed(_character_id: String) -> void:
 	refresh()
+
+
+func _on_visibility_changed() -> void:
+	if not visible:
+		_close_character_creation_overlay()
+	else:
+		call_deferred("_center_preview_sprite")
+
+
+func _make_stage_box(border_color: Color) -> StyleBoxFlat:
+	var box := UI_THEME.make_box(Color(0.02, 0.03, 0.055, 0.98), border_color, 2, 10)
+	box.content_margin_left = 2.0
+	box.content_margin_right = 2.0
+	box.content_margin_top = 2.0
+	box.content_margin_bottom = 2.0
+	box.shadow_size = 0
+	return box
+
+
+func _center_preview_sprite() -> void:
+	if preview_viewport == null or preview_sprite == null:
+		return
+	var vp_size := Vector2(preview_viewport.size)
+	if vp_size.x <= 0.0 or vp_size.y <= 0.0:
+		return
+	var active := GameState.get_active_character()
+	var center_offset := ClassVisualHelper.get_visual_center_offset(active.class_id, &"idle") if active != null else Vector2.ZERO
+	preview_sprite.position = vp_size * 0.5 - center_offset * preview_sprite.scale
 
 
 func _set_status(message: String, success: bool = false) -> void:

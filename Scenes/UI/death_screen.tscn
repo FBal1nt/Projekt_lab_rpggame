@@ -1,0 +1,258 @@
+[gd_scene format=3 uid="uid://c8deathui7p2q"]
+
+[ext_resource type="Script" uid="uid://doefuaohruiib" path="res://Scripts/UI/death_screen.gd" id="1_death"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_death_panel"]
+content_margin_left = 22.0
+content_margin_top = 20.0
+content_margin_right = 22.0
+content_margin_bottom = 20.0
+bg_color = Color(0.08, 0.09, 0.14, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.68, 0.24, 0.26, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skull_badge"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16, 0.09, 0.12, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.28, 0.28, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_summary_badge"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.14, 0.22, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.32, 0.44, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_restart_normal"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.13, 0.17, 0.27, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.54, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_restart_pressed"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.12, 0.19, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.36, 0.2, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_restart_hover"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.2, 0.25, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.78, 0.42, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_menu_normal"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.18, 0.12, 0.12, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 0.25, 0.25, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_menu_pressed"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.08, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.15, 0.15, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_menu_hover"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.32, 0.16, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.35, 0.35, 1)
+anti_aliasing = false
+
+[node name="DeathScreen" type="CanvasLayer" unique_id=147964266]
+process_mode = 3
+layer = 120
+script = ExtResource("1_death")
+
+[node name="Root" type="Control" parent="." unique_id=1848262554]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="Root" unique_id=874769754]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.04, 0.07, 0.86)
+
+[node name="CenterContainer" type="CenterContainer" parent="Root" unique_id=2083768641]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeathPanel" type="PanelContainer" parent="Root/CenterContainer" unique_id=14616474]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_death_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Root/CenterContainer/DeathPanel" unique_id=1238577363]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HeaderBox" type="VBoxContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer" unique_id=353128462]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SkullCenter" type="CenterContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox" unique_id=1466215997]
+layout_mode = 2
+
+[node name="SkullBadge" type="PanelContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox/SkullCenter" unique_id=1327748176]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_skull_badge")
+
+[node name="SkullLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox/SkullCenter/SkullBadge" unique_id=1603775120]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.35, 0.35, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 24
+text = "☠️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox" unique_id=1595676324]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.28, 0.32, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
+text = "MEGHALTÁL"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox" unique_id=964159452]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.8, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "A dungeon sötétsége elnyelte a hősödet."
+horizontal_alignment = 1
+
+[node name="SummaryBadge" type="PanelContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer" unique_id=2147233834]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_summary_badge")
+
+[node name="SummaryVBox" type="VBoxContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge" unique_id=1852823501]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeroSummaryLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=1954121025]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.92, 0.8, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "⚔️ Kardforgató • Szint 1"
+horizontal_alignment = 1
+
+[node name="RunSummaryLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=2037941049]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.75, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "🏰 Elfeledett Kripta • Közepes"
+horizontal_alignment = 1
+
+[node name="ButtonsRow" type="HBoxContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer" unique_id=1881385228]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RestartButton" type="Button" parent="Root/CenterContainer/DeathPanel/VBoxContainer/ButtonsRow" unique_id=1943367306]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.98, 0.92, 0.78, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_restart_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_restart_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_restart_hover")
+text = "🔄 DUNGEON ÚJRAINDÍTÁSA"
+
+[node name="MenuButton" type="Button" parent="Root/CenterContainer/DeathPanel/VBoxContainer/ButtonsRow" unique_id=1166599181]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.72, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_menu_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_menu_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_menu_hover")
+text = "🏠 VISSZA A MENÜBE"

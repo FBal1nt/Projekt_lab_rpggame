@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Weapons/healing_staff.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"healing_staff"
+display_name = "Gyógyító bot"
+description = "Smaragdköves szent pálca, amely felerősíti a gyógyító varázslatokat és távolról is sújt az ellenségre."
+icon = ExtResource("2")
+size = Vector2i(1, 3)
+max_stack = 1
+buy_price = 46
+sell_price = 23
+item_type = &"weapon"
+equipment_slot = &"weapon"
+can_upgrade = true
+max_upgrade_level = 5
+base_stats = {
+"damage": 7.0,
+"healing_power": 15.0
+}
+upgrade_stat_bonuses = {
+"damage": 1.0,
+"healing_power": 4.0
+}

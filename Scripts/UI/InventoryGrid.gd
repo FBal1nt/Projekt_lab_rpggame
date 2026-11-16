@@ -6,7 +6,7 @@ signal item_selected(item: InventoryItem)
 signal action_feedback(message: String, is_success: bool)
 
 
-@export var cell_size: int = 64
+@export var cell_size: int = 42
 
 var inventory: Inventory
 var peer_grid: InventoryGrid = null
@@ -124,35 +124,24 @@ func _draw() -> void:
 		inventory.height * cell_size
 	)
 
-	# Háttér
-	draw_rect(
-		Rect2(Vector2.ZERO, grid_size),
-		Color(0.12, 0.12, 0.12, 1.0)
-	)
-
-	# Függőleges vonalak
+	# Darkest Dungeon-inspired worn leather/wood grid with recessed cells and brass borders.
+	draw_rect(Rect2(Vector2.ZERO, grid_size), Color(0.055, 0.040, 0.034, 1.0))
+	for y in range(inventory.height):
+		for x in range(inventory.width):
+			var shade := 0.0 if (x + y) % 2 == 0 else 0.012
+			draw_rect(
+				Rect2(Vector2(x * cell_size + 1, y * cell_size + 1), Vector2(cell_size - 2, cell_size - 2)),
+				Color(0.105 + shade, 0.078 + shade, 0.064 + shade, 1.0)
+			)
 	for x in range(inventory.width + 1):
 		var start := Vector2(x * cell_size, 0)
 		var end := Vector2(x * cell_size, grid_size.y)
-
-		draw_line(
-			start,
-			end,
-			Color(0.35, 0.35, 0.35, 1.0),
-			1.0
-		)
-
-	# Vízszintes vonalak
+		draw_line(start, end, Color(0.31, 0.22, 0.15, 1.0), 1.0)
 	for y in range(inventory.height + 1):
 		var start := Vector2(0, y * cell_size)
 		var end := Vector2(grid_size.x, y * cell_size)
-
-		draw_line(
-			start,
-			end,
-			Color(0.35, 0.35, 0.35, 1.0),
-			1.0
-		)
+		draw_line(start, end, Color(0.31, 0.22, 0.15, 1.0), 1.0)
+	draw_rect(Rect2(Vector2.ZERO, grid_size), Color(0.63, 0.43, 0.25, 1.0), false, 2.0)
 
 
 func refresh() -> void:
@@ -179,6 +168,7 @@ func create_item_visual(inventory_item: InventoryItem) -> void:
 	var item_panel := Panel.new()
 
 	item_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	item_panel.add_theme_stylebox_override("panel", _make_item_style(inventory_item == selected_item, inventory_item.item_data.item_type))
 
 	var item_position := inventory_item.position
 	var item_size := inventory_item.item_data.size
@@ -251,39 +241,60 @@ func create_item_visual(inventory_item: InventoryItem) -> void:
 
 	if inventory_item.amount > 1:
 		var amount_label := Label.new()
-
 		amount_label.text = str(inventory_item.amount)
-
 		amount_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		amount_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-
+		amount_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		amount_label.set_anchors_and_offsets_preset(
 			Control.PRESET_FULL_RECT
 		)
-
+		amount_label.offset_right = -3
+		amount_label.offset_bottom = -1
+		amount_label.add_theme_font_size_override("font_size", 12)
+		amount_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 1))
+		amount_label.add_theme_constant_override("shadow_offset_x", 1)
+		amount_label.add_theme_constant_override("shadow_offset_y", 1)
 		item_panel.add_child(amount_label)
 
 func select_item(item: InventoryItem) -> void:
 	selected_item = item
 	preview_cell = Vector2i(-1, -1)
-
-	print("Selected item: ", item.item_data.display_name)
-
-	item_selected.emit(item)
-
+	for item_ref in item_visuals:
+		var visual := item_visuals[item_ref] as Panel
+		if visual != null and item_ref is InventoryItem:
+			visual.add_theme_stylebox_override("panel", _make_item_style(item_ref == selected_item, item_ref.item_data.item_type))
+	if item != null and item.item_data != null:
+		item_selected.emit(item)
+	else:
+		item_selected.emit(null)
 	queue_redraw()
 
 func is_item_selected(item: InventoryItem) -> bool:
 	return selected_item == item
 
 func create_selected_style() -> StyleBoxFlat:
+	return _make_item_style(true, &"other")
+
+
+func _make_item_style(selected: bool, item_type: StringName) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-
-	style.bg_color = Color(0.25, 0.25, 0.35, 1.0)
-	style.border_color = Color(1.0, 0.85, 0.2, 1.0)
-
-	style.set_border_width_all(3)
-
+	var accent := Color(0.67, 0.49, 0.29, 1.0)
+	match item_type:
+		&"weapon": accent = Color(0.77, 0.58, 0.34, 1.0)
+		&"shield", &"armor": accent = Color(0.54, 0.63, 0.66, 1.0)
+		&"ring", &"earring": accent = Color(0.72, 0.68, 0.43, 1.0)
+		&"ammo": accent = Color(0.58, 0.67, 0.42, 1.0)
+		&"consumable": accent = Color(0.56, 0.32, 0.30, 1.0)
+	style.bg_color = Color(0.13, 0.095, 0.075, 0.98)
+	style.border_color = Color(1.0, 0.78, 0.39, 1.0) if selected else accent
+	style.set_border_width_all(3 if selected else 2)
+	style.set_corner_radius_all(3)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.6)
+	style.shadow_size = 3 if selected else 1
+	style.content_margin_left = 2
+	style.content_margin_right = 2
+	style.content_margin_top = 2
+	style.content_margin_bottom = 2
 	return style
 
 func get_cell_from_mouse_position(mouse_position: Vector2) -> Vector2i:

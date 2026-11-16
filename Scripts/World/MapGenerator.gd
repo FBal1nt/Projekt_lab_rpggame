@@ -27,16 +27,23 @@ extends Node2D
 @export var grid_manager: GridManager
 
 signal map_generation_started
+signal map_generation_progress(progress: float, stage_text: String)
 signal map_generation_completed
 
 enum Difficulty { EASY, MEDIUM, HARD }
+
+const ENEMY_SPAWNER_SCRIPT := preload("res://Scripts/World/EnemySpawner.gd")
 
 # === BELSŐ VÁLTOZÓK ===
 var open_doors: Array = []
 var rooms_spawned: int = 0
 var start_room_node: Node2D = null
+var boss_room_node: Node2D = null
+var placed_rooms: Array[Dictionary] = []
 var player_spawn_pos: Vector2 = Vector2.ZERO
 var is_generating: bool = false
+var current_difficulty: Difficulty = Difficulty.MEDIUM
+var enemies_container: Node2D = null
 
 const OPPOSITES = {
 	"felso": "also",
@@ -46,6 +53,7 @@ const OPPOSITES = {
 }
 
 func apply_difficulty(diff: Difficulty) -> void:
+	current_difficulty = diff
 	match diff:
 		Difficulty.EASY:
 			max_rooms = 15
@@ -56,6 +64,13 @@ func apply_difficulty(diff: Difficulty) -> void:
 		Difficulty.HARD:
 			max_rooms = 35
 			max_depth = 8
+
+
+func _difficulty_to_id(diff: Difficulty) -> String:
+	match diff:
+		Difficulty.EASY: return "easy"
+		Difficulty.HARD: return "hard"
+		_: return "normal"
 
 func _ready() -> void:
 	# Nehézség és Seed beállítása a GameState.run_state alapján, ha van
@@ -90,6 +105,7 @@ func generate_map(p_max_rooms: int = -1, p_max_depth: int = -1) -> void:
 		max_depth = p_max_depth
 
 	print("[MapGenerator] Pálya generálása indítva -> Max szobák: ", max_rooms, " | Max mélység: ", max_depth)
+	map_generation_progress.emit(0.05, "Kezdőszoba előkészítése...")
 
 	# 1. Kezdőszoba lerakása
 	if not _spawn_starter_room():
@@ -97,15 +113,18 @@ func generate_map(p_max_rooms: int = -1, p_max_depth: int = -1) -> void:
 		return
 
 	print("--- 1. LÉPÉS: Kezdőszoba lerakva ---")
+	map_generation_progress.emit(0.10, "Labirintus szobák építése...")
 
 	# 2. Normál szobák fűzése
 	await _generate_branches()
 	print("--- 2. LÉPÉS: Normál szobák lerakva (", rooms_spawned, " db) ---")
 
 	# 3. Boss szoba + Reward szoba + Falak lehelyezése
+	map_generation_progress.emit(0.70, "Főellenség termének kialakítása...")
 	await _place_boss_room()
 
 	# 4. Maradék nyitott folyosóvégek lefalazása
+	map_generation_progress.emit(0.78, "Pálya rétegeinek összeállítása...")
 	_close_remaining_doors()
 	print("--- GENERÁLÁS KÉSZ! Összesen lerakott szoba: ", rooms_spawned, " ---")
 
@@ -116,15 +135,24 @@ func generate_map(p_max_rooms: int = -1, p_max_depth: int = -1) -> void:
 	_setup_world_systems()
 
 	is_generating = false
+	map_generation_progress.emit(1.0, "Pálya elkészült!")
 	map_generation_completed.emit()
 
 
 func _reset_generator() -> void:
 	open_doors.clear()
+	placed_rooms.clear()
 	rooms_spawned = 0
 	start_room_node = null
+	boss_room_node = null
 	for child in get_children():
 		child.queue_free()
+	var container := _get_enemies_container(false)
+	if container != null:
+		for enemy_child in container.get_children():
+			if enemy_child.is_in_group("enemies"):
+				enemy_child.remove_from_group("enemies")
+			enemy_child.queue_free()
 
 
 func _spawn_starter_room() -> bool:
@@ -137,6 +165,7 @@ func _spawn_starter_room() -> bool:
 	start_room.global_position = Vector2.ZERO
 	rooms_spawned += 1
 	start_room_node = start_room
+	placed_rooms.append({"node": start_room, "depth": 0, "kind": "start"})
 
 	var spawn_marker = start_room.find_child("Player_Spawn", true, false) as Marker2D
 	if not spawn_marker:
@@ -193,6 +222,9 @@ func _generate_branches() -> void:
 
 			room.visible = true
 			rooms_spawned += 1
+			placed_rooms.append({"node": room, "depth": int(target_door["depth"]) + 1, "kind": "normal"})
+			var branch_ratio := clampf(float(rooms_spawned) / float(maxi(1, max_rooms)), 0.0, 1.0)
+			map_generation_progress.emit(0.10 + branch_ratio * 0.56, "Labirintus szobák építése (%d/%d)..." % [rooms_spawned, max_rooms])
 			_register_doors(room, target_door["depth"] + 1, required_dir)
 			room_placed = true
 			break
@@ -233,6 +265,8 @@ func _place_boss_room() -> void:
 			else:
 				boss_room.visible = true
 				rooms_spawned += 1
+				boss_room_node = boss_room
+				placed_rooms.append({"node": boss_room, "depth": int(target_door["depth"]) + 1, "kind": "boss"})
 				open_doors.remove_at(i) # Kiemeljük a bejárati ajtót
 
 				print("--- BOSS SZOBA elhelyezve! Pozíció: ", boss_room.global_position, " ---")
@@ -292,6 +326,7 @@ func _handle_boss_room_exits(boss_room: Node2D, entry_dir: String) -> void:
 					else:
 						reward_room.visible = true
 						rooms_spawned += 1
+						placed_rooms.append({"node": reward_room, "depth": max_depth + 1, "kind": "exit"})
 						reward_placed = true
 						reward_door_index = idx
 						print(" -> Reward Room csatlakoztatva a Boss szoba '", b_door["dir"], "' ajtajára!")
@@ -432,6 +467,7 @@ func _setup_world_systems() -> void:
 		grid_manager = get_tree().get_first_node_in_group("grid_manager") as GridManager
 
 	if grid_manager and master_floor:
+		map_generation_progress.emit(0.84, "Útvonalhálózat felépítése...")
 		grid_manager.floor_layer = master_floor
 		grid_manager.wall_layer = master_wall
 		grid_manager.decoratives_layer = master_decoratives
@@ -440,6 +476,7 @@ func _setup_world_systems() -> void:
 	if player == null:
 		player = get_tree().get_first_node_in_group("player") as HeroController
 
+	var hero_cell := Vector2i.ZERO
 	if player and master_floor:
 		player.floor_layer = master_floor
 		player.wall_layer = master_wall
@@ -449,20 +486,59 @@ func _setup_world_systems() -> void:
 		# Játékos a kezdőszoba Player_Spawn pontjára igazítása
 		player.global_position = player_spawn_pos
 		var spawn_grid = master_floor.local_to_map(master_floor.to_local(player_spawn_pos))
+		hero_cell = spawn_grid
 		player.grid_pos = spawn_grid
 		player.position = master_floor.map_to_local(spawn_grid)
 		if player.mover:
 			player.mover.setup(player)
 
 	if fog_of_war and master_floor:
+		map_generation_progress.emit(0.90, "Köd és fáklyák inicializálása...")
 		fog_of_war.floor_layer = master_floor
 		fog_of_war.wall_layer = master_wall
 		fog_of_war.decoratives_layer = master_decoratives
 		fog_of_war.torch_layer = master_torch
 		fog_of_war.init_fog()
 
+	map_generation_progress.emit(0.95, "Szörnyek idézése...")
+	_spawn_enemies(hero_cell)
+
 	if player and player.visuals and player.visuals.has_method("update_fog_of_war"):
 		player.visuals.fog_of_war = fog_of_war
 		player.visuals.update_fog_of_war()
 
-	print("[MapGenerator] MINDEN RENDSZER KÉSZ! Random_map sikeresen generálva és felépítve.")
+	print("[MapGenerator] MINDEN RENDSZER KÉSZ! Pálya sikeresen generálva és felépítve.")
+
+
+func _get_enemies_container(create_if_missing: bool = true) -> Node2D:
+	if enemies_container != null and is_instance_valid(enemies_container):
+		return enemies_container
+
+	var host := get_parent() if get_parent() != null else self
+	var existing := host.get_node_or_null("Enemies") as Node2D
+	if existing != null:
+		enemies_container = existing
+		return enemies_container
+
+	if not create_if_missing:
+		return null
+
+	var container := Node2D.new()
+	container.name = "Enemies"
+	host.add_child(container)
+	enemies_container = container
+	return enemies_container
+
+
+func _spawn_enemies(hero_cell: Vector2i) -> void:
+	var container := _get_enemies_container(true)
+	var spawner := ENEMY_SPAWNER_SCRIPT.new()
+	spawner.populate_dungeon(
+		placed_rooms,
+		container,
+		grid_manager,
+		fog_of_war,
+		hero_cell,
+		max_depth,
+		_difficulty_to_id(current_difficulty)
+	)

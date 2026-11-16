@@ -6,7 +6,7 @@
 script = ExtResource("1_script")
 id = &"archer"
 display_name = "Íjász"
-role = "Távolsági sebző (Lőtáv: 5)"
+role = "Távolsági íjász"
 description = "Gyors és pontos távolsági harcos. Lőtávolsága 5 mező, alap életereje 85 HP, sebzése 15, magas (14.0) kezdeményezéssel."
 placeholder_color = Color(0.2, 0.6, 0.3, 1)
 base_health = 85
@@ -23,6 +23,5 @@ health_per_level = 10
 damage_min_per_level = 1
 damage_max_per_level = 2
 defense_per_level = 1
-skill_ids = PackedStringArray("arrow_shot")
 skill_names = PackedStringArray("Nyíllövés (5 mező)")
-starting_equipment_ids = PackedStringArray()
+starting_equipment_ids = PackedStringArray("short_bow", "arrow")

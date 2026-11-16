@@ -2,70 +2,711 @@
 
 [ext_resource type="Script" uid="uid://b3q24efey7ssb" path="res://Scripts/UI/battle_dialog.gd" id="1_jngcs"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_panel"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.08, 0.09, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.54, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hero_panel"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.08, 0.09, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.62, 0.88, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_portrait_hero"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.13, 0.2, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.38, 0.56, 0.8, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.12, 0.14, 0.22, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.32, 0.44, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_bg"]
+bg_color = Color(0.14, 0.06, 0.08, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.32, 0.14, 0.16, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.84, 0.22, 0.24, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.45, 0.45, 0.45)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_bg"]
+bg_color = Color(0.09, 0.1, 0.16, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22, 0.26, 0.36, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
+bg_color = Color(0.95, 0.72, 0.22, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_cell"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.12, 0.19, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22, 0.28, 0.4, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enemy_panel"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.08, 0.09, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.76, 0.26, 0.28, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_portrait_enemy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.16, 0.1, 0.13, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.26, 0.28, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_log_panel"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.05, 0.065, 0.1, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.54, 0.45, 0.28, 0.95)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
 [node name="BattleDialog" type="CanvasLayer" unique_id=1849918493]
 layer = 100
 script = ExtResource("1_jngcs")
 
-[node name="Hero" type="PanelContainer" parent="." unique_id=579562526]
-anchors_preset = -1
-offset_right = 256.0
-offset_bottom = 640.0
+[node name="Root" type="Control" parent="." unique_id=248476919]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="HeroBox" type="VBoxContainer" parent="Hero" unique_id=1184170511]
+[node name="HeaderAnchor" type="Control" parent="Root" unique_id=1991588667]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -210.0
+offset_top = 12.0
+offset_right = 210.0
+offset_bottom = 80.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="HeaderPanel" type="PanelContainer" parent="Root/HeaderAnchor" unique_id=445258999]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_panel")
+
+[node name="HeaderVBox" type="VBoxContainer" parent="Root/HeaderAnchor/HeaderPanel" unique_id=902451801]
 layout_mode = 2
+theme_override_constants/separation = 3
 alignment = 1
 
-[node name="HeroNameLabel" type="Label" parent="Hero/HeroBox" unique_id=1676262350]
+[node name="TitleLabel" type="Label" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox" unique_id=2039605439]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.88, 0.45, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 15
+text = "⚔️  1. KÖR  •  PÁRBAJ"
 horizontal_alignment = 1
 
-[node name="HeroHpBar" type="ProgressBar" parent="Hero/HeroBox" unique_id=11144223]
+[node name="TurnBannerLabel" type="Label" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox" unique_id=307535431]
 layout_mode = 2
-
-[node name="HeroStatsLabel" type="Label" parent="Hero/HeroBox" unique_id=115047906]
-layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "◄  A HŐS KÖVETKEZIK"
 horizontal_alignment = 1
 
-[node name="Enemy" type="PanelContainer" parent="." unique_id=1379205553]
-anchors_preset = -1
-offset_left = 896.0
-offset_right = 1152.0
-offset_bottom = 640.0
+[node name="HeroAnchor" type="Control" parent="Root" unique_id=621672212]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 18.0
+offset_top = -188.0
+offset_right = 312.0
+offset_bottom = 178.0
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="EnemyBox" type="VBoxContainer" parent="Enemy" unique_id=1723515112]
+[node name="HeroPanel" type="PanelContainer" parent="Root/HeroAnchor" unique_id=1186197700]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hero_panel")
+
+[node name="HeroVBox" type="VBoxContainer" parent="Root/HeroAnchor/HeroPanel" unique_id=1972325547]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeroTopRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox" unique_id=1236250293]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeroPortraitFrame" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow" unique_id=43611498]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_portrait_hero")
+
+[node name="HeroPortraitTexture" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroPortraitFrame" unique_id=1174407687]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HeroIdentityVBox" type="VBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow" unique_id=1392959861]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
 alignment = 1
 
-[node name="EnemyNameLabel" type="Label" parent="Enemy/EnemyBox" unique_id=75021570]
+[node name="HeroSideTag" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=2018942388]
 layout_mode = 2
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_colors/font_color = Color(0.54, 0.8, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "🛡️  SAJÁT KARAKTER"
 
-[node name="EnemyHpBar" type="ProgressBar" parent="Enemy/EnemyBox" unique_id=1153726435]
+[node name="HeroNameLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=158366644]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.82, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 15
+text = "Kalandor"
+clip_text = true
+
+[node name="HeroClassLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=1846850178]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.8, 0.92, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "Kardforgató  •  Lv. 1"
+clip_text = true
+
+[node name="HeroVitalsBadge" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox" unique_id=728872357]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="HeroVitalsVBox" type="VBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge" unique_id=1927475267]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeroHpHeader" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=1900405765]
 layout_mode = 2
 
-[node name="EnemyStatsLabel" type="Label" parent="Enemy/EnemyBox" unique_id=1024475017]
+[node name="HeroHpTitle" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroHpHeader" unique_id=1296463535]
 layout_mode = 2
-horizontal_alignment = 1
-vertical_alignment = 1
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.55, 0.55, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "❤️ ÉLETERŐ"
 
-[node name="TitleLabel" type="Label" parent="." unique_id=350221307]
-offset_left = 384.00003
-offset_top = 48.000008
-offset_right = 570.0
-offset_bottom = 87.00001
-scale = Vector2(2.065, 2.065)
-theme_type_variation = &"HeaderLarge"
-text = "HARC"
-horizontal_alignment = 1
-uppercase = true
+[node name="HeroHpText" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroHpHeader" unique_id=26213725]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.92, 0.92, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "100 / 100"
+horizontal_alignment = 2
 
-[node name="VSLabel" type="Label" parent="." unique_id=1497590523]
-offset_left = 512.0
-offset_top = 128.0
-offset_right = 553.0
-offset_bottom = 167.0
-scale = Vector2(3.12, 3.12)
-theme_type_variation = &"HeaderLarge"
-text = "VS."
+[node name="HeroHpBar" type="ProgressBar" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=1852609490]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+value = 100.0
+show_percentage = false
+
+[node name="HeroXpHeader" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=925988114]
+layout_mode = 2
+
+[node name="HeroXpTitle" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroXpHeader" unique_id=337714108]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.82, 0.42, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "⭐ TAPASZTALAT"
+
+[node name="HeroXpText" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroXpHeader" unique_id=1586683421]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.86, 0.72, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "0 / 10 XP"
+horizontal_alignment = 2
+
+[node name="HeroXpBar" type="ProgressBar" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=784958079]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_xp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
+max_value = 10.0
+show_percentage = false
+
+[node name="HeroStatsGrid" type="GridContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox" unique_id=911059773]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="HeroAtkBox" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid" unique_id=847671747]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="HeroAtkLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroAtkBox" unique_id=101479264]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.78, 0.56, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "⚔️ Támadás
+12"
 horizontal_alignment = 1
+
+[node name="HeroDefBox" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid" unique_id=594493549]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="HeroDefLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroDefBox" unique_id=724952277]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.85, 0.98, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "🛡️ Védekezés
+2"
+horizontal_alignment = 1
+
+[node name="HeroInitBox" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid" unique_id=1921751173]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="HeroInitLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroInitBox" unique_id=887047044]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.88, 0.48, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "⚡ Kezdeményezés
+10.0"
+horizontal_alignment = 1
+
+[node name="HeroRangeBox" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid" unique_id=1002659530]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="HeroRangeLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroRangeBox" unique_id=11258696]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.94, 0.68, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "🎯 Hatótáv
+1 mező"
+horizontal_alignment = 1
+
+[node name="HeroStatusBadge" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox" unique_id=1207583598]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="HeroStatusLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatusBadge" unique_id=224755711]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.88, 0.98, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "Állapot: Harcra kész"
+autowrap_mode = 2
+
+[node name="EnemyAnchor" type="Control" parent="Root" unique_id=1642552619]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -312.0
+offset_top = -188.0
+offset_right = -18.0
+offset_bottom = 178.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnemyPanel" type="PanelContainer" parent="Root/EnemyAnchor" unique_id=812197529]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_enemy_panel")
+
+[node name="EnemyVBox" type="VBoxContainer" parent="Root/EnemyAnchor/EnemyPanel" unique_id=437661784]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EnemyTopRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox" unique_id=330581499]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="EnemyIdentityVBox" type="VBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow" unique_id=1881604797]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="EnemySideTag" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox" unique_id=971604764]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.48, 0.48, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "💀  ELLENFÉL"
+horizontal_alignment = 2
+
+[node name="EnemyNameLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox" unique_id=1203721854]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.88, 0.84, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 15
+text = "Csontváz"
+horizontal_alignment = 2
+clip_text = true
+
+[node name="EnemyTierLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox" unique_id=995420300]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.7, 0.72, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "Alap  •  Lv. 1"
+horizontal_alignment = 2
+clip_text = true
+
+[node name="EnemyPortraitFrame" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow" unique_id=9833759]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_portrait_enemy")
+
+[node name="EnemyPortraitTexture" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyPortraitFrame" unique_id=1576659667]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="EnemyVitalsBadge" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox" unique_id=844007372]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="EnemyVitalsVBox" type="VBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge" unique_id=429718045]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EnemyHpHeader" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox" unique_id=491031356]
+layout_mode = 2
+
+[node name="EnemyHpTitle" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyHpHeader" unique_id=174800583]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.55, 0.55, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "❤️ ÉLETERŐ"
+
+[node name="EnemyHpText" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyHpHeader" unique_id=232938872]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.92, 0.92, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "45 / 45"
+horizontal_alignment = 2
+
+[node name="EnemyHpBar" type="ProgressBar" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox" unique_id=505396877]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+value = 100.0
+show_percentage = false
+
+[node name="EnemyBossTitleLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox" unique_id=1584776321]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.82, 0.44, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "👑 Titulus: -"
+clip_text = true
+
+[node name="EnemyStatsGrid" type="GridContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox" unique_id=171983685]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="EnemyAtkBox" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid" unique_id=2142992640]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="EnemyAtkLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyAtkBox" unique_id=2067153138]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.72, 0.56, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "⚔️ Támadás
+8"
+horizontal_alignment = 1
+
+[node name="EnemyDefBox" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid" unique_id=345656917]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="EnemyDefLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyDefBox" unique_id=903099003]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.92, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "🛡️ Védekezés
+1"
+horizontal_alignment = 1
+
+[node name="EnemyArmorBox" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid" unique_id=2074819243]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="EnemyArmorLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyArmorBox" unique_id=569500740]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.84, 0.9, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "🪨 Páncél
+0"
+horizontal_alignment = 1
+
+[node name="EnemyInitBox" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid" unique_id=1093131092]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
+
+[node name="EnemyInitLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyInitBox" unique_id=378254544]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.86, 0.48, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "⚡ Kezdeményezés
+8.0"
+horizontal_alignment = 1
+
+[node name="EnemyTraitsBadge" type="PanelContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox" unique_id=2107657492]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="EnemyTraitsLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTraitsBadge" unique_id=1464486261]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.78, 0.78, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "Képességek: Közelharci"
+autowrap_mode = 2
+
+[node name="LogAnchor" type="Control" parent="Root" unique_id=704255938]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -182.0
+offset_right = 330.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="LogPanel" type="PanelContainer" parent="Root/LogAnchor" unique_id=69941521]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_log_panel")
+
+[node name="LogVBox" type="VBoxContainer" parent="Root/LogAnchor/LogPanel" unique_id=375178672]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LogHeader" type="Label" parent="Root/LogAnchor/LogPanel/LogVBox" unique_id=372683141]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.8, 0.52, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "📜  HARCI NAPLÓ"
+
+[node name="LogDivider" type="HSeparator" parent="Root/LogAnchor/LogPanel/LogVBox" unique_id=1948201980]
+modulate = Color(0.75, 0.6, 0.35, 0.45)
+layout_mode = 2
+
+[node name="LogScroll" type="ScrollContainer" parent="Root/LogAnchor/LogPanel/LogVBox" unique_id=138177070]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="LogText" type="RichTextLabel" parent="Root/LogAnchor/LogPanel/LogVBox/LogScroll" unique_id=1813838704]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.88, 0.91, 0.96, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 3
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/normal_font_size = 13
+theme_override_font_sizes/bold_font_size = 13
+bbcode_enabled = true
+fit_content = true
+scroll_active = false

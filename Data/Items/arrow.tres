@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Ammo/arrows.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"arrow"
+display_name = "Nyílvessző"
+description = "Tollazott fa nyílvesszők acélheggyel. Íjjal való lövéskor lövésenként egy fogy el."
+icon = ExtResource("2")
+size = Vector2i(1, 2)
+max_stack = 30
+buy_price = 3
+sell_price = 1
+item_type = &"ammo"
+equipment_slot = &"none"
+can_upgrade = false
+max_upgrade_level = 5
+base_stats = {}
+upgrade_stat_bonuses = {}

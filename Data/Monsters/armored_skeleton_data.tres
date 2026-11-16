@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dkbjkijkx161m"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_x4tx4"]
+[ext_resource type="SpriteFrames" uid="uid://cbgewo4117j0q" path="res://Data/Monsters/armored_skeleton_frames.tres" id="2_pekce"]
+
+[resource]
+script = ExtResource("1_x4tx4")
+monster_id = "armored_skeleton"
+monster_name = "Páncélozott Csontváz"
+title = "a Vascsontú"
+tier = 2
+xp_reward = 5
+sprite_frames = ExtResource("2_pekce")
+max_hp = 50
+base_damage = 10
+defense = 1
+initiative = 8.5
+flat_armor = 4
+special_profile = 1
+knockback_frame_attack_1 = 4
+move_duration = 0.28
+action_interval = 1.3
+aggro_range = 4
+can_self_revive = true
+resurrect_hp_percent = 0.4
+resurrect_delay = 3.0
+can_block = false
+metadata/_custom_type_script = "uid://jfeoccywjufa"

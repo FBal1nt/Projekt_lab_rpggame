@@ -143,10 +143,25 @@ func update_fog_of_war() -> void:
 		visuals.update_fog_of_war()
 
 func _process(_delta: float) -> void:
+	var dm := get_node_or_null("/root/DungeonManager")
+	if dm != null and dm.has_method("is_loading_dungeon") and dm.is_loading_dungeon():
+		return
 	if visuals:
 		visuals.process_hover()
 
+func _mark_input_handled() -> void:
+	if not is_inside_tree():
+		return
+	var vp := get_viewport()
+	if vp != null and vp.is_inside_tree():
+		vp.set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_inside_tree():
+		return
+	var dm := get_node_or_null("/root/DungeonManager")
+	if dm != null and dm.has_method("is_loading_dungeon") and dm.is_loading_dungeon():
+		return
 	if not is_alive() or in_battle or is_attacking or is_stunned:
 		return
 
@@ -163,7 +178,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if move_dir != Vector2i.ZERO:
 		if mover and mover.move_in_direction(move_dir):
-			get_viewport().set_input_as_handled()
+			_mark_input_handled()
 			return
 
 	# 2. Számbillentyűk és képességek
@@ -171,9 +186,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		var code = event.physical_keycode if event.physical_keycode != 0 else event.keycode
 		match code:
 			KEY_F:
-				combat.wizard_element = "fire" if combat.wizard_element == "ice" else "ice"
-				print("🔥/❄️ Varázsló elem váltva: ", combat.wizard_element)
-			KEY_H: combat.cast_priest_self_heal()
+				if combat and active_class and active_class.class_name_id == "Wizard":
+					combat.wizard_element = "fire" if combat.wizard_element == "ice" else "ice"
+					print("🔥/❄️ Varázsló elem váltva: ", combat.wizard_element)
+					if progression:
+						progression.update_hud()
+					_mark_input_handled()
+					return
+			KEY_H:
+				if combat and active_class and active_class.class_name_id == "Priest":
+					combat.cast_priest_self_heal()
+					_mark_input_handled()
+					return
 
 	# 3. Egér kattintások:
 	# Bal klikk: ha ellenségre kattintunk -> támadás, ha üres mezőre -> odasétálás!
@@ -181,14 +205,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		var handled_attack = combat.handle_attack_click() if combat else false
 		if not handled_attack and mover:
 			mover.handle_move_click()
-		get_viewport().set_input_as_handled()
+		_mark_input_handled()
 		return
 
 	# Jobb klikk: közvetlen mozgás parancs
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if mover:
 			mover.handle_move_click()
-		get_viewport().set_input_as_handled()
+		_mark_input_handled()
 		return
 
 func _is_key_pressed(event: InputEvent, keys: Array) -> bool:
@@ -263,3 +287,27 @@ func play_overworld_death() -> void:
 		var last_frame = spr.sprite_frames.get_frame_count("death") - 1
 		spr.frame = last_frame
 		spr.pause()
+
+	var battle_ui := get_tree().get_first_node_in_group("battle_ui")
+	if battle_ui == null or not bool(battle_ui.get("combat_active")):
+		show_death_screen()
+
+
+## Megnyitja a halálképernyőt (és elrejti a HUD-ot)
+func show_death_screen() -> void:
+	var hud := get_tree().get_first_node_in_group("hud")
+	if hud != null:
+		if hud.has_method("set_battle_mode"):
+			hud.set_battle_mode(true)
+		elif "visible" in hud:
+			hud.visible = false
+
+	var death_ui := get_tree().get_first_node_in_group("death_screen")
+	if death_ui == null and ResourceLoader.exists("res://Scenes/UI/death_screen.tscn"):
+		var packed := load("res://Scenes/UI/death_screen.tscn") as PackedScene
+		if packed != null:
+			death_ui = packed.instantiate()
+			get_tree().current_scene.add_child(death_ui)
+
+	if death_ui != null and death_ui.has_method("show_death_screen"):
+		death_ui.show_death_screen(self)

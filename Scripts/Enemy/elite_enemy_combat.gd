@@ -6,6 +6,12 @@ var controller: EnemyController
 
 ## Kétkezes Csontváz körszámlálója (minden 2. körben sújt le)
 var greatsword_turn_counter: int = 0
+## Nekromanta fázisállapot (0: 100%-75%, 1: 75%-50%, 2: <=50% mágia nélkül)
+var necromancer_phase: int = 0
+var necromancer_vanished: bool = false
+var necromancer_summoned_minions: Array[EnemyController] = []
+var necromancer_return_cell: Vector2i = Vector2i.ZERO
+var _necromancer_phase_transition_active: bool = false
 
 func _init(p_combat: EnemyCombat) -> void:
 	combat = p_combat
@@ -34,274 +40,111 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 			return await _perform_generic_turn(target_hero)
 
 # ==============================================================================
-# 1. NEKROMANTA (Ranged Summoner/Healer Boss)
+# 1. NEKROMANTA (3-Fázisú Főellenség: Kasza + Mágia + Idézés/Eltűnés)
 # ==============================================================================
+func is_necromancer() -> bool:
+	var data = controller.enemy_data if controller else null
+	return data != null and int(data.special_profile) == 4
+
+
+func is_necromancer_vanished() -> bool:
+	return is_necromancer() and necromancer_vanished
+
+
+func is_necromancer_out_of_magic() -> bool:
+	return is_necromancer() and necromancer_phase >= 2 and not necromancer_vanished
+
+
+func get_necromancer_phase_hp_floor() -> int:
+	if not is_necromancer() or controller == null:
+		return 0
+	var max_h := maxi(1, controller.max_hp)
+	if necromancer_phase == 0:
+		return floori(float(max_h) * 0.75)
+	if necromancer_phase == 1:
+		return floori(float(max_h) * 0.50)
+	return 0
+
+
+func _get_anim_fps(anim: String, default_fps: float = 8.0) -> float:
+	var sprite = controller.visuals.sprite if (controller and controller.visuals) else null
+	if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
+		var s_fps = sprite.sprite_frames.get_animation_speed(anim)
+		if s_fps > 0.0:
+			return s_fps
+	return default_fps
+
+
 func _perform_necromancer_turn(target_hero: HeroController) -> int:
-	var hero_adjacent = _is_hero_adjacent(target_hero)
-	var allies = _get_adjacent_allies()
+	if necromancer_vanished or _necromancer_phase_transition_active:
+		return 0
 
-	# 1. HA A HŐS KÖZVETLENÜL MELLETTÜNK ÁLL: Támadási prioritás a túlélésért
-	if hero_adjacent:
-		return await _necromancer_cast_attack(target_hero)
+	# 3. Fázis (<= 50% HP, mindkét idézési hullám legyőzve): elfogyott a mágiája, egyedül küzd kaszával
+	if necromancer_phase >= 2:
+		return await _necromancer_cast_scythe_attack(target_hero)
 
-	# 2. HA NINCS SZÖVETSÉGES A SZOMSZÉDOS MEZŐKÖN: Megidézünk egyet
-	if allies.is_empty():
-		return await _perform_necromancer_summon(target_hero)
+	# 1–2. Fázis: közelben nagy kaszás suhintás ('attack_1' + hátralökés), távolról mágikus lövedék ('attack_2')
+	if _is_hero_adjacent(target_hero):
+		return await _necromancer_cast_scythe_attack(target_hero)
+	return await _necromancer_cast_magic_attack(target_hero)
 
-	# 3. HA VAN SZÖVETSÉGES ÉS SEBESÜLT: Meggyógyítjuk
-	var wounded_ally: EnemyController = null
-	for ally in allies:
-		if ally.current_hp < ally.max_hp:
-			wounded_ally = ally
-			break
 
-	if wounded_ally != null:
-		return await _necromancer_cast_heal(wounded_ally)
+## 'attack_1': Nagy kaszás suhintás, az 5. képkockánál hátralöki a hőst
+func _necromancer_cast_scythe_attack(target_hero: HeroController) -> int:
+	if not is_instance_valid(target_hero):
+		return 0
 
-	# 4. HA MINDEN MINION ÉP: Távolsági támadás a hősre
-	return await _necromancer_cast_attack(target_hero)
-
-## ==============================================================================
-## NEKROMANTA IDÉZÉSI RUTIN (_perform_necromancer_summon)
-## ==============================================================================
-func _perform_necromancer_summon(target_hero: HeroController) -> int:
-	# --------------------------------------------------------------------------
-	# 1. LÉPÉS: RÁCSPOZICIONÁLÁS ÉS SZABAD SZOMSZÉDOS MEZŐ KERESÉSE
-	# --------------------------------------------------------------------------
-	var gm = controller.mover.grid_manager if (controller and controller.mover) else null
-	if gm == null and combat != null:
-		gm = combat.get_tree().get_first_node_in_group("grid_manager") as GridManager
-
-	var adjacent_dirs = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
-	adjacent_dirs.shuffle()
-
-	var target_cell := Vector2i.ZERO
-	var cell_found := false
-
-	for dir in adjacent_dirs:
-		var candidate = controller.grid_pos + dir
-
-		# 1/a. Ellenőrizzük, hogy a csempe nem szilárd (járható a grid_manager szerint)
-		if gm != null and gm.is_cell_solid(candidate):
-			continue
-
-		# 1/b. Ellenőrizzük a "player" csoportot (hős ne álljon rajta vagy ne lépjen oda)
-		var occupied = false
-		for player_node in combat.get_tree().get_nodes_in_group("player"):
-			if is_instance_valid(player_node) and player_node is HeroController:
-				var hero = player_node as HeroController
-				if hero.is_alive():
-					if hero.grid_pos == candidate:
-						occupied = true
-						break
-					if hero.is_moving and hero.current_step_target == candidate:
-						occupied = true
-						break
-
-		if occupied:
-			continue
-
-		# 1/c. Ellenőrizzük az "enemies" csoportot (ne álljon rajta élő szörny)
-		for enemy_node in combat.get_tree().get_nodes_in_group("enemies"):
-			if is_instance_valid(enemy_node) and enemy_node is EnemyController:
-				var enemy = enemy_node as EnemyController
-				if enemy.is_monster_alive():
-					if enemy.grid_pos == candidate:
-						occupied = true
-						break
-					if enemy.is_moving and enemy.current_step_target == candidate:
-						occupied = true
-						break
-
-		if occupied:
-			continue
-
-		# Találtunk egy teljesen üres, szilárd akadályoktól mentes mezőt:
-		target_cell = candidate
-		cell_found = true
-		break
-
-	# Ha nincs elérhető szabad mező, megszakítjuk az idézést és normál attack_1-re váltunk
-	if not cell_found:
-		print("⚠️ [%s] Nincs szabad szomszédos mező az idézéshez! Visszalépés normál támadásra (attack_1)." % controller.monster_name)
-		return await _necromancer_cast_attack(target_hero)
-
-	var fl = _get_floor_layer()
-	var spawn_world_pos: Vector2 = fl.map_to_local(target_cell) if fl else controller.global_position
-
-	# --------------------------------------------------------------------------
-	# 2. LÉPÉS: 3-LÉPÉSES ANIMÁCIÓS SZINKRONIZÁCIÓ (8 FPS IDŐZÍTÉSSEL)
-	# --------------------------------------------------------------------------
-	# 2/a. Step 1 (Nekromanta): 'summon' animáció lejátszása és várakozás az impact frame-ig
-	var necro_anim = safe_play_anim("summon", "attack_2")
-	var impact_frame = get_impact_frame("summon", 4)
-	await combat.get_tree().create_timer(float(impact_frame) / 8.0).timeout
-
-	# 2/b. Step 2 (Az Effekt): summon_effect.tscn példányosítása pontosan a célmező közepére
-	var effect_paths = [
-		"res://scenes/Projectiles/summon_effect.tscn",
-		"res://Scenes/Projectiles/summon_effect.tscn",
-		"res://Scenes/Projectiles/necromancer_summon.tscn",
-		"res://scenes/Projectiles/necromancer_summon.tscn"
-	]
-	for ep in effect_paths:
-		if ResourceLoader.exists(ep):
-			var eff_res = load(ep) as PackedScene
-			if eff_res:
-				var eff = eff_res.instantiate() as Node2D
-				if eff:
-					controller.get_parent().add_child(eff)
-					eff.global_position = spawn_world_pos
-					eff.z_index = 12
-					var anim_spr = eff.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-					if anim_spr:
-						if anim_spr.sprite_frames and anim_spr.sprite_frames.has_animation("default"):
-							anim_spr.play("default")
-						anim_spr.animation_finished.connect(eff.queue_free)
-					else:
-						combat.get_tree().create_timer(1.0).timeout.connect(eff.queue_free)
-			break
-
-	# 2/c. Step 3 (A Minion): Véletlenszerű csontváz típus kiválasztása és példányosítása
-	var minion_pool = [
-		{
-			"name": "Páncélozott Csontváz",
-			"data_path": "res://resources/Monsters/armored_skeleton_data.tres"
-		},
-		{
-			"name": "Kétkezes Kardos Csontváz",
-			"data_path": "res://resources/Monsters/greatsword_skeleton_data.tres"
-		},
-		{
-			"name": "Csontváz Íjász",
-			"data_path": "res://resources/Monsters/skeleton_archer_data.tres"
-		},
-		{
-			"name": "Csontváz",
-			"data_path": "res://resources/Monsters/skeleton_data.tres"
-		}
-	]
-	var chosen_minion = minion_pool.pick_random()
-
-	var enemy_scene_paths = [
-		"res://scenes/Enemy/enemy.tscn",
-		"res://Scenes/Enemy/enemy.tscn"
-	]
-	var enemy_scene: PackedScene = null
-	for sp in enemy_scene_paths:
-		if ResourceLoader.exists(sp):
-			enemy_scene = load(sp) as PackedScene
-			break
-
-	if enemy_scene != null:
-		var minion = enemy_scene.instantiate() as EnemyController
-
-		# Adatmodell betöltése és klónozása
-		if ResourceLoader.exists(chosen_minion["data_path"]):
-			var data_res = load(chosen_minion["data_path"]) as EnemyData
-			if data_res:
-				minion.enemy_data = data_res.duplicate()
-				minion.enemy_data.initialize()
-
-		# Hozzáadás a jelenethez és pozicionálás (rács + világkoordináta)
-		controller.get_parent().add_child(minion)
-		minion.position = spawn_world_pos
-		minion.grid_pos = target_cell
-		if minion.mover:
-			minion.mover.grid_pos = target_cell
-			minion.mover.current_step_target = target_cell
-
-		minion.is_dead = false
-		minion.visible = true
-		if not minion.is_in_group("enemies"):
-			minion.add_to_group("enemies")
-
-		# Komponensek inicializálása
-		if minion.has_method("setup"):
-			minion.setup()
-		if minion.visuals and minion.visuals.has_method("setup"):
-			minion.visuals.setup(minion)
-		if minion.mover and minion.mover.has_method("setup"):
-			minion.mover.setup(minion)
-		if minion.combat and minion.combat.has_method("setup"):
-			minion.combat.setup(minion)
-		if minion.brain and minion.brain.has_method("setup"):
-			minion.brain.setup(minion)
-
-		# AI timer megállítása az idézési animáció lejátszása alatt
-		if minion.brain and minion.brain.ai_timer and is_instance_valid(minion.brain.ai_timer):
-			minion.brain.ai_timer.stop()
-
-		# ----------------------------------------------------------------------
-		# 3. LÉPÉS: MINION 'summon' ANIMÁCIÓ LEJÁTSZÁSA ÉS MEGINTÉSE
-		# ----------------------------------------------------------------------
-		var minion_sprite: AnimatedSprite2D = null
-		if minion.visuals and minion.visuals.sprite:
-			minion_sprite = minion.visuals.sprite
-		elif minion.has_node("Visuals"):
-			minion_sprite = minion.get_node("Visuals") as AnimatedSprite2D
-
-		if minion_sprite and minion_sprite.sprite_frames and minion_sprite.sprite_frames.has_animation("summon"):
-			minion_sprite.play("summon")
-			await minion_sprite.animation_finished
-		elif minion.visuals and minion.visuals.has_method("play_respawn_animation"):
-			await minion.visuals.play_respawn_animation()
-		else:
-			await combat.get_tree().create_timer(0.6).timeout
-
-		# Visszaállás idle-re és az AI timer elindítása
-		if minion.visuals and minion.visuals.has_method("play_idle_anim"):
-			minion.visuals.play_idle_anim()
-		elif minion_sprite and minion_sprite.sprite_frames and minion_sprite.sprite_frames.has_animation("idle"):
-			minion_sprite.play("idle")
-
-		if minion.brain and minion.brain.ai_timer and is_instance_valid(minion.brain.ai_timer):
-			minion.brain.ai_timer.start()
-
-		print("💀 [%s MEGIDÉZVE] %s megjelent a (%d, %d) koordinátán!" % [controller.monster_name, minion.monster_name, target_cell.x, target_cell.y])
-
-	var battle_ui = _get_battle_dialog()
-	if battle_ui and battle_ui.combat_active:
-		battle_ui._append_log("[color=purple]💀 [%s IDÉZÉS] Megidézett egy szövetségest (%s) a csatatérre![/color]" % [controller.monster_name, chosen_minion["name"]])
-
-	await await_anim_finish(necro_anim)
-	return 0
-
-## Nekromanta gyógyítás logikája
-func _necromancer_cast_heal(wounded_ally: EnemyController) -> int:
-	var anim = safe_play_anim("heal", "attack_2")
-	var impact_frame = get_impact_frame("attack_2", 3)
-
-	await combat.get_tree().create_timer(float(impact_frame) / 8.0).timeout
-
-	var missing = wounded_ally.max_hp - wounded_ally.current_hp
-	var heal_amount = mini(missing, maxi(15, ceili(float(wounded_ally.max_hp) * 0.40)))
-	wounded_ally.enemy_data._current_hp += heal_amount
-
-	show_floating_text(wounded_ally.global_position, "+%d HP" % heal_amount, Color.GREEN)
-	_flash_sprite(wounded_ally.visuals.sprite if wounded_ally.visuals else null, Color.GREEN)
-
-	var battle_ui = _get_battle_dialog()
-	if battle_ui and battle_ui.combat_active:
-		battle_ui._append_log("[color=green]✨ [%s GYÓGYÍTÁS] A Nekromanta meggyógyította %s szövetségesét (+%d HP)![/color]" % [controller.monster_name, wounded_ally.monster_name, heal_amount])
-		battle_ui._update_ui_cards()
-
-	await await_anim_finish(anim)
-	return 0
-
-## Nekromanta távolsági támadás logikája
-func _necromancer_cast_attack(target_hero: HeroController) -> int:
 	var anim = safe_play_anim("attack_1", "attack_1")
 	if target_hero.has_method("try_trigger_block"):
 		target_hero.try_trigger_block()
 
-	var impact_frame = get_impact_frame("attack_1", 2)
-	await combat.get_tree().create_timer(float(impact_frame) / 8.0).timeout
+	var fps := _get_anim_fps(anim, 8.0)
+	var impact_frame := get_impact_frame("attack_1", 5)
+	await combat.get_tree().create_timer(float(impact_frame) / fps).timeout
 
-	var raw_dmg = combat.roll_attack_damage()
+	if not is_instance_valid(target_hero) or combat.is_dead:
+		await await_anim_finish(anim)
+		return 0
+
+	var raw_dmg := combat.roll_attack_damage()
+	target_hero.take_damage(raw_dmg)
+	if target_hero.has_method("play_hurt_reaction"):
+		target_hero.play_hurt_reaction()
+
+	if is_instance_valid(target_hero) and target_hero.is_alive() and combat.armored_combat:
+		var prev_pos := target_hero.grid_pos
+		await combat.armored_combat.apply_knockback(target_hero, 2)
+		if target_hero.grid_pos != prev_pos:
+			var battle_ui = _get_battle_dialog()
+			if battle_ui and battle_ui.combat_active:
+				battle_ui._append_log("[color=orange]🌀 [%s KASZACSAPÁS] A Nekromanta kaszájával hátralökte a hőst![/color]" % controller.monster_name)
+				battle_ui.interrupt_combat_due_to_knockback()
+
+	await await_anim_finish(anim)
+	return raw_dmg
+
+
+## 'attack_2': Mágikus támadás lövedékkel
+func _necromancer_cast_magic_attack(target_hero: HeroController) -> int:
+	if not is_instance_valid(target_hero):
+		return 0
+
+	var anim = safe_play_anim("attack_2", "attack_1")
+	if target_hero.has_method("try_trigger_block"):
+		target_hero.try_trigger_block()
+
+	var fps := _get_anim_fps(anim, 8.0)
+	var impact_frame := get_impact_frame("attack_2", 5)
+	await combat.get_tree().create_timer(float(impact_frame) / fps).timeout
+
+	if not is_instance_valid(target_hero) or combat.is_dead:
+		await await_anim_finish(anim)
+		return 0
+
+	var raw_dmg := combat.roll_attack_damage()
 	var proj_scene: PackedScene = controller.enemy_data.projectile_scene if controller.enemy_data else null
 	if proj_scene == null:
-		var default_proj = "res://Scenes/Projectiles/necromancer_attack.tscn"
+		var default_proj := "res://Scenes/Projectiles/necromancer_attack.tscn"
 		if ResourceLoader.exists(default_proj):
 			proj_scene = load(default_proj) as PackedScene
 
@@ -328,6 +171,330 @@ func _necromancer_cast_attack(target_hero: HeroController) -> int:
 	await await_anim_finish(anim)
 	return raw_dmg
 
+
+## Sebzés utáni fázisellenőrzés (75%-nál 1. idézés, 50%-nál 2. erősebb idézés)
+func handle_necromancer_post_damage(target_hero: HeroController = null) -> bool:
+	if not is_necromancer() or combat.is_dead or controller == null or not controller.is_monster_alive():
+		return false
+	if necromancer_vanished or _necromancer_phase_transition_active:
+		return false
+
+	var max_h := maxi(1, controller.max_hp)
+	var cur_h := controller.current_hp
+	if necromancer_phase == 0 and cur_h <= floori(float(max_h) * 0.75):
+		necromancer_phase = 1
+		await _trigger_necromancer_summon_and_vanish(1, target_hero)
+		return true
+	if necromancer_phase == 1 and cur_h <= floori(float(max_h) * 0.50):
+		necromancer_phase = 2
+		await _trigger_necromancer_summon_and_vanish(2, target_hero)
+		return true
+	return false
+
+
+func _trigger_necromancer_summon_and_vanish(wave_index: int, target_hero: HeroController) -> void:
+	_necromancer_phase_transition_active = true
+	combat.set_all_monsters_ai_frozen(true)
+	if controller.brain and controller.brain.ai_timer and is_instance_valid(controller.brain.ai_timer):
+		controller.brain.ai_timer.stop()
+
+	var battle_ui = _get_battle_dialog()
+	if battle_ui and battle_ui.combat_active:
+		var log_msg := (
+			"[color=purple]💀 [%s 75%% HP] 'Szolgáim, állítsátok meg!' — Szörnyeket idéz és eltűnik![/color]"
+			if wave_index == 1
+			else "[color=purple]💀 [%s 50%% HP] 'Elég! Erősebb élőholtak, pusztítsátok el!' — Újabb idézés![/color]"
+		) % controller.monster_name
+		battle_ui._append_log(log_msg)
+		await combat.get_tree().create_timer(0.35).timeout
+		if battle_ui and battle_ui.combat_active:
+			battle_ui.interrupt_combat_due_to_boss_phase()
+
+	var hero_locked := is_instance_valid(target_hero)
+	if hero_locked:
+		target_hero.is_attacking = true
+
+	var necro_anim := safe_play_anim("summon", "attack_2")
+	var fps := _get_anim_fps(necro_anim, 8.0)
+	var impact_frame := mini(5, 9)
+	await combat.get_tree().create_timer(float(impact_frame) / fps).timeout
+
+	var spawned_count := await _spawn_necromancer_wave_minions(wave_index)
+	await await_anim_finish(necro_anim)
+
+	if spawned_count > 0 and is_instance_valid(controller) and controller.is_monster_alive():
+		necromancer_return_cell = controller.grid_pos
+		necromancer_vanished = true
+		_play_summon_fx(controller.global_position)
+		controller.visible = false
+		if controller.is_in_group("enemies"):
+			controller.remove_from_group("enemies")
+	else:
+		# Ha egyáltalán nem volt szabad mező az idézéshez, maradjon látható és küzdjön tovább
+		if controller.brain and controller.brain.ai_timer and is_instance_valid(controller.brain.ai_timer):
+			controller.brain.ai_timer.start()
+
+	if is_instance_valid(target_hero) and hero_locked:
+		target_hero.is_attacking = false
+	combat.set_all_monsters_ai_frozen(false)
+	_necromancer_phase_transition_active = false
+
+
+func _spawn_necromancer_wave_minions(wave_index: int) -> int:
+	necromancer_summoned_minions.clear()
+	var gs = combat.get_tree().root.get_node_or_null("GameState")
+	var diff_id := ""
+	if gs and "run_state" in gs and gs.run_state is Dictionary:
+		diff_id = String(gs.run_state.get("difficulty_id", "normal")).to_lower()
+
+	var wave_specs: Array[Dictionary] = []
+	if wave_index == 1:
+		wave_specs = [
+			{"name": "Páncélozott Csontváz" if "hard" in diff_id else "Csontváz", "data_path": "res://Data/Monsters/armored_skeleton_data.tres" if "hard" in diff_id else "res://Data/Monsters/skeleton_data.tres"},
+			{"name": "Csontváz Íjász", "data_path": "res://Data/Monsters/skeleton_archer_data.tres"}
+		]
+	else:
+		wave_specs = [
+			{"name": "Páncélozott Ork" if "hard" in diff_id else "Páncélozott Csontváz", "data_path": "res://Data/Monsters/armored_orc_data.tres" if "hard" in diff_id else "res://Data/Monsters/armored_skeleton_data.tres"},
+			{"name": "Nagy Kardos Csontváz", "data_path": "res://Data/Monsters/greatsword_skeleton_data.tres"}
+		]
+
+	var spawn_cells := _find_summon_cells(wave_specs.size())
+	if spawn_cells.is_empty():
+		print("⚠️ [%s] Nincs szabad mező a hullám megidézéséhez!" % controller.monster_name)
+		return 0
+
+	var enemy_scene := load("res://Scenes/Enemy/enemy.tscn") as PackedScene
+	if enemy_scene == null:
+		return 0
+
+	var fl := _get_floor_layer()
+	var spawned_sprites: Array[AnimatedSprite2D] = []
+	var spawned_minions: Array[EnemyController] = []
+
+	for idx in range(mini(wave_specs.size(), spawn_cells.size())):
+		var cell := spawn_cells[idx]
+		var spec := wave_specs[idx]
+		var world_pos: Vector2 = fl.map_to_local(cell) if fl else controller.global_position
+		_play_summon_fx(world_pos)
+
+		var minion := enemy_scene.instantiate() as EnemyController
+		if minion == null:
+			continue
+		if ResourceLoader.exists(spec["data_path"]):
+			var raw_data := load(spec["data_path"]) as EnemyData
+			if raw_data != null:
+				var minion_data := raw_data.duplicate() as EnemyData
+				# Az idézett szolgák ne támadjanak fel 3 mp múlva, így a legyőzésük azonnal visszahozza a Nekromantát
+				minion_data.can_self_revive = false
+				minion.enemy_data = minion_data
+
+		minion.fog_of_war = controller.fog_of_war
+		minion.position = world_pos
+		controller.get_parent().add_child(minion)
+		minion.grid_pos = cell
+		if minion.mover:
+			minion.mover.grid_pos = cell
+			minion.mover.current_step_target = cell
+		minion.is_dead = false
+		if not minion.is_in_group("enemies"):
+			minion.add_to_group("enemies")
+		minion.update_fog_visibility()
+		if minion.brain and minion.brain.ai_timer and is_instance_valid(minion.brain.ai_timer):
+			minion.brain.ai_timer.stop()
+
+		necromancer_summoned_minions.append(minion)
+		spawned_minions.append(minion)
+		minion.tree_exited.connect(_on_summoned_minion_exited.bind(minion))
+
+		var m_sprite: AnimatedSprite2D = minion.visuals.sprite if (minion.visuals and minion.visuals.sprite) else null
+		if m_sprite and m_sprite.sprite_frames and m_sprite.sprite_frames.has_animation("summon"):
+			m_sprite.play("summon")
+			spawned_sprites.append(m_sprite)
+
+		print("💀 [%s IDÉZÉS - %d. HULLÁM] %s megjelent a (%d, %d) mezőn!" % [controller.monster_name, wave_index, minion.monster_name, cell.x, cell.y])
+
+	if not spawned_sprites.is_empty():
+		var last_spr := spawned_sprites[0]
+		if is_instance_valid(last_spr) and last_spr.is_playing() and last_spr.animation == "summon":
+			await last_spr.animation_finished
+	elif not spawned_minions.is_empty():
+		await combat.get_tree().create_timer(0.45).timeout
+
+	for minion in spawned_minions:
+		if not is_instance_valid(minion):
+			continue
+		if minion.visuals and minion.visuals.has_method("play_idle_anim"):
+			minion.visuals.play_idle_anim()
+		if minion.brain and minion.brain.ai_timer and is_instance_valid(minion.brain.ai_timer):
+			minion.brain.ai_timer.start()
+
+	return spawned_minions.size()
+
+
+func _is_cell_free_for_spawn(candidate: Vector2i, gm: GridManager) -> bool:
+	if gm != null and gm.is_cell_solid(candidate):
+		return false
+	if gm != null and gm.floor_layer != null and gm.floor_layer.get_cell_source_id(candidate) == -1:
+		return false
+
+	for player_node in combat.get_tree().get_nodes_in_group("player"):
+		if is_instance_valid(player_node) and player_node is HeroController:
+			var hero := player_node as HeroController
+			if hero.is_alive():
+				if hero.grid_pos == candidate or (hero.is_moving and hero.current_step_target == candidate):
+					return false
+
+	for enemy_node in combat.get_tree().get_nodes_in_group("enemies"):
+		if is_instance_valid(enemy_node) and enemy_node is EnemyController and enemy_node != controller:
+			var enemy := enemy_node as EnemyController
+			if enemy.is_monster_alive():
+				if enemy.grid_pos == candidate or (enemy.is_moving and enemy.current_step_target == candidate):
+					return false
+
+	return true
+
+
+func _find_summon_cells(wanted_count: int) -> Array[Vector2i]:
+	var found: Array[Vector2i] = []
+	var gm: GridManager = controller.mover.grid_manager if (controller and controller.mover) else null
+	if gm == null and combat != null:
+		gm = combat.get_tree().get_first_node_in_group("grid_manager") as GridManager
+
+	var rings: Array[Vector2i] = []
+	var cardinals: Array[Vector2i] = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+	cardinals.shuffle()
+	var diagonals: Array[Vector2i] = [Vector2i(1, 1), Vector2i(-1, 1), Vector2i(1, -1), Vector2i(-1, -1)]
+	diagonals.shuffle()
+	rings.append_array(cardinals)
+	rings.append_array(diagonals)
+
+	for r in [2, 3]:
+		var outer: Array[Vector2i] = []
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				if maxi(absi(dx), absi(dy)) == r:
+					outer.append(Vector2i(dx, dy))
+		outer.shuffle()
+		rings.append_array(outer)
+
+	for offset in rings:
+		if found.size() >= wanted_count:
+			break
+		var candidate := controller.grid_pos + offset
+		if not found.has(candidate) and _is_cell_free_for_spawn(candidate, gm):
+			found.append(candidate)
+
+	return found
+
+
+func _find_reappear_cell(preferred_cell: Vector2i) -> Vector2i:
+	var gm: GridManager = controller.mover.grid_manager if (controller and controller.mover) else null
+	if gm == null and combat != null:
+		gm = combat.get_tree().get_first_node_in_group("grid_manager") as GridManager
+
+	if _is_cell_free_for_spawn(preferred_cell, gm):
+		return preferred_cell
+
+	for r in [1, 2, 3]:
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				var candidate := preferred_cell + Vector2i(dx, dy)
+				if _is_cell_free_for_spawn(candidate, gm):
+					return candidate
+
+	return preferred_cell
+
+
+func _play_summon_fx(world_pos: Vector2) -> void:
+	var effect_paths := [
+		"res://Scenes/Projectiles/summon_effect.tscn",
+		"res://Scenes/Projectiles/necromancer_summon.tscn"
+	]
+	for ep in effect_paths:
+		if ResourceLoader.exists(ep):
+			var eff_res = load(ep) as PackedScene
+			if eff_res:
+				var eff = eff_res.instantiate() as Node2D
+				if eff and controller and controller.get_parent():
+					controller.get_parent().add_child(eff)
+					eff.global_position = world_pos
+					eff.z_index = 12
+					var anim_spr = eff.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+					if anim_spr:
+						anim_spr.stop()
+						anim_spr.frame = 0
+						if anim_spr.sprite_frames and anim_spr.sprite_frames.has_animation("default"):
+							anim_spr.play("default")
+						anim_spr.animation_finished.connect(eff.queue_free)
+					else:
+						combat.get_tree().create_timer(1.0).timeout.connect(eff.queue_free)
+			break
+
+
+func _on_summoned_minion_exited(_minion: EnemyController) -> void:
+	if not is_instance_valid(controller) or not is_instance_valid(combat) or combat.is_dead:
+		return
+	if not necromancer_vanished:
+		return
+
+	var remaining: Array[EnemyController] = []
+	for m in necromancer_summoned_minions:
+		if is_instance_valid(m) and not m.is_queued_for_deletion() and m.is_monster_alive():
+			remaining.append(m)
+	necromancer_summoned_minions = remaining
+
+	if remaining.is_empty():
+		_reappear_necromancer()
+
+
+func _reappear_necromancer() -> void:
+	if not necromancer_vanished or not is_instance_valid(controller) or combat.is_dead:
+		return
+	if not controller.is_inside_tree():
+		return
+
+	await combat.get_tree().create_timer(0.35).timeout
+	if not is_instance_valid(controller) or not controller.is_inside_tree() or combat.is_dead:
+		return
+
+	var battle_ui = _get_battle_dialog()
+	while battle_ui != null and battle_ui.combat_active:
+		await combat.get_tree().create_timer(0.2).timeout
+		if not is_instance_valid(controller) or not controller.is_inside_tree() or combat.is_dead:
+			return
+		battle_ui = _get_battle_dialog()
+
+	var reappear_cell := _find_reappear_cell(necromancer_return_cell)
+	var fl := _get_floor_layer()
+	controller.grid_pos = reappear_cell
+	if controller.mover:
+		controller.mover.grid_pos = reappear_cell
+		controller.mover.current_step_target = reappear_cell
+	if fl:
+		controller.position = fl.map_to_local(reappear_cell)
+
+	_play_summon_fx(controller.global_position)
+	necromancer_vanished = false
+	if not controller.is_in_group("enemies"):
+		controller.add_to_group("enemies")
+	controller.visible = true
+	controller.update_fog_visibility()
+	if controller.visuals:
+		controller.visuals.play_idle_anim()
+
+	var heroes := combat.get_tree().get_nodes_in_group("player")
+	if not heroes.is_empty() and is_instance_valid(heroes[0]) and heroes[0] is HeroController and controller.visuals:
+		controller.visuals.update_facing((heroes[0] as HeroController).grid_pos.x)
+
+	if necromancer_phase >= 2:
+		print("⚔️ [%s VÉGSŐ FÁZIS] Elfogyott a mágiája — most már egyedül, kaszával küzd tovább!" % controller.monster_name)
+	else:
+		print("💀 [%s VISSZATÉRT] A csatlósai elestek, újra harcba száll!" % controller.monster_name)
+
+	if controller.brain and controller.brain.ai_timer and is_instance_valid(controller.brain.ai_timer):
+		controller.brain.ai_timer.start()
+
 # ==============================================================================
 # 2. ELIT ORK (Frenzy / Dühöngés)
 # ==============================================================================
@@ -352,8 +519,6 @@ func _perform_elite_orc_turn(target_hero: HeroController, is_extra_attack: bool)
 
 		var raw_dmg = ceili(float(combat.roll_attack_damage()) * frenzy_multiplier * crit_mult)
 		target_hero.take_damage(raw_dmg)
-
-		show_floating_text(target_hero.global_position, "KRITIKUS! -%d" % raw_dmg, Color(1.0, 0.25, 0.1))
 
 		var battle_ui = _get_battle_dialog()
 		if battle_ui and battle_ui.combat_active:
@@ -427,14 +592,14 @@ func _perform_greatsword_skeleton_turn(target_hero: HeroController) -> int:
 				prep_anim = "summon"
 			if not sprite.sprite_frames.has_animation(prep_anim):
 				prep_anim = "idle"
-		var anim = safe_play_anim(prep_anim, "idle")
+		var prep_played_anim = safe_play_anim(prep_anim, "idle")
 
-		var battle_ui = _get_battle_dialog()
-		if battle_ui and battle_ui.combat_active:
-			battle_ui._append_log("[color=yellow]⚔️ [%s FELKÉSZÜL] Felemeli óriási kétkezes kardját, és hatalmas erőt gyűjt a következő csapásra![/color]" % controller.monster_name)
+		var prep_battle_ui = _get_battle_dialog()
+		if prep_battle_ui and prep_battle_ui.combat_active:
+			prep_battle_ui._append_log("[color=yellow]⚔️ [%s FELKÉSZÜL] Felemeli óriási kétkezes kardját, és hatalmas erőt gyűjt a következő csapásra![/color]" % controller.monster_name)
 
 		await combat.get_tree().create_timer(1.0).timeout
-		await await_anim_finish(anim)
+		await await_anim_finish(prep_played_anim)
 		return 0
 
 	# Turn 2: Lecsapás garantált Tiszta Sebzéssel (Páncél és Védelem átütése)
@@ -451,8 +616,6 @@ func _perform_greatsword_skeleton_turn(target_hero: HeroController) -> int:
 	if target_hero.combat:
 		target_hero.combat.is_blocking_active = false
 	target_hero.take_damage(devastating_dmg + hero_def)
-
-	show_floating_text(target_hero.global_position, "TISZTA SEBZÉS! -%d" % devastating_dmg, Color(0.95, 0.25, 0.95))
 
 	var battle_ui = _get_battle_dialog()
 	if battle_ui and battle_ui.combat_active:
@@ -548,7 +711,6 @@ func _perform_werewolf_turn(target_hero: HeroController) -> int:
 	var actually_healed = controller.current_hp - old_hp
 
 	if actually_healed > 0:
-		show_floating_text(controller.global_position, "+%d HP" % actually_healed, Color(0.2, 0.9, 0.3))
 		_flash_sprite(controller.visuals.sprite if controller.visuals else null, Color(0.3, 1.3, 0.4))
 
 		var battle_ui = _get_battle_dialog()
@@ -696,28 +858,6 @@ func _get_adjacent_allies() -> Array[EnemyController]:
 
 	return allies
 
-func show_floating_text(pos: Vector2, text: String, color: Color) -> void:
-	if combat == null: return
-	var tree = combat.get_tree()
-	if tree == null: return
-
-	var label = Label.new()
-	label.text = text
-	label.modulate = color
-	label.z_index = 200
-	label.global_position = pos + Vector2(-20, -30)
-	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
-	label.add_theme_constant_override("outline_size", 4)
-
-	tree.root.add_child(label)
-
-	var tween = label.create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(label, "position:y", label.position.y - 30.0, 0.9).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(label, "modulate:a", 0.0, 0.9).set_delay(0.3)
-	tween.chain().tween_callback(label.queue_free)
-
 func _flash_sprite(sprite: AnimatedSprite2D, flash_color: Color) -> void:
 	if not sprite: return
 	var tween = sprite.create_tween()
@@ -794,7 +934,6 @@ class BleedStatusEffect extends Node:
 		turns_remaining -= 1
 
 		if is_instance_valid(elite_combat):
-			elite_combat.show_floating_text(target_hero.global_position, "-%d HP (Vérzés)" % damage_per_turn, Color(0.9, 0.15, 0.15))
 			elite_combat._flash_sprite(target_hero.sprite, Color(1.5, 0.2, 0.2))
 
 		if is_instance_valid(target_hero) and target_hero.has_method("play_hurt_reaction"):

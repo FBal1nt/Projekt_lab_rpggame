@@ -1,9 +1,10 @@
 [gd_scene format=4 uid="uid://b5fvusnselboy"]
 
-[ext_resource type="Texture2D" uid="uid://5bkvwrivrdxv" path="res://PNG/decorative_cracks_floor.png" id="1_66nia"]
-[ext_resource type="Texture2D" uid="uid://b727p7158rbhj" path="res://PNG/walls_floor.png" id="2_g81ml"]
-[ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://PNG/decorative_cracks_walls.png" id="3_f0v4q"]
-[ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://PNG/Objects.png" id="4_fjkp6"]
+[ext_resource type="Texture2D" uid="uid://5bkvwrivrdxv" path="res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png" id="1_66nia"]
+[ext_resource type="Texture2D" uid="uid://b727p7158rbhj" path="res://Assets/Tilesets/Dungeon/walls_floor.png" id="2_g81ml"]
+[ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png" id="3_f0v4q"]
+[ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://Assets/Tilesets/Dungeon/Objects.png" id="4_fjkp6"]
+[ext_resource type="PackedScene" uid="uid://dv6gqt581k6xj" path="res://Scenes/Props/torch.tscn" id="5_a73qp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1ha0"]
 texture = ExtResource("1_66nia")
@@ -2098,3 +2099,20 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=703402970]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_a1ha0")
+
+[node name="Torch" parent="." unique_id=563503918 instance=ExtResource("5_a73qp")]
+position = Vector2(0, -104)
+
+[node name="Torch2" parent="." unique_id=897581552 instance=ExtResource("5_a73qp")]
+position = Vector2(144, -40)
+
+[node name="Spawners" type="Node2D" parent="." unique_id=962312418]
+
+[node name="EnemySpawn_1" type="Marker2D" parent="Spawners" unique_id=1213937879]
+position = Vector2(40, -32)
+
+[node name="EnemySpawn_2" type="Marker2D" parent="Spawners" unique_id=1584285159]
+position = Vector2(-48, -8)
+
+[node name="EnemySpawn_3" type="Marker2D" parent="Spawners" unique_id=1848205132]
+position = Vector2(24, 24)

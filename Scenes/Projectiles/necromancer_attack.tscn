@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cy5ycl5laye4r"]
 
 [ext_resource type="Script" uid="uid://ktub1p3dstr0" path="res://Scripts/Projectiles/wizard_spell.gd" id="1_b8roa"]
-[ext_resource type="SpriteFrames" uid="uid://dlajbe3ryb1oe" path="res://resources/Projectiles/necromancer_attack2_effect.tres" id="2_b8roa"]
+[ext_resource type="SpriteFrames" uid="uid://dlajbe3ryb1oe" path="res://Data/Projectiles/necromancer_attack2_effect.tres" id="2_b8roa"]
 
 [node name="Attack" type="Node2D" unique_id=631529737]
 script = ExtResource("1_b8roa")

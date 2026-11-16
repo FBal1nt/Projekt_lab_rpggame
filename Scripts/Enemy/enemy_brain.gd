@@ -22,7 +22,12 @@ func _setup_autonomous_ai() -> void:
 # --- DÖNTÉSHOZATAL ÉS AI KÖRÖK ---
 
 func _on_ai_tick(target_hero: HeroController = null) -> void:
+	var dm := get_node_or_null("/root/DungeonManager")
+	if dm != null and dm.has_method("is_loading_dungeon") and dm.is_loading_dungeon():
+		return
 	if controller == null or controller.is_dead or controller.is_moving or controller.is_attacking or not controller.is_monster_alive():
+		return
+	if controller.combat and controller.combat.elite_combat and controller.combat.elite_combat.is_necromancer_vanished():
 		return
 
 	var hero = target_hero if is_instance_valid(target_hero) else _find_hero()
@@ -106,8 +111,14 @@ func _find_best_flank_cell(hero_pos: Vector2i) -> Vector2i:
 	return hero_pos
 
 func _wander_multiple_tiles() -> void:
-	if randf() < 0.35: return
 	if controller == null or controller.mover == null: return
+	if randf() < 0.35: return
+
+	var roam_cells: Dictionary = {}
+	if controller.has_meta("roam_room_cells"):
+		var raw_cells = controller.get_meta("roam_room_cells")
+		if raw_cells is Dictionary:
+			roam_cells = raw_cells
 
 	var directions = [Vector2i.RIGHT, Vector2i.LEFT, Vector2i.DOWN, Vector2i.UP]
 	directions.shuffle()
@@ -118,6 +129,8 @@ func _wander_multiple_tiles() -> void:
 		var current = controller.grid_pos
 		for step in range(randi_range(1, max_steps)):
 			var next = current + dir
+			if not roam_cells.is_empty() and not roam_cells.has(next):
+				break
 			if controller.mover.is_cell_walkable(next):
 				test_path.append(next)
 				current = next

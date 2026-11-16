@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dobctk5swp35g"]
+
+[ext_resource type="Script" uid="uid://jfeoccywjufa" path="res://Scripts/Enemy/enemy_data.gd" id="1_l6xko"]
+[ext_resource type="SpriteFrames" uid="uid://h4mnsbl6cf5x" path="res://Data/Monsters/slime_frames.tres" id="2_ukdu2"]
+
+[resource]
+script = ExtResource("1_l6xko")
+monster_id = "slime"
+monster_name = "Nyálka"
+tier = 1
+xp_reward = 2
+sprite_frames = ExtResource("2_ukdu2")
+max_hp = 32
+base_damage = 8
+defense = 0
+initiative = 5.0
+flat_armor = 0
+special_profile = 0
+move_duration = 0.45
+action_interval = 2.0
+aggro_range = 3
+can_block = false
+can_split = true
+split_chance_on_death = 0.65
+metadata/_custom_type_script = "uid://jfeoccywjufa"

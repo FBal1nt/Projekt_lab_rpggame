@@ -163,6 +163,15 @@ func refresh_selection_details() -> void:
 		return
 
 	var item_data := selected_inventory_item.item_data
+	if item_data.id == &"gold_coin":
+		selected_item_label.text = "%s × %d  |  Ez maga a fizetőeszköz (%d arany)" % [
+			item_data.display_name,
+			selected_inventory_item.amount,
+			selected_inventory_item.amount
+		]
+		sell_button.text = "FIZETŐESZKÖZ"
+		sell_button.disabled = true
+		return
 	var sell_value := item_data.sell_price * selected_inventory_item.amount
 	selected_item_label.text = "%s × %d  |  Eladási érték: %d arany" % [
 		item_data.display_name,

@@ -6,7 +6,7 @@
 script = ExtResource("1_script")
 id = &"wizard"
 display_name = "Varázsló"
-role = "Tűz és Jég elemi mágia (Lőtáv: 5)"
+role = "Elemi mágus"
 description = "A pusztító elemek ura. A legmagasabb alapsebzésű (28 sebzés, 80 HP) távolsági mágus. Az F billentyűvel váltható a Tűz és Fagyasztó Jég elem."
 placeholder_color = Color(0.3, 0.2, 0.8, 1)
 base_health = 80
@@ -23,6 +23,5 @@ health_per_level = 10
 damage_min_per_level = 1
 damage_max_per_level = 2
 defense_per_level = 1
-skill_ids = PackedStringArray("fireball", "ice_spike")
 skill_names = PackedStringArray("Tűzgolyó (F)", "Jégtüske (F)")
-starting_equipment_ids = PackedStringArray()
+starting_equipment_ids = PackedStringArray("magic_staff")

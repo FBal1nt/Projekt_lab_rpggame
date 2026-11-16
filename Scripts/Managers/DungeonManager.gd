@@ -1,6 +1,7 @@
 extends Node
 
 const RESOURCE_CATALOG := preload("res://Scripts/Utils/ResourceCatalog.gd")
+const LOADING_SCREEN_SCENE := preload("res://Scenes/UI/loading_screen.tscn")
 
 ## Global dungeon-selection/configuration service.
 ## The actual dungeon scene can read GameState.run_state after scene transition.
@@ -13,6 +14,12 @@ const DIFFICULTY_DIRECTORY := "res://Data/DungeonDifficulties"
 var dungeons: Dictionary = {}
 var difficulties: Dictionary = {}
 var _run_rng := RandomNumberGenerator.new()
+var _loading_screen: LoadingScreen = null
+var _is_transitioning: bool = false
+
+
+func is_loading_dungeon() -> bool:
+	return _is_transitioning
 
 
 # -----------------------------------------------------------------------------
@@ -125,6 +132,14 @@ func start_dungeon(dungeon_id: StringName, difficulty_id: StringName) -> Diction
 	## Saves the entire run configuration before launching the scene.
 	## If scene_path is empty, this prepares a run only; the UI tells the player
 	## that the dungeon scene has not been connected yet.
+	var scene_transition := get_node_or_null("/root/SceneTransition")
+	if _is_transitioning or (scene_transition != null and scene_transition.has_method("is_transitioning") and scene_transition.is_transitioning()):
+		return {
+			"ok": true,
+			"launched": true,
+			"message": "Dungeon betöltése már folyamatban..."
+		}
+
 	var configuration := get_launch_configuration(dungeon_id, difficulty_id)
 	if configuration.is_empty():
 		return {
@@ -158,24 +173,114 @@ func start_dungeon(dungeon_id: StringName, difficulty_id: StringName) -> Diction
 
 	configuration["status"] = "active"
 	GameState.set_run_state(configuration)
-	var change_error := get_tree().change_scene_to_file(scene_path)
-	if change_error != OK:
-		configuration["status"] = "prepared"
-		GameState.set_run_state(configuration)
-		return {
-			"ok": false,
-			"launched": false,
-			"configuration": configuration.duplicate(true),
-			"message": "A konfiguráció elmentődött, de a dungeon jelenet betöltése sikertelen: " + error_string(change_error)
-		}
+	_is_transitioning = true
 
-	dungeon_started.emit(configuration.duplicate(true))
+	var screen := _ensure_loading_screen()
+	if screen != null:
+		screen.begin_loading(
+			String(configuration.get("dungeon_name", "Dungeon")),
+			String(configuration.get("difficulty_name", "Normál"))
+		)
+
+	_transition_to_dungeon_scene(scene_path, configuration.duplicate(true))
 	return {
 		"ok": true,
 		"launched": true,
 		"configuration": configuration.duplicate(true),
 		"message": "Dungeon indítása..."
 	}
+
+
+func _ensure_loading_screen() -> LoadingScreen:
+	if _loading_screen != null and is_instance_valid(_loading_screen):
+		return _loading_screen
+	var instance := LOADING_SCREEN_SCENE.instantiate() as LoadingScreen
+	if instance != null:
+		add_child(instance)
+		_loading_screen = instance
+	return _loading_screen
+
+
+func _transition_to_dungeon_scene(scene_path: String, configuration: Dictionary) -> void:
+	get_tree().paused = false
+	await get_tree().process_frame
+
+	var packed_scene: PackedScene = null
+	var req_err := ResourceLoader.load_threaded_request(scene_path)
+	if req_err == OK:
+		while true:
+			var progress := []
+			var status := ResourceLoader.load_threaded_get_status(scene_path, progress)
+			var ratio := float(progress[0]) if not progress.is_empty() else 0.0
+			if _loading_screen != null:
+				_loading_screen.set_progress(clampf(0.02 + ratio * 0.33, 0.02, 0.35), "Dungeon jelenet betöltése...")
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				packed_scene = ResourceLoader.load_threaded_get(scene_path) as PackedScene
+				break
+			elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				break
+			await get_tree().process_frame
+
+	if packed_scene == null:
+		packed_scene = load(scene_path) as PackedScene
+
+	if packed_scene == null:
+		configuration["status"] = "prepared"
+		GameState.set_run_state(configuration)
+		if _loading_screen != null:
+			_loading_screen.force_hide()
+		_is_transitioning = false
+		push_error("[DungeonManager] Sikertelen jelenetbetöltés: " + scene_path)
+		return
+
+	var change_error := get_tree().change_scene_to_packed(packed_scene)
+	if change_error != OK:
+		configuration["status"] = "prepared"
+		GameState.set_run_state(configuration)
+		if _loading_screen != null:
+			_loading_screen.force_hide()
+		_is_transitioning = false
+		push_error("[DungeonManager] Sikertelen jelenetváltás (%s): %s" % [scene_path, error_string(change_error)])
+		return
+
+	# Várjuk meg, amíg az új scene aktívvá válik és a MapGenerator elindul
+	for _attempt in range(30):
+		await get_tree().process_frame
+		var cur := get_tree().current_scene
+		if cur != null and cur.scene_file_path == scene_path:
+			break
+
+	var current_root := get_tree().current_scene
+	if current_root != null:
+		var map_gen := current_root.find_child("MapGenerator", true, false)
+		if map_gen != null:
+			var progress_cb := func(p: float, stage_text: String) -> void:
+				if _loading_screen != null:
+					_loading_screen.set_progress(0.35 + clampf(p, 0.0, 1.0) * 0.62, stage_text)
+
+			if map_gen.has_signal("map_generation_progress"):
+				map_gen.connect("map_generation_progress", progress_cb)
+
+			if bool(map_gen.get("is_generating")) and map_gen.has_signal("map_generation_completed"):
+				await map_gen.map_generation_completed
+
+			if map_gen.has_signal("map_generation_progress") and map_gen.is_connected("map_generation_progress", progress_cb):
+				map_gen.disconnect("map_generation_progress", progress_cb)
+
+	if _loading_screen != null:
+		_loading_screen.set_progress(0.98, "Köd és látótér véglegesítése...")
+
+	# Pár képkocka, hogy a FogOfWar shader, a kamera és a HUD biztosan renderelődjön a függöny mögött
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	dungeon_started.emit(configuration)
+
+	if _loading_screen != null:
+		await _loading_screen.finish_and_hide()
+
+	_is_transitioning = false
 
 
 # -----------------------------------------------------------------------------

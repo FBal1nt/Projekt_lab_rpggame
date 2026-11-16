@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bwegda1m08hf8" path="res://Scripts/UI/lobby.gd" id="1_a15b7"]
 [ext_resource type="PackedScene" uid="uid://tyslssobm4ap" path="res://Scenes/Shop/ShopWindow.tscn" id="2_q0a3m"]
 [ext_resource type="PackedScene" uid="uid://dbbx8xkxlo7eh" path="res://Scenes/Inventory/InventoryWindow.tscn" id="2_t6nvb"]
-[ext_resource type="Texture2D" path="res://Arts/UI/lobby_background.png" id="3_background"]
+[ext_resource type="Texture2D" path="res://Assets/UI/lobby_background.png" id="3_background"]
 [ext_resource type="Script" path="res://Scripts/UI/CharacterWindow.gd" id="4_character_window"]
 [ext_resource type="Script" path="res://Scripts/UI/BlacksmithWindow.gd" id="5_blacksmith_window"]
 [ext_resource type="Script" path="res://Scripts/UI/WizardWindow.gd" id="6_wizard_window"]
@@ -102,7 +102,7 @@ theme_override_constants/separation = 20
 
 [node name="GoldLabel" type="Label" parent="UI/TopBar/Container" unique_id=267772598]
 layout_mode = 2
-text = "Gold: 500"
+text = "ARANY  200"
 
 [node name="LevelLabel" type="Label" parent="UI/TopBar/Container" unique_id=1962142581]
 layout_mode = 2
@@ -268,10 +268,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -191.0
-offset_right = 300.0
-offset_bottom = 209.0
+offset_left = -625.0
+offset_top = -330.0
+offset_right = 625.0
+offset_bottom = 330.0
 
 [connection signal="pressed" from="Buildings/ShopBuilding" to="." method="_on_shop_building_pressed"]
 [connection signal="pressed" from="Buildings/CharacterBuilding" to="." method="_on_character_building_pressed"]

@@ -21,6 +21,13 @@ var monster_name: String:
 var title: String:
 	get: return enemy_data.title if enemy_data else ""
 
+@warning_ignore("enum_variable_without_default")
+var tier: EnemyData.EnemyTier:
+	get: return enemy_data.tier if enemy_data else EnemyData.EnemyTier.BASIC
+
+var enemy_level: int:
+	get: return enemy_data.enemy_level if enemy_data else 1
+
 var current_hp: int:
 	get: return enemy_data.get_current_hp() if enemy_data else 0
 
@@ -34,7 +41,10 @@ var initiative: float:
 	get: return enemy_data.get_initiative() if enemy_data else 8.0
 
 var attack_range: int:
-	get: return enemy_data.get_attack_range() if enemy_data else 1
+	get:
+		if combat and combat.elite_combat and combat.elite_combat.is_necromancer_out_of_magic():
+			return 1
+		return enemy_data.get_attack_range() if enemy_data else 1
 
 var grid_pos: Vector2i:
 	get: return mover.grid_pos if mover else Vector2i.ZERO
@@ -123,6 +133,11 @@ func opportunity_attack(target_hero: HeroController) -> void:
 func perform_combat_turn(target_hero: HeroController) -> int:
 	if combat: return await combat.perform_combat_turn(target_hero)
 	return 0
+
+func handle_post_damage_phase_reaction(target_hero: HeroController = null) -> bool:
+	if combat and combat.has_method("handle_post_damage_phase_reaction"):
+		return await combat.handle_post_damage_phase_reaction(target_hero)
+	return false
 
 func play_overworld_death() -> void:
 	if combat: await combat.play_overworld_death()

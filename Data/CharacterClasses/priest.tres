@@ -6,7 +6,7 @@
 script = ExtResource("1_script")
 id = &"priest"
 display_name = "Papnő"
-role = "Szent mágia és öngyógyítás (Lőtáv: 4)"
+role = "Szent gyógyító"
 description = "Szent energiát sugárzó papnő. 4 mezős távolsági szent varázslattal támad (17 sebzés, 95 HP), a H billentyűvel pedig képes önmagát meggyógyítani."
 placeholder_color = Color(0.9, 0.85, 0.5, 1)
 base_health = 95
@@ -23,6 +23,5 @@ health_per_level = 10
 damage_min_per_level = 1
 damage_max_per_level = 2
 defense_per_level = 1
-skill_ids = PackedStringArray("holy_light", "self_heal")
 skill_names = PackedStringArray("Szent Fény (4 mező)", "Öngyógyítás (H)")
-starting_equipment_ids = PackedStringArray()
+starting_equipment_ids = PackedStringArray("healing_staff")

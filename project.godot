@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 GameState="*res://Scripts/Managers/GameState.gd"
 DungeonManager="*res://Scripts/Managers/DungeonManager.gd"
 SettingsManager="*res://Scripts/Managers/SettingsManager.gd"
+SceneTransition="*res://Scripts/Managers/SceneTransition.gd"
 
 [display]
 

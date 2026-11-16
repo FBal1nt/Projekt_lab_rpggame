@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Currency/gold_coins.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"gold_coin"
+display_name = "Aranyérme"
+description = "Csillogó aranyérmék. Ez maga a fizetőeszközöd (1 aranyérme = 1 arany), amelyet a táborban, a boltban és a műhelyekben használhatsz."
+icon = ExtResource("2")
+size = Vector2i(1, 1)
+max_stack = 9999
+buy_price = -1
+sell_price = 0
+item_type = &"other"
+equipment_slot = &"none"
+can_upgrade = false
+max_upgrade_level = 5
+base_stats = {}
+upgrade_stat_bonuses = {}

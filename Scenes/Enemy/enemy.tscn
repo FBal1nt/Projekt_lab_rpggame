@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://c4cbj1slbcvun"]
 
-[ext_resource type="Script" uid="uid://dll5vs3jall0p" path="res://scripts/Enemy/EnemyController.gd" id="1_c4w8v"]
-[ext_resource type="Script" uid="uid://bh2hcnq46r4rt" path="res://scripts/Enemy/enemy_visuals.gd" id="2_xwavj"]
-[ext_resource type="Script" uid="uid://ds7ax5rpwufi8" path="res://scripts/Enemy/grid_mover.gd" id="3_nenq2"]
-[ext_resource type="Script" uid="uid://cx0t5mprnkpkx" path="res://scripts/Enemy/enemy_combat.gd" id="4_md484"]
-[ext_resource type="Script" uid="uid://bopak6ipbtpcn" path="res://scripts/Enemy/enemy_brain.gd" id="5_ipns3"]
+[ext_resource type="Script" uid="uid://dll5vs3jall0p" path="res://Scripts/Enemy/EnemyController.gd" id="1_c4w8v"]
+[ext_resource type="Script" uid="uid://bh2hcnq46r4rt" path="res://Scripts/Enemy/enemy_visuals.gd" id="2_xwavj"]
+[ext_resource type="Script" uid="uid://ds7ax5rpwufi8" path="res://Scripts/Enemy/grid_mover.gd" id="3_nenq2"]
+[ext_resource type="Script" uid="uid://cx0t5mprnkpkx" path="res://Scripts/Enemy/enemy_combat.gd" id="4_md484"]
+[ext_resource type="Script" uid="uid://bopak6ipbtpcn" path="res://Scripts/Enemy/enemy_brain.gd" id="5_ipns3"]
 
 [node name="Enemy" type="Node2D" unique_id=132133333]
 script = ExtResource("1_c4w8v")

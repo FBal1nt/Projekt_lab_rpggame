@@ -9,7 +9,6 @@ display_name = "Kovácsolt megerősítés"
 description = "Megvastagítja és megerősíti a páncélt vagy az ékszert, javítva a fizikai védelmet."
 workshop_type = &"blacksmith"
 option_category = &"defense"
-element = &"physical"
 applicable_item_types = PackedStringArray("armor", "ring", "earring", "shield", "helmet", "boots", "gloves")
 ingredient_item_ids = PackedStringArray("iron_ingot", "leather_strip")
 ingredient_amounts = PackedInt32Array(2, 1)

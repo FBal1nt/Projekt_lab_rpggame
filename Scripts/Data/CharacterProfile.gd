@@ -5,9 +5,9 @@ extends Resource
 ## CharacterClassData resources so class definitions can be extended safely.
 
 @export var id: String = ""
-@export var character_name: String = "Kardforgató"
+@export var character_name: String = ""
 ## Kept for save-file and teammate-script compatibility; this stores the class ID.
-@export var archetype: StringName = &"warrior"
+@export var archetype: StringName = &""
 @export var level: int = 1
 @export var xp: int = 0
 ## -1 means "initialize from the class's maximum health" when loading.
@@ -23,7 +23,11 @@ extends Resource
 ## Persistent additive modifiers granted by equipment, quests, traits, or mechanics.
 @export var stat_modifiers: Dictionary = {}
 ## Equipment slot -> InventoryItem instance. Items remain the same instances when equipped.
-var equipment: Dictionary = {}
+@export var equipment: Dictionary = {}
+## Cached class/level stats before equipment modifiers.
+@export var base_stats: Dictionary = {}
+## Cached final stats after all currently equipped items, upgrades and enchantments.
+@export var derived_stats: Dictionary = {}
 ## Dungeon effects should be JSON-compatible dictionaries, e.g. {"id":"poison", "turns_left":2}.
 var status_effects: Array[Dictionary] = []
 ## Skill/ability ID -> remaining cooldown turns.
