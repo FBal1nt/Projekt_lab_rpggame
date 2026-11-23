@@ -1237,4 +1237,5 @@ tile_map_data = PackedByteArray(0, 0, 254, 255, 0, 0, 2, 0, 3, 0, 3, 0, 0, 0, 25
 tile_set = SubResource("TileSet_uqsjs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=600648908]
+visible = false
 shape = SubResource("RectangleShape2D_g4v7s")

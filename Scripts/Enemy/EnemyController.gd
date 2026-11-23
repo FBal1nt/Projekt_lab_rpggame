@@ -77,6 +77,10 @@ var sprite: AnimatedSprite2D:
 # --- ÉLETCIKLUS ---
 
 func _ready() -> void:
+	# Skip spawning/activating enemies hidden in the editor so they can be tested one by one.
+	if not visible:
+		queue_free()
+		return
 	add_to_group("enemies")
 	z_index = 8
 	# LÁTHATÓSÁG: Nem rejtjük el azonnal, így látható marad a tesztelés alatt!
@@ -111,6 +115,13 @@ func get_current_hp() -> int: return current_hp
 func get_max_hp() -> int: return max_hp
 func get_attack_range() -> int: return attack_range
 func is_monster_alive() -> bool: return not is_dead and (enemy_data != null and enemy_data.is_alive())
+
+func is_targetable() -> bool:
+	if not is_monster_alive():
+		return false
+	if combat != null and combat.elite_combat != null and combat.elite_combat.is_necromancer_transitioning():
+		return false
+	return true
 
 func take_damage(incoming_raw_damage: int) -> int:
 	return combat.take_damage(incoming_raw_damage) if combat else 0
@@ -153,3 +164,7 @@ func update_fog_visibility() -> void:
 
 func take_turn(hero: HeroController) -> void:
 	if brain: brain.take_turn(hero)
+
+func cancel_movement_immediately() -> void:
+	if mover and mover.has_method("cancel_movement_immediately"):
+		mover.cancel_movement_immediately()

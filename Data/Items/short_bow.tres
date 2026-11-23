@@ -19,7 +19,7 @@ can_upgrade = true
 max_upgrade_level = 5
 base_stats = {
 "accuracy": 5.0,
-"damage": 9.0
+"damage": 6.0
 }
 upgrade_stat_bonuses = {
 "damage": 2.0

@@ -327,12 +327,21 @@ func _build_inspector_content(parent: Control) -> void:
 	_skills_row.add_theme_constant_override("v_separation", 6)
 	details_vbox.add_child(_skills_row)
 
+	var special_note_row := HBoxContainer.new()
+	special_note_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	special_note_row.add_theme_constant_override("separation", 6)
+	details_vbox.add_child(special_note_row)
+
+	var note_icon := UiIcons.make_icon_rect(UiIcons.LORE_LAMP, Vector2(15, 15))
+	note_icon.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	special_note_row.add_child(note_icon)
+
 	_special_note_label = Label.new()
 	_special_note_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_special_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_special_note_label.add_theme_color_override("font_color", Color("d8e2ec"))
 	_special_note_label.add_theme_font_size_override("font_size", 12)
-	details_vbox.add_child(_special_note_label)
+	special_note_row.add_child(_special_note_label)
 
 
 func reload_classes(auto_select_first: bool = false) -> void:
@@ -491,8 +500,8 @@ func _populate_inspector(class_data: CharacterClassData) -> void:
 		child.queue_free()
 
 	var meta := ClassVisualHelper.get_class_gameplay_meta(class_data.id)
-	_add_tag_pill("🎯 Lőtáv: " + str(meta.get("range_text", "1 mező")), Color("8db7d8"))
-	_add_tag_pill("⚡ " + str(meta.get("mobility_text", "")), Color("a7cf9c"))
+	_add_tag_pill("Lőtáv: " + str(meta.get("range_text", "1 mező")), Color("8db7d8"), UiIcons.TARGET)
+	_add_tag_pill(str(meta.get("mobility_text", "")), Color("a7cf9c"), UiIcons.INITIATIVE)
 
 	for child in _stat_bars_grid.get_children():
 		child.queue_free()
@@ -504,29 +513,34 @@ func _populate_inspector(class_data: CharacterClassData) -> void:
 	var def := int(stats.get("defense", 0))
 	var spd := int(stats.get("speed", 0))
 
-	_add_stat_bar("❤️ Életerő", float(hp), 160.0, "%d HP" % hp, Color("d96b6b"))
-	_add_stat_bar("⚔️ Sebzés", float(dmg_max), 30.0, "%d–%d" % [dmg_min, dmg_max], Color("e9a452"))
-	_add_stat_bar("🛡️ Védelem", float(def), 5.0, "%d" % def, Color("6ca8dc"))
-	_add_stat_bar("⚡ Kezdeményezés", float(spd), 16.0, "%d" % spd, Color("7bd19b"))
+	_add_stat_bar("Életerő", float(hp), 160.0, "%d HP" % hp, Color("d96b6b"), UiIcons.HEART)
+	_add_stat_bar("Sebzés", float(dmg_max), 30.0, "%d–%d" % [dmg_min, dmg_max], Color("e9a452"), UiIcons.PLAY_SWORD)
+	_add_stat_bar("Védelem", float(def), 5.0, "%d" % def, Color("6ca8dc"), UiIcons.SHIELD)
+	_add_stat_bar("Kezdeményezés", float(spd), 16.0, "%d" % spd, Color("7bd19b"), UiIcons.INITIATIVE)
 
 	for child in _secondary_stats_grid.get_children():
 		child.queue_free()
 
-	var secondary_items: Array[String] = [
-		"🎯 Pontosság: %d%%" % int(stats.get("accuracy", 0)),
-		"💥 Kritikus: %d%%" % int(round(float(stats.get("crit_chance", 0.0)))),
-		"💨 Kitérés: %d%%" % int(stats.get("dodge", 0)),
-		"💚 Gyógyerő: %d" % int(stats.get("healing_power", 0)),
-		"🧠 Stressztűrés: %d%%" % int(stats.get("stress_resistance", 0)),
-		"📈 Szintlépés: +%d HP / +%d sebzés" % [class_data.health_per_level, class_data.damage_max_per_level]
+	var secondary_items: Array[Dictionary] = [
+		{"icon": UiIcons.TARGET, "text": "Pontosság: %d%%" % int(stats.get("accuracy", 0))},
+		{"icon": UiIcons.CRIT_BURST, "text": "Kritikus: %d%%" % int(round(float(stats.get("crit_chance", 0.0))))},
+		{"icon": UiIcons.KNOCKBACK, "text": "Kitérés: %d%%" % int(stats.get("dodge", 0))},
+		{"icon": UiIcons.HEAL, "text": "Gyógyerő: %d" % int(stats.get("healing_power", 0))},
+		{"icon": UiIcons.MIND, "text": "Stressztűrés: %d%%" % int(stats.get("stress_resistance", 0))},
+		{"icon": UiIcons.LEVEL_UP, "text": "Szintlépés: +%d HP / +%d sebzés" % [class_data.health_per_level, class_data.damage_max_per_level]}
 	]
-	for item_text in secondary_items:
+	for item_entry in secondary_items:
+		var row := HBoxContainer.new()
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_theme_constant_override("separation", 6)
+		row.add_child(UiIcons.make_icon_rect(str(item_entry["icon"]), Vector2(14, 14)))
 		var lbl := Label.new()
-		lbl.text = item_text
+		lbl.text = str(item_entry["text"])
 		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl.add_theme_color_override("font_color", Color("cfd8e3"))
 		lbl.add_theme_font_size_override("font_size", 12)
-		_secondary_stats_grid.add_child(lbl)
+		row.add_child(lbl)
+		_secondary_stats_grid.add_child(row)
 
 	for child in _skills_row.get_children():
 		child.queue_free()
@@ -535,14 +549,17 @@ func _populate_inspector(class_data: CharacterClassData) -> void:
 		_add_tag_pill("Alap támadás", UI_THEME.MUTED)
 	else:
 		for skill_name in class_data.skill_names:
-			_add_skill_chip("✦ " + skill_name)
+			_add_skill_chip(skill_name, UiIcons.SPARKLE)
 
 	var note := str(meta.get("special_note", ""))
-	_special_note_label.text = ("💡 " + note) if not note.is_empty() else ""
-	_special_note_label.visible = not note.is_empty()
+	_special_note_label.text = note
+	if _special_note_label.get_parent() is HBoxContainer:
+		(_special_note_label.get_parent() as Control).visible = not note.is_empty()
+	else:
+		_special_note_label.visible = not note.is_empty()
 
 
-func _add_tag_pill(text_value: String, accent: Color) -> void:
+func _add_tag_pill(text_value: String, accent: Color, icon_path: String = "") -> void:
 	var pill := PanelContainer.new()
 	var box := UI_THEME.make_box(Color(0.06, 0.10, 0.16, 0.95), accent, 1, 6)
 	box.content_margin_left = 8
@@ -553,14 +570,20 @@ func _add_tag_pill(text_value: String, accent: Color) -> void:
 	pill.add_theme_stylebox_override("panel", box)
 	_tags_row.add_child(pill)
 
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 5)
+	pill.add_child(hbox)
+	if not icon_path.is_empty():
+		hbox.add_child(UiIcons.make_icon_rect(icon_path, Vector2(13, 13)))
+
 	var lbl := Label.new()
 	lbl.text = text_value
 	lbl.add_theme_color_override("font_color", UI_THEME.IVORY)
 	lbl.add_theme_font_size_override("font_size", 11)
-	pill.add_child(lbl)
+	hbox.add_child(lbl)
 
 
-func _add_skill_chip(text_value: String) -> void:
+func _add_skill_chip(text_value: String, icon_path: String = UiIcons.SPARKLE) -> void:
 	var chip := PanelContainer.new()
 	var box := UI_THEME.make_box(Color(0.14, 0.11, 0.05, 0.95), UI_THEME.GOLD, 1, 6)
 	box.content_margin_left = 10
@@ -571,21 +594,31 @@ func _add_skill_chip(text_value: String) -> void:
 	chip.add_theme_stylebox_override("panel", box)
 	_skills_row.add_child(chip)
 
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 5)
+	chip.add_child(hbox)
+	if not icon_path.is_empty():
+		hbox.add_child(UiIcons.make_icon_rect(icon_path, Vector2(13, 13)))
+
 	var lbl := Label.new()
 	lbl.text = text_value
 	lbl.add_theme_color_override("font_color", UI_THEME.IVORY)
 	lbl.add_theme_font_size_override("font_size", 12)
-	chip.add_child(lbl)
+	hbox.add_child(lbl)
 
 
-func _add_stat_bar(title_text: String, value: float, max_val: float, value_label_text: String, bar_color: Color) -> void:
+func _add_stat_bar(title_text: String, value: float, max_val: float, value_label_text: String, bar_color: Color, icon_path: String = "") -> void:
 	var row := VBoxContainer.new()
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 2)
 	_stat_bars_grid.add_child(row)
 
 	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 5)
 	row.add_child(header)
+
+	if not icon_path.is_empty():
+		header.add_child(UiIcons.make_icon_rect(icon_path, Vector2(14, 14)))
 
 	var name_lbl := Label.new()
 	name_lbl.text = title_text

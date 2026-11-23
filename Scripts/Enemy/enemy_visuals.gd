@@ -113,7 +113,7 @@ func play_death_animation() -> void:
 	var d_anim = _get_death_anim_name()
 	if d_anim != "" and sprite:
 		play(d_anim)
-		await sprite.animation_finished
+		await _await_anim_or_interrupt(d_anim, 1.2)
 
 func get_attack_animation_length(anim_name: String) -> float:
 	if not sprite or not sprite.sprite_frames or anim_name == "":
@@ -163,9 +163,10 @@ func play_hurt_reaction() -> void:
 	var is_dead = controller.is_dead if controller else false
 
 	if is_blocking:
+		AudioManager.sfx(&"shield_block", 0.94, 1.06, -1.5)
 		var b_anim = _get_block_anim_name()
-		if sprite and sprite.is_playing() and sprite.animation == b_anim:
-			await sprite.animation_finished
+		if b_anim != "":
+			await _await_anim_or_interrupt(b_anim, 0.8)
 		if controller and controller.combat:
 			controller.combat.is_blocking_active = false
 		if not is_dead: play_idle_anim()
@@ -173,25 +174,46 @@ func play_hurt_reaction() -> void:
 
 	var h_anim = _get_hurt_anim_name()
 	if h_anim != "" and not is_dead:
+		AudioManager.sfx(&"hurt_enemy", 0.90, 1.12, -2.5)
 		play(h_anim)
-		await sprite.animation_finished
-		if not is_dead: play_idle_anim()
+		await _await_anim_or_interrupt(h_anim, 0.8)
+		if not is_dead and controller and not controller.is_moving and not controller.is_attacking:
+			play_idle_anim()
 
 func play_respawn_animation() -> void:
 	if not sprite or not sprite.sprite_frames: return
+	AudioManager.sfx(&"enemy_revive", 0.94, 1.06, -1.0)
 	update_fog_visibility()
 
 	if sprite.sprite_frames.has_animation("respawn"):
 		play("respawn")
-		await sprite.animation_finished
+		await _await_anim_or_interrupt("respawn", 1.0)
 	else:
 		var d_anim = _get_death_anim_name()
 		if d_anim != "":
 			play_backwards(d_anim)
-			await sprite.animation_finished
+			await _await_anim_or_interrupt(d_anim, 1.2)
 
 	play_idle_anim()
 	update_fog_visibility()
+
+func _await_anim_or_interrupt(anim_name: String, fallback_duration: float = 0.8) -> void:
+	if not sprite or not is_instance_valid(sprite) or not sprite.is_playing() or sprite.animation != anim_name:
+		return
+	var dur: float = fallback_duration
+	if sprite.sprite_frames and sprite.sprite_frames.has_animation(anim_name):
+		var frames: int = sprite.sprite_frames.get_frame_count(anim_name)
+		var fps: float = sprite.sprite_frames.get_animation_speed(anim_name)
+		if fps > 0.0:
+			dur = float(frames) / fps + 0.05
+	var elapsed: float = 0.0
+	while elapsed < dur:
+		if not is_instance_valid(sprite) or not sprite.is_inside_tree():
+			return
+		if not sprite.is_playing() or sprite.animation != anim_name:
+			return
+		await get_tree().process_frame
+		elapsed += get_process_delta_time()
 
 func update_facing(target_grid_x: int) -> void:
 	if not sprite or controller == null: return
@@ -202,6 +224,9 @@ func update_facing(target_grid_x: int) -> void:
 
 func update_fog_visibility() -> void:
 	if controller == null: return
+	if controller.combat and controller.combat.elite_combat and controller.combat.elite_combat.is_necromancer_vanished():
+		controller.visible = false
+		return
 	if fog_of_war and fog_of_war.is_initialized:
 		controller.visible = (controller.grid_pos in fog_of_war.current_visible_cells)
 	else:
@@ -211,3 +236,30 @@ func update_fog_visibility() -> void:
 func _find_hero() -> HeroController:
 	var heroes = get_tree().get_nodes_in_group("player")
 	return heroes[0] if not heroes.is_empty() else null
+
+
+## Waits until target_sprite displays target_frame (0-indexed) of anim_name, falling back to a timed wait if sprite/anim is unavailable.
+static func await_sprite_frame(tree_owner: Node, target_sprite: AnimatedSprite2D, anim_name: String, target_frame: int) -> void:
+	if target_frame <= 0 or tree_owner == null or not is_instance_valid(tree_owner) or not tree_owner.is_inside_tree():
+		return
+	if target_sprite == null or not is_instance_valid(target_sprite) or not target_sprite.is_inside_tree() or target_sprite.sprite_frames == null or not target_sprite.sprite_frames.has_animation(anim_name):
+		await tree_owner.get_tree().create_timer(float(target_frame) / 8.0).timeout
+		return
+	var total_frames: int = target_sprite.sprite_frames.get_frame_count(anim_name)
+	var clamped_target: int = clampi(target_frame, 0, maxi(0, total_frames - 1))
+	while is_instance_valid(target_sprite) and target_sprite.is_inside_tree() and target_sprite.is_playing() and target_sprite.animation == anim_name and target_sprite.frame < clamped_target:
+		if not is_instance_valid(tree_owner) or not tree_owner.is_inside_tree():
+			return
+		await tree_owner.get_tree().process_frame
+
+
+## Lets the current attack animation finish and returns to idle asynchronously so long stun sequences do not freeze the attacker mid-swing.
+func finish_attack_to_idle_async(anim_name: String) -> void:
+	if anim_name == "" or not sprite or not is_instance_valid(sprite) or not sprite.is_inside_tree():
+		return
+	if sprite.is_playing() and sprite.animation == anim_name:
+		await _await_anim_or_interrupt(anim_name, 1.5)
+	if not is_instance_valid(self) or not is_instance_valid(controller) or not is_instance_valid(sprite):
+		return
+	if not controller.is_dead and not controller.is_moving and (sprite.animation == anim_name or not sprite.is_playing()):
+		play_idle_anim()

@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://caf7n1p6wvnpn"]
 
 [ext_resource type="Script" uid="uid://d27t50r8ivv6r" path="res://Scripts/UI/hud.gd" id="1_ahhtf"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/play_sword.png" id="2_icon_sword"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/shield.png" id="3_icon_shield"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/initiative.png" id="4_icon_init"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/vision.png" id="5_icon_vision"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/frost.png" id="6_icon_frost"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/pause.png" id="7_icon_pause"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/map.png" id="8_icon_map"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/inventory.png" id="9_icon_inventory"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Consumables/health_potion.png" id="10_icon_potion"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 12.0
@@ -183,15 +192,12 @@ custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
 
-[node name="IconLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox/IconBadge" unique_id=1637191996]
+[node name="IconTexture" type="TextureRect" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox/IconBadge" unique_id=1637191996]
+custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 18
-text = "⚔️"
-horizontal_alignment = 1
-vertical_alignment = 1
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_sword")
 
 [node name="NameLevelBox" type="VBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/HeaderBox" unique_id=262725468]
 layout_mode = 2
@@ -277,14 +283,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
 
-[node name="AtkLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/AtkBadge" unique_id=705700582]
+[node name="AtkRow" type="HBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/AtkBadge" unique_id=910000401]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="AtkIcon" type="TextureRect" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/AtkBadge/AtkRow" unique_id=910000402]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_sword")
+
+[node name="AtkLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/AtkBadge/AtkRow" unique_id=705700582]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.7, 0.65, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "⚔️ Támadás: 18"
+text = "Támadás: 18"
 horizontal_alignment = 1
 
 [node name="DefBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=2090340568]
@@ -292,14 +310,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
 
-[node name="DefLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/DefBadge" unique_id=2065000700]
+[node name="DefRow" type="HBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/DefBadge" unique_id=910000403]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="DefIcon" type="TextureRect" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/DefBadge/DefRow" unique_id=910000404]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("3_icon_shield")
+
+[node name="DefLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/DefBadge/DefRow" unique_id=2065000700]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.65, 0.8, 0.95, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "🛡️ Védelem: 1"
+text = "Védelem: 1"
 horizontal_alignment = 1
 
 [node name="InitBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=1725124339]
@@ -307,14 +337,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
 
-[node name="InitLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/InitBadge" unique_id=1265225090]
+[node name="InitRow" type="HBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/InitBadge" unique_id=910000405]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="InitIcon" type="TextureRect" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/InitBadge/InitRow" unique_id=910000406]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("4_icon_init")
+
+[node name="InitLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/InitBadge/InitRow" unique_id=1265225090]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.9, 0.65, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "⚡ Kezdeményezés: 15.0"
+text = "Kezdeményezés: 15.0"
 horizontal_alignment = 1
 
 [node name="VisionBadge" type="PanelContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid" unique_id=1770702965]
@@ -322,14 +364,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
 
-[node name="VisionLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/VisionBadge" unique_id=1767290060]
+[node name="VisionRow" type="HBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/VisionBadge" unique_id=910000407]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="VisionIcon" type="TextureRect" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/VisionBadge/VisionRow" unique_id=910000408]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("5_icon_vision")
+
+[node name="VisionLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/StatsGrid/VisionBadge/VisionRow" unique_id=1767290060]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.65, 0.95, 0.85, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "👁️ Látótáv: 2 (5x5)"
+text = "Látótáv: 2 (5x5)"
 horizontal_alignment = 1
 
 [node name="ClassAbilityContainer" type="MarginContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer" unique_id=1948201970]
@@ -346,14 +400,28 @@ max_value = 1.0
 value = 1.0
 show_percentage = false
 
-[node name="ClassAbilityLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/ClassAbilityContainer" unique_id=1948201972]
+[node name="ClassAbilityRow" type="HBoxContainer" parent="StatsMargin/MainStatsPanel/VBoxContainer/ClassAbilityContainer" unique_id=910000409]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="ClassAbilityIcon" type="TextureRect" parent="StatsMargin/MainStatsPanel/VBoxContainer/ClassAbilityContainer/ClassAbilityRow" unique_id=910000410]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("6_icon_frost")
+
+[node name="ClassAbilityLabel" type="Label" parent="StatsMargin/MainStatsPanel/VBoxContainer/ClassAbilityContainer/ClassAbilityRow" unique_id=1948201972]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.96, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "❄️ Elem: Jég  [F]"
+text = "Elem: Jég  [F]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -400,11 +468,86 @@ grow_horizontal = 0
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 0.66, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 16
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_pause_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_pause_hover")
-text = "⏸️  SZÜNET  [P / ESC]"
+text = "SZÜNET  [P / ESC]"
+icon = ExtResource("7_icon_pause")
+expand_icon = true
+
+[node name="BackpackMargin" type="MarginContainer" parent="." unique_id=1948201980]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 268.0
+offset_right = -16.0
+offset_bottom = 304.0
+grow_horizontal = 0
+
+[node name="BackpackButton" type="Button" parent="BackpackMargin" unique_id=1948201981]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.66, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 16
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_hover")
+text = "HÁTIZSÁK  [TAB]"
+icon = ExtResource("9_icon_inventory")
+expand_icon = true
+
+[node name="PotionMargin" type="MarginContainer" parent="." unique_id=1948201982]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 310.0
+offset_right = -16.0
+offset_bottom = 346.0
+grow_horizontal = 0
+
+[node name="PotionButton" type="Button" parent="PotionMargin" unique_id=1948201983]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.96, 0.78, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.54, 0.6, 0.8)
+theme_override_constants/icon_max_width = 18
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_hover")
+text = "GYÓGYITAL (0)  [Q]"
+icon = ExtResource("10_icon_potion")
+expand_icon = true
+
+[node name="HudToastPanel" type="PanelContainer" parent="." unique_id=1948201984]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_top = 18.0
+offset_right = 180.0
+offset_bottom = 52.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="HudToastLabel" type="Label" parent="HudToastPanel" unique_id=1948201985]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.98, 0.8, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "+40 HP (Gyógyital)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="FullscreenMapOverlay" type="Control" parent="." unique_id=-2061521730]
 visible = false
@@ -445,6 +588,13 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="BigMapIcon" type="TextureRect" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapHeader" unique_id=910000411]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("8_icon_map")
+
 [node name="BigMapTitle" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapHeader" unique_id=906262269]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.85, 0.55, 1)
@@ -452,7 +602,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 14
-text = "🗺️ DUNGEON TÉRKÉP"
+text = "DUNGEON TÉRKÉP"
 
 [node name="BigMapCoords" type="Label" parent="FullscreenMapOverlay/MapCenter/BigMapPanel/BigMapVBox/BigMapHeader" unique_id=1397311305]
 layout_mode = 2

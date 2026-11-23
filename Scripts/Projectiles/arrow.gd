@@ -26,6 +26,7 @@ func launch(start_pos: Vector2, target_enemy: Node2D, damage: int, source_hero: 
 
 func _on_hit(target_enemy: Node2D, damage: int, source_hero: Object) -> void:
 	if is_instance_valid(target_enemy):
+		AudioManager.sfx(&"arrow_hit", 0.94, 1.08)
 		# Szigorúan metódushívás, tilos a közvetlen 'current_hp' módosítás!
 		if target_enemy.has_method("take_damage"):
 			target_enemy.take_damage(damage)

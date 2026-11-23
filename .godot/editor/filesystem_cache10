@@ -1,11 +1,70 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1794743478
+::res://::1795463631
 icon.svg::CompressedTexture2D::3596759946226483595::1794250973::1794250973::1::::<><><>0<>0<>d4c473c2969ed7a60c1c977a8100f866<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 README.md::TextFile::-1::1794668763::0::1::::<><><>0<>0<><>::
-::res://Assets/::1794742963
+specs.txt::TextFile::-1::1795455697::0::1::::<><><>0<>0<><>::
+::res://Assets/::1795444846
 LICENSE.txt::TextFile::-1::1794250973::0::1::::<><><>0<>0<><>::
+::res://Assets/Audio/::1795444852
+::res://Assets/Audio/Music/::1795451318
+battle_theme.ogg::AudioStreamOggVorbis::22957346087831681::1795444867::1795451318::1::::<><><>0<>0<>936455fa9d248d50a994b13d4b8445c0<>res://.godot/imported/battle_theme.ogg-9f00779dd18bd215f10141d5b3edf219.oggvorbisstr::
+boss_theme.ogg::AudioStreamOggVorbis::4008533514781605249::1795444869::1795451318::1::::<><><>0<>0<>2b1d3c6d0476c3bfdf5081bf6ee38853<>res://.godot/imported/boss_theme.ogg-8da55e5327e14a563f70eefb7a9e2324.oggvorbisstr::
+dungeon_theme.ogg::AudioStreamOggVorbis::5544855005979877506::1795444863::1795451318::1::::<><><>0<>0<>36865d86206e57eefaa5389ca25ee368<>res://.godot/imported/dungeon_theme.ogg-761907b1dd0928797319e8bc63c96305.oggvorbisstr::
+lobby_theme.ogg::AudioStreamOggVorbis::532376819522275201::1795444857::1795451318::1::::<><><>0<>0<>14bf707ea1a0f6c979bb998cd1ad8ad3<>res://.godot/imported/lobby_theme.ogg-59c45d910d59cacd94827326fc74592d.oggvorbisstr::
+menu_theme.ogg::AudioStreamOggVorbis::5986236300808928320::1795444852::1795451318::1::::<><><>0<>0<>b429a943cd2d07a8ea4eb60222350bc5<>res://.godot/imported/menu_theme.ogg-c77eab81efdd0d39a4991d1d03093d43.oggvorbisstr::
+::res://Assets/Audio/SFX/::1795451318
+arrow_hit.wav::AudioStreamWAV::4269783436543394498::1795444847::1795451318::1::::<><><>0<>0<>7da98c4f110b19a78e798b21a00ac0b1<>res://.godot/imported/arrow_hit.wav-b1886024f349897fd8f554a42e2c5c64.sample::
+bleed_inflict.wav::AudioStreamWAV::4682708212381329820::1795444847::1795451318::1::::<><><>0<>0<>991e6583afc54532f8b0885e2a571f39<>res://.godot/imported/bleed_inflict.wav-4c58b4a39b3986fa8dd8f59504070442.sample::
+bow_release.wav::AudioStreamWAV::6667742772603046357::1795444847::1795451318::1::::<><><>0<>0<>a41b15df2d9157284cf905cb5cde3e0c<>res://.godot/imported/bow_release.wav-6d779bb22a3bbcaf7eefac6ad877448e.sample::
+crit_slam.wav::AudioStreamWAV::2309562988793727253::1795444847::1795451318::1::::<><><>0<>0<>7b06904c5fce2c17adce4b6ad1bc2374<>res://.godot/imported/crit_slam.wav-d48cb3dc10c62a7f0851e45fe7e1bec8.sample::
+death_enemy.wav::AudioStreamWAV::2045673896236694255::1795444847::1795451318::1::::<><><>0<>0<>50f0f010c3cf33dd01d3ab94fe94eff3<>res://.godot/imported/death_enemy.wav-791259af33aca5f8255be9882f777652.sample::
+death_hero.wav::AudioStreamWAV::8547394175880215798::1795444847::1795451318::1::::<><><>0<>0<>d4ff8a84d2ba75722b2694fdb5ae90ac<>res://.godot/imported/death_hero.wav-5144d07a86e0719640be61b69615def4.sample::
+defeat_stinger.wav::AudioStreamWAV::1752392917197273718::1795444847::1795451318::1::::<><><>0<>0<>b46c1f4ea9d6f88d358448ada5365c93<>res://.godot/imported/defeat_stinger.wav-4792c837f6aa3a604c4f26c8eae545cd.sample::
+dodge_whoosh.wav::AudioStreamWAV::338008948190787084::1795444847::1795451318::1::::<><><>0<>0<>e79297f17cfb0e94636a42894694fd60<>res://.godot/imported/dodge_whoosh.wav-f60b6a7c90a5927232598973226ac438.sample::
+element_swap.wav::AudioStreamWAV::354755376894502080::1795444847::1795451318::1::::<><><>0<>0<>f16bd9562c3716dd80102dd9f76c38ca<>res://.godot/imported/element_swap.wav-a78a41eb13311e24c45716486f30f7f2.sample::
+enchant_apply.wav::AudioStreamWAV::1641544956580559409::1795444846::1795451318::1::::<><><>0<>0<>48bbeb035669f50ec64fa166e0fa2b26<>res://.godot/imported/enchant_apply.wav-143c0ba9f744cae4f4f627738488f956.sample::
+enemy_revive.wav::AudioStreamWAV::7379756649399108792::1795444847::1795451318::1::::<><><>0<>0<>54b63166f01133946399beeeaab38475<>res://.godot/imported/enemy_revive.wav-bfd073a324bc2b5d53efe2157b40cde9.sample::
+gold_coins.wav::AudioStreamWAV::1844856220060879640::1795444846::1795451318::1::::<><><>0<>0<>679b0ff0d13f26819c3b5fbe9f1b0da6<>res://.godot/imported/gold_coins.wav-d8862854d50e8b9e07e4645044ed0821.sample::
+heavy_cleave.wav::AudioStreamWAV::3736870888161166377::1795444847::1795451318::1::::<><><>0<>0<>69d43f809438cb0ba4105adefa405de4<>res://.godot/imported/heavy_cleave.wav-dd990006934f6795e057987a42d30033.sample::
+hit_melee.wav::AudioStreamWAV::8047338291338311684::1795444847::1795451318::1::::<><><>0<>0<>35851b0d470821f68bcd8a7cb3102ef8<>res://.godot/imported/hit_melee.wav-7041cab1817f06cf0c454e6bf321eb4c.sample::
+hurt_enemy.wav::AudioStreamWAV::8421742036212329635::1795444847::1795451318::1::::<><><>0<>0<>6a864fc9e8386823fa6a2e48013a1985<>res://.godot/imported/hurt_enemy.wav-c68020e43ab3360995edd61a7bf07ec5.sample::
+hurt_hero.wav::AudioStreamWAV::7270104229690924985::1795444847::1795451318::1::::<><><>0<>0<>51ee721bbe290d2e9e63df0af1ee74ea<>res://.godot/imported/hurt_hero.wav-bb5c41700033ce1777a31e72a098f484.sample::
+item_equip.wav::AudioStreamWAV::404773073440967570::1795444846::1795451318::1::::<><><>0<>0<>6f169b01344222b4a15a80b517195d21<>res://.godot/imported/item_equip.wav-eaca5f6c0691f45a21d7e927a589ac5b.sample::
+item_move.wav::AudioStreamWAV::7440077210056244665::1795444846::1795451318::1::::<><><>0<>0<>875e19103c87c1f525fc24c95f8b40ba<>res://.godot/imported/item_move.wav-2440578bd61c479392e71431c9716593.sample::
+item_unequip.wav::AudioStreamWAV::5475048933971366211::1795444846::1795451318::1::::<><><>0<>0<>e8de62e4738c4c117e6f2af1e2eca5b5<>res://.godot/imported/item_unequip.wav-39faf3521ab1d77f949631536c89da54.sample::
+knockback_slide.wav::AudioStreamWAV::2012848265695107565::1795444847::1795451318::1::::<><><>0<>0<>0119a7f669d2e387f43f23b1f778ceab<>res://.godot/imported/knockback_slide.wav-5332b7d13ea918ad56b8835a4fbcdb9e.sample::
+level_up.wav::AudioStreamWAV::3826447342681543119::1795444846::1795451318::1::::<><><>0<>0<>4f1deac75859cda5733f369f0631ffb9<>res://.godot/imported/level_up.wav-6b6aef27efd2d8ed8769cee80341d611.sample::
+monster_growl.wav::AudioStreamWAV::4044567247064336394::1795444847::1795451318::1::::<><><>0<>0<>b55f1b870d7e01be3694c06712d22a40<>res://.godot/imported/monster_growl.wav-caec5f3a975ef83b422e1be9875fe4c0.sample::
+necro_cast.wav::AudioStreamWAV::7036911771666113281::1795444847::1795451318::1::::<><><>0<>0<>7f68bbbd42749b2892cd65fb359a6909<>res://.godot/imported/necro_cast.wav-99b655ffd2082e18e12c5a6fda451761.sample::
+necro_reappear.wav::AudioStreamWAV::5449990061422616991::1795444847::1795451318::1::::<><><>0<>0<>82c0a41658713c7b9b4e2d48a9f902ef<>res://.godot/imported/necro_reappear.wav-c206c66f2a80b9cd094aa181e76ac7d0.sample::
+necro_summon.wav::AudioStreamWAV::8969749480550999141::1795444847::1795451318::1::::<><><>0<>0<>8adeadb60faaeab61b121785093719ad<>res://.godot/imported/necro_summon.wav-b8602789cc7ca2365854880cff330688.sample::
+necro_vanish.wav::AudioStreamWAV::4128984436312137813::1795444847::1795451318::1::::<><><>0<>0<>349e3210e82919834554c5d6b90d5ee0<>res://.godot/imported/necro_vanish.wav-9d8d3963933e2a913e5a060287d73bc2.sample::
+portal_enter.wav::AudioStreamWAV::7985616281639595571::1795444847::1795451318::1::::<><><>0<>0<>06b00586474204246cd3baf097e9a6f4<>res://.godot/imported/portal_enter.wav-f946c244f66c457a1e3c96c87733f92f.sample::
+potion_drink.wav::AudioStreamWAV::3123530155114855328::1795444846::1795451318::1::::<><><>0<>0<>bfe6540b3d26a0641cb72635f1cfe182<>res://.godot/imported/potion_drink.wav-7ef1cc474c9cf2c8eada101e54252dc9.sample::
+shield_block.wav::AudioStreamWAV::1497798768867962155::1795444847::1795451318::1::::<><><>0<>0<>474827fa2322e0a7bb15a25aebd939b0<>res://.godot/imported/shield_block.wav-e0a134992621932045ba4eb8cd1ee3fa.sample::
+smith_craft.wav::AudioStreamWAV::5554043052764222900::1795444846::1795451318::1::::<><><>0<>0<>8856d10a8e1402e1c1a40d9e243ab218<>res://.godot/imported/smith_craft.wav-d2c5c9054519d779976ba2c6f50124ae.sample::
+smith_upgrade.wav::AudioStreamWAV::7278348490552540560::1795444846::1795451318::1::::<><><>0<>0<>786ac3f97c1c54a1d6342f33b78bf539<>res://.godot/imported/smith_upgrade.wav-2ab6a55f5bb2dc5bbf6210dd1b4593c7.sample::
+spell_fire.wav::AudioStreamWAV::9024297871108081330::1795444847::1795451318::1::::<><><>0<>0<>641966cc35032ec2c370af6f19c803dd<>res://.godot/imported/spell_fire.wav-abcacc1e19c1dfa15673a904c7000d0c.sample::
+spell_heal.wav::AudioStreamWAV::2119113045840204584::1795444847::1795451318::1::::<><><>0<>0<>1f243186cde274c4c1955e83bfa216d4<>res://.godot/imported/spell_heal.wav-d2627ffe9b89d161ffa9f17a3f80c8fe.sample::
+spell_holy.wav::AudioStreamWAV::9134197487320516222::1795444847::1795451318::1::::<><><>0<>0<>451be1e97e006cc70a3012ad4dfd72f0<>res://.godot/imported/spell_holy.wav-2fff7bdf27d5eb42685ba0c363f2ba1f.sample::
+spell_ice.wav::AudioStreamWAV::3087907820343863728::1795444847::1795451318::1::::<><><>0<>0<>4c8e010b14db0324ae2ec08773c7a107<>res://.godot/imported/spell_ice.wav-bf1e28c49f4e80920f0f983bf25bbe49.sample::
+step_enemy.wav::AudioStreamWAV::7217834761033984995::1795444847::1795451318::1::::<><><>0<>0<>e052da07df5862f8347ef308bf51efdd<>res://.godot/imported/step_enemy.wav-6f462ed1f11ddd965d66102311c96b95.sample::
+step_hero.wav::AudioStreamWAV::984664778899869705::1795444847::1795451318::1::::<><><>0<>0<>6e5016fc9feac46ee8a23622ec7b82a7<>res://.godot/imported/step_hero.wav-42e151c92721beafdf316c82100d259b.sample::
+sword_swing.wav::AudioStreamWAV::6722756413003597609::1795444847::1795451318::1::::<><><>0<>0<>865a00ba2b9613207fbe7f70ff6663ef<>res://.godot/imported/sword_swing.wav-743e1e6e7b3d2894866678a1d0ec263e.sample::
+title_unlock.wav::AudioStreamWAV::4427962535875416823::1795444846::1795451318::1::::<><><>0<>0<>8c468ed6e84f9cc1ed619a368c7621b3<>res://.godot/imported/title_unlock.wav-cb375e1f7a5cf55677e824c624d05f5d.sample::
+ui_cancel.wav::AudioStreamWAV::2995029717257618247::1795444846::1795451318::1::::<><><>0<>0<>9153ca6e5d9386aca9cdc44acc995e8d<>res://.godot/imported/ui_cancel.wav-b1d54bdb3d2e7749cfce40313a3d8727.sample::
+ui_click.wav::AudioStreamWAV::243194720406606538::1795444846::1795451318::1::::<><><>0<>0<>9c7b62992b1c5a7c1bd9b0632e27a868<>res://.godot/imported/ui_click.wav-57f00c538ef11abf23cb84803435bfe8.sample::
+ui_confirm.wav::AudioStreamWAV::4352320217148490701::1795444846::1795451318::1::::<><><>0<>0<>d2c6ad5baafa92a6209dd2aad9efbcd9<>res://.godot/imported/ui_confirm.wav-0d848d6d5bb18121748d5521d546d402.sample::
+ui_error.wav::AudioStreamWAV::3731384104660462333::1795444846::1795451318::1::::<><><>0<>0<>fe186e3a12f13648d62d889f03477b44<>res://.godot/imported/ui_error.wav-8fa4f1e924996778c08af9c890c59cfa.sample::
+ui_hover.wav::AudioStreamWAV::998977648288524147::1795444846::1795451318::1::::<><><>0<>0<>705710ee815e2436aa24c866eb8e1088<>res://.godot/imported/ui_hover.wav-74b4d88c9ba4461bda6582444451e424.sample::
+ui_map_open.wav::AudioStreamWAV::8321880189755052619::1795444846::1795451318::1::::<><><>0<>0<>1eaf805c55521f3f0e1d9824b724699d<>res://.godot/imported/ui_map_open.wav-1ec5cc7a411b0961b798084b097cb6ca.sample::
+ui_pause.wav::AudioStreamWAV::2138596733640423849::1795444846::1795451318::1::::<><><>0<>0<>d208212f11f9a18ec1918940ef0fdf83<>res://.godot/imported/ui_pause.wav-f617b1ad5c5c3a6246b40871af4ca57b.sample::
+ui_window_close.wav::AudioStreamWAV::3678839339360729301::1795444846::1795451318::1::::<><><>0<>0<>084f9a97ee6a58d549931b096af48075<>res://.godot/imported/ui_window_close.wav-1ed372f8d7fa2e5bf6c00f72369ea562.sample::
+ui_window_open.wav::AudioStreamWAV::7735673636942710345::1795444846::1795451318::1::::<><><>0<>0<>78cb54836f7f19d780e97e75edd7eaeb<>res://.godot/imported/ui_window_open.wav-33e602568ed3aea63c39be25e78193d3.sample::
+victory_fanfare.wav::AudioStreamWAV::449222814551948447::1795444847::1795451318::1::::<><><>0<>0<>580b7444957d12061e98cfd8f23f099b<>res://.godot/imported/victory_fanfare.wav-a38adf716f19bca9b2e4f3cb3913f180.sample::
+werewolf_regen.wav::AudioStreamWAV::2484112129138298157::1795444847::1795451318::1::::<><><>0<>0<>9146b1325a65928c2e24854a8699f455<>res://.godot/imported/werewolf_regen.wav-9085009d68f8250b1e8eb6a0b93e99cf.sample::
 ::res://Assets/Characters/::1794742962
-::res://Assets/Characters/Archer/::1794742960
+::res://Assets/Characters/Archer/::1795452500
 ::res://Assets/Characters/Archer/Archer/::1794742960
 Archer.png::CompressedTexture2D::5847811443131200891::1794250973::1794668649::1::::<><><>0<>0<>5d4551f96ae20018a6e9d95ec03f058e<>res://.godot/imported/Archer.png-d15e19cdf4a3b843fb1e4148914e2da8.ctex::
 Archer_Attack01.png::CompressedTexture2D::1064829166303188454::1794250973::1794668649::1::::<><><>0<>0<>6be6d6e0f4e90600c8bdef77366633d9<>res://.godot/imported/Archer_Attack01.png-a0f88fdc845d094842fff9740a591152.ctex::
@@ -14,19 +73,11 @@ Archer_Death.png::CompressedTexture2D::1363014000268414878::1794250973::17946686
 Archer_Hurt.png::CompressedTexture2D::2408802867500602734::1794250973::1794668649::1::::<><><>0<>0<>c1d6a88f1736ca829702fc9905903a0c<>res://.godot/imported/Archer_Hurt.png-352da936e69c0f29a8be1f17ef15c44e.ctex::
 Archer_Idle.png::CompressedTexture2D::4158297861845826608::1794250973::1794668649::1::::<><><>0<>0<>da25944db731405859c485c1952a2786<>res://.godot/imported/Archer_Idle.png-b3c7821387c2946417d687c4d985df08.ctex::
 Archer_Walk.png::CompressedTexture2D::3352122550280155158::1794250973::1794668649::1::::<><><>0<>0<>e625e57324835ab8a6c61baf96c5ee4f<>res://.godot/imported/Archer_Walk.png-9b807fa9e5d86cad3cbc486cd5ffd660.ctex::
-::res://Assets/Characters/Archer/Archer with shadows/::1794742960
-Archer.png::CompressedTexture2D::2366621873961303219::1794250973::1794668649::1::::<><><>0<>0<>3f54c7b3369cacf8ede0ccedfa60feae<>res://.godot/imported/Archer.png-0fe8abbf37a6de64459ea0d457b8592e.ctex::
-Archer_Attack01.png::CompressedTexture2D::4468797033456706751::1794250973::1794668649::1::::<><><>0<>0<>99b14f2d97d5b0d41384c25c1a06638a<>res://.godot/imported/Archer_Attack01.png-c613f2bdd30201963d212b67515a6f74.ctex::
-Archer_Attack02.png::CompressedTexture2D::4857800776447641976::1794250973::1794668649::1::::<><><>0<>0<>0c86c14b8e55871fc571ed26ce14b82f<>res://.godot/imported/Archer_Attack02.png-be98dd9e0aa6e1d080e5f7214e262e0d.ctex::
-Archer_Death.png::CompressedTexture2D::1104260542108095236::1794250973::1794668649::1::::<><><>0<>0<>b9d56ece1efff7c9e730db0d9fcfecaf<>res://.godot/imported/Archer_Death.png-d737def18fe115be33f25f114bfc8c5b.ctex::
-Archer_Hurt.png::CompressedTexture2D::2076330070234660917::1794250973::1794668649::1::::<><><>0<>0<>880fa0ce770ff24116a2eef7e5f63b90<>res://.godot/imported/Archer_Hurt.png-23304913f475a6bfb294f88af25a370b.ctex::
-Archer_Idle.png::CompressedTexture2D::2530229963308181931::1794250973::1794668649::1::::<><><>0<>0<>3739802e9425b2ec838e3335a34c9a6f<>res://.godot/imported/Archer_Idle.png-b601ad0912347b8652a3281b0ea405e3.ctex::
-Archer_Walk.png::CompressedTexture2D::4288067178707191807::1794250973::1794668649::1::::<><><>0<>0<>942bce8f5d5d88f50963f5f166bf86ee<>res://.godot/imported/Archer_Walk.png-15cbd48926c164e9822ad13c99000116.ctex::
 ::res://Assets/Characters/Archer/Arrow(projectile)/::1794742960
 Arrow02(32x32).png::CompressedTexture2D::4073999415561558742::1794250973::1794668649::1::::<><><>0<>0<>716538ebfbc6924028d074060204da46<>res://.godot/imported/Arrow02(32x32).png-5a1cc2dc1f2e5bdfcc1f80ea4261253a.ctex::
 Arrow02(100x100).png::CompressedTexture2D::1200413757659771145::1794250973::1794668649::1::::<><><>0<>0<>bcecb5dc32b7519ea46d7e88112b2b97<>res://.godot/imported/Arrow02(100x100).png-cc9b543cde2adca91355593ad7847455.ctex::
-::res://Assets/Characters/Armored Axeman/::1794742960
-::res://Assets/Characters/Armored Axeman/Armored Axeman/::1794742960
+::res://Assets/Characters/Armored Axeman/::1795452503
+::res://Assets/Characters/Armored Axeman/Armored Axeman/::1795453294
 Armored Axeman.png::CompressedTexture2D::850115154504667820::1794250973::1794668649::1::::<><><>0<>0<>e1546111f717a60f412b3d67a1ddce73<>res://.godot/imported/Armored Axeman.png-95423953891bbf3c0b9c0481217accb2.ctex::
 Armored Axeman_Attack01.png::CompressedTexture2D::4198243303038561593::1794250973::1794668650::1::::<><><>0<>0<>5aeeb6ae568befa327ddd90e73289ad5<>res://.godot/imported/Armored Axeman_Attack01.png-035dedce333ff2b544d42a180128847c.ctex::
 Armored Axeman_Attack02.png::CompressedTexture2D::4805138945750416033::1794250973::1794668650::1::::<><><>0<>0<>ac91bd779c851b856c176efb04144b0f<>res://.godot/imported/Armored Axeman_Attack02.png-c7a5e4a08befe9a3779c7cb5687f9f6a.ctex::
@@ -34,18 +85,10 @@ Armored Axeman_Attack03.png::CompressedTexture2D::8520984571514811838::179425097
 Armored Axeman_Death.png::CompressedTexture2D::837649382672418027::1794250973::1794668650::1::::<><><>0<>0<>0735bda36d8801ef4391f67f7514c00a<>res://.godot/imported/Armored Axeman_Death.png-276a136ca4c02d3e7601ad2479132c8e.ctex::
 Armored Axeman_Hurt.png::CompressedTexture2D::3841798251859001853::1794250973::1794668650::1::::<><><>0<>0<>d0dcd03317e5948fe905fe8fbbb55492<>res://.godot/imported/Armored Axeman_Hurt.png-285317aa21452f119d14ec9f64d36f9a.ctex::
 Armored Axeman_Idle.png::CompressedTexture2D::7284767598235407214::1794250973::1794668650::1::::<><><>0<>0<>74210ef6d3879d8a7ae5fe626ae5ba02<>res://.godot/imported/Armored Axeman_Idle.png-5e9166ac20846cb36aefaf1837cdedf1.ctex::
+Armored Axeman_Summon.png::CompressedTexture2D::905368193908368611::1795453292::1795453294::1::::<><><>0<>0<>7fbda89efcfecfb4d7cc4026f7e8c23c<>res://.godot/imported/Armored Axeman_Summon.png-e6c99f73adfa43bd182354e5df121a09.ctex::
 Armored Axeman_Walk.png::CompressedTexture2D::676887930798648957::1794250973::1794668650::1::::<><><>0<>0<>94146ea4b5dd3a28c9be2923f04d51a5<>res://.godot/imported/Armored Axeman_Walk.png-36e78193b1b5057c6394a8819c90945c.ctex::
-::res://Assets/Characters/Armored Axeman/Armored Axeman with shadows/::1794742960
-Armored Axeman.png::CompressedTexture2D::6232902468897632262::1794250973::1794668649::1::::<><><>0<>0<>7dd75d95adf10e8d896b692a8c2daff8<>res://.godot/imported/Armored Axeman.png-32f9bd65ef29b94ffc8300528336a1c1.ctex::
-Armored Axeman_Attack01.png::CompressedTexture2D::2422402955981823205::1794250973::1794668649::1::::<><><>0<>0<>64b40f683a0213ceeac0099386479e94<>res://.godot/imported/Armored Axeman_Attack01.png-466b7983f094e00e4191b4db4fa813ec.ctex::
-Armored Axeman_Attack02.png::CompressedTexture2D::56744214373894139::1794250973::1794668649::1::::<><><>0<>0<>9930ea716fd9bbcc17c493e053011d58<>res://.godot/imported/Armored Axeman_Attack02.png-aef87ae0f9ab0e8b614eceb00c6f7f85.ctex::
-Armored Axeman_Attack03.png::CompressedTexture2D::4279285000698413784::1794250973::1794668649::1::::<><><>0<>0<>7425309ee9d1396ab6183bc4befb9b07<>res://.godot/imported/Armored Axeman_Attack03.png-d412e9fb759fef15b2a1fb06c41db592.ctex::
-Armored Axeman_Death.png::CompressedTexture2D::7532514317143043085::1794250973::1794668649::1::::<><><>0<>0<>2fcaa91b596b4f5f5583a1b277e7a057<>res://.godot/imported/Armored Axeman_Death.png-4962d98b88599cda091c65f62919cf9d.ctex::
-Armored Axeman_Hurt.png::CompressedTexture2D::6874184049454786093::1794250973::1794668649::1::::<><><>0<>0<>712d8dddf09765c5b0c24efdad224b07<>res://.godot/imported/Armored Axeman_Hurt.png-b22f8e2d0f011a659d7973703197ca2d.ctex::
-Armored Axeman_Idle.png::CompressedTexture2D::8489567602611933577::1794250973::1794668649::1::::<><><>0<>0<>52ee05abe87fa2ff2217b8792f370b1d<>res://.godot/imported/Armored Axeman_Idle.png-c2584f5fb4639842e00cac8e44fce863.ctex::
-Armored Axeman_Walk.png::CompressedTexture2D::2483022161238951408::1794250973::1794668649::1::::<><><>0<>0<>737f0542278b327eecdfc6bb46c69a87<>res://.godot/imported/Armored Axeman_Walk.png-3d6e7da58ed65d59839c7a80a264354a.ctex::
-::res://Assets/Characters/Armored Orc/::1794742960
-::res://Assets/Characters/Armored Orc/Armored Orc/::1794742960
+::res://Assets/Characters/Armored Orc/::1795452621
+::res://Assets/Characters/Armored Orc/Armored Orc/::1795453246
 Armored Orc.png::CompressedTexture2D::236753154813937584::1794250973::1794668650::1::::<><><>0<>0<>b748e188ff579a6116b1ec3c6127ca64<>res://.godot/imported/Armored Orc.png-0d16d75475ff13be3c714ae7f457e1f4.ctex::
 Armored Orc_Attack01.png::CompressedTexture2D::5890271904823748798::1794250973::1794668650::1::::<><><>0<>0<>4d92fa115018a70b9bc1cc2fc0b1a4ee<>res://.godot/imported/Armored Orc_Attack01.png-504c04dca8965b771a317493159a5ec5.ctex::
 Armored Orc_Attack02.png::CompressedTexture2D::3625535863517500591::1794250973::1794668650::1::::<><><>0<>0<>91958cbca4b112e982ff9671c45bb05d<>res://.godot/imported/Armored Orc_Attack02.png-72df44e51659e046d707d0d0b1cb75c7.ctex::
@@ -54,18 +97,9 @@ Armored Orc_Block.png::CompressedTexture2D::350083865736126885::1794250973::1794
 Armored Orc_Death.png::CompressedTexture2D::4416656282974791821::1794250973::1794668650::1::::<><><>0<>0<>ae523d634cc63c0a5019e5abde996948<>res://.godot/imported/Armored Orc_Death.png-82c9bc42d31bddbaef19c0d8444a1abb.ctex::
 Armored Orc_Hurt.png::CompressedTexture2D::7152435452738667301::1794250973::1794668650::1::::<><><>0<>0<>360a859a17939d33a85819af76f407b1<>res://.godot/imported/Armored Orc_Hurt.png-4a838ae710e1ca4cc248d0def915879c.ctex::
 Armored Orc_Idle.png::CompressedTexture2D::5723970788263663367::1794250973::1794668650::1::::<><><>0<>0<>65d676e59f34628d2637d372a19a11bd<>res://.godot/imported/Armored Orc_Idle.png-5488bf3fd60b98368a40a34b0572a7c8.ctex::
+Armored Orc_Summon.png::CompressedTexture2D::3195589384412534377::1795453292::1795453246::1::::<><><>0<>0<>0c62b2ff5780ca1ca9287f253ebd506d<>res://.godot/imported/Armored Orc_Summon.png-3002d5e05f34676e4bb9e289da30d586.ctex::
 Armored Orc_Walk.png::CompressedTexture2D::7721199973640858855::1794250973::1794668650::1::::<><><>0<>0<>125a2fd7743ca545cc6e04f8420970c6<>res://.godot/imported/Armored Orc_Walk.png-2d53e0aae02043da0bd7be95c407b192.ctex::
-::res://Assets/Characters/Armored Orc/Armored Orc with shadows/::1794742960
-Armored Orc.png::CompressedTexture2D::470704937745680199::1794250973::1794668650::1::::<><><>0<>0<>3ecaac8f7e3b1b8c6fd94187779d4854<>res://.godot/imported/Armored Orc.png-c4783612eeb6539c1087177c387a9df0.ctex::
-Armored Orc_Attack01.png::CompressedTexture2D::1787541111032109620::1794250973::1794668650::1::::<><><>0<>0<>07535311956b65ac3f6be57be4dd1c21<>res://.godot/imported/Armored Orc_Attack01.png-19ebe942eb13d2c7cb85bd0aa362062b.ctex::
-Armored Orc_Attack02.png::CompressedTexture2D::2655849662228759269::1794250973::1794668650::1::::<><><>0<>0<>2159dca813f0a0f99b987d696b8bf2db<>res://.godot/imported/Armored Orc_Attack02.png-38aaa4c3ce53632101ecc4f535ba1c50.ctex::
-Armored Orc_Attack03.png::CompressedTexture2D::8896087004893895114::1794250973::1794668650::1::::<><><>0<>0<>d2e504a79d216a2d164306417f975064<>res://.godot/imported/Armored Orc_Attack03.png-f3eb6772594a6787903c44478680c859.ctex::
-Armored Orc_Block.png::CompressedTexture2D::4392764840164378292::1794250973::1794668650::1::::<><><>0<>0<>ce049496f258f226d48b641ed6600533<>res://.godot/imported/Armored Orc_Block.png-79afbea6eaae1aa83e0ff3ac9e85c6f8.ctex::
-Armored Orc_Death.png::CompressedTexture2D::4376776378814412699::1794250973::1794668650::1::::<><><>0<>0<>f9f5251571f23b29d06bdd5171d53466<>res://.godot/imported/Armored Orc_Death.png-cc13829c302cd26649eb937dabd4c4a7.ctex::
-Armored Orc_Hurt.png::CompressedTexture2D::2272646840030362507::1794250973::1794668650::1::::<><><>0<>0<>5e4f851ef43678a88bb1e66909dc3410<>res://.godot/imported/Armored Orc_Hurt.png-ce63368602a6565b2a29876aced9206d.ctex::
-Armored Orc_Idle.png::CompressedTexture2D::5387635707314953494::1794250973::1794668650::1::::<><><>0<>0<>84ba0c9eecac987fa6fa6b355c7dc494<>res://.godot/imported/Armored Orc_Idle.png-116b664c17a1ac14330123ec853ad8a5.ctex::
-Armored Orc_Walk.png::CompressedTexture2D::8360274326115056612::1794250973::1794668650::1::::<><><>0<>0<>18274b727470194176a5a01306000117<>res://.godot/imported/Armored Orc_Walk.png-2896c08d655406a29be18aa2ebd57db1.ctex::
-::res://Assets/Characters/Armored Skeleton/::1794742960
+::res://Assets/Characters/Armored Skeleton/::1795452621
 ::res://Assets/Characters/Armored Skeleton/Armored Skeleton/::1794742960
 Armored Skeleton.png::CompressedTexture2D::9099011216609990029::1794250973::1794668650::1::::<><><>0<>0<>6d073d219a632acf75c19f99cb7b69f0<>res://.godot/imported/Armored Skeleton.png-bca5412057035307ed818203ed1b60fc.ctex::
 Armored Skeleton_Attack01.png::CompressedTexture2D::7508805197083106945::1794250973::1794668650::1::::<><><>0<>0<>8838d9f08fec6aa7cabe60f2bf0420ab<>res://.godot/imported/Armored Skeleton_Attack01.png-789181bb35fd700910c8c8a8b078bb92.ctex::
@@ -75,32 +109,17 @@ Armored Skeleton_Hurt.png::CompressedTexture2D::3579927040348015114::1794250973:
 Armored Skeleton_Idle.png::CompressedTexture2D::2092325948018753058::1794250973::1794668650::1::::<><><>0<>0<>7934f877e550d26771f886a313feec9e<>res://.godot/imported/Armored Skeleton_Idle.png-cb96a79daf4e7143c78e65595df2242c.ctex::
 Armored Skeleton_Summon.png::CompressedTexture2D::8414529933870144053::1794250973::1794668650::1::::<><><>0<>0<>a33962aa083602428a8419d219c3eb9b<>res://.godot/imported/Armored Skeleton_Summon.png-84d453263626aebe45a490a5b8611238.ctex::
 Armored Skeleton_Walk.png::CompressedTexture2D::6141405672218885975::1794250973::1794668650::1::::<><><>0<>0<>5b863d400c584cf227caebb604f1378b<>res://.godot/imported/Armored Skeleton_Walk.png-20a34f243ea683dbc86dfa56dba7bd4b.ctex::
-::res://Assets/Characters/Armored Skeleton/Armored Skeleton with shadows/::1794742960
-Armored Skeleton.png::CompressedTexture2D::2861329582962448062::1794250973::1794668650::1::::<><><>0<>0<>6974b660dd2be900e82de4538ce418ea<>res://.godot/imported/Armored Skeleton.png-4dd6269e1446b1a167107d6c7e658bc6.ctex::
-Armored Skeleton_Attack01.png::CompressedTexture2D::7933827952656394645::1794250973::1794668650::1::::<><><>0<>0<>626661c22ca6d96cf8fdd1621071e547<>res://.godot/imported/Armored Skeleton_Attack01.png-857db24f93a4876c9e6519ce5fac5ac0.ctex::
-Armored Skeleton_Attack02.png::CompressedTexture2D::1782400070179864166::1794250973::1794668650::1::::<><><>0<>0<>a7783388f8903be5475c0658c0ff0331<>res://.godot/imported/Armored Skeleton_Attack02.png-4c25dfe683af92361ab69932008f8fd7.ctex::
-Armored Skeleton_Death.png::CompressedTexture2D::4637226543042525073::1794250973::1794668650::1::::<><><>0<>0<>4b7d050c14a8cfa024e2a221200ba0cc<>res://.godot/imported/Armored Skeleton_Death.png-1e4a855d9a8bbb467eeb3b907043b500.ctex::
-Armored Skeleton_Hurt.png::CompressedTexture2D::3329089094967663170::1794250973::1794668650::1::::<><><>0<>0<>828879baedf7f8d0d7034d4c898dc239<>res://.godot/imported/Armored Skeleton_Hurt.png-dc79dcbc9970a8e03b496d98d47962b5.ctex::
-Armored Skeleton_Idle.png::CompressedTexture2D::4978591139040765061::1794250973::1794668650::1::::<><><>0<>0<>6790271035e8c099d238a0ef2deb4035<>res://.godot/imported/Armored Skeleton_Idle.png-26485acca542b665014ea582cb79e307.ctex::
-Armored Skeleton_Summon.png::CompressedTexture2D::1855400168737335801::1794250973::1794668650::1::::<><><>0<>0<>cdcd84aae739c67269995747ee9fc920<>res://.godot/imported/Armored Skeleton_Summon.png-743acdfdd541e7d0f067a0ff18d33c8f.ctex::
-Armored Skeleton_Walk.png::CompressedTexture2D::8221423640875395546::1794250973::1794668650::1::::<><><>0<>0<>dbedd678895819d094628ac5f9d67d35<>res://.godot/imported/Armored Skeleton_Walk.png-c91cb001b7a5e8f671087261426ae122.ctex::
-::res://Assets/Characters/Bat/::1794742960
-::res://Assets/Characters/Bat/Bat/::1794742960
+::res://Assets/Characters/Bat/::1795452621
+::res://Assets/Characters/Bat/Bat/::1795453246
 Bat.png::CompressedTexture2D::639197787589795046::1794250973::1794668650::1::::<><><>0<>0<>ff932ed35b93714b5192e27de26e4194<>res://.godot/imported/Bat.png-0902c45e10ca5451c48d1a1046777773.ctex::
 Bat_Attack01.png::CompressedTexture2D::2005994899939808340::1794250973::1794668650::1::::<><><>0<>0<>9d8d0cf85c2a2b2b206857c1f523fab8<>res://.godot/imported/Bat_Attack01.png-2972587dec9dfacde837998ca130a3ce.ctex::
 Bat_Attack02.png::CompressedTexture2D::1736488902470706447::1794250973::1794668650::1::::<><><>0<>0<>6349f2c6f37066ddd92ffdc5954c9b3d<>res://.godot/imported/Bat_Attack02.png-6b21b383918f116fddfbd047b5764bd4.ctex::
 Bat_Death.png::CompressedTexture2D::1693002769122205344::1794250973::1794668650::1::::<><><>0<>0<>fdd7493b566cb14c6b5d6679d3630483<>res://.godot/imported/Bat_Death.png-9a6d57514b284aaae7b2a657ea4cb49c.ctex::
 Bat_Flying.png::CompressedTexture2D::8995092223333900757::1794250973::1794668650::1::::<><><>0<>0<>76bb7e79125d85d7581a053809c71f81<>res://.godot/imported/Bat_Flying.png-93bdb21d8a0072d8cbae91f67d2e6135.ctex::
 Bat_Hurt.png::CompressedTexture2D::1007971907432009241::1794250973::1794668650::1::::<><><>0<>0<>200202bcead6450b812275307ae970ce<>res://.godot/imported/Bat_Hurt.png-670b41f3a77917319adae1cded7efba0.ctex::
-::res://Assets/Characters/Bat/Bat with shadows/::1794742961
-Bat.png::CompressedTexture2D::2089881895535326043::1794250973::1794668650::1::::<><><>0<>0<>cc117e2856a31490f91fc1658db2c066<>res://.godot/imported/Bat.png-b22cec6683691e9fb01710cb999e86cb.ctex::
-Bat_Attack01.png::CompressedTexture2D::1834267844496031518::1794250973::1794668650::1::::<><><>0<>0<>e560d75d2d85c1b3c823d1c1c454dfb1<>res://.godot/imported/Bat_Attack01.png-392d112c521bec8c8584d298cceb6d31.ctex::
-Bat_Attack02.png::CompressedTexture2D::3660241492159700640::1794250973::1794668650::1::::<><><>0<>0<>060fdbb604755979588baea86961621a<>res://.godot/imported/Bat_Attack02.png-204f79162d88a75fae8e3228f9b1271f.ctex::
-Bat_Death.png::CompressedTexture2D::3804950105408998357::1794250973::1794668650::1::::<><><>0<>0<>3d2895420b12de50382a306df0f5d080<>res://.godot/imported/Bat_Death.png-806a0622edc094fbe6c968aae4cb0574.ctex::
-Bat_Flying.png::CompressedTexture2D::4763676450049642961::1794250973::1794668650::1::::<><><>0<>0<>06c737916b34d05e119130fa74ec7380<>res://.godot/imported/Bat_Flying.png-e18651826457e749df2e89ff5ae4d253.ctex::
-Bat_Hurt.png::CompressedTexture2D::6341041342825775367::1794250973::1794668650::1::::<><><>0<>0<>874fc46abc4874677bd8b040cbc41a68<>res://.godot/imported/Bat_Hurt.png-5e90a20f7bf81cec4922b91522f3ca4b.ctex::
-::res://Assets/Characters/Elite Orc/::1794742961
-::res://Assets/Characters/Elite Orc/Elite Orc/::1794742961
+Bat_Summon.png::CompressedTexture2D::3789162753371107952::1795453292::1795453246::1::::<><><>0<>0<>5b7c1cd3dcdd95f14934efa89254f97c<>res://.godot/imported/Bat_Summon.png-9869729de651ec55de3f0a55f27c7ef5.ctex::
+::res://Assets/Characters/Elite Orc/::1795452621
+::res://Assets/Characters/Elite Orc/Elite Orc/::1795453246
 Elite Orc.png::CompressedTexture2D::649432978613008471::1794250973::1794668650::1::::<><><>0<>0<>cbd8d24a9bb8e8adda144404ebe62762<>res://.godot/imported/Elite Orc.png-0757285c08679fe106cd80e4519d082e.ctex::
 Elite Orc_Attack01.png::CompressedTexture2D::2157334987825954898::1794250973::1794668650::1::::<><><>0<>0<>7837b72b5b03f48b25d002937fc8921f<>res://.godot/imported/Elite Orc_Attack01.png-6880b3459037e3cf8f2b1d5aa3b84ff7.ctex::
 Elite Orc_Attack02.png::CompressedTexture2D::8529482716443269869::1794250973::1794668650::1::::<><><>0<>0<>118417c69e8466366d873ac854c68abf<>res://.godot/imported/Elite Orc_Attack02.png-d1cef1a5584e008c39657340f75e65d2.ctex::
@@ -108,17 +127,9 @@ Elite Orc_Attack03.png::CompressedTexture2D::5771022077715156464::1794250973::17
 Elite Orc_Death.png::CompressedTexture2D::3979106160110494425::1794250973::1794668650::1::::<><><>0<>0<>ec44175ef9740a0ad78cc3b7cb8531cf<>res://.godot/imported/Elite Orc_Death.png-5d75cbfbe2114b66eafbe6135a85dcf5.ctex::
 Elite Orc_Hurt.png::CompressedTexture2D::5345474640581305409::1794250973::1794668650::1::::<><><>0<>0<>2d4e90adb5c99d5b56b7845f79f428c3<>res://.godot/imported/Elite Orc_Hurt.png-d21e4b16320ccea9863321e03b812d43.ctex::
 Elite Orc_Idle.png::CompressedTexture2D::988506512302222745::1794250973::1794668650::1::::<><><>0<>0<>2dcbbc576bff719325fab958956a019a<>res://.godot/imported/Elite Orc_Idle.png-9cc1767768381f6fc7b43ae1ac00c0b5.ctex::
+Elite Orc_Summon.png::CompressedTexture2D::5635347396901904098::1795453292::1795453246::1::::<><><>0<>0<>d9528bd02f352c623e242999736e3a33<>res://.godot/imported/Elite Orc_Summon.png-6e7726a1e12d843e8852c273670c598f.ctex::
 Elite Orc_Walk.png::CompressedTexture2D::6143639062576806852::1794250973::1794668650::1::::<><><>0<>0<>b36e28d163cb962b919ffdf233745485<>res://.godot/imported/Elite Orc_Walk.png-c8fdb27ac5b3427058d98186ea039b6f.ctex::
-::res://Assets/Characters/Elite Orc/Elite Orc with shadows/::1794742961
-Elite Orc.png::CompressedTexture2D::6482419924297010768::1794250973::1794668650::1::::<><><>0<>0<>542a0313f52bed25eec8b54206cf0345<>res://.godot/imported/Elite Orc.png-e5f6c89129e6ce82847c4bcba4080aa5.ctex::
-Elite Orc_Attack01.png::CompressedTexture2D::3080151778220170974::1794250973::1794668650::1::::<><><>0<>0<>a22b7ee6b33c4d76b89b8d5c1ce370ef<>res://.godot/imported/Elite Orc_Attack01.png-aa81bff51fc425bed62ff32a63e9a0a5.ctex::
-Elite Orc_Attack02.png::CompressedTexture2D::4998799167970275792::1794250973::1794668650::1::::<><><>0<>0<>58303c551534d9029e696df8129370fb<>res://.godot/imported/Elite Orc_Attack02.png-ef3af61c421bf0f76b581dc6b098d2cf.ctex::
-Elite Orc_Attack03.png::CompressedTexture2D::451483120473462065::1794250973::1794668650::1::::<><><>0<>0<>1bfff75faba0987944d5c5da49c58b6a<>res://.godot/imported/Elite Orc_Attack03.png-0c6b3eac226e6347e215f9571b8ef14c.ctex::
-Elite Orc_Death.png::CompressedTexture2D::4209648084604505040::1794250973::1794668650::1::::<><><>0<>0<>1c06ffa0157873308f1285244118b8d5<>res://.godot/imported/Elite Orc_Death.png-d2f2388be4a9ae9dab9d02f933cae79b.ctex::
-Elite Orc_Hurt.png::CompressedTexture2D::3970827142013341052::1794250973::1794668650::1::::<><><>0<>0<>04650fea22293aa7572234b7596460b6<>res://.godot/imported/Elite Orc_Hurt.png-132c0cf212de556ba9a4c0ed2bd95469.ctex::
-Elite Orc_Idle.png::CompressedTexture2D::1152106530673445475::1794250973::1794668650::1::::<><><>0<>0<>3be22933f20400eb1b2fc0f943752f65<>res://.godot/imported/Elite Orc_Idle.png-7db335f55f7b738c5cf617890eb51a3e.ctex::
-Elite Orc_Walk.png::CompressedTexture2D::8359552216819958260::1794250973::1794668650::1::::<><><>0<>0<>5934d801ba2dcef57eed32d8489b7fb1<>res://.godot/imported/Elite Orc_Walk.png-e6ee2bd0694c33fdb54e105563020ebd.ctex::
-::res://Assets/Characters/Greatsword Skeleton/::1794742961
+::res://Assets/Characters/Greatsword Skeleton/::1795452621
 ::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/::1794742961
 Greatsword Skeleton.png::CompressedTexture2D::590633241493680482::1794250973::1794668650::1::::<><><>0<>0<>d951b41e52379e772dde1e700a1b7590<>res://.godot/imported/Greatsword Skeleton.png-d3f3126b3d3af7b6ba32a546f1134e22.ctex::
 Greatsword Skeleton_Attack01.png::CompressedTexture2D::4832998529229737481::1794250973::1794668650::1::::<><><>0<>0<>6ab74ea6e5a605ef44bd7c5f14253ee5<>res://.godot/imported/Greatsword Skeleton_Attack01.png-59d5d8030cda03604b90f5dad0a2db48.ctex::
@@ -129,17 +140,7 @@ Greatsword Skeleton_Hurt.png::CompressedTexture2D::4733344416837113653::17942509
 Greatsword Skeleton_Idle.png::CompressedTexture2D::1510779005281943951::1794250973::1794668650::1::::<><><>0<>0<>a99ab8f89b9488ddfbccc1a7295bc558<>res://.godot/imported/Greatsword Skeleton_Idle.png-51cf770c3de27b9ecd60defdff614c65.ctex::
 Greatsword Skeleton_Summon.png::CompressedTexture2D::3462688034107429956::1794250973::1794668650::1::::<><><>0<>0<>13b81a8d882ffea0a1478d79da8a96b9<>res://.godot/imported/Greatsword Skeleton_Summon.png-c38d57869241daf8e95bf2f83265afe0.ctex::
 Greatsword Skeleton_Walk.png::CompressedTexture2D::818304551211634103::1794250973::1794668650::1::::<><><>0<>0<>d58084e384a508d3914c945a86c684a1<>res://.godot/imported/Greatsword Skeleton_Walk.png-2b64362d3824586a75992884a56ff89d.ctex::
-::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton with shadows/::1794742961
-Greatsword Skeleton.png::CompressedTexture2D::2663331138926061635::1794250973::1794668650::1::::<><><>0<>0<>98f4d502de8dd434ded480e3bdb42ed8<>res://.godot/imported/Greatsword Skeleton.png-f78e9f813366a7f8d3c37ef789c4e8eb.ctex::
-Greatsword Skeleton_Attack01.png::CompressedTexture2D::3981423685441663001::1794250973::1794668650::1::::<><><>0<>0<>f9ed7d8f6b973bd3def8681ff77e6077<>res://.godot/imported/Greatsword Skeleton_Attack01.png-b8aa46a34372a5d8395a8788d8cbad4f.ctex::
-Greatsword Skeleton_Attack02.png::CompressedTexture2D::5891998852122211483::1794250973::1794668650::1::::<><><>0<>0<>50db0743b352d61804ca094f586b1e19<>res://.godot/imported/Greatsword Skeleton_Attack02.png-e3a7f2fb640ccade3df59ab7c4fc2ab4.ctex::
-Greatsword Skeleton_Attack03.png::CompressedTexture2D::5017520982785493756::1794250973::1794668650::1::::<><><>0<>0<>58441c38247177e1f3b608302b1a3fe5<>res://.godot/imported/Greatsword Skeleton_Attack03.png-ffbd8c07b57c688cc6260f6a55fc83c3.ctex::
-Greatsword Skeleton_Death.png::CompressedTexture2D::7962424921562821487::1794250973::1794668650::1::::<><><>0<>0<>3f1021fafe8170d9fcac1440526e1758<>res://.godot/imported/Greatsword Skeleton_Death.png-78a59e6ef03433a4eb7f8c0a48922498.ctex::
-Greatsword Skeleton_Hurt.png::CompressedTexture2D::2184958157562888663::1794250973::1794668650::1::::<><><>0<>0<>842eab14d34d2b11bb80eb40501e6486<>res://.godot/imported/Greatsword Skeleton_Hurt.png-ee56aec9a6c840be7f36b407bc9737be.ctex::
-Greatsword Skeleton_Idle.png::CompressedTexture2D::1058951854671841340::1794250973::1794668650::1::::<><><>0<>0<>415c706caaf23fd0f8e7bc5508e82917<>res://.godot/imported/Greatsword Skeleton_Idle.png-bc459c338db33d06b8a879f94df08417.ctex::
-Greatsword Skeleton_Summon.png::CompressedTexture2D::6756471024803240991::1794250973::1794668650::1::::<><><>0<>0<>e50a6a19a85ea49d6469e04c3aa0b1df<>res://.godot/imported/Greatsword Skeleton_Summon.png-225adef02aaf059fff25a30360b468a5.ctex::
-Greatsword Skeleton_Walk.png::CompressedTexture2D::3441014955170596526::1794250973::1794668650::1::::<><><>0<>0<>17062c446a302ff278a97003e0eff520<>res://.godot/imported/Greatsword Skeleton_Walk.png-2fbc5de2fee5a858d43ccf23f5a83c9d.ctex::
-::res://Assets/Characters/Knight/::1794742961
+::res://Assets/Characters/Knight/::1795452621
 ::res://Assets/Characters/Knight/Knight/::1794742961
 Knight.png::CompressedTexture2D::411452881814248334::1794250973::1794668650::1::::<><><>0<>0<>6bdc34ce372f207878df7fa21ad9d951<>res://.godot/imported/Knight.png-e8f9ae8166d22c0ce6c3e4c2ec31f976.ctex::
 Knight_Attack01.png::CompressedTexture2D::4260854275543954830::1794250973::1794668650::1::::<><><>0<>0<>e1d595d925874e82c7652c9fe7d59774<>res://.godot/imported/Knight_Attack01.png-8b0bece4416ae82cb094f6f1b5cd124c.ctex::
@@ -150,17 +151,7 @@ Knight_Death.png::CompressedTexture2D::1679958308842716696::1794250973::17946686
 Knight_Hurt.png::CompressedTexture2D::1508063129323389864::1794250973::1794668650::1::::<><><>0<>0<>ceed721c10dc7d913aaee046aa924c8a<>res://.godot/imported/Knight_Hurt.png-dafffbd22d5be77b267ff6eae604e7a6.ctex::
 Knight_Idle.png::CompressedTexture2D::5648491811263904903::1794250973::1794668650::1::::<><><>0<>0<>cbf03edbed6fdb8e4d1b105190c22d01<>res://.godot/imported/Knight_Idle.png-4720c218cc9e7505461ca11313465edf.ctex::
 Knight_Walk.png::CompressedTexture2D::6240590816589213351::1794250973::1794668650::1::::<><><>0<>0<>2911ce28687fa86902ccb6f18f526d58<>res://.godot/imported/Knight_Walk.png-a099a0756e1922c621ca7d4f2fd50348.ctex::
-::res://Assets/Characters/Knight/Knight with shadows/::1794742961
-Knight.png::CompressedTexture2D::1979902346374344137::1794250973::1794668650::1::::<><><>0<>0<>cb253d0bf2c3b13d61f1a55f58051c4e<>res://.godot/imported/Knight.png-7cc6c39715ce8be97cdee256766ce4d1.ctex::
-Knight_Attack01.png::CompressedTexture2D::1916915408621688993::1794250973::1794668650::1::::<><><>0<>0<>ddd7c61823576de22e396977aad7bb41<>res://.godot/imported/Knight_Attack01.png-31bd216e531fb65baf54bbda5232970f.ctex::
-Knight_Attack02.png::CompressedTexture2D::1576068700383045747::1794250973::1794668650::1::::<><><>0<>0<>7630594d1e777e61cbea444c0fc97539<>res://.godot/imported/Knight_Attack02.png-e25649f5f266961fc4ae777bbf7540b2.ctex::
-Knight_Attack03.png::CompressedTexture2D::2613912240193238170::1794250973::1794668650::1::::<><><>0<>0<>1ffc3306f1451a072de8fc7afeea082d<>res://.godot/imported/Knight_Attack03.png-23ae7fdc297062c33ee7478b97ca5d4c.ctex::
-Knight_Block.png::CompressedTexture2D::4400972142459143183::1794250973::1794668650::1::::<><><>0<>0<>7b9d9be665d90637c2b8825151f3e02f<>res://.godot/imported/Knight_Block.png-624af4e919d0ed3a88ab54e5793df2d0.ctex::
-Knight_Death.png::CompressedTexture2D::2210010451167819722::1794250973::1794668650::1::::<><><>0<>0<>1456fca8f763bbd1a31d1562cb6c6662<>res://.godot/imported/Knight_Death.png-7b0454d42b789316c2f073091135e6cf.ctex::
-Knight_Hurt.png::CompressedTexture2D::8477080323525699797::1794250973::1794668650::1::::<><><>0<>0<>b56dc059eeeb0048951a4603054ea06e<>res://.godot/imported/Knight_Hurt.png-ec5f860546abe4b8ce75c0979f009355.ctex::
-Knight_Idle.png::CompressedTexture2D::2599540280721053695::1794250973::1794668650::1::::<><><>0<>0<>294a2a5207fa0b9ca0e04e8fcf48f5bf<>res://.godot/imported/Knight_Idle.png-f29c3e302e8cf2df1d3d86e697241773.ctex::
-Knight_Walk.png::CompressedTexture2D::232564663280557888::1794250973::1794668650::1::::<><><>0<>0<>d578d7596ff07c4a0a8670437ff61818<>res://.godot/imported/Knight_Walk.png-e31ece7cc967325f43690196b34e0e63.ctex::
-::res://Assets/Characters/Knight Templar/::1794742961
+::res://Assets/Characters/Knight Templar/::1795452621
 ::res://Assets/Characters/Knight Templar/Knight Templar/::1794742961
 Knight Templar.png::CompressedTexture2D::2484840713015649848::1794250973::1794668650::1::::<><><>0<>0<>f25d45479241f8d8ace920acf5067df9<>res://.godot/imported/Knight Templar.png-0e2bfd34309040e63e7ee02104372850.ctex::
 Knight Templar_Attack01.png::CompressedTexture2D::3902253234294243805::1794250973::1794668650::1::::<><><>0<>0<>e8d5b1d337c818c304e695a500e5445b<>res://.godot/imported/Knight Templar_Attack01.png-2f1b9984d44726608848296228c60f2c.ctex::
@@ -172,18 +163,7 @@ Knight Templar_Hurt.png::CompressedTexture2D::8303410090775934040::1794250973::1
 Knight Templar_Idle.png::CompressedTexture2D::8588937997264285126::1794250973::1794668650::1::::<><><>0<>0<>f40b36ba0469917ef20f71bf02d31544<>res://.godot/imported/Knight Templar_Idle.png-0d2db795746cd9feeec53a7b5a9babc1.ctex::
 Knight Templar_Walk01.png::CompressedTexture2D::1971894153205398300::1794250973::1794668650::1::::<><><>0<>0<>78fc85de60b4fa969e3a4d16dc99667e<>res://.godot/imported/Knight Templar_Walk01.png-881552b8fa9086c9f83c2230e69f3c6e.ctex::
 Knight Templar_Walk02.png::CompressedTexture2D::7014711744472861930::1794250973::1794668650::1::::<><><>0<>0<>2ece16815d68637151fd9eaaeb85155b<>res://.godot/imported/Knight Templar_Walk02.png-d465871233283562ae4923ba06295a88.ctex::
-::res://Assets/Characters/Knight Templar/Knight Templar with shadows/::1794742961
-Knight Templar.png::CompressedTexture2D::3972513819474931075::1794250973::1794668650::1::::<><><>0<>0<>63d59f5ef355688cc9450c39046ce58c<>res://.godot/imported/Knight Templar.png-bade329e18398d6cce12197dfc222268.ctex::
-Knight Templar_Attack01.png::CompressedTexture2D::2906414000159884132::1794250973::1794668650::1::::<><><>0<>0<>6329c60cac686cd1abba76ad2fc42f75<>res://.godot/imported/Knight Templar_Attack01.png-1aca081aa28df001738ec5712876a3f2.ctex::
-Knight Templar_Attack02.png::CompressedTexture2D::1277313486821150266::1794250973::1794668650::1::::<><><>0<>0<>605c9bb71fb83fe97e8b5bd3e850d5f7<>res://.godot/imported/Knight Templar_Attack02.png-d4cf9fb2597b837256f1cf79c01ef92b.ctex::
-Knight Templar_Attack03.png::CompressedTexture2D::6504695962451226654::1794250973::1794668650::1::::<><><>0<>0<>53ca22efef91bd74de89832561ab71c2<>res://.godot/imported/Knight Templar_Attack03.png-cc242ccf9b5d3e3e6b4fe441599e3583.ctex::
-Knight Templar_Block.png::CompressedTexture2D::8360295280075593399::1794250973::1794668650::1::::<><><>0<>0<>eb723057529c850c8083315216d754a7<>res://.godot/imported/Knight Templar_Block.png-9a3c58500517e6c4b7bfa05c715eb9f2.ctex::
-Knight Templar_Death.png::CompressedTexture2D::2555342339459510434::1794250973::1794668650::1::::<><><>0<>0<>f02228e276b78fb2698e98d7b3e5ecb6<>res://.godot/imported/Knight Templar_Death.png-5f9d67f0870025adc50fb294deab0e43.ctex::
-Knight Templar_Hurt.png::CompressedTexture2D::5524399226539841372::1794250973::1794668650::1::::<><><>0<>0<>a48b7ec2703c3e2f57c39fe2d88655aa<>res://.godot/imported/Knight Templar_Hurt.png-9fd318e6d28ee5f57675bdb176b90fd3.ctex::
-Knight Templar_Idle.png::CompressedTexture2D::1186942990908485112::1794250973::1794668650::1::::<><><>0<>0<>997ab802ce2354bd67e1f6e3ef24b9ba<>res://.godot/imported/Knight Templar_Idle.png-649da8acc4a33af8a26a23e08245d313.ctex::
-Knight Templar_Walk01.png::CompressedTexture2D::2679371659687720823::1794250973::1794668650::1::::<><><>0<>0<>9495c917d2a846281910ac1cded7b700<>res://.godot/imported/Knight Templar_Walk01.png-bf04db824f798a5e2c17ea7478e52be8.ctex::
-Knight Templar_Walk02.png::CompressedTexture2D::2507347074110522887::1794250973::1794668650::1::::<><><>0<>0<>c495d8b622fbdb31bd929d0d86cd458c<>res://.godot/imported/Knight Templar_Walk02.png-3154e850a4e6d840bccc7c89b474a912.ctex::
-::res://Assets/Characters/Lancer/::1794742961
+::res://Assets/Characters/Lancer/::1795452621
 ::res://Assets/Characters/Lancer/Lancer/::1794742961
 Lancer.png::CompressedTexture2D::2288657663614898191::1794250973::1794668650::1::::<><><>0<>0<>1e4d6b8b484bf541a1dfd938e1655aa7<>res://.godot/imported/Lancer.png-bad796a4f8e2199dd88f70d3ee46120e.ctex::
 Lancer_Attack01.png::CompressedTexture2D::4998204304735980903::1794250973::1794668650::1::::<><><>0<>0<>c564858818e1f9925b2a49fa9f583bb7<>res://.godot/imported/Lancer_Attack01.png-fd724ac2a3f1b1483d6035912baceccd.ctex::
@@ -194,65 +174,36 @@ Lancer_Hurt.png::CompressedTexture2D::4141626911034530187::1794250973::179466865
 Lancer_Idle.png::CompressedTexture2D::3609639028496710877::1794250973::1794668650::1::::<><><>0<>0<>3f6d0d20240b6b4c115652e56c3b3fae<>res://.godot/imported/Lancer_Idle.png-666155a6af5e5b34127a13b7ce55bb57.ctex::
 Lancer_Walk01.png::CompressedTexture2D::1218520876388593161::1794250973::1794668650::1::::<><><>0<>0<>d42004ad6c3fae78763f39810678e7cc<>res://.godot/imported/Lancer_Walk01.png-21ad8d903fc74041167c5ef730332da8.ctex::
 Lancer_Walk02.png::CompressedTexture2D::5947732624835062178::1794250973::1794668650::1::::<><><>0<>0<>7ff43f3fc8d3f047b84517fd0af61e5c<>res://.godot/imported/Lancer_Walk02.png-a5ab0e8382adc6de60c4eec8dc05284d.ctex::
-::res://Assets/Characters/Lancer/Lancer with shadows/::1794742961
-Lancer.png::CompressedTexture2D::387804420913653508::1794250973::1794668650::1::::<><><>0<>0<>bab26542e2b600eb5e1830c92b8064e8<>res://.godot/imported/Lancer.png-32feace34ba7b22d350ffc084424838e.ctex::
-Lancer_Attack01.png::CompressedTexture2D::1470169339870432269::1794250973::1794668650::1::::<><><>0<>0<>e13770a8f4926154aebde50085c088c1<>res://.godot/imported/Lancer_Attack01.png-ecf8ca232cbf7d1150e2cb7ea5627ac9.ctex::
-Lancer_Attack02.png::CompressedTexture2D::3592624613023316509::1794250973::1794668650::1::::<><><>0<>0<>1f8571328c2b05a27ce51bc99d2806dd<>res://.godot/imported/Lancer_Attack02.png-cb697ceaa65136a0a7a45adfc89e431f.ctex::
-Lancer_Attack03.png::CompressedTexture2D::5543077135638960892::1794250973::1794668650::1::::<><><>0<>0<>a86b2f0985c6ac20e2d78266cf8aa697<>res://.godot/imported/Lancer_Attack03.png-ee7f8b5cf8200669cb7dd19e002a75e8.ctex::
-Lancer_Death.png::CompressedTexture2D::8260989213708453361::1794250973::1794668650::1::::<><><>0<>0<>88dacd282de022bb9793d19f836773f4<>res://.godot/imported/Lancer_Death.png-ce48dadadf2a2463205e2e5e7aa51b6c.ctex::
-Lancer_Hurt.png::CompressedTexture2D::4242711948475664138::1794250973::1794668650::1::::<><><>0<>0<>b68a856b0577c96b76224fa8bda6b40f<>res://.godot/imported/Lancer_Hurt.png-3480f51c4aed541fb81058e0f292b8f5.ctex::
-Lancer_Idle.png::CompressedTexture2D::3513944167946175869::1794250973::1794668650::1::::<><><>0<>0<>1bac53bf61ea59ca62a31d28addcf594<>res://.godot/imported/Lancer_Idle.png-0bef0b3d88297092a6ac275aeddd92aa.ctex::
-Lancer_Walk01.png::CompressedTexture2D::263911020400586065::1794250973::1794668650::1::::<><><>0<>0<>7a52a6e624d43c99d72f236dde067f20<>res://.godot/imported/Lancer_Walk01.png-c23bfaeca49ded4bb76c153c36fd6f99.ctex::
-Lancer_Walk02.png::CompressedTexture2D::8949831004193238591::1794250973::1794668650::1::::<><><>0<>0<>759804ee3f74e6015143895269a30d11<>res://.godot/imported/Lancer_Walk02.png-0162bffa9a46b02cb908479a808adfab.ctex::
-::res://Assets/Characters/Necromancer/::1794742961
+::res://Assets/Characters/Necromancer/::1795452621
 ::res://Assets/Characters/Necromancer/Magic(projectile)/::1794742961
 Necromancer_Attack02_Effect.png::CompressedTexture2D::7250041478636340833::1794250973::1794668650::1::::<><><>0<>0<>ce20ece860d6eefbf8ef917283be69bd<>res://.godot/imported/Necromancer_Attack02_Effect.png-48716f17e1f88732933867c64c56da76.ctex::
 Necromancer_Sumon_Effect.png::CompressedTexture2D::4233413812780372581::1794250973::1794668650::1::::<><><>0<>0<>d278b58295929e45f77c57a15770a0e8<>res://.godot/imported/Necromancer_Sumon_Effect.png-eb5b6595c147a8adcdbc0c7c0c78c48c.ctex::
-::res://Assets/Characters/Necromancer/Necromancer/::1794742961
+::res://Assets/Characters/Necromancer/Necromancer/::1794836838
 Necromancer.png::CompressedTexture2D::3146363479889080011::1794250973::1794668651::1::::<><><>0<>0<>8187aec952328d3efbce26cfa610e031<>res://.godot/imported/Necromancer.png-75dd7c19933c46dfa6787628849fbc29.ctex::
 Necromancer_Attack01.png::CompressedTexture2D::476138850521602122::1794250973::1794668651::1::::<><><>0<>0<>078a9c58393dbe4ce983e62fa4037961<>res://.godot/imported/Necromancer_Attack01.png-348e4130bce5ff2fbb35e55102b15c02.ctex::
 Necromancer_Attack02(With magic effects).png::CompressedTexture2D::4459643465856771845::1794250973::1794668651::1::::<><><>0<>0<>5f55cb42ca5fd18c664998f270684a07<>res://.godot/imported/Necromancer_Attack02(With magic effects).png-66e10eb206d640079b17cb84ffa6a366.ctex::
 Necromancer_Attack02.png::CompressedTexture2D::8999492677213417700::1794250973::1794668651::1::::<><><>0<>0<>93bdcc469b268c203dad38b3eaba96db<>res://.godot/imported/Necromancer_Attack02.png-74ae9d28cf9f21c776ebc778d1dea682.ctex::
 Necromancer_Attack02_Effect.png::CompressedTexture2D::7390231901230458657::1794250973::1794668651::1::::<><><>0<>0<>319ac3e6db45821221d34807edbb02c7<>res://.godot/imported/Necromancer_Attack02_Effect.png-de95e114190b911215c01b37b4948975.ctex::
 Necromancer_DEATH.png::CompressedTexture2D::6903627598586731466::1794250973::1794668651::1::::<><><>0<>0<>dfc42fcbc6d274f2d55c8e54ca681ab1<>res://.godot/imported/Necromancer_DEATH.png-b53fa9d84b274ef2c4aba626dbf49ec5.ctex::
+Necromancer_Hide.png::CompressedTexture2D::2734604342347669742::1794836785::1794836838::1::::<><><>0<>0<>b40a304c9ca41cf3b324ab42a4bc0f6c<>res://.godot/imported/Necromancer_Hide.png-df25616f0975097e5e9f8145d86c7ee1.ctex::
 Necromancer_Hurt.png::CompressedTexture2D::3797596743395866243::1794250973::1794668651::1::::<><><>0<>0<>3315c6b04b6359fe7fca5757297dd356<>res://.godot/imported/Necromancer_Hurt.png-93918124e332c4dca7318ba0e496b370.ctex::
 Necromancer_Idle.png::CompressedTexture2D::5375069444552424647::1794250973::1794668651::1::::<><><>0<>0<>fea0c2abe601f63544ef3a49c1f1d1e9<>res://.godot/imported/Necromancer_Idle.png-108901f41bc6b27445013beadede16b9.ctex::
 Necromancer_Summon(With magic effects).png::CompressedTexture2D::5311307772919961162::1794250973::1794668651::1::::<><><>0<>0<>b838b14c4fbedd997c5b617db4fbba70<>res://.godot/imported/Necromancer_Summon(With magic effects).png-7e8a0d0b8be8fd1bf4909df3a5afe369.ctex::
 Necromancer_Summon.png::CompressedTexture2D::3728964524576890091::1794250973::1794668651::1::::<><><>0<>0<>b47a16755132c3695ce362451e850039<>res://.godot/imported/Necromancer_Summon.png-fd575e32c666ac1cf046ab7731a0f91b.ctex::
 Necromancer_Sumon_Effect.png::CompressedTexture2D::2884139059222651022::1794250973::1794668651::1::::<><><>0<>0<>9865d911c2f175960136795de1e3e82d<>res://.godot/imported/Necromancer_Sumon_Effect.png-09b4ed34f825e135bb93677de58aef65.ctex::
 Necromancer_Walk.png::CompressedTexture2D::6457291662862842254::1794250973::1794668651::1::::<><><>0<>0<>f0abab758a6db052a3df0d718beabacc<>res://.godot/imported/Necromancer_Walk.png-779a6ca9b04880d899ec91fb03c54d12.ctex::
-::res://Assets/Characters/Necromancer/Necromancer with shadows/::1794742961
-Necromancer.png::CompressedTexture2D::2733236318527839403::1794250973::1794668650::1::::<><><>0<>0<>edbab428255e08571d3f36907a9ff1f6<>res://.godot/imported/Necromancer.png-cdbfaefc85701c8e7ba58ab6397e74b5.ctex::
-Necromancer_Attack01.png::CompressedTexture2D::938132745714901722::1794250973::1794668650::1::::<><><>0<>0<>17e9ffa1ef27feda9d371430b5e72b10<>res://.godot/imported/Necromancer_Attack01.png-15e4186d1c2de0edb3c61413c6bf1670.ctex::
-Necromancer_Attack02(With magic effects).png::CompressedTexture2D::5653301377997257285::1794250973::1794668650::1::::<><><>0<>0<>a15b1a0078b1f31d5075741de707941c<>res://.godot/imported/Necromancer_Attack02(With magic effects).png-c7d60bcf0b53985968a56ce5bd397b89.ctex::
-Necromancer_Attack02.png::CompressedTexture2D::2390405042741227869::1794250973::1794668650::1::::<><><>0<>0<>4d89c3c4e6349907fed8cf9150bb9509<>res://.godot/imported/Necromancer_Attack02.png-2c370f1f6ec3439e258d82400b4151ae.ctex::
-Necromancer_Attack02_Effect.png::CompressedTexture2D::5385845669352909098::1794250973::1794668650::1::::<><><>0<>0<>4f7e54ff67054e53142a90f906b7f460<>res://.godot/imported/Necromancer_Attack02_Effect.png-0a4503603525661cdce6f703063f6f87.ctex::
-Necromancer_DEATH.png::CompressedTexture2D::6028096743205874924::1794250973::1794668651::1::::<><><>0<>0<>4cfe84de9d7742abe139aea7948476ea<>res://.godot/imported/Necromancer_DEATH.png-be2d05c70fd81c2ea28a334667b66d7c.ctex::
-Necromancer_Hurt.png::CompressedTexture2D::6841897435073764691::1794250973::1794668651::1::::<><><>0<>0<>49f5401ec27bbf841fa5fbd6d8f5ee9f<>res://.godot/imported/Necromancer_Hurt.png-e5c560bf9b625f1623af856e60626c2a.ctex::
-Necromancer_Idle.png::CompressedTexture2D::7951832477332375009::1794250973::1794668651::1::::<><><>0<>0<>1d46bff22f562cb19c5fae9905026301<>res://.godot/imported/Necromancer_Idle.png-f3b88f39c7a74e4b54f8a44587c44b4f.ctex::
-Necromancer_Summon(With magic effects).png::CompressedTexture2D::2451500144749950903::1794250973::1794668651::1::::<><><>0<>0<>9ccbceaa6cde0e05f63c25951c86ad55<>res://.godot/imported/Necromancer_Summon(With magic effects).png-a19bede4456b7c4dcbe04565ed4a7dae.ctex::
-Necromancer_Summon.png::CompressedTexture2D::3844636994646451988::1794250973::1794668651::1::::<><><>0<>0<>0f5bcaa1eea597215d98ab4bb0dc78f0<>res://.godot/imported/Necromancer_Summon.png-93dd5e28ec534fbbdd38380d5df320c7.ctex::
-Necromancer_Sumon_Effect.png::CompressedTexture2D::1590359728800750125::1794250973::1794668651::1::::<><><>0<>0<>f520a73b24f0276a8b1d84ec81a2102d<>res://.godot/imported/Necromancer_Sumon_Effect.png-f881d424953fc151ef8cbbe37574f0da.ctex::
-Necromancer_Walk.png::CompressedTexture2D::6209343212224212056::1794250973::1794668651::1::::<><><>0<>0<>1c1ee402d0caf66c28defb6cacb4b6b2<>res://.godot/imported/Necromancer_Walk.png-82fe0e3e1d77c837eb0b8eda989933ae.ctex::
-::res://Assets/Characters/Orc/::1794742961
-::res://Assets/Characters/Orc/Orc/::1794742961
+::res://Assets/Characters/Orc/::1795452621
+::res://Assets/Characters/Orc/Orc/::1795453246
 Orc.png::CompressedTexture2D::2644032015709505417::1794250973::1794668651::1::::<><><>0<>0<>138f4e2b39a0da13085ffcddf47501a4<>res://.godot/imported/Orc.png-761a178c3dbb06ac2501f639ec0a1d7a.ctex::
 Orc_Attack01.png::CompressedTexture2D::5471665446687087460::1794250973::1794668651::1::::<><><>0<>0<>c5766472cbc838c99a06c904765dfd04<>res://.godot/imported/Orc_Attack01.png-e2009ea364b773b03fbe93b812d97a6e.ctex::
 Orc_Attack02.png::CompressedTexture2D::5936086059325839054::1794250973::1794668651::1::::<><><>0<>0<>e65298df3ba899e4db6281f66b67fa65<>res://.godot/imported/Orc_Attack02.png-e14b0168e348ed6fe7616e46213c190f.ctex::
 Orc_Death.png::CompressedTexture2D::4432103718942496019::1794250973::1794668651::1::::<><><>0<>0<>65724eb17c1fc3b79e03185c493f731f<>res://.godot/imported/Orc_Death.png-ccaf765c43c059de60e5bb1e0851bc90.ctex::
 Orc_Hurt.png::CompressedTexture2D::3411018434626248163::1794250973::1794668651::1::::<><><>0<>0<>ec625bbb3af4bbeda8525dcbb8e5d6d4<>res://.godot/imported/Orc_Hurt.png-0d5e1db4fd29776367b454d113d9419c.ctex::
 Orc_Idle.png::CompressedTexture2D::7549577819330776998::1794250973::1794668651::1::::<><><>0<>0<>dd5470b4092ed2caa0bef1362d76a897<>res://.godot/imported/Orc_Idle.png-74125f86f87cc67fd5e0b4adaccd5628.ctex::
+Orc_Summon.png::CompressedTexture2D::664800550367516387::1795453292::1795453246::1::::<><><>0<>0<>fbe9541a618eb943ecd431f32c833677<>res://.godot/imported/Orc_Summon.png-c688d1390f6b1660020f1b9b736e3459.ctex::
 Orc_Walk.png::CompressedTexture2D::2995855135367235452::1794250973::1794668651::1::::<><><>0<>0<>1d4d423834a17f2486d4cdd12706101d<>res://.godot/imported/Orc_Walk.png-d74feb99bb2e32bccdb1f9b4e626ca26.ctex::
-::res://Assets/Characters/Orc/Orc with shadows/::1794742961
-Orc.png::CompressedTexture2D::841293470988883642::1794250973::1794668651::1::::<><><>0<>0<>dad7d1c4d6b4698935447160b43eaf0a<>res://.godot/imported/Orc.png-3cb6e1eeb130d816d98f0c479a87a4af.ctex::
-Orc_Attack01.png::CompressedTexture2D::3110628389737060742::1794250973::1794668651::1::::<><><>0<>0<>5d3266e381778286d681e7c8af10d8ea<>res://.godot/imported/Orc_Attack01.png-9f9222e130de4cc43057cb8c70d40cf4.ctex::
-Orc_Attack02.png::CompressedTexture2D::8425818918968554512::1794250973::1794668651::1::::<><><>0<>0<>5835bf0530cf258f882fa283022aac98<>res://.godot/imported/Orc_Attack02.png-28a8679379b24cba60e3a1207279838c.ctex::
-Orc_Death.png::CompressedTexture2D::9162159213053511119::1794250973::1794668651::1::::<><><>0<>0<>7343f14efb90814380f32a1b87b70e6e<>res://.godot/imported/Orc_Death.png-c10212696d623550c0f75358a8a2378d.ctex::
-Orc_Hurt.png::CompressedTexture2D::8419539111690457883::1794250973::1794668651::1::::<><><>0<>0<>d380b466c21edd24a000e8c20806270f<>res://.godot/imported/Orc_Hurt.png-bf19587498ecf37afcdb4ecdc8fb6d8b.ctex::
-Orc_Idle.png::CompressedTexture2D::734050160780420998::1794250973::1794668651::1::::<><><>0<>0<>95edc03bf9a655ed94f89dc4bf2b82d9<>res://.godot/imported/Orc_Idle.png-4b3d31c2f178351f6b79095fe706305c.ctex::
-Orc_Walk.png::CompressedTexture2D::4485147382856209104::1794250973::1794668651::1::::<><><>0<>0<>4996a2ff938695ed21f90ce418659736<>res://.godot/imported/Orc_Walk.png-1a9e005c571e8ef7e7f0be176f69d12d.ctex::
-::res://Assets/Characters/Orc rider/::1794742961
-::res://Assets/Characters/Orc rider/Orc rider/::1794742961
+::res://Assets/Characters/Orc rider/::1795452621
+::res://Assets/Characters/Orc rider/Orc rider/::1795453246
 Orc rider.png::CompressedTexture2D::59671765248541137::1794250973::1794668651::1::::<><><>0<>0<>821530d783416e327144ffdd77964b1a<>res://.godot/imported/Orc rider.png-eae3ae3a7efdb394857a926dd45f2298.ctex::
 Orc rider_Attack01.png::CompressedTexture2D::5743455930295140126::1794250973::1794668651::1::::<><><>0<>0<>a05ab0a3dcf601ae33811daec4bc471b<>res://.godot/imported/Orc rider_Attack01.png-f095b5fc065da82c0d4b367a4800adb9.ctex::
 Orc rider_Attack02.png::CompressedTexture2D::3759663569772595135::1794250973::1794668651::1::::<><><>0<>0<>8f224d74b3892367d729a14e2f700c7b<>res://.godot/imported/Orc rider_Attack02.png-af0cc4a5b556d12e393cfd7c3bec08dd.ctex::
@@ -261,18 +212,9 @@ Orc rider_Block.png::CompressedTexture2D::8120895851646907585::1794250973::17946
 Orc rider_Death.png::CompressedTexture2D::3819370104037179231::1794250973::1794668651::1::::<><><>0<>0<>39b2bd93a75759d33ef0ec42779d9e5f<>res://.godot/imported/Orc rider_Death.png-87758f52a8560f9c612ba932b5f921b3.ctex::
 Orc rider_Hurt.png::CompressedTexture2D::5768541549111545263::1794250973::1794668651::1::::<><><>0<>0<>4b9d82750a932230d22f81cd49f2d1b5<>res://.godot/imported/Orc rider_Hurt.png-0fdf01aea2d21e59fa4e883400fa976c.ctex::
 Orc rider_Idle.png::CompressedTexture2D::4100991529002199053::1794250973::1794668651::1::::<><><>0<>0<>d61b9b68c5e4781d71f09a06ca0835af<>res://.godot/imported/Orc rider_Idle.png-2c3d8855e9b24549d5d67014b725d3d9.ctex::
+Orc rider_Summon.png::CompressedTexture2D::7768182856241489010::1795453292::1795453246::1::::<><><>0<>0<>452813fd026ffe171588396a2c3b6c84<>res://.godot/imported/Orc rider_Summon.png-945e094de7df947753dcd3282aba94a5.ctex::
 Orc rider_Walk.png::CompressedTexture2D::5174090784341607581::1794250973::1794668651::1::::<><><>0<>0<>625b2e206e8bc40421d2a7131e4c22b9<>res://.godot/imported/Orc rider_Walk.png-ce8077093db45e846eac47ce63d35ab4.ctex::
-::res://Assets/Characters/Orc rider/Orc rider with shadows/::1794742961
-Orc rider.png::CompressedTexture2D::7180994712032645342::1794250973::1794668651::1::::<><><>0<>0<>ddae9f54b3e97f6ef0b48b0f27a5619f<>res://.godot/imported/Orc rider.png-f5a56be8324b8808b5febee959755f12.ctex::
-Orc rider_Attack01.png::CompressedTexture2D::2966734418110970402::1794250973::1794668651::1::::<><><>0<>0<>39ff31f7864c7c8946b85e95b3d8ddd8<>res://.godot/imported/Orc rider_Attack01.png-e56286c558a3018ceec938925ae0d177.ctex::
-Orc rider_Attack02.png::CompressedTexture2D::8513021284519021922::1794250973::1794668651::1::::<><><>0<>0<>e799d34c3d2aa66734f17163e2748a36<>res://.godot/imported/Orc rider_Attack02.png-be08aea0b61d21a5794dd1b45906b454.ctex::
-Orc rider_Attack03.png::CompressedTexture2D::7434220574615527319::1794250973::1794668651::1::::<><><>0<>0<>1340f74848e0fd8770a5344957760b3c<>res://.godot/imported/Orc rider_Attack03.png-761859a55a16416322323047b2bc812e.ctex::
-Orc rider_Block.png::CompressedTexture2D::2635013624276099720::1794250973::1794668651::1::::<><><>0<>0<>369a1b650f8053f6058339843716a3e9<>res://.godot/imported/Orc rider_Block.png-1dab15e231a284e4f4ce843af752f65b.ctex::
-Orc rider_Death.png::CompressedTexture2D::6973064696924636278::1794250973::1794668651::1::::<><><>0<>0<>3cd9aaf869da3b5f12384b03cfb31472<>res://.godot/imported/Orc rider_Death.png-150bd850478853d2e60df48bb0b4c478.ctex::
-Orc rider_Hurt.png::CompressedTexture2D::5035468425851344841::1794250973::1794668651::1::::<><><>0<>0<>54341a77d9e655f82511e8b04a1bddf1<>res://.godot/imported/Orc rider_Hurt.png-300c7dd3acfdcf3f800f8b2b54f85892.ctex::
-Orc rider_Idle.png::CompressedTexture2D::5309649138346202418::1794250973::1794668651::1::::<><><>0<>0<>e9a24d37b7d3314fa850c4c2b020a65c<>res://.godot/imported/Orc rider_Idle.png-b1c6679b49c562ce4064e18a9718ac63.ctex::
-Orc rider_Walk.png::CompressedTexture2D::1659052567526141119::1794250973::1794668651::1::::<><><>0<>0<>873865432baee602851aba89b852627d<>res://.godot/imported/Orc rider_Walk.png-8ebd1de11fa510060c2b08e1dae2a85c.ctex::
-::res://Assets/Characters/Priest/::1794742961
+::res://Assets/Characters/Priest/::1795452621
 ::res://Assets/Characters/Priest/Magic(projectile)/::1794742961
 Priest_Attack_effect.png::CompressedTexture2D::903152283656789880::1794250973::1794668651::1::::<><><>0<>0<>689a629f8ae80e595cb5e03c7015e23d<>res://.godot/imported/Priest_Attack_effect.png-763277dc7413ff8357e3e678de3a318f.ctex::
 Priest_Heal_effect.png::CompressedTexture2D::5923592942219384016::1794250973::1794668651::1::::<><><>0<>0<>af398708de79893867d941384ad7b976<>res://.godot/imported/Priest_Heal_effect.png-62e4eb4a2d64640e2e8678392dc89808.ctex::
@@ -288,19 +230,7 @@ Priest_Heal_effect.png::CompressedTexture2D::793042863420910378::1794250973::179
 Priest_Hurt.png::CompressedTexture2D::481747765675631999::1794250973::1794668651::1::::<><><>0<>0<>5c6c37b3a0d051f09657b6a600eb2769<>res://.godot/imported/Priest_Hurt.png-225a38f183ee3a98a52be59ff1c6ac5c.ctex::
 Priest_Idle.png::CompressedTexture2D::9165007472801662055::1794250973::1794668651::1::::<><><>0<>0<>47d4e3d45191078577191c3a1a4e7f2a<>res://.godot/imported/Priest_Idle.png-65aa8013e148b07e51407e40043b8575.ctex::
 Priest_Walk.png::CompressedTexture2D::87965588009323403::1794250973::1794668651::1::::<><><>0<>0<>5148ef435ca01206da56fad657c798c0<>res://.godot/imported/Priest_Walk.png-e02e41bc0b022a05c9f00f5daba12fc7.ctex::
-::res://Assets/Characters/Priest/Priest with shadows/::1794742961
-Priest.png::CompressedTexture2D::5841310262668019354::1794250973::1794668651::1::::<><><>0<>0<>5ada2fc3ea06519dc047aa2dfc698d8a<>res://.godot/imported/Priest.png-c90acd98dd145a0dedc742110a3918c2.ctex::
-Priest_Attack(With magic effects).png::CompressedTexture2D::2924733806720126563::1794250973::1794668651::1::::<><><>0<>0<>d5e8c6e8cfe7d8e23960ed3cd90de50f<>res://.godot/imported/Priest_Attack(With magic effects).png-41483041b5eed8d83e3513aaaf4e6d03.ctex::
-Priest_Attack.png::CompressedTexture2D::1248524358739304023::1794250973::1794668651::1::::<><><>0<>0<>d7e80d771242be2d68337477bcf650ec<>res://.godot/imported/Priest_Attack.png-09f2ecb3ef277917cc824e04e1cf3f82.ctex::
-Priest_Attack_effect.png::CompressedTexture2D::5073508064509527182::1794250973::1794668651::1::::<><><>0<>0<>14202dc9f332f8643d6b7d2b05dae42c<>res://.godot/imported/Priest_Attack_effect.png-d6ea0b7a0297e5f849c77a138b768ad6.ctex::
-Priest_Death.png::CompressedTexture2D::6048356348048317816::1794250973::1794668651::1::::<><><>0<>0<>2d086dcdded5bb00e42c419d2c4a7173<>res://.godot/imported/Priest_Death.png-23ad1487ebdb1984cf290652f15be246.ctex::
-Priest_Heal(With magic effects).png::CompressedTexture2D::1932130571755208472::1794250973::1794668651::1::::<><><>0<>0<>14fadfde88d20aa9f27495599b153d1c<>res://.godot/imported/Priest_Heal(With magic effects).png-301b21fe1732cc3fb7177fa83ce833a0.ctex::
-Priest_Heal.png::CompressedTexture2D::3014460703386362449::1794250973::1794668651::1::::<><><>0<>0<>06642c1ec8c4f06cd2561b5b140f7188<>res://.godot/imported/Priest_Heal.png-d359af7929b05b6d6654828b680ec5fa.ctex::
-Priest_Heal_effect.png::CompressedTexture2D::3266665758004737520::1794250973::1794668651::1::::<><><>0<>0<>f6922f18e1dba0ada6759d2a3cdcc5f2<>res://.godot/imported/Priest_Heal_effect.png-e3e3e169751b1255548141554f1bef53.ctex::
-Priest_Hurt.png::CompressedTexture2D::1721392301298390695::1794250973::1794668651::1::::<><><>0<>0<>3845e462fe21d40a4c661ffa930b1e1c<>res://.godot/imported/Priest_Hurt.png-ea6e89053231f61d7d15194bbea16e65.ctex::
-Priest_Idle.png::CompressedTexture2D::8583256051342594107::1794250973::1794668651::1::::<><><>0<>0<>600009c92e5964aac56c1de4c9578190<>res://.godot/imported/Priest_Idle.png-656414088e11250899124a9f64004b9d.ctex::
-Priest_Walk.png::CompressedTexture2D::4572768617011907282::1794250973::1794668651::1::::<><><>0<>0<>11c828407b3761ea860b8921a2d98344<>res://.godot/imported/Priest_Walk.png-06839c46d41d7fc6a4d3e7472ef67bc5.ctex::
-::res://Assets/Characters/Skeleton/::1794742962
+::res://Assets/Characters/Skeleton/::1795452621
 ::res://Assets/Characters/Skeleton/Skeleton/::1794742962
 Skeleton.png::CompressedTexture2D::1753734790211137422::1794250973::1794668651::1::::<><><>0<>0<>9a3b4d8a47b9eb472c5c1b7041b5648c<>res://.godot/imported/Skeleton.png-4e03441451bf90dc7d39e3a8a9689ada.ctex::
 Skeleton_Attack01.png::CompressedTexture2D::8345267580211025160::1794250973::1794668651::1::::<><><>0<>0<>f4c27db40667d10ee4323453c0278e73<>res://.godot/imported/Skeleton_Attack01.png-845d09f469ea25d33d5c932bec5e2005.ctex::
@@ -311,17 +241,7 @@ Skeleton_Hurt.png::CompressedTexture2D::6987317762095549181::1794250973::1794668
 Skeleton_Idle.png::CompressedTexture2D::4558356527021964457::1794250973::1794668651::1::::<><><>0<>0<>d24871799e2c7bc143bbc600a7a640f4<>res://.godot/imported/Skeleton_Idle.png-93ce7c2ecc362230f678a7960b83166d.ctex::
 Skeleton_Summon.png::CompressedTexture2D::7876872714785678032::1794250973::1794668651::1::::<><><>0<>0<>d79643cea361f528ff467819ae9406e7<>res://.godot/imported/Skeleton_Summon.png-e0e148a08f5b70d8377c888fd032b1ef.ctex::
 Skeleton_Walk.png::CompressedTexture2D::1897760940118599782::1794250973::1794668651::1::::<><><>0<>0<>2a2ab570c192f2316d9e639f56ca3581<>res://.godot/imported/Skeleton_Walk.png-55349e34cbc72bccb81c04f26b6c9931.ctex::
-::res://Assets/Characters/Skeleton/Skeleton with shadows/::1794742962
-Skeleton.png::CompressedTexture2D::8870320139446239602::1794250973::1794668651::1::::<><><>0<>0<>ca6595296b9dae27fe6eff72ece38b52<>res://.godot/imported/Skeleton.png-ed469cc8f67e5b89b58fc75b72302837.ctex::
-Skeleton_Attack01.png::CompressedTexture2D::8925701499524633915::1794250973::1794668651::1::::<><><>0<>0<>c18122a847d36e61349fe2b39e54b4c6<>res://.godot/imported/Skeleton_Attack01.png-afba1c75ef27e8cd49f94f4705d0c0eb.ctex::
-Skeleton_Attack02.png::CompressedTexture2D::7277757983700630747::1794250973::1794668651::1::::<><><>0<>0<>ee93da5737f5d88d7f414334b976a352<>res://.godot/imported/Skeleton_Attack02.png-fe45db5d873db3d67ca5345c82c80dc3.ctex::
-Skeleton_Block.png::CompressedTexture2D::651774934929099802::1794250973::1794668651::1::::<><><>0<>0<>4d005eeb0fb8360aea89f8f3bb3a7e6c<>res://.godot/imported/Skeleton_Block.png-1e6036c47d0d3c7b8f5e4074836ade59.ctex::
-Skeleton_Death.png::CompressedTexture2D::5265759102891268338::1794250973::1794668651::1::::<><><>0<>0<>a18326c1620d5a6fd1eac3fd49173586<>res://.godot/imported/Skeleton_Death.png-6e787cf7aa26e964f0ff86127b5fff7c.ctex::
-Skeleton_Hurt.png::CompressedTexture2D::4238226703523291879::1794250973::1794668651::1::::<><><>0<>0<>5b86c8482a8b40d7d30b47050a192d0d<>res://.godot/imported/Skeleton_Hurt.png-6de447d6a5e6728489739db900a55224.ctex::
-Skeleton_Idle.png::CompressedTexture2D::2319003948820620546::1794250973::1794668651::1::::<><><>0<>0<>15b7399703e9c46c0eef3bcb90bab11f<>res://.godot/imported/Skeleton_Idle.png-d655747aac3c02be1e1b0b1574815539.ctex::
-Skeleton_Summon.png::CompressedTexture2D::4750265082068793460::1794250973::1794668651::1::::<><><>0<>0<>17a1a0d782eebb04e1d50dc7c95517ef<>res://.godot/imported/Skeleton_Summon.png-74a7ac444705629207ea5e59e3869766.ctex::
-Skeleton_Walk.png::CompressedTexture2D::3998989953211618362::1794250973::1794668651::1::::<><><>0<>0<>15625de22f10cdc8f47a5a63eb883501<>res://.godot/imported/Skeleton_Walk.png-9c4a0418dda53014efe592813b425a42.ctex::
-::res://Assets/Characters/Skeleton Archer/::1794742962
+::res://Assets/Characters/Skeleton Archer/::1795452621
 ::res://Assets/Characters/Skeleton Archer/Arrow(projectile)/::1794742962
 Arrow03(32x32).png::CompressedTexture2D::6304930522893082962::1794250973::1794668651::1::::<><><>0<>0<>47cddc1785243bdafd2f16c7ea785110<>res://.godot/imported/Arrow03(32x32).png-520a12f1c625b0d4d4e3b5fd2da838bf.ctex::
 Arrow03(100x100).png::CompressedTexture2D::8014572319657444503::1794250973::1794668651::1::::<><><>0<>0<>632522bcb711a5bf4b11028f199026e7<>res://.godot/imported/Arrow03(100x100).png-846eb86b6ba2c13e20f7b35e5c021984.ctex::
@@ -333,32 +253,17 @@ Skeleton Archer_Hurt.png::CompressedTexture2D::2978606006572277407::1794250973::
 Skeleton Archer_Idle.png::CompressedTexture2D::4013755464966001643::1794250973::1794668651::1::::<><><>0<>0<>8ff638b835b1e519cf3963fdb0b8b454<>res://.godot/imported/Skeleton Archer_Idle.png-d28ddbbaa21402a29a14fd07651f528c.ctex::
 Skeleton Archer_Summon.png::CompressedTexture2D::1953050776783300076::1794250973::1794668651::1::::<><><>0<>0<>db0bc8b86187e51a021eb7ca8ca486e5<>res://.godot/imported/Skeleton Archer_Summon.png-ee527c9f4d429610e8e7ddcf3b779890.ctex::
 Skeleton Archer_Walk.png::CompressedTexture2D::3736266628594260977::1794250973::1794668651::1::::<><><>0<>0<>ace041bfb61d47e932971619524140fc<>res://.godot/imported/Skeleton Archer_Walk.png-d784d4af66eaf9ab8772a9f5a059e334.ctex::
-::res://Assets/Characters/Skeleton Archer/Skeleton Archer with shadows/::1794742962
-Skeleton Archer.png::CompressedTexture2D::867906947085114202::1794250973::1794668651::1::::<><><>0<>0<>c9ebc77dea5710393cb99c2870474c17<>res://.godot/imported/Skeleton Archer.png-3d79a6a57ac59d405dc89faf8e0ee5df.ctex::
-Skeleton Archer_Attack.png::CompressedTexture2D::7389772260857520368::1794250973::1794668651::1::::<><><>0<>0<>1d4150474878e35744d7ceb4cc650f8a<>res://.godot/imported/Skeleton Archer_Attack.png-cdd37e20c7e323dab260172ce1aa3338.ctex::
-Skeleton Archer_Death.png::CompressedTexture2D::5323183292058047345::1794250973::1794668651::1::::<><><>0<>0<>36b794e2ed3b1b3c6d76e63607a884f6<>res://.godot/imported/Skeleton Archer_Death.png-7d8ad228126e4f351de24ca6bdaeef4b.ctex::
-Skeleton Archer_Hurt.png::CompressedTexture2D::3211353767058380381::1794250973::1794668651::1::::<><><>0<>0<>5188fea375d4abeb22283a7ec1092f4f<>res://.godot/imported/Skeleton Archer_Hurt.png-69263ea139fb1c99ebff3891dd9bea7a.ctex::
-Skeleton Archer_Idle.png::CompressedTexture2D::3607866901018279839::1794250973::1794668651::1::::<><><>0<>0<>3ef1a18e9d29101902057cac16c37b5e<>res://.godot/imported/Skeleton Archer_Idle.png-be51fe1159f126a1399a628279596003.ctex::
-Skeleton Archer_Summon.png::CompressedTexture2D::1972894735530438007::1794250973::1794668651::1::::<><><>0<>0<>a95db66679dbc11a59fb55a1d9daa0ba<>res://.godot/imported/Skeleton Archer_Summon.png-c3c0cf936cfe4b4f245267d7972ca062.ctex::
-Skeleton Archer_Walk.png::CompressedTexture2D::1411255140304870691::1794250973::1794668651::1::::<><><>0<>0<>56646d5eac960110044f3b54e153b528<>res://.godot/imported/Skeleton Archer_Walk.png-ef11c72031cbf944773b0581c93f3099.ctex::
-::res://Assets/Characters/Slime/::1794742962
-::res://Assets/Characters/Slime/Slime/::1794742962
+::res://Assets/Characters/Slime/::1795452621
+::res://Assets/Characters/Slime/Slime/::1795453246
 Slime.png::CompressedTexture2D::7227891120054218574::1794250973::1794668651::1::::<><><>0<>0<>2b6be3d0e80ef5c557ea6578b9274611<>res://.godot/imported/Slime.png-98ddb2251a23d8bfa3719db68959790d.ctex::
 Slime_Attack01.png::CompressedTexture2D::275900353227535546::1794250973::1794668651::1::::<><><>0<>0<>8b4e495bfef9d501d3bde8d08affaad4<>res://.godot/imported/Slime_Attack01.png-0bf17a2b00125a723b7edd41d09fcf48.ctex::
 Slime_Attack02.png::CompressedTexture2D::7511834821622728719::1794250973::1794668651::1::::<><><>0<>0<>1572fed3a34e7c0349f3b26cfdc6ab3c<>res://.godot/imported/Slime_Attack02.png-3aad196ef3f67e3dcc17471f82cb1be5.ctex::
 Slime_Death.png::CompressedTexture2D::8772629498781677500::1794250973::1794668651::1::::<><><>0<>0<>fcb5fcc8ba37459208cc90db6b881c05<>res://.godot/imported/Slime_Death.png-6ee3db9496c6689aa96ffbdf70c72829.ctex::
 Slime_Hurt.png::CompressedTexture2D::6196527878381109930::1794250973::1794668651::1::::<><><>0<>0<>bfc1ff5269e29190604bc9ef0ddaa1ab<>res://.godot/imported/Slime_Hurt.png-b9d81f22c191ee441c462d42655edfc0.ctex::
 Slime_Idle.png::CompressedTexture2D::6277435261859097258::1794250973::1794668651::1::::<><><>0<>0<>121513351019a3eb14ef882cda941ac7<>res://.godot/imported/Slime_Idle.png-240116714aae2708ffbba05bc5933810.ctex::
+Slime_Summon.png::CompressedTexture2D::1232240472111955886::1795453292::1795453246::1::::<><><>0<>0<>24d8f96055809ff54bc5d8497adc039d<>res://.godot/imported/Slime_Summon.png-b303b7df95e6d1623e601bfa03749c1e.ctex::
 Slime_Walk.png::CompressedTexture2D::2666185362321183006::1794250973::1794668651::1::::<><><>0<>0<>d12f61fbaf212e6de55c1546bad3f4c4<>res://.godot/imported/Slime_Walk.png-8dfe8c2246419f934fab54e46824014b.ctex::
-::res://Assets/Characters/Slime/Slime with shadows/::1794742962
-Slime.png::CompressedTexture2D::537255088587593316::1794250973::1794668651::1::::<><><>0<>0<>fbdce2273d823b6e56274b879be03b6a<>res://.godot/imported/Slime.png-966aee72902ba2a4ae448ae62792c889.ctex::
-Slime_Attack01.png::CompressedTexture2D::5933192750126885499::1794250973::1794668651::1::::<><><>0<>0<>7afd7531a235df2420064903ee02a256<>res://.godot/imported/Slime_Attack01.png-715fc27572fd5414330466a807daab72.ctex::
-Slime_Attack02.png::CompressedTexture2D::8424545698845990489::1794250973::1794668651::1::::<><><>0<>0<>ddbf15253779b09f9ab2e626a31388a0<>res://.godot/imported/Slime_Attack02.png-f67451076b0b85d6066ee32aaeba3679.ctex::
-Slime_Death.png::CompressedTexture2D::3487251513813295603::1794250973::1794668651::1::::<><><>0<>0<>bfe36a0f08555a0e0d8632019e87dc42<>res://.godot/imported/Slime_Death.png-18c68c50a357e0321801de7bdd6abc45.ctex::
-Slime_Hurt.png::CompressedTexture2D::7582143156640303278::1794250973::1794668651::1::::<><><>0<>0<>6c7cab92516bf402b0b25b150143451b<>res://.godot/imported/Slime_Hurt.png-252add9b10a8892835cf1ef2732720ef.ctex::
-Slime_Idle.png::CompressedTexture2D::840629630906459364::1794250973::1794668651::1::::<><><>0<>0<>cbf29802daa3a3e86493c4b826797ebe<>res://.godot/imported/Slime_Idle.png-23f58f59b62a5e01ad9a135c7b939594.ctex::
-Slime_Walk.png::CompressedTexture2D::8394990077455179293::1794250973::1794668651::1::::<><><>0<>0<>76db3bb2ce30a97cd716c30bde7ec291<>res://.godot/imported/Slime_Walk.png-0ca378edd1282dc21f4cad108397ee62.ctex::
-::res://Assets/Characters/Soldier/::1794742962
+::res://Assets/Characters/Soldier/::1795452621
 ::res://Assets/Characters/Soldier/Arrow(projectile)/::1794742962
 Arrow01(32x32).png::CompressedTexture2D::6577022048634875452::1794250973::1794668651::1::::<><><>0<>0<>b81db388875db450f461a94440e3e455<>res://.godot/imported/Arrow01(32x32).png-14499dcb462c9265ad996876bbd24f57.ctex::
 Arrow01(100x100).png::CompressedTexture2D::8833005443796476527::1794250973::1794668651::1::::<><><>0<>0<>62dfeb5db1cc0f08cc6a1ad1e4fb51df<>res://.godot/imported/Arrow01(100x100).png-3710bccd01a66608ee69619eab4da335.ctex::
@@ -371,16 +276,7 @@ Soldier_Death.png::CompressedTexture2D::8036960358872536199::1794250973::1794668
 Soldier_Hurt.png::CompressedTexture2D::6753006853189640565::1794250973::1794668651::1::::<><><>0<>0<>ff7f45a988bfc592a3f68e6f0ecac873<>res://.godot/imported/Soldier_Hurt.png-9910c761494be97e8f428d0566173abc.ctex::
 Soldier_Idle.png::CompressedTexture2D::2105881082213465520::1794250973::1794668651::1::::<><><>0<>0<>f275bd34a9ceb01c6c219035d84ef421<>res://.godot/imported/Soldier_Idle.png-42381c82f2b06bbdee5a89c8d30540e4.ctex::
 Soldier_Walk.png::CompressedTexture2D::5293524495392842320::1794250973::1794668651::1::::<><><>0<>0<>b493c9940998569b5e88096430cba2e1<>res://.godot/imported/Soldier_Walk.png-8e2e868f0b27d92360a8478a6ae35bb1.ctex::
-::res://Assets/Characters/Soldier/Soldier with shadows/::1794742962
-Soldier.png::CompressedTexture2D::6397526345992548046::1794250973::1794668651::1::::<><><>0<>0<>e908cb1888431de7788ca748da6d64b7<>res://.godot/imported/Soldier.png-fa92deb192295357a541a38a0fb99af5.ctex::
-Soldier_Attack01.png::CompressedTexture2D::7096147018684418373::1794250973::1794668651::1::::<><><>0<>0<>7d22f2cf47a1d86e0e1cc0abb6286c87<>res://.godot/imported/Soldier_Attack01.png-af49d90cbb6932f34aaf36082b8b20ee.ctex::
-Soldier_Attack02.png::CompressedTexture2D::2127753165213118919::1794250973::1794668651::1::::<><><>0<>0<>09165e583b7bfcca807e2fb0e81b0033<>res://.godot/imported/Soldier_Attack02.png-a5db797c4ebeb09874659fc126f2ead4.ctex::
-Soldier_Attack03.png::CompressedTexture2D::9207262099624263205::1794250973::1794668651::1::::<><><>0<>0<>160c4ecf44a6b054a96cd45713d87b6d<>res://.godot/imported/Soldier_Attack03.png-cb3f4c28aac2682916fc87cf096b4adc.ctex::
-Soldier_Death.png::CompressedTexture2D::5716950620974780629::1794250973::1794668651::1::::<><><>0<>0<>5df00a7d67764f8b119a5b83746d2ebc<>res://.godot/imported/Soldier_Death.png-e26371550eca904061c5030dd71e25b1.ctex::
-Soldier_Hurt.png::CompressedTexture2D::420785717239400050::1794250973::1794668651::1::::<><><>0<>0<>cd27a263f6f49a10130703e269c7d951<>res://.godot/imported/Soldier_Hurt.png-25330a591fe652cd7a62d2b29a09f78c.ctex::
-Soldier_Idle.png::CompressedTexture2D::8241510699010628188::1794250973::1794668651::1::::<><><>0<>0<>d64ffa5a6a637c30c6045988f1ef5024<>res://.godot/imported/Soldier_Idle.png-06550aec0f732d537d3086f3e093ff01.ctex::
-Soldier_Walk.png::CompressedTexture2D::8700940238368190987::1794250973::1794668651::1::::<><><>0<>0<>2d9fe8467487241577911061fe1f7d2d<>res://.godot/imported/Soldier_Walk.png-8bb07fe1373f95fd03a9126d2b2d78fa.ctex::
-::res://Assets/Characters/Swordsman/::1794742962
+::res://Assets/Characters/Swordsman/::1795452621
 ::res://Assets/Characters/Swordsman/Swordsman/::1794742962
 Swordsman.png::CompressedTexture2D::1722708593078582619::1794250973::1794668651::1::::<><><>0<>0<>4d6ba59e9ae8ac435fdced6c8650bf9e<>res://.godot/imported/Swordsman.png-16903f38e921a30f7e26c343fa952e64.ctex::
 Swordsman_Attack01.png::CompressedTexture2D::8265301924413209704::1794250973::1794668651::1::::<><><>0<>0<>383e5356c8ce8b6d1d20d3dc78a72ed8<>res://.godot/imported/Swordsman_Attack01.png-eda6ab5ef16d234677f952a3531f128b.ctex::
@@ -390,17 +286,8 @@ Swordsman_Death.png::CompressedTexture2D::2253266254152235358::1794250973::17946
 Swordsman_Hurt.png::CompressedTexture2D::4566608693115905813::1794250973::1794668651::1::::<><><>0<>0<>4fc7fc42420c7184b0a0151a0aa4dbd6<>res://.godot/imported/Swordsman_Hurt.png-13a60a6e55853878cc2dfa3b72970d1a.ctex::
 Swordsman_Idle.png::CompressedTexture2D::1777929453525443850::1794250973::1794668651::1::::<><><>0<>0<>b88420b28236bc3f569ce34b68a1e292<>res://.godot/imported/Swordsman_Idle.png-14b75fe7549c2cd1a63b4083017636b9.ctex::
 Swordsman_Walk.png::CompressedTexture2D::3439935846628363787::1794250973::1794668651::1::::<><><>0<>0<>491c2574114307b228505b2f907807f2<>res://.godot/imported/Swordsman_Walk.png-070249f88973c6849c35606727e9f174.ctex::
-::res://Assets/Characters/Swordsman/Swordsman with shadows/::1794742962
-Swordsman.png::CompressedTexture2D::2754736261830824606::1794250973::1794668651::1::::<><><>0<>0<>02f5c72ca389bfcca346d34f60277ec4<>res://.godot/imported/Swordsman.png-dd1669023525bb8bd1b9f17adddb2ae2.ctex::
-Swordsman_Attack01.png::CompressedTexture2D::6463807582143195502::1794250973::1794668651::1::::<><><>0<>0<>c7f7be965e4974032b19b409c2cd20ec<>res://.godot/imported/Swordsman_Attack01.png-8fb77a37f8f53a0d8a1681f6146e06be.ctex::
-Swordsman_Attack02.png::CompressedTexture2D::6019097622651537008::1794250973::1794668651::1::::<><><>0<>0<>b7f50ca6ba013fc023953491a075a043<>res://.godot/imported/Swordsman_Attack02.png-68f5fb44ddfb9380302dbf626bfe698b.ctex::
-Swordsman_Attack3.png::CompressedTexture2D::8160196357527820333::1794250973::1794668651::1::::<><><>0<>0<>6d7ff99b194f2ac355bc4251a4c15f4f<>res://.godot/imported/Swordsman_Attack3.png-5e2e479782ae1a2eecdc6509acac6a2c.ctex::
-Swordsman_Death.png::CompressedTexture2D::3008702381663829981::1794250973::1794668651::1::::<><><>0<>0<>4330290e6185f34389c2c20506f61cbd<>res://.godot/imported/Swordsman_Death.png-ee5c4edf3af00b50efee8a75edec6eaf.ctex::
-Swordsman_Hurt.png::CompressedTexture2D::3125220903420818492::1794250973::1794668651::1::::<><><>0<>0<>0d5b8fdb8f0f76c89cbab8b1b6640477<>res://.godot/imported/Swordsman_Hurt.png-a71297c601d1982a6dcfe6c38f24c407.ctex::
-Swordsman_Idle.png::CompressedTexture2D::7240767606962255645::1794250973::1794668651::1::::<><><>0<>0<>eac6a8e7a6df40d7101aa822f72c221d<>res://.godot/imported/Swordsman_Idle.png-5ba30d61881d48b4dc730fb4949da508.ctex::
-Swordsman_Walk.png::CompressedTexture2D::7864908245988677383::1794250973::1794668651::1::::<><><>0<>0<>89af85421d6acdf3295808ce7adfcdd6<>res://.godot/imported/Swordsman_Walk.png-229a73985c11d73a13437d28602616c5.ctex::
-::res://Assets/Characters/Werebear/::1794742962
-::res://Assets/Characters/Werebear/Werebear/::1794742962
+::res://Assets/Characters/Werebear/::1795452621
+::res://Assets/Characters/Werebear/Werebear/::1795453246
 Werebear.png::CompressedTexture2D::2459185271005882764::1794250973::1794668652::1::::<><><>0<>0<>54b63b18350041fa85aeda2d3c32cd48<>res://.godot/imported/Werebear.png-ec5e81c9e13948cd6a2fb72cf6870b33.ctex::
 Werebear_Attack01.png::CompressedTexture2D::3843586424813727877::1794250973::1794668652::1::::<><><>0<>0<>2c34cdd3802c27ccf7171b85d2c01cd3<>res://.godot/imported/Werebear_Attack01.png-2bc8b4aa77264c27f890e17d66c70227.ctex::
 Werebear_Attack02.png::CompressedTexture2D::3914351516585618185::1794250973::1794668652::1::::<><><>0<>0<>b7ee8cb952eca59aa789c2819d5dcc02<>res://.godot/imported/Werebear_Attack02.png-324b729c8d81f8231b2a2caf61c92139.ctex::
@@ -408,34 +295,19 @@ Werebear_Attack03.png::CompressedTexture2D::7530838570676974656::1794250973::179
 Werebear_Death.png::CompressedTexture2D::6214317261541062228::1794250973::1794668652::1::::<><><>0<>0<>7cedcb6e1bf04edf358019b655243675<>res://.godot/imported/Werebear_Death.png-796f274c80e70af786f509f8908574cc.ctex::
 Werebear_Hurt.png::CompressedTexture2D::4299356592983821106::1794250973::1794668652::1::::<><><>0<>0<>74da59893b24ecdf3a257a231e31f114<>res://.godot/imported/Werebear_Hurt.png-b299c583572587af1a55a15c231bd274.ctex::
 Werebear_Idle.png::CompressedTexture2D::8823093473272338330::1794250973::1794668652::1::::<><><>0<>0<>ef81d2c3c1c2c6b0b7f703a0f25819b3<>res://.godot/imported/Werebear_Idle.png-6ecbbdc2044287fb1c0100b5964e7a45.ctex::
+Werebear_Summon.png::CompressedTexture2D::7531809991400204488::1795453292::1795453246::1::::<><><>0<>0<>532a2cf71c3ffa679968699582e5a3b1<>res://.godot/imported/Werebear_Summon.png-4a55ed1c31dd4d90242cd2345d9fa483.ctex::
 Werebear_Walk.png::CompressedTexture2D::6734858607408682580::1794250973::1794668652::1::::<><><>0<>0<>70c0167f7e58e92369af65f9c760a0bc<>res://.godot/imported/Werebear_Walk.png-7e4d66facbd4c39b5c187f69230e7c1e.ctex::
-::res://Assets/Characters/Werebear/Werebear with shadows/::1794742962
-Werebear.png::CompressedTexture2D::2146964264276659447::1794250973::1794668651::1::::<><><>0<>0<>fea31c77c899e985168990168bef99f8<>res://.godot/imported/Werebear.png-e23138b56ccecf58639a6949bc550cb9.ctex::
-Werebear_Attack01.png::CompressedTexture2D::5655251916469401448::1794250973::1794668651::1::::<><><>0<>0<>c68e9d5417d25a0407ceb129ff527203<>res://.godot/imported/Werebear_Attack01.png-7b1366ba0a2812af93ff55b4d89763bc.ctex::
-Werebear_Attack02.png::CompressedTexture2D::7166476757987992027::1794250973::1794668652::1::::<><><>0<>0<>a02055383a146f807b7f8e3d139d8b4b<>res://.godot/imported/Werebear_Attack02.png-d23258024e6e4ba3b843fa910511b7ab.ctex::
-Werebear_Attack03.png::CompressedTexture2D::9018362231531131330::1794250973::1794668652::1::::<><><>0<>0<>2a392a17c21cd86cd671ad6cf0792ce2<>res://.godot/imported/Werebear_Attack03.png-5c0e7c374670d153155bc3b52043379b.ctex::
-Werebear_Death.png::CompressedTexture2D::7901056667711575333::1794250973::1794668652::1::::<><><>0<>0<>cc7570a8a9414fa1fcee14d3f36f7450<>res://.godot/imported/Werebear_Death.png-5f3cd556aceb415956a9a7a00050f135.ctex::
-Werebear_Hurt.png::CompressedTexture2D::3764840379576957590::1794250973::1794668652::1::::<><><>0<>0<>100bc904212a915ab300a0b5619b8bd6<>res://.godot/imported/Werebear_Hurt.png-5ae72957083203585f03d8e411ff443e.ctex::
-Werebear_Idle.png::CompressedTexture2D::5928427489235089311::1794250973::1794668652::1::::<><><>0<>0<>e9ec4afcd65c292c3c377947c0810fea<>res://.godot/imported/Werebear_Idle.png-35d11a870c9dd25d3fabb33ba07365db.ctex::
-Werebear_Walk.png::CompressedTexture2D::8087186717566594379::1794250973::1794668652::1::::<><><>0<>0<>269962afd50af00ae38830f27ce57458<>res://.godot/imported/Werebear_Walk.png-0ea3b1ee58e091f00c796e273191a75a.ctex::
-::res://Assets/Characters/Werewolf/::1794742962
-::res://Assets/Characters/Werewolf/Werewolf/::1794742962
+::res://Assets/Characters/Werewolf/::1795452621
+::res://Assets/Characters/Werewolf/Werewolf/::1795453246
 Werewolf.png::CompressedTexture2D::8521576336994069882::1794250973::1794668652::1::::<><><>0<>0<>5e5190ed8a70b5ea1bc9a41d628ea3ea<>res://.godot/imported/Werewolf.png-47081180242fa6fc1927c9dcefc8a467.ctex::
 Werewolf_Attack01.png::CompressedTexture2D::400202885186714679::1794250973::1794668652::1::::<><><>0<>0<>48fc2f63a1c31f5a157b1ffd52466baf<>res://.godot/imported/Werewolf_Attack01.png-3db02a0b8b99bf887cc6d148a49df053.ctex::
 Werewolf_Attack02.png::CompressedTexture2D::183880846709757280::1794250973::1794668652::1::::<><><>0<>0<>28b27925d0b089b457b19144bf63997b<>res://.godot/imported/Werewolf_Attack02.png-b6262118eb505b41058595c816a1939f.ctex::
 Werewolf_Death.png::CompressedTexture2D::4763916117600194950::1794250973::1794668652::1::::<><><>0<>0<>4be6a487d07a7eec99b2f547a0771b73<>res://.godot/imported/Werewolf_Death.png-a52e3648cfc15b46113f04d88040df3e.ctex::
 Werewolf_Hurt.png::CompressedTexture2D::4312350731758747495::1794250973::1794668652::1::::<><><>0<>0<>903379e31454ca5a0e9720c95abd2fc0<>res://.godot/imported/Werewolf_Hurt.png-50af743207e90a124a984ac3db2bffe3.ctex::
 Werewolf_Idle.png::CompressedTexture2D::6411687182996830225::1794250973::1794668652::1::::<><><>0<>0<>7c75aafd14113d365ec1ad7033057129<>res://.godot/imported/Werewolf_Idle.png-95e3a2c1e039cc343b9c4a9f53894f49.ctex::
+Werewolf_Summon.png::CompressedTexture2D::7231703157728280418::1795453292::1795453246::1::::<><><>0<>0<>f04f4d6d49f1173d90ae7266c3029f91<>res://.godot/imported/Werewolf_Summon.png-6ae3f66e23801445b86ecd5b15bb5294.ctex::
 Werewolf_Walk.png::CompressedTexture2D::2052673548824923946::1794250973::1794668652::1::::<><><>0<>0<>2b8f612d5cc4a9a518f7c105c1e18600<>res://.godot/imported/Werewolf_Walk.png-da75edb7bcb7c342a5bfc22ee03b6458.ctex::
-::res://Assets/Characters/Werewolf/Werewolf with shadows/::1794742962
-Werewolf.png::CompressedTexture2D::6361665285830866821::1794250973::1794668652::1::::<><><>0<>0<>9b84f12fb88e95db64e1a3c54faec695<>res://.godot/imported/Werewolf.png-01311dd958e8f82dfe5e269ce79ca8ad.ctex::
-Werewolf_Attack01.png::CompressedTexture2D::8502074154874590047::1794250973::1794668652::1::::<><><>0<>0<>a664c8a9f03809f067446d5a8b2b916c<>res://.godot/imported/Werewolf_Attack01.png-90fba6be136d05ecd7af0ce5d66cdc93.ctex::
-Werewolf_Attack02.png::CompressedTexture2D::4047134494014077636::1794250973::1794668652::1::::<><><>0<>0<>440175ca6ef7114024acfa3518314dbe<>res://.godot/imported/Werewolf_Attack02.png-f487dfcf4aa2c6d6ba46f18e78219eeb.ctex::
-Werewolf_Death.png::CompressedTexture2D::6933424952802845504::1794250973::1794668652::1::::<><><>0<>0<>ee3f7e179f1b3a0f2e70cecf72cfe92a<>res://.godot/imported/Werewolf_Death.png-e254e7ea2dbe7918f0f097a4d46043a9.ctex::
-Werewolf_Hurt.png::CompressedTexture2D::6334302220763250255::1794250973::1794668652::1::::<><><>0<>0<>79d78d4a167601b6ff26ca48f95dc4d8<>res://.godot/imported/Werewolf_Hurt.png-f717c5529e6fb15f7c3403c1d3cdad75.ctex::
-Werewolf_Idle.png::CompressedTexture2D::7694585766094095884::1794250973::1794668652::1::::<><><>0<>0<>bc1e32cd5ecd4f252d4de0387f2c2c7d<>res://.godot/imported/Werewolf_Idle.png-5965712414b8d104fe7a66f64d2085ca.ctex::
-Werewolf_Walk.png::CompressedTexture2D::1763453342757209526::1794250973::1794668652::1::::<><><>0<>0<>15c5244dac656a49822c57d67efb5a18<>res://.godot/imported/Werewolf_Walk.png-c9a233d8cdb2e878ce0f94dd6e0a7c13.ctex::
-::res://Assets/Characters/Wizard/::1794742962
+::res://Assets/Characters/Wizard/::1795452621
 ::res://Assets/Characters/Wizard/Magic(projectile)/::1794742962
 Wizard_Attack01_Effect.png::CompressedTexture2D::3359508757949272844::1794250973::1794668652::1::::<><><>0<>0<>44d7be1ec1aa97fdd7001fd9ed4319e8<>res://.godot/imported/Wizard_Attack01_Effect.png-5ed7b425b04bacb89feaea07e86c578d.ctex::
 Wizard_Attack02_Effect.png::CompressedTexture2D::7428533741355778001::1794250973::1794668652::1::::<><><>0<>0<>13a705b7bfaea16530bc6b6289831548<>res://.godot/imported/Wizard_Attack02_Effect.png-753cb0ed4fd2f56a039bdd4e7dcf9be8.ctex::
@@ -451,28 +323,26 @@ Wizard_Death.png::CompressedTexture2D::3944681149911337415::1794250973::17946686
 Wizard_Hurt.png::CompressedTexture2D::3325522726217151736::1794250973::1794668653::1::::<><><>0<>0<>514db64d6e1918c15cdc086d04974a6e<>res://.godot/imported/Wizard_Hurt.png-a0a3bc7e97ff5319e77cf2e3a1cc7628.ctex::
 Wizard_Idle.png::CompressedTexture2D::211682375166232359::1794250973::1794668653::1::::<><><>0<>0<>cf37fe5456cc55235d61233061660f84<>res://.godot/imported/Wizard_Idle.png-386757f6d80780612d7cc3add6105116.ctex::
 Wizard_Walk.png::CompressedTexture2D::2702965352609475410::1794250973::1794668653::1::::<><><>0<>0<>850b7d3893897b823fec6ad295f0eadd<>res://.godot/imported/Wizard_Walk.png-dd0f8b714086466d07ea931f92aca6fe.ctex::
-::res://Assets/Characters/Wizard/Wizard with shadows/::1794742962
-Wizard.png::CompressedTexture2D::4383871115407590260::1794250973::1794668652::1::::<><><>0<>0<>921133c97d883c13f9f5ecb272f0af47<>res://.godot/imported/Wizard.png-ec97b50ff26ad1b16ece9a011ae7595f.ctex::
-Wizard_Attack01(With magic effects).png::CompressedTexture2D::1911279985714696921::1794250973::1794668652::1::::<><><>0<>0<>494db1eaf3aa4da28e041f634aa427c0<>res://.godot/imported/Wizard_Attack01(With magic effects).png-15b304dd818ab7a977737553f835a211.ctex::
-Wizard_Attack01.png::CompressedTexture2D::1746058504576828535::1794250973::1794668652::1::::<><><>0<>0<>e39a93bc854cc4681965491525f68772<>res://.godot/imported/Wizard_Attack01.png-088fbdab9f4500ed4b6cead9452675ba.ctex::
-Wizard_Attack01_Effect.png::CompressedTexture2D::3123005296930822087::1794250973::1794668652::1::::<><><>0<>0<>87a47855d766252af4c5686f44d08a12<>res://.godot/imported/Wizard_Attack01_Effect.png-d0c542e419b8578df26dffbb41622a1f.ctex::
-Wizard_Attack02(With magic effects).png::CompressedTexture2D::5829471768068447145::1794250973::1794668652::1::::<><><>0<>0<>a438c8d9fbf208fe4661b5700b87014b<>res://.godot/imported/Wizard_Attack02(With magic effects).png-ed506392f5bbf4411ebc4ed773b5faea.ctex::
-Wizard_Attack02.png::CompressedTexture2D::5827915405873128831::1794250973::1794668652::1::::<><><>0<>0<>d0b09978f2aae76d3cd11aecaac11189<>res://.godot/imported/Wizard_Attack02.png-610fbaf8211ea82846e18129aaab4973.ctex::
-Wizard_Attack02_Effect.png::CompressedTexture2D::6161118425182253634::1794250973::1794668652::1::::<><><>0<>0<>acf7261ad89fe5009ad61025cb12deb5<>res://.godot/imported/Wizard_Attack02_Effect.png-cafacff49ac00ca6529b3c10d54857e7.ctex::
-Wizard_Death.png::CompressedTexture2D::450759927799148203::1794250973::1794668652::1::::<><><>0<>0<>048627d994697dd5fc51af51eb2244c5<>res://.godot/imported/Wizard_Death.png-8022741df758bd94676a112faebc534f.ctex::
-Wizard_Hurt.png::CompressedTexture2D::5065797609075047471::1794250973::1794668653::1::::<><><>0<>0<>22d668ed1fde284aa9e22cc1676dc800<>res://.godot/imported/Wizard_Hurt.png-aba123f05762cca26e270d139cae28fb.ctex::
-Wizard_Idle.png::CompressedTexture2D::3906475308811225848::1794250973::1794668653::1::::<><><>0<>0<>00a5635928b90e25ba46f402e70d4915<>res://.godot/imported/Wizard_Idle.png-c09bd476066321f0b670e390fed66d0c.ctex::
-Wizard_Walk.png::CompressedTexture2D::4277602863932361975::1794250973::1794668653::1::::<><><>0<>0<>bad47cffd8a05c0824dc9e08e6666834<>res://.godot/imported/Wizard_Walk.png-a46448af856b9071d3c38adac7923be9.ctex::
-::res://Assets/Items/::1794747250
-::res://Assets/Items/Ammo/::1794747246
+::res://Assets/Items/::1795459260
+::res://Assets/Items/Accessories/::1795459381
+iron_ring.png::CompressedTexture2D::5588799053611089716::1795459261::1795459381::1::::<><><>0<>0<>6b75b9ff80b86d12c15a8b95f2f8263c<>res://.godot/imported/iron_ring.png-0fd8f8a50498cc184ea70e02ba627593.ctex::
+silver_earrings.png::CompressedTexture2D::4661917379672355153::1795459302::1795459381::1::::<><><>0<>0<>2a87915385988776c60f2cbbb046c248<>res://.godot/imported/silver_earrings.png-1130a89f4435c672684355d17269b5fa.ctex::
+::res://Assets/Items/Ammo/::1794747316
 arrows.png::CompressedTexture2D::5109235939970860965::1794747289::1794747316::1::::<><><>0<>0<>d1745fc36740e953c88e705319840028<>res://.godot/imported/arrows.png-3f67828a9644bbf654638134ed516429.ctex::
+::res://Assets/Items/Armor/::1795459381
+leather_armor.png::CompressedTexture2D::3313523305467588877::1795459260::1795459381::1::::<><><>0<>0<>9d7e08f9bfd3de9b12d2fe31be4161b6<>res://.godot/imported/leather_armor.png-2bb41db1449da2c6c52aab3f7d66f326.ctex::
 ::res://Assets/Items/Consumables/::1794742962
 health_potion.png::CompressedTexture2D::8659219986538095545::1794250973::1794668649::1::::<><><>0<>0<>9425e44549fee589e3028796259dbdbc<>res://.godot/imported/health_potion.png-3d0a65df662efa94c560f5ff137a3e02.ctex::
-::res://Assets/Items/Currency/::1794747251
+::res://Assets/Items/Currency/::1794747316
 gold_coins.png::CompressedTexture2D::6065063490495116754::1794747251::1794747316::1::::<><><>0<>0<>7de1bbcd389a6743e93e986907f20539<>res://.godot/imported/gold_coins.png-7175f616fe9cd71eecc6481425874813.ctex::
-::res://Assets/Items/Shields/::1794747247
+::res://Assets/Items/Materials/::1795457892
+arcane_dust.png::CompressedTexture2D::834769647387575753::1795457361::1795457892::1::::<><><>0<>0<>ee15dc474036461c82a69445ad17c7fa<>res://.godot/imported/arcane_dust.png-a1354c484e0d06e3a5083231c687763d.ctex::
+iron_ingot.png::CompressedTexture2D::1408143530117215463::1795457361::1795457892::1::::<><><>0<>0<>68f9cd4ad130b6cf4738098a9bb548d3<>res://.godot/imported/iron_ingot.png-3dc25581df8d8de8ef8303775b55b087.ctex::
+leather_strip.png::CompressedTexture2D::4764463735565595392::1795457361::1795457892::1::::<><><>0<>0<>37dde60b2d0d5868416f0f13364d0dcd<>res://.godot/imported/leather_strip.png-db5c6f841e41585e729d25000ac638aa.ctex::
+silver_ingot.png::CompressedTexture2D::5783163737984819160::1795457361::1795457892::1::::<><><>0<>0<>e3c9ff9a982a4d012213d841ff7f636c<>res://.godot/imported/silver_ingot.png-a35e0d7a5fff89a3e6ffbcd08e010925.ctex::
+::res://Assets/Items/Shields/::1794747316
 iron_shield.png::CompressedTexture2D::9112300941560667306::1794747247::1794747316::1::::<><><>0<>0<>ad56349f4c94e37c8610045186fb43fa<>res://.godot/imported/iron_shield.png-42bc010830e5d0cf368325c175a397ad.ctex::
-::res://Assets/Items/Weapons/::1794747250
+::res://Assets/Items/Weapons/::1794747317
 healing_staff.png::CompressedTexture2D::3989692827055980358::1794747290::1794747316::1::::<><><>0<>0<>c3c6143e128f90985f4bda082a899291<>res://.godot/imported/healing_staff.png-c25619d6acd5f0dcb9c4188e3b047caf.ctex::
 iron_sword.png::CompressedTexture2D::5349380960813682565::1794250973::1794668649::1::::<><><>0<>0<>7a69d34c66bf7547bcaa31eadb34bc05<>res://.godot/imported/iron_sword.png-8dc2af7706b92edace44abcba2b786c2.ctex::
 light_longsword.png::CompressedTexture2D::7353981093095292714::1794747243::1794747316::1::::<><><>0<>0<>1a51929b367a0999e660809e4f562640<>res://.godot/imported/light_longsword.png-ec2d2b8eb1b7cf0667d32be78f7f26d1.ctex::
@@ -536,11 +406,16 @@ water_details_animation.png::CompressedTexture2D::962380661414623303::1794250973
 ::res://Assets/UI/::1794742963
 lobby_background.png::CompressedTexture2D::5756072525051692755::1794250973::1794668649::1::::<><><>0<>0<>239fb5859fb3cadbd3ff6566c163f837<>res://.godot/imported/lobby_background.png-8755d62c81c643fa60fc3569916cc7fc.ctex::
 lobby_background.svg::CompressedTexture2D::3623250907513951131::1794250973::1794668649::1::::<><><>0<>0<>0a1502120e96f939d3b59eff5395fff0<>res://.godot/imported/lobby_background.svg-81660eb174c7974272ed80d1c44f03c5.ctex::
-::res://Assets/UI/Icons/::1794747214
+::res://Assets/UI/Icons/::1794837764
+armor.png::CompressedTexture2D::4710212030271130376::1794837467::1794837764::1::::<><><>0<>0<>cbb6a65dd65c0e8c716bfbef5fd8a5f7<>res://.godot/imported/armor.png-7329b94d77db9bb4d337bcc157fde25a.ctex::
 blacksmith.png::CompressedTexture2D::198898799720441002::1794250973::1794668649::1::::<><><>0<>0<>50c898b1e61da4a1b2660299d1abe715<>res://.godot/imported/blacksmith.png-577d978f94c06db0ac61597b81a20c2b.ctex::
 blacksmith.svg::CompressedTexture2D::2134730279575042660::1794250973::1794668649::1::::<><><>0<>0<>b64ea38c9572f2a78347a67fbc08f835<>res://.godot/imported/blacksmith.svg-69223eda3881e579afba4a3aac1ff2c7.ctex::
+bleed.png::CompressedTexture2D::1864374568846891828::1794837467::1794837764::1::::<><><>0<>0<>a343fed85b61538ab36f469697e97a7b<>res://.godot/imported/bleed.png-776cb14c260540c7c1ecdbf02d28ae8f.ctex::
 character.png::CompressedTexture2D::6437943383121896261::1794250973::1794668649::1::::<><><>0<>0<>1420b4827c3ba1e849a83c4a33788997<>res://.godot/imported/character.png-5957e2c8a1c779049cce02a2cfef38c5.ctex::
 character.svg::CompressedTexture2D::880930180501587985::1794250973::1794668649::1::::<><><>0<>0<>79a19d815c9d6b8ca540c8cc403b9268<>res://.godot/imported/character.svg-5988daa2a3714470247cfe8c0bf4af23.ctex::
+close.png::CompressedTexture2D::5386489712668189168::1794837468::1794837764::1::::<><><>0<>0<>88b53c07739e5c1337348f89aa6c3370<>res://.godot/imported/close.png-d9baaefb8fcd02784c7059fcf3bedcfd.ctex::
+crit_burst.png::CompressedTexture2D::6827736338356356304::1794837467::1794837764::1::::<><><>0<>0<>19c3297422d42514b712f97950ace090<>res://.godot/imported/crit_burst.png-4d3c4a2523f23759b3bfc6b32b575d07.ctex::
+crown.png::CompressedTexture2D::544613514817192861::1794837467::1794837764::1::::<><><>0<>0<>b849b7aedeb2fdac88ea1e9ce4196e04<>res://.godot/imported/crown.png-9062d7b294628d63c29149e06c45c001.ctex::
 delete_saves.png::CompressedTexture2D::6035298162090688722::1794744215::1794744406::1::::<><><>0<>0<>64b12b385ac7e08f61088ce0871eca15<>res://.godot/imported/delete_saves.png-a85de4a43d361e1f796cc6b64308158c.ctex::
 dungeon.png::CompressedTexture2D::7694628670317836161::1794250973::1794668649::1::::<><><>0<>0<>1c58f5894d2b6d9f311aeec92a307336<>res://.godot/imported/dungeon.png-0483c3568d37a133b6bf5403aa3cdcfa.ctex::
 dungeon.svg::CompressedTexture2D::2115210680510859940::1794250973::1794668649::1::::<><><>0<>0<>9e73d1bd12ecb9ef0e3e6541ed52f4fb<>res://.godot/imported/dungeon.svg-398206dae66025b41f872d3a5ce45686.ctex::
@@ -551,27 +426,57 @@ equipment_shield.svg::CompressedTexture2D::6024360474474814373::1794747147::1794
 equipment_weapon.svg::CompressedTexture2D::1469303082328748827::1794437230::1794669036::1::::<><><>0<>0<>d62f8cdf0b44b7a6fbb8c79225632bb7<>res://.godot/imported/equipment_weapon.svg-148e0819af4e551090e51ce8b3622e2a.ctex::
 exit.png::CompressedTexture2D::2466436524442083070::1794250973::1794744406::1::::<><><>0<>0<>89d1ac0df660a4c74c577984b9991bd5<>res://.godot/imported/exit.png-78b0e44c207aacaf0467efac57351cac.ctex::
 exit.svg::CompressedTexture2D::5129669391235830591::1794250973::1794668649::1::::<><><>0<>0<>a96c13c008c1f1ef395e1e65c370301a<>res://.godot/imported/exit.svg-ecb69999ab4d3d5f7afd7af749dded22.ctex::
+fire.png::CompressedTexture2D::4706779733828469198::1794837467::1794837764::1::::<><><>0<>0<>3875b9f8fefe8dde928dc927f6f821a5<>res://.godot/imported/fire.png-9ff260c42039e2ab61efcc75e85315c9.ctex::
+frost.png::CompressedTexture2D::8638550021083468825::1794837467::1794837764::1::::<><><>0<>0<>c0f6655db1ea648093017777c0e3a0e0<>res://.godot/imported/frost.png-bdc783fb64be2ea190478ee3c918e6e3.ctex::
+heal.png::CompressedTexture2D::3652924026358177532::1794837467::1794837764::1::::<><><>0<>0<>36a038f3ab288018662618fdcb0b7d0a<>res://.godot/imported/heal.png-22bc0b25b89f3e83e47f4eedd67e261f.ctex::
+heart.png::CompressedTexture2D::2625293104394547660::1794837467::1794837764::1::::<><><>0<>0<>364a5c0af92eb0012eb888d291ea89b3<>res://.godot/imported/heart.png-7b2894233495e01a9fb5c23d73c8a8a6.ctex::
+home.png::CompressedTexture2D::3248085036949610779::1794837467::1794837764::1::::<><><>0<>0<>ba111596bbb7145ad08824e4242acffe<>res://.godot/imported/home.png-e918cc7af988c7f8ab715a07649a6e80.ctex::
+hourglass.png::CompressedTexture2D::185865584723086422::1794837467::1794837764::1::::<><><>0<>0<>bb1a1a0af1637e39aecc82f20ae6b122<>res://.godot/imported/hourglass.png-369b1241d2ad796c3fadf10fb9a7b0d7.ctex::
+initiative.png::CompressedTexture2D::2986242476034700557::1794837502::1794837764::1::::<><><>0<>0<>8fad87da18cec5e3bb242b69a643ffed<>res://.godot/imported/initiative.png-99c1e9c2b1884a607d2a3121687c0624.ctex::
 inventory.png::CompressedTexture2D::749994697938253509::1794250973::1794744406::1::::<><><>0<>0<>d7ef6bde3804aabcf17e6f86f9277aff<>res://.godot/imported/inventory.png-6650b69faf02a95b58a382665f19b8a8.ctex::
 inventory.svg::CompressedTexture2D::2275822776755157108::1794250973::1794668649::1::::<><><>0<>0<>f534b500eeddb5526f1c5c12d3778ee7<>res://.godot/imported/inventory.svg-a5258bc91fe94565bb52e9f55186bebc.ctex::
+knockback.png::CompressedTexture2D::6461468915389789539::1794837502::1794837764::1::::<><><>0<>0<>dc61bc1d85a77c6991adef16d5c0f5e4<>res://.godot/imported/knockback.png-b1bcf71980e99d3cfb38fd67be8dcfb8.ctex::
+level_up.png::CompressedTexture2D::4024320366030703504::1794837467::1794837764::1::::<><><>0<>0<>3659aa98c09d33be8c06bd5b38211940<>res://.godot/imported/level_up.png-cbc822f398e78efd3a4fff1f2dcc6608.ctex::
+location.png::CompressedTexture2D::2972312170112943347::1794837467::1794837764::1::::<><><>0<>0<>84ae1846163fba10396194f3630c7771<>res://.godot/imported/location.png-1d6aefffcc4818936efe65fbbb3d704b.ctex::
+lore_lamp.png::CompressedTexture2D::3736798121825902164::1794837467::1794837764::1::::<><><>0<>0<>9694d0f09a5739727346a48885f6c3b1<>res://.godot/imported/lore_lamp.png-b7d8b6c1788f2fb56e686abd70e67951.ctex::
+map.png::CompressedTexture2D::709947835369590210::1794837467::1794837764::1::::<><><>0<>0<>1317fb25a39ad0b0d7eff21fb9a9e28d<>res://.godot/imported/map.png-8d185069d1d9f6fa62823b074ea58732.ctex::
+medal.png::CompressedTexture2D::3472199806103842437::1794837467::1794837764::1::::<><><>0<>0<>036a7918b8d902c0c22f71458f1541b6<>res://.godot/imported/medal.png-e3774969603af124cbe45cbe1887b239.ctex::
+mind.png::CompressedTexture2D::7067902347183563694::1794837502::1794837764::1::::<><><>0<>0<>444b68855074aac6a1b1dc2eae1c37f5<>res://.godot/imported/mind.png-98b2a13d1a58aed8723feda029479a98.ctex::
+pause.png::CompressedTexture2D::8344816695716179719::1794837467::1794837764::1::::<><><>0<>0<>87e50042a14fa9de1dc327d46464fc6a<>res://.godot/imported/pause.png-9b6264b779ba7398f648ceba59149d1f.ctex::
 play.png::CompressedTexture2D::9177385560178427158::1794250973::1794668649::1::::<><><>0<>0<>fcffdfd187dfd4fd6838876f5e5ab64f<>res://.godot/imported/play.png-90b13aaf69625ca9a19c93af84033662.ctex::
 play.svg::CompressedTexture2D::3469443487885982583::1794250973::1794668649::1::::<><><>0<>0<>13fbdb260202d85afe6d961bc1faf41c<>res://.godot/imported/play.svg-445d0e7feb4bed76e5bf957978449dcd.ctex::
 play_sword.png::CompressedTexture2D::7830069741739960964::1794744214::1794744406::1::::<><><>0<>0<>493e265264cce2d866cf579a1a203b69<>res://.godot/imported/play_sword.png-98b0d5b026a0cf3802d4ccff227da9d8.ctex::
 play_sword.svg::CompressedTexture2D::3730293931782564199::1794744255::1794744406::1::::<><><>0<>0<>d5ee79a295b13523aae4b16cbcecc579<>res://.godot/imported/play_sword.svg-b651660d690d014b991b219c4fa7cfef.ctex::
+ready_check.png::CompressedTexture2D::7227471373989312878::1794837467::1794837764::1::::<><><>0<>0<>6e3f07a58b0e93720ceb985b450109ad<>res://.godot/imported/ready_check.png-fd6235a15a959b1990b4499312af9c80.ctex::
+restart.png::CompressedTexture2D::6462975933486588450::1794837502::1794837764::1::::<><><>0<>0<>798e31cdbbe56c8294c5493f6e01101d<>res://.godot/imported/restart.png-dc36be43e5fcfadeb3edaf5796fc0f1e.ctex::
+scroll.png::CompressedTexture2D::8843565190400638179::1794837467::1794837764::1::::<><><>0<>0<>ffbf48e1b88c020bb392d77f81d44b3e<>res://.godot/imported/scroll.png-acc68b405e0296b6b8cb99afb6921099.ctex::
 settings.png::CompressedTexture2D::9017063213636670476::1794250973::1794744406::1::::<><><>0<>0<>2450dbac0ef37d773b6c78a644322faa<>res://.godot/imported/settings.png-107cc519264dfa20b6866cdaf1c02405.ctex::
 settings.svg::CompressedTexture2D::2560754570374562799::1794250973::1794668649::1::::<><><>0<>0<>658982e99ff5f725a7b8e8f71c981652<>res://.godot/imported/settings.svg-4a098ae81fca88f1959c1b667548c790.ctex::
+shield.png::CompressedTexture2D::8901622058874851289::1794837467::1794837764::1::::<><><>0<>0<>5693c3e36cba36fe13bfc6881c5a7c3d<>res://.godot/imported/shield.png-49cb1e760588c0575e3142f40c860bf9.ctex::
 shop.png::CompressedTexture2D::6485483784190869586::1794250973::1794668649::1::::<><><>0<>0<>1d27d23179bb6d9868b9d72c052b0a2b<>res://.godot/imported/shop.png-4066a9d3a1300bcce39d919e6bb73e59.ctex::
 shop.svg::CompressedTexture2D::4746262662165558370::1794250973::1794668649::1::::<><><>0<>0<>9c21a73e8ce6e3c7fdbae838c95b7e6c<>res://.godot/imported/shop.svg-6afc6313bad78273f5c94ff78d664fe5.ctex::
+skull.png::CompressedTexture2D::7074431393871986693::1794837467::1794837764::1::::<><><>0<>0<>9c3a6c0cf955dc9c7d7492c9a736cb96<>res://.godot/imported/skull.png-2cddf2add6e998d960d9e479b6447e2a.ctex::
+sparkle.png::CompressedTexture2D::917728960611403411::1794837467::1794837764::1::::<><><>0<>0<>7084344357f5ebc658d1637c767fc094<>res://.godot/imported/sparkle.png-4d7eef04f17fbb23ad67f04f7fd5d803.ctex::
+stun.png::CompressedTexture2D::1748958903730324147::1794837467::1794837764::1::::<><><>0<>0<>84e1e10cf2c27b5c2b5957660bce9dd9<>res://.godot/imported/stun.png-22dfdf189dc096e419f64a35bda5f8e0.ctex::
+target.png::CompressedTexture2D::3672855525051695905::1794837467::1794837764::1::::<><><>0<>0<>c247621a0b82c05028e64af33a11462a<>res://.godot/imported/target.png-05f8bb36d8c6c059b44a6ca5ea209a31.ctex::
+trophy.png::CompressedTexture2D::7363209598663024419::1794837467::1794837764::1::::<><><>0<>0<>8e2f07d0f8593aece8c6128d90a34e26<>res://.godot/imported/trophy.png-ed1ef7414d6cb9408c9e482ecaf4b82a.ctex::
+turn_left.png::CompressedTexture2D::2497687983261059212::1794837468::1794837764::1::::<><><>0<>0<>5b967fb27331d1a54f9a04072dd93035<>res://.godot/imported/turn_left.png-6c2a770206f955e75aea7d3f6d0efb1f.ctex::
+turn_right.png::CompressedTexture2D::2460667226977547099::1794837468::1794837764::1::::<><><>0<>0<>1a9fc099a34f10d0401aed9c7e9ccf50<>res://.godot/imported/turn_right.png-0db8a94f602cadc3f16dffe0e4b30fb2.ctex::
+vision.png::CompressedTexture2D::7549824829193640329::1794837467::1794837764::1::::<><><>0<>0<>53c0e41a83f140c82062cd9d20323b43<>res://.godot/imported/vision.png-ec144225c35c36a8cfb273acb32bf096.ctex::
+warning.png::CompressedTexture2D::4311862158578014577::1794837467::1794837764::1::::<><><>0<>0<>fc719a018b659307175f4e406a3e307a<>res://.godot/imported/warning.png-347e1df06890c170a99fb3d784cd62e4.ctex::
 wizard.png::CompressedTexture2D::555642744991249651::1794250973::1794668649::1::::<><><>0<>0<>f2dd2d57b62b4567497a1776b18cff33<>res://.godot/imported/wizard.png-ada0c20bd1c9ab2fb77dc77332940a69.ctex::
 wizard.svg::CompressedTexture2D::4492218206392838028::1794250973::1794668649::1::::<><><>0<>0<>6d85bd81b90e3333733393710f1a26a6<>res://.godot/imported/wizard.svg-a03fd37b9306c87d50397b1bd4813b06.ctex::
+wolf_fang.png::CompressedTexture2D::1094416845636021505::1794837502::1794837764::1::::<><><>0<>0<>38b671374e2e7aad6771f2657a62b3f5<>res://.godot/imported/wolf_fang.png-a6b7fc377ec5cdf484d141c1dd6b8516.ctex::
+xp_star.png::CompressedTexture2D::3704971297767197661::1794837467::1794837764::1::::<><><>0<>0<>204a5ffc4535f94892f3c9a14463c39f<>res://.godot/imported/xp_star.png-ca5d366c6f7088437364a94a749c9239.ctex::
 ::res://Data/::1794742963
 ::res://Data/CharacterClasses/::1794742963
-archer.tres::Resource/CharacterClassData::-1::1794747161::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
-knight.tres::Resource/CharacterClassData::-1::1794747162::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
-knight_templar.tres::Resource/CharacterClassData::-1::1794747163::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
-priest.tres::Resource/CharacterClassData::-1::1794747165::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
-soldier.tres::Resource/CharacterClassData::-1::1794747145::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
-swordsman.tres::Resource/CharacterClassData::-1::1794747166::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
-wizard.tres::Resource/CharacterClassData::-1::1794747167::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+archer.tres::Resource/CharacterClassData::-1::1795456154::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+knight.tres::Resource/CharacterClassData::-1::1795456156::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+knight_templar.tres::Resource/CharacterClassData::-1::1795456158::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+priest.tres::Resource/CharacterClassData::-1::1795456160::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+soldier.tres::Resource/CharacterClassData::-1::1795456162::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+swordsman.tres::Resource/CharacterClassData::-1::1795456164::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
+wizard.tres::Resource/CharacterClassData::-1::1795456165::0::1::::<><><>0<>0<><>::res://Scripts/Data/CharacterClassData.gd
 ::res://Data/DungeonDifficulties/::1794742963
 forgotten_crypt_easy.tres::Resource/DungeonDifficultyData::-1::1794679981::0::1::::<><><>0<>0<><>::res://Scripts/Data/DungeonDifficultyData.gd
 forgotten_crypt_hard.tres::Resource/DungeonDifficultyData::-1::1794679984::0::1::::<><><>0<>0<><>::res://Scripts/Data/DungeonDifficultyData.gd
@@ -591,74 +496,74 @@ renewal.tres::Resource/EnchantmentData::-1::1794676105::0::1::::<><><>0<>0<><>::
 storm_edge.tres::Resource/EnchantmentData::-1::1794676105::0::1::::<><><>0<>0<><>::res://Scripts/Data/EnchantmentData.gd
 venom_edge.tres::Resource/EnchantmentData::-1::1794676105::0::1::::<><><>0<>0<><>::res://Scripts/Data/EnchantmentData.gd
 vitality.tres::Resource/EnchantmentData::-1::1794676105::0::1::::<><><>0<>0<><>::res://Scripts/Data/EnchantmentData.gd
-::res://Data/Heroes/::1794742963
-archer_class.tres::Resource/CharacterClass::6556418524521246312::1794668681::0::1::::<><><>0<>0<><>::uid://b2rb3eieyvbkx::::res://Scenes/Projectiles/arrow.tscn<>uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://c18t121ymvjp4::::res://Data/Heroes/archer_frames.tres
-archer_frames.tres::SpriteFrames::6667077280765798055::1794698263::0::1::::<><><>0<>0<><>::
-knight_class.tres::Resource/CharacterClass::2073345059391712355::1794668709::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://bnuq0kpjoc4lu::::res://Data/Heroes/knight_frames.tres
-knight_frames.tres::SpriteFrames::3341179871633911118::1794698264::0::1::::<><><>0<>0<><>::
-knight_templar_class.tres::Resource/CharacterClass::6262105899106084682::1794668709::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://fq7uv5nnq4vj::::res://Data/Heroes/knight_templar_frames.tres
-knight_templar_frames.tres::SpriteFrames::385954071844924599::1794698265::0::1::::<><><>0<>0<><>::
-priest_class.tres::Resource/CharacterClass::1526316387497802328::1794668681::0::1::::<><><>0<>0<><>::uid://ba7habqlv5hmi::::res://Scenes/Projectiles/holy_spell.tscn<>uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://2ptcmc64pm4m::::res://Data/Heroes/priest_frames.tres
-priest_frames.tres::SpriteFrames::1927222273805810494::1794698264::0::1::::<><><>0<>0<><>::
-soldier_class.tres::Resource/CharacterClass::2864078113276949703::1794668709::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://b2rb3eieyvbkx::::res://Scenes/Projectiles/arrow.tscn<>uid://cmfvnc5qe7t1r::::res://Data/Heroes/soldier_frames.tres
-soldier_frames.tres::SpriteFrames::5626727804106174481::1794698264::0::1::::<><><>0<>0<><>::
-swordsman_class.tres::Resource/CharacterClass::3446622099148949919::1794668709::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://damcttydypd7o::::res://Data/Heroes/swordsman_frames.tres
-swordsman_frames.tres::SpriteFrames::7184190983385677618::1794698264::0::1::::<><><>0<>0<><>::
-wizard_class.tres::Resource/CharacterClass::2572731024988322635::1794668681::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://tjop60ao78bn::::res://Scenes/Projectiles/wizard_spell.tscn<>uid://b1a8aph4sjuaf::::res://Data/Heroes/wizard_frames.tres
-wizard_frames.tres::SpriteFrames::4213335079049177629::1794698265::0::1::::<><><>0<>0<><>::
+::res://Data/Heroes/::1795462825
+archer_class.tres::Resource/CharacterClass::6556418524521246312::1795456100::0::1::::<><><>0<>0<><>::uid://b2rb3eieyvbkx::::res://Scenes/Projectiles/arrow.tscn<>uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://c18t121ymvjp4::::res://Data/Heroes/archer_frames.tres
+archer_frames.tres::SpriteFrames::6667077280765798055::1795462823::0::1::::<><><>0<>0<><>::
+knight_class.tres::Resource/CharacterClass::2073345059391712355::1795456102::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://bnuq0kpjoc4lu::::res://Data/Heroes/knight_frames.tres
+knight_frames.tres::SpriteFrames::3341179871633911118::1795462824::0::1::::<><><>0<>0<><>::
+knight_templar_class.tres::Resource/CharacterClass::6262105899106084682::1795456104::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://fq7uv5nnq4vj::::res://Data/Heroes/knight_templar_frames.tres
+knight_templar_frames.tres::SpriteFrames::385954071844924599::1795462825::0::1::::<><><>0<>0<><>::
+priest_class.tres::Resource/CharacterClass::1526316387497802328::1795456105::0::1::::<><><>0<>0<><>::uid://ba7habqlv5hmi::::res://Scenes/Projectiles/holy_spell.tscn<>uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://2ptcmc64pm4m::::res://Data/Heroes/priest_frames.tres
+priest_frames.tres::SpriteFrames::1927222273805810494::1795462824::0::1::::<><><>0<>0<><>::
+soldier_class.tres::Resource/CharacterClass::2864078113276949703::1795456107::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://b2rb3eieyvbkx::::res://Scenes/Projectiles/arrow.tscn<>uid://cmfvnc5qe7t1r::::res://Data/Heroes/soldier_frames.tres
+soldier_frames.tres::SpriteFrames::5626727804106174481::1795462824::0::1::::<><><>0<>0<><>::
+swordsman_class.tres::Resource/CharacterClass::3446622099148949919::1795456110::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://damcttydypd7o::::res://Data/Heroes/swordsman_frames.tres
+swordsman_frames.tres::SpriteFrames::7184190983385677618::1795462824::0::1::::<><><>0<>0<><>::
+wizard_class.tres::Resource/CharacterClass::2572731024988322635::1795456114::0::1::::<><><>0<>0<><>::uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://tjop60ao78bn::::res://Scenes/Projectiles/wizard_spell.tscn<>uid://b1a8aph4sjuaf::::res://Data/Heroes/wizard_frames.tres
+wizard_frames.tres::SpriteFrames::4213335079049177629::1795462825::0::1::::<><><>0<>0<><>::
 ::res://Data/Items/::1794747314
-arcane_dust.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+arcane_dust.tres::Resource/ItemData::-1::1795457384::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
 arrow.tres::Resource/ItemData::-1::1794747309::0::1::::<><><>0<>0<><>::
-gold_coin.tres::Resource/ItemData::-1::1794747314::0::1::::<><><>0<>0<><>::
-healing_staff.tres::Resource/ItemData::-1::1794747312::0::1::::<><><>0<>0<><>::
-health_potion.tres::Resource/ItemData::5458321598916083255::1794668681::0::1::::<><><>0<>0<><>::uid://4qjcof5xncfd::::res://Scripts/Data/ItemData.gd<>uid://dvmuc81y6xe86::::res://Assets/Items/Consumables/health_potion.png
-iron_ingot.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
-iron_ring.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
-iron_shield.tres::Resource/ItemData::-1::1794747310::0::1::::<><><>0<>0<><>::
-iron_sword.tres::Resource/ItemData::6929320854982565373::1794668681::0::1::::<><><>0<>0<><>::uid://4qjcof5xncfd::::res://Scripts/Data/ItemData.gd<>uid://cihjr1o5mbpq8::::res://Assets/Items/Weapons/iron_sword.png
-leather_armor.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
-leather_strip.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
-light_longsword.tres::Resource/ItemData::-1::1794747307::0::1::::<><><>0<>0<><>::
-magic_staff.tres::Resource/ItemData::-1::1794747313::0::1::::<><><>0<>0<><>::
-short_bow.tres::Resource/ItemData::-1::1794747308::0::1::::<><><>0<>0<><>::
-silver_earrings.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
-silver_ingot.tres::Resource/ItemData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
-templar_lance.tres::Resource/ItemData::-1::1794747311::0::1::::<><><>0<>0<><>::
-::res://Data/Monsters/::1794742963
-armored_axeman_data.tres::Resource/EnemyData::8993013692812992653::1794679960::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cffgyaihk3q6u::::res://Data/Monsters/armored_axeman_frames.tres
-armored_axeman_frames.tres::SpriteFrames::5134514648047945938::1794250973::0::1::::<><><>0<>0<><>::
-armored_orc_data.tres::Resource/EnemyData::5841382120416799247::1794679959::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://jqom7bqw00xm::::res://Data/Monsters/armored_orc_frames.tres
-armored_orc_frames.tres::SpriteFrames::665602787282224614::1794318794::0::1::::<><><>0<>0<><>::
-armored_skeleton_data.tres::Resource/EnemyData::7863779610663823420::1794679957::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cbgewo4117j0q::::res://Data/Monsters/armored_skeleton_frames.tres
-armored_skeleton_frames.tres::SpriteFrames::4855699414329131558::1794321245::0::1::::<><><>0<>0<><>::
-bat_data.tres::Resource/EnemyData::1270611251556037588::1794679942::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cg1w1npd4vpll::::res://Data/Monsters/bat_frames.tres
-bat_frames.tres::SpriteFrames::5249031161453861333::1794250973::0::1::::<><><>0<>0<><>::
-elite_orc_data.tres::Resource/EnemyData::9219786165907593500::1794679962::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://bn4idbwdwdfn8::::res://Data/Monsters/elite_orc_frames.tres
-elite_orc_frames.tres::SpriteFrames::3359233785853979079::1794668681::0::1::::<><><>0<>0<><>::uid://50a8y25bcxn3::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Attack01.png<>uid://dtr0lmkdeig1b::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Attack02.png<>uid://cohr5jm05dg3i::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Attack03.png<>uid://bwxrkdpksr4q4::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Death.png<>uid://cifnglof43ggn::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Hurt.png<>uid://oc3s74fae4e4::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Idle.png<>uid://ctsa3qpp3ynwe::::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Walk.png
-greatsword_skeleton_data.tres::Resource/EnemyData::1116709289161865149::1794679963::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://babvtov8h1x4m::::res://Data/Monsters/greatsword_skeleton_frames.tres
-greatsword_skeleton_frames.tres::SpriteFrames::2389794817657017186::1794668681::0::1::::<><><>0<>0<><>::uid://bauhb3gpux7s3::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Attack02.png<>uid://drfevtlmu1itb::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Attack03.png<>uid://chpctaqjaff8j::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Death.png<>uid://b8o4qxuclrsdp::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Hurt.png<>uid://vr3kr1f37p08::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Idle.png<>uid://bpll73yk5ggvs::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Summon.png<>uid://lwnmeabyf5wl::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Walk.png
-necromancer_data.tres::Resource/EnemyData::148518146953498779::1794679979::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cy5ycl5laye4r::::res://Scenes/Projectiles/necromancer_attack.tscn<>uid://bjxdgblhv6r0a::::res://Data/Monsters/necromancer_frames.tres
-necromancer_frames.tres::SpriteFrames::3065793900384044798::1794668681::0::1::::<><><>0<>0<><>::uid://g1v64r1gnxiw::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Attack01.png<>uid://d1holg7xmhbpk::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Attack02.png<>uid://c5mf0dbb4ixws::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_DEATH.png<>uid://budt4midominj::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Hurt.png<>uid://cityuxmka7ogd::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Idle.png<>uid://btelrbb2y3604::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Summon.png<>uid://cx87wdya3sf6m::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Walk.png
-orc_data.tres::Resource/EnemyData::303026464287014147::1794679946::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://dlop4tv2c18o5::::res://Data/Monsters/orc_frames.tres
-orc_frames.tres::SpriteFrames::7961204194184270350::1794250973::0::1::::<><><>0<>0<><>::
-skeleton_archer_data.tres::Resource/EnemyData::1687549731620341001::1794679945::0::1::::<><><>0<>0<><>::uid://b2rb3eieyvbkx::::res://Scenes/Projectiles/arrow.tscn<>uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://djpvjolaq245::::res://Data/Monsters/skeleton_archer_frames.tres
-skeleton_archer_frames.tres::SpriteFrames::230094682101998788::1794250973::0::1::::<><><>0<>0<><>::
-skeleton_data.tres::Resource/EnemyData::3116437407718078147::1794679943::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://kt844pn6aobg::::res://Data/Monsters/skeleton_frames.tres
-skeleton_frames.tres::SpriteFrames::743168609473318448::1794250973::0::1::::<><><>0<>0<><>::
-slime_data.tres::Resource/EnemyData::8144126176261036170::1794679941::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://h4mnsbl6cf5x::::res://Data/Monsters/slime_frames.tres
-slime_frames.tres::SpriteFrames::551941627074329927::1794250973::0::1::::<><><>0<>0<><>::
-werebear_data.tres::Resource/EnemyData::1721263110667017780::1794679978::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://4qi5cbrpifx8::::res://Data/Monsters/werebear_frames.tres
-werebear_frames.tres::SpriteFrames::2069045926711447123::1794668681::0::1::::<><><>0<>0<><>::uid://bu04koy5kou0t::::res://Assets/Characters/Werebear/Werebear/Werebear_Attack01.png<>uid://bv1e2eaisvssv::::res://Assets/Characters/Werebear/Werebear/Werebear_Attack02.png<>uid://dfj82tre224wy::::res://Assets/Characters/Werebear/Werebear/Werebear_Attack03.png<>uid://cusi5rmn2m86c::::res://Assets/Characters/Werebear/Werebear/Werebear_Death.png<>uid://b2iv1l3lw5a5g::::res://Assets/Characters/Werebear/Werebear/Werebear_Hurt.png<>uid://dxx8cb4lcrdf3::::res://Assets/Characters/Werebear/Werebear/Werebear_Idle.png<>uid://c27oewyab0nce::::res://Assets/Characters/Werebear/Werebear/Werebear_Walk.png
-werewolf_data.tres::Resource/EnemyData::272120246657737399::1794679977::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cgr8xbdjle8u3::::res://Data/Monsters/werewolf_frames.tres
-werewolf_frames.tres::SpriteFrames::5231113642636096504::1794668681::0::1::::<><><>0<>0<><>::uid://fx4jvg7drn7l::::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Attack01.png<>uid://cvcqxhxlaxum::::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Attack02.png<>uid://b84xac25xllas::::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Death.png<>uid://b2o610g8jrc2r::::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Hurt.png<>uid://cxl4s0egs2jun::::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Idle.png<>uid://4ilh64rmdcg5::::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Walk.png
-::res://Data/Projectiles/::1794742963
+gold_coin.tres::Resource/ItemData::-1::1794747721::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd<>res://Assets/Items/Currency/gold_coins.png
+healing_staff.tres::Resource/ItemData::-1::1795456196::0::1::::<><><>0<>0<><>::
+health_potion.tres::Resource/ItemData::5458321598916083255::1795435958::0::1::::<><><>0<>0<><>::uid://4qjcof5xncfd::::res://Scripts/Data/ItemData.gd<>uid://dvmuc81y6xe86::::res://Assets/Items/Consumables/health_potion.png
+iron_ingot.tres::Resource/ItemData::-1::1795457380::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+iron_ring.tres::Resource/ItemData::-1::1795459306::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+iron_shield.tres::Resource/ItemData::-1::1795456203::0::1::::<><><>0<>0<><>::
+iron_sword.tres::Resource/ItemData::6929320854982565373::1795456192::0::1::::<><><>0<>0<><>::uid://4qjcof5xncfd::::res://Scripts/Data/ItemData.gd<>uid://cihjr1o5mbpq8::::res://Assets/Items/Weapons/iron_sword.png
+leather_armor.tres::Resource/ItemData::-1::1795459304::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+leather_strip.tres::Resource/ItemData::-1::1795457383::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+light_longsword.tres::Resource/ItemData::-1::1795456199::0::1::::<><><>0<>0<><>::
+magic_staff.tres::Resource/ItemData::-1::1795456198::0::1::::<><><>0<>0<><>::
+short_bow.tres::Resource/ItemData::-1::1795456194::0::1::::<><><>0<>0<><>::
+silver_earrings.tres::Resource/ItemData::-1::1795459307::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+silver_ingot.tres::Resource/ItemData::-1::1795457382::0::1::::<><><>0<>0<><>::res://Scripts/Data/ItemData.gd
+templar_lance.tres::Resource/ItemData::-1::1795456201::0::1::::<><><>0<>0<><>::
+::res://Data/Monsters/::1795442146
+armored_axeman_data.tres::Resource/EnemyData::8993013692812992653::1795456393::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cffgyaihk3q6u::::res://Data/Monsters/armored_axeman_frames.tres
+armored_axeman_frames.tres::SpriteFrames::-1::1795453314::0::1::::<><><>0<>0<><>::res://Assets/Characters/Armored Axeman/Armored Axeman/Armored Axeman_Summon.png
+armored_orc_data.tres::Resource/EnemyData::5841382120416799247::1795456374::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://jqom7bqw00xm::::res://Data/Monsters/armored_orc_frames.tres
+armored_orc_frames.tres::SpriteFrames::-1::1795453315::0::1::::<><><>0<>0<><>::res://Assets/Characters/Armored Orc/Armored Orc/Armored Orc_Summon.png
+armored_skeleton_data.tres::Resource/EnemyData::7863779610663823420::1795456356::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cbgewo4117j0q::::res://Data/Monsters/armored_skeleton_frames.tres
+armored_skeleton_frames.tres::SpriteFrames::4855699414329131558::1795442145::0::1::::<><><>0<>0<><>::
+bat_data.tres::Resource/EnemyData::1270611251556037588::1795456286::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cg1w1npd4vpll::::res://Data/Monsters/bat_frames.tres
+bat_frames.tres::SpriteFrames::-1::1795453315::0::1::::<><><>0<>0<><>::res://Assets/Characters/Bat/Bat/Bat_Summon.png
+elite_orc_data.tres::Resource/EnemyData::9219786165907593500::1795456417::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://bn4idbwdwdfn8::::res://Data/Monsters/elite_orc_frames.tres
+elite_orc_frames.tres::SpriteFrames::-1::1795453315::0::1::::<><><>0<>0<><>::res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Attack01.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Attack02.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Attack03.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Death.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Hurt.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Idle.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Summon.png<>res://Assets/Characters/Elite Orc/Elite Orc/Elite Orc_Walk.png
+greatsword_skeleton_data.tres::Resource/EnemyData::1116709289161865149::1795456411::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://babvtov8h1x4m::::res://Data/Monsters/greatsword_skeleton_frames.tres
+greatsword_skeleton_frames.tres::SpriteFrames::2389794817657017186::1795442146::0::1::::<><><>0<>0<><>::uid://bauhb3gpux7s3::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Attack02.png<>uid://drfevtlmu1itb::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Attack03.png<>uid://chpctaqjaff8j::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Death.png<>uid://b8o4qxuclrsdp::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Hurt.png<>uid://vr3kr1f37p08::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Idle.png<>uid://bpll73yk5ggvs::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Summon.png<>uid://lwnmeabyf5wl::::res://Assets/Characters/Greatsword Skeleton/Greatsword Skeleton/Greatsword Skeleton_Walk.png
+necromancer_data.tres::Resource/EnemyData::148518146953498779::1795456428::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cy5ycl5laye4r::::res://Scenes/Projectiles/necromancer_attack.tscn<>uid://bjxdgblhv6r0a::::res://Data/Monsters/necromancer_frames.tres
+necromancer_frames.tres::SpriteFrames::3065793900384044798::1795442146::0::1::::<><><>0<>0<><>::uid://g1v64r1gnxiw::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Attack01.png<>uid://d1holg7xmhbpk::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Attack02.png<>uid://c5mf0dbb4ixws::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_DEATH.png<>uid://be7wsfj4c2vb7::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Hide.png<>uid://budt4midominj::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Hurt.png<>uid://cityuxmka7ogd::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Idle.png<>uid://btelrbb2y3604::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Summon.png<>uid://cx87wdya3sf6m::::res://Assets/Characters/Necromancer/Necromancer/Necromancer_Walk.png
+orc_data.tres::Resource/EnemyData::303026464287014147::1795456291::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://dlop4tv2c18o5::::res://Data/Monsters/orc_frames.tres
+orc_frames.tres::SpriteFrames::-1::1795453315::0::1::::<><><>0<>0<><>::res://Assets/Characters/Orc/Orc/Orc_Summon.png
+skeleton_archer_data.tres::Resource/EnemyData::1687549731620341001::1795456287::0::1::::<><><>0<>0<><>::uid://b2rb3eieyvbkx::::res://Scenes/Projectiles/arrow.tscn<>uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://djpvjolaq245::::res://Data/Monsters/skeleton_archer_frames.tres
+skeleton_archer_frames.tres::SpriteFrames::230094682101998788::1795442145::0::1::::<><><>0<>0<><>::
+skeleton_data.tres::Resource/EnemyData::3116437407718078147::1795456289::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://kt844pn6aobg::::res://Data/Monsters/skeleton_frames.tres
+skeleton_frames.tres::SpriteFrames::743168609473318448::1795442144::0::1::::<><><>0<>0<><>::
+slime_data.tres::Resource/EnemyData::8144126176261036170::1795456284::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://h4mnsbl6cf5x::::res://Data/Monsters/slime_frames.tres
+slime_frames.tres::SpriteFrames::-1::1795453316::0::1::::<><><>0<>0<><>::res://Assets/Characters/Slime/Slime/Slime_Summon.png
+werebear_data.tres::Resource/EnemyData::1721263110667017780::1795456419::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://4qi5cbrpifx8::::res://Data/Monsters/werebear_frames.tres
+werebear_frames.tres::SpriteFrames::-1::1795453316::0::1::::<><><>0<>0<><>::res://Assets/Characters/Werebear/Werebear/Werebear_Attack01.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Attack02.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Attack03.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Death.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Hurt.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Idle.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Walk.png<>res://Assets/Characters/Werebear/Werebear/Werebear_Summon.png
+werewolf_data.tres::Resource/EnemyData::272120246657737399::1795456425::0::1::::<><><>0<>0<><>::uid://jfeoccywjufa::::res://Scripts/Enemy/enemy_data.gd<>uid://cgr8xbdjle8u3::::res://Data/Monsters/werewolf_frames.tres
+werewolf_frames.tres::SpriteFrames::-1::1795453316::0::1::::<><><>0<>0<><>::res://Assets/Characters/Werewolf/Werewolf/Werewolf_Attack01.png<>res://Assets/Characters/Werewolf/Werewolf/Werewolf_Attack02.png<>res://Assets/Characters/Werewolf/Werewolf/Werewolf_Death.png<>res://Assets/Characters/Werewolf/Werewolf/Werewolf_Hurt.png<>res://Assets/Characters/Werewolf/Werewolf/Werewolf_Idle.png<>res://Assets/Characters/Werewolf/Werewolf/Werewolf_Summon.png<>res://Assets/Characters/Werewolf/Werewolf/Werewolf_Walk.png
+::res://Data/Projectiles/::1795462825
 arrow.tres::CompressedTexture2D::7683499412240084008::1794668805::0::1::::<><><>0<>0<><>::
-holy_spell.tres::SpriteFrames::2165299699806719046::1794698264::0::1::::<><><>0<>0<><>::uid://m4q1y2hn87aa::::res://Assets/Characters/Priest/Magic(projectile)/Priest_Attack_effect.png<>uid://cqnoyfebu8ju3::::res://Assets/Characters/Priest/Magic(projectile)/Priest_Heal_effect.png
-necromancer_attack2_effect.tres::SpriteFrames::7931887823978930800::1794668681::0::1::::<><><>0<>0<><>::uid://dbj8ehid27t5j::::res://Assets/Characters/Necromancer/Magic(projectile)/Necromancer_Attack02_Effect.png
-necromancer_summon_effect.tres::SpriteFrames::4701867407860207510::1794668681::0::1::::<><><>0<>0<><>::uid://dbj8ehid27t5j::::res://Assets/Characters/Necromancer/Magic(projectile)/Necromancer_Attack02_Effect.png<>uid://b1kxybjof3phl::::res://Assets/Characters/Necromancer/Magic(projectile)/Necromancer_Sumon_Effect.png
-wizard_spell.tres::SpriteFrames::4481917962790705103::1794698265::0::1::::<><><>0<>0<><>::uid://ct1qyqxe775lu::::res://Assets/Characters/Wizard/Wizard with shadows/Wizard_Attack02_Effect.png<>uid://bkq2o80vvfh32::::res://Assets/Characters/Wizard/Wizard with shadows/Wizard_Attack01_Effect.png
-::res://Data/Props/::1794742963
-torch_frames.tres::SpriteFrames::2395694981590641512::1794698263::0::1::::<><><>0<>0<><>::uid://chvn17274760n::::res://Assets/Tilesets/Dungeon/torch1.png
+holy_spell.tres::SpriteFrames::2165299699806719046::1795462824::0::1::::<><><>0<>0<><>::uid://m4q1y2hn87aa::::res://Assets/Characters/Priest/Magic(projectile)/Priest_Attack_effect.png<>uid://cqnoyfebu8ju3::::res://Assets/Characters/Priest/Magic(projectile)/Priest_Heal_effect.png
+necromancer_attack2_effect.tres::SpriteFrames::7931887823978930800::1795442146::0::1::::<><><>0<>0<><>::uid://dbj8ehid27t5j::::res://Assets/Characters/Necromancer/Magic(projectile)/Necromancer_Attack02_Effect.png
+necromancer_summon_effect.tres::SpriteFrames::4701867407860207510::1794833594::0::1::::<><><>0<>0<><>::uid://b1kxybjof3phl::::res://Assets/Characters/Necromancer/Magic(projectile)/Necromancer_Sumon_Effect.png
+wizard_spell.tres::SpriteFrames::4481917962790705103::1795462825::0::1::::<><><>0<>0<><>::uid://dd3o4onugqoo4::::res://Assets/Characters/Wizard/Magic(projectile)/Wizard_Attack02_Effect.png<>uid://bn4mva5dviatw::::res://Assets/Characters/Wizard/Magic(projectile)/Wizard_Attack01_Effect.png
+::res://Data/Props/::1795462823
+torch_frames.tres::SpriteFrames::2395694981590641512::1795462823::0::1::::<><><>0<>0<><>::uid://chvn17274760n::::res://Assets/Tilesets/Dungeon/torch1.png
 ::res://Data/SmithingRecipes/::1794742963
 craft_iron_ring.tres::Resource/SmithingRecipeData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/SmithingRecipeData.gd
 craft_iron_sword.tres::Resource/SmithingRecipeData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/SmithingRecipeData.gd
@@ -669,53 +574,55 @@ upgrade_2.tres::Resource/SmithingRecipeData::-1::1794250973::0::1::::<><><>0<>0<
 upgrade_3.tres::Resource/SmithingRecipeData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/SmithingRecipeData.gd
 upgrade_4.tres::Resource/SmithingRecipeData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/SmithingRecipeData.gd
 upgrade_5.tres::Resource/SmithingRecipeData::-1::1794250973::0::1::::<><><>0<>0<><>::res://Scripts/Data/SmithingRecipeData.gd
-::res://Scenes/::1794742963
-Main.tscn::PackedScene::9046787478968095426::1794698263::0::1::::<><><>0<>0<><>::uid://bjn17co80q44d::::res://Scripts/World/MapGenerator.gd<>uid://ckjoiicio0un2::::res://Scenes/Rooms/Start_room.tscn<>uid://du8qgs7ostht7::::res://Scenes/Rooms/Normal/bal_jobb_folyoso.tscn<>uid://ex8y0fu2hq5m::::res://Scenes/Rooms/Normal/fent_lent_folyoso.tscn<>uid://c3mwkecyt8shs::::res://Scenes/Rooms/Normal/L_also_bal.tscn<>uid://bjln4u6ica7hn::::res://Scenes/Rooms/Normal/L_also_jobb.tscn<>uid://c6et03m7m843p::::res://Scenes/Rooms/Normal/L_felso_bal.tscn<>uid://dvi6dwdkcbysu::::res://Scenes/Rooms/Normal/L_felso_jobb.tscn<>uid://6cm8qjk3jic2::::res://Scenes/Rooms/Normal/Negy_iranyu_szoba.tscn<>uid://dx541oyapgevw::::res://Scenes/Rooms/Normal/T_bal_szoba.tscn<>uid://cuiofrd3gnpxr::::res://Scenes/Rooms/Normal/T_fel_szoba.tscn<>uid://dyrusar7nwoq5::::res://Scenes/Rooms/Normal/T_jobb_szoba.tscn<>uid://o3a4etxi7ake::::res://Scenes/Rooms/Normal/T_szoba.tscn<>uid://b5a8bwxu51821::::res://Scenes/Rooms/BOSS_szoba.tscn<>uid://bxvo66rmpsf71::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Also.tscn<>uid://duksxaoeh65x7::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Bal.tscn<>uid://dou2e7aurigoj::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Felso.tscn<>uid://c5d2p57gu2g0s::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Jobb.tscn<>uid://b45tpr8u1vef::::res://Scenes/Rooms/Wall/Wall_Felso.tscn<>uid://dpsli0xg226fc::::res://Scenes/Rooms/Wall/Wall_Also.tscn<>uid://cpeph8o5ntf3p::::res://Scenes/Rooms/Wall/Wall_Jobb.tscn<>uid://dn4ukwiirppgj::::res://Scenes/Rooms/Wall/Wall_Bal.tscn<>uid://dscjbrnyg4cnt::::res://Scenes/Player/player.tscn<>uid://h2s735pkiobj::::res://Scripts/World/fog_of_war.gd<>uid://b2ggcgia3c3po::::res://Scripts/Core/grid_manager.gd<>uid://caf7n1p6wvnpn::::res://Scenes/UI/hud.tscn<>uid://c645dfdo7w2qv::::res://Scenes/UI/battle_dialog.tscn<>uid://c8deathui7p2q::::res://Scenes/UI/death_screen.tscn<>uid://c7pauseujax3m::::res://Scenes/UI/pause_menu.tscn
+::res://Scenes/::1794752969
+Main.tscn::PackedScene::9046787478968095426::1794752969::0::1::::<><><>0<>0<><>::uid://bjn17co80q44d::::res://Scripts/World/MapGenerator.gd<>uid://ckjoiicio0un2::::res://Scenes/Rooms/Start_room.tscn<>uid://du8qgs7ostht7::::res://Scenes/Rooms/Normal/bal_jobb_folyoso.tscn<>uid://ex8y0fu2hq5m::::res://Scenes/Rooms/Normal/fent_lent_folyoso.tscn<>uid://c3mwkecyt8shs::::res://Scenes/Rooms/Normal/L_also_bal.tscn<>uid://bjln4u6ica7hn::::res://Scenes/Rooms/Normal/L_also_jobb.tscn<>uid://c6et03m7m843p::::res://Scenes/Rooms/Normal/L_felso_bal.tscn<>uid://dvi6dwdkcbysu::::res://Scenes/Rooms/Normal/L_felso_jobb.tscn<>uid://6cm8qjk3jic2::::res://Scenes/Rooms/Normal/Negy_iranyu_szoba.tscn<>uid://dx541oyapgevw::::res://Scenes/Rooms/Normal/T_bal_szoba.tscn<>uid://cuiofrd3gnpxr::::res://Scenes/Rooms/Normal/T_fel_szoba.tscn<>uid://dyrusar7nwoq5::::res://Scenes/Rooms/Normal/T_jobb_szoba.tscn<>uid://o3a4etxi7ake::::res://Scenes/Rooms/Normal/T_szoba.tscn<>uid://b5a8bwxu51821::::res://Scenes/Rooms/BOSS_szoba.tscn<>uid://bxvo66rmpsf71::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Also.tscn<>uid://duksxaoeh65x7::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Bal.tscn<>uid://dou2e7aurigoj::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Felso.tscn<>uid://c5d2p57gu2g0s::::res://Scenes/Rooms/Kapu/Kapu_Szoba_Jobb.tscn<>uid://b45tpr8u1vef::::res://Scenes/Rooms/Wall/Wall_Felso.tscn<>uid://dpsli0xg226fc::::res://Scenes/Rooms/Wall/Wall_Also.tscn<>uid://cpeph8o5ntf3p::::res://Scenes/Rooms/Wall/Wall_Jobb.tscn<>uid://dn4ukwiirppgj::::res://Scenes/Rooms/Wall/Wall_Bal.tscn<>uid://dscjbrnyg4cnt::::res://Scenes/Player/player.tscn<>uid://h2s735pkiobj::::res://Scripts/World/fog_of_war.gd<>uid://b2ggcgia3c3po::::res://Scripts/Core/grid_manager.gd<>uid://caf7n1p6wvnpn::::res://Scenes/UI/hud.tscn<>uid://c645dfdo7w2qv::::res://Scenes/UI/battle_dialog.tscn<>uid://c8deathui7p2q::::res://Scenes/UI/death_screen.tscn<>uid://c7pauseujax3m::::res://Scenes/UI/pause_menu.tscn
 ::res://Scenes/Enemy/::1794742963
 enemy.tscn::PackedScene::6812524771449984137::1794668681::0::1::::<><><>0<>0<><>::uid://dll5vs3jall0p::::res://Scripts/Enemy/EnemyController.gd<>uid://bh2hcnq46r4rt::::res://Scripts/Enemy/enemy_visuals.gd<>uid://ds7ax5rpwufi8::::res://Scripts/Enemy/grid_mover.gd<>uid://cx0t5mprnkpkx::::res://Scripts/Enemy/enemy_combat.gd<>uid://bopak6ipbtpcn::::res://Scripts/Enemy/enemy_brain.gd
 ::res://Scenes/Inventory/::1794742963
 InventoryGrid.tscn::PackedScene::7682138702577501708::1794250973::0::1::::<><><>0<>0<><>::uid://o7s50biii7cv::::res://Scripts/UI/InventoryGrid.gd
 InventoryWindow.tscn::PackedScene::7232971919049284879::1794437230::0::1::::<><><>0<>0<><>::res://Scripts/UI/InventoryWindow.gd
 ::res://Scenes/Lobby/::1794742963
-Lobby.tscn::PackedScene::3074444437708283992::1794668681::0::1::::<><><>0<>0<><>::uid://bwegda1m08hf8::::res://Scripts/UI/lobby.gd<>uid://tyslssobm4ap::::res://Scenes/Shop/ShopWindow.tscn<>uid://dbbx8xkxlo7eh::::res://Scenes/Inventory/InventoryWindow.tscn<>res://Assets/UI/lobby_background.png<>res://Scripts/UI/CharacterWindow.gd<>res://Scripts/UI/BlacksmithWindow.gd<>res://Scripts/UI/WizardWindow.gd<>res://Scripts/UI/DungeonWindow.gd
+Lobby.tscn::PackedScene::3074444437708283992::1794747722::0::1::::<><><>0<>0<><>::uid://bwegda1m08hf8::::res://Scripts/UI/lobby.gd<>uid://tyslssobm4ap::::res://Scenes/Shop/ShopWindow.tscn<>uid://dbbx8xkxlo7eh::::res://Scenes/Inventory/InventoryWindow.tscn<>res://Assets/UI/lobby_background.png<>res://Scripts/UI/CharacterWindow.gd<>res://Scripts/UI/BlacksmithWindow.gd<>res://Scripts/UI/WizardWindow.gd<>res://Scripts/UI/DungeonWindow.gd
 ::res://Scenes/Menu/::1794742963
 MainMenu.tscn::PackedScene::7846064410996521029::1794668681::0::1::::<><><>0<>0<><>::uid://c6cqjvi61acb6::::res://Scripts/UI/main_menu.gd<>uid://coajw5t3gf612::::res://Assets/UI/lobby_background.png
 ::res://Scenes/Player/::1794742963
 player.tscn::PackedScene::8427339144879829341::1794668681::0::1::::<><><>0<>0<><>::uid://bwpum47fhfrax::::res://Scripts/Player/HeroController.gd<>uid://x6e1ci7n7u21::::res://Scripts/Player/hero_visuals.gd<>uid://bewq3fbkpsbt7::::res://Scripts/Player/character_class.gd<>uid://d1pyivisar2jd::::res://Scripts/Player/hero_mover.gd<>uid://c0n8ixafdrpcq::::res://Data/Heroes/archer_class.tres<>uid://4slxp47x5vsl::::res://Data/Heroes/knight_class.tres<>uid://duwxr2ul5bd7h::::res://Scripts/Player/hero_combat.gd<>uid://cgfq55ag41sen::::res://Scripts/Player/hero_progression.gd<>uid://v0mhclqh6gts::::res://Data/Heroes/priest_class.tres<>uid://bg2m7h8jugg76::::res://Data/Heroes/soldier_class.tres<>uid://bpdtmk7mp61y6::::res://Data/Heroes/swordsman_class.tres<>uid://cvhn77pr5csyc::::res://Data/Heroes/knight_templar_class.tres<>uid://bcwire0gd5ndr::::res://Data/Heroes/wizard_class.tres
-::res://Scenes/Projectiles/::1794742963
+::res://Scenes/Projectiles/::1794833474
 arrow.tscn::PackedScene::4316724825627571735::1794668681::0::1::::<><><>0<>0<><>::uid://c8clx3030op47::::res://Scripts/Projectiles/arrow.gd<>uid://dhp7d3lm6c31e::::res://Data/Projectiles/arrow.tres
 holy_spell.tscn::PackedScene::2452905868541640284::1794668681::0::1::::<><><>0<>0<><>::uid://cgpx5hwy5tqgk::::res://Scripts/Projectiles/holy_spell.gd<>uid://535f1f7k322e::::res://Data/Projectiles/holy_spell.tres
-necromancer_attack.tscn::PackedScene::6520766351336700187::1794668681::0::1::::<><><>0<>0<><>::uid://ktub1p3dstr0::::res://Scripts/Projectiles/wizard_spell.gd<>uid://dlajbe3ryb1oe::::res://Data/Projectiles/necromancer_attack2_effect.tres
-necromancer_summon.tscn::PackedScene::3550346885466873640::1794668681::0::1::::<><><>0<>0<><>::uid://ktub1p3dstr0::::res://Scripts/Projectiles/wizard_spell.gd<>uid://b78vcmcblgjdm::::res://Data/Projectiles/necromancer_summon_effect.tres
-summon_effect.tscn::PackedScene::4008249409777686797::1794668681::0::1::::<><><>0<>0<><>::uid://ktub1p3dstr0::::res://Scripts/Projectiles/wizard_spell.gd<>uid://b78vcmcblgjdm::::res://Data/Projectiles/necromancer_summon_effect.tres
+necromancer_attack.tscn::PackedScene::6520766351336700187::1794833474::0::1::::<><><>0<>0<><>::uid://ktub1p3dstr0::::res://Scripts/Projectiles/wizard_spell.gd<>uid://dlajbe3ryb1oe::::res://Data/Projectiles/necromancer_attack2_effect.tres
+necromancer_summon.tscn::PackedScene::3550346885466873640::1794833873::0::1::::<><><>0<>0<><>::uid://ktub1p3dstr0::::res://Scripts/Projectiles/wizard_spell.gd<>uid://b78vcmcblgjdm::::res://Data/Projectiles/necromancer_summon_effect.tres
 wizard_spell.tscn::PackedScene::1353045920580426707::1794668681::0::1::::<><><>0<>0<><>::uid://ktub1p3dstr0::::res://Scripts/Projectiles/wizard_spell.gd<>uid://b44csflsryk0f::::res://Data/Projectiles/wizard_spell.tres
-::res://Scenes/Props/::1794742963
+::res://Scenes/Props/::1795461391
+exit_gate.tscn::PackedScene::-1::1795454581::0::1::::<><><>0<>0<><>::
+loot_bag.tscn::PackedScene::-1::1795461391::0::1::::<><><>0<>0<><>::res://Scripts/World/loot_bag.gd<>res://Assets/Tilesets/Dungeon/supplies_objects.png
 torch.tscn::PackedScene::8697617398335242019::1794672356::0::1::::<><><>0<>0<><>::uid://baeq0m02qytjk::::res://Data/Props/torch_frames.tres
-::res://Scenes/Rooms/::1794742963
-BOSS_szoba.tscn::PackedScene::4494092631383335076::1794677017::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://cagx5r4ucdjr8::::res://Assets/Tilesets/Tiled/Other_objects.png<>uid://ji3cglcrfjt1::::res://Assets/Tilesets/Tiled/supplies_objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+::res://Scenes/Rooms/::1795442142
+BOSS_szoba.tscn::PackedScene::4494092631383335076::1794830750::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://cagx5r4ucdjr8::::res://Assets/Tilesets/Tiled/Other_objects.png<>uid://ji3cglcrfjt1::::res://Assets/Tilesets/Tiled/supplies_objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+DEBUG_ROOM.tscn::PackedScene::9127840037987035121::1795442142::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn<>uid://dscjbrnyg4cnt::::res://Scenes/Player/player.tscn<>uid://h2s735pkiobj::::res://Scripts/World/fog_of_war.gd<>uid://b2ggcgia3c3po::::res://Scripts/Core/grid_manager.gd<>uid://caf7n1p6wvnpn::::res://Scenes/UI/hud.tscn<>uid://c645dfdo7w2qv::::res://Scenes/UI/battle_dialog.tscn<>uid://c8deathui7p2q::::res://Scenes/UI/death_screen.tscn<>uid://c7pauseujax3m::::res://Scenes/UI/pause_menu.tscn<>uid://c4cbj1slbcvun::::res://Scenes/Enemy/enemy.tscn<>uid://bpdtmk7mp61y6::::res://Data/Heroes/swordsman_class.tres<>uid://dobctk5swp35g::::res://Data/Monsters/slime_data.tres<>uid://sdq1tu61m0ei::::res://Data/Monsters/bat_data.tres<>uid://bknvjeyo72itf::::res://Data/Monsters/skeleton_data.tres<>uid://ybpxylsxjnin::::res://Data/Monsters/skeleton_archer_data.tres<>uid://ek12iv4bg308::::res://Data/Monsters/orc_data.tres<>uid://dkbjkijkx161m::::res://Data/Monsters/armored_skeleton_data.tres<>uid://cphuye4imkemx::::res://Data/Monsters/armored_orc_data.tres<>uid://d1ejveulyjcvt::::res://Data/Monsters/armored_axeman_data.tres<>uid://d4mesb8lkf43i::::res://Data/Monsters/elite_orc_data.tres<>uid://p57bk5si0iif::::res://Data/Monsters/greatsword_skeleton_data.tres<>uid://d421sq3pg8xf::::res://Data/Monsters/werewolf_data.tres<>uid://yr17mptcdg7e::::res://Data/Monsters/werebear_data.tres<>uid://cd7cppa2ngud::::res://Data/Monsters/necromancer_data.tres
 Start_room.tscn::PackedScene::5494173951462641869::1794678386::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 ::res://Scenes/Rooms/Kapu/::1794742963
-Kapu_Szoba_Also.tscn::PackedScene::4045023072764397486::1794672230::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-Kapu_Szoba_Bal.tscn::PackedScene::8584816702329769358::1794672803::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-Kapu_Szoba_Felso.tscn::PackedScene::8184841600752218829::1794676488::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-Kapu_Szoba_Jobb.tscn::PackedScene::6886367580937274836::1794676510::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-::res://Scenes/Rooms/Normal/::1794742963
-bal_jobb_folyoso.tscn::PackedScene::8632146571886565690::1794678949::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-fent_lent_folyoso.tscn::PackedScene::330283904463375088::1794678596::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-L_also_bal.tscn::PackedScene::6764255368379905408::1794678679::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-L_also_jobb.tscn::PackedScene::3041670639381389147::1794678724::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-L_felso_bal.tscn::PackedScene::6958152789554388483::1794678790::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-L_felso_jobb.tscn::PackedScene::8651631534273147520::1794678806::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+Kapu_Szoba_Also.tscn::PackedScene::4045023072764397486::1795454654::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn<>res://Scenes/Props/exit_gate.tscn
+Kapu_Szoba_Bal.tscn::PackedScene::8584816702329769358::1795454656::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn<>res://Scenes/Props/exit_gate.tscn
+Kapu_Szoba_Felso.tscn::PackedScene::8184841600752218829::1795454658::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn<>res://Scenes/Props/exit_gate.tscn
+Kapu_Szoba_Jobb.tscn::PackedScene::6886367580937274836::1795454660::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn<>res://Scenes/Props/exit_gate.tscn
+::res://Scenes/Rooms/Normal/::1795463165
+bal_jobb_folyoso.tscn::PackedScene::8632146571886565690::1795463165::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+fent_lent_folyoso.tscn::PackedScene::330283904463375088::1795460443::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+L_also_bal.tscn::PackedScene::6764255368379905408::1795460443::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+L_also_jobb.tscn::PackedScene::3041670639381389147::1795460443::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+L_felso_bal.tscn::PackedScene::6958152789554388483::1795460443::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
+L_felso_jobb.tscn::PackedScene::8651631534273147520::1795460443::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 Negy_iranyu_szoba.tscn::PackedScene::2180771298168159367::1794678835::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 T_bal_szoba.tscn::PackedScene::8837344783230090256::1794678862::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 T_fel_szoba.tscn::PackedScene::6193993127859687651::1794678897::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 T_jobb_szoba.tscn::PackedScene::8880135232090576438::1794678923::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 T_szoba.tscn::PackedScene::1040498416571017080::1794678936::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
-::res://Scenes/Rooms/Wall/::1794742963
-Wall_Also.tscn::PackedScene::8249937027418581168::1794668681::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
-Wall_Bal.tscn::PackedScene::8132817339294782617::1794668681::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
-Wall_Felso.tscn::PackedScene::131912054012022097::1794668681::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
-Wall_Jobb.tscn::PackedScene::5834856544700763395::1794668681::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
+::res://Scenes/Rooms/Wall/::1795439225
+Wall_Also.tscn::PackedScene::8249937027418581168::1795439181::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
+Wall_Bal.tscn::PackedScene::8132817339294782617::1795439225::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
+Wall_Felso.tscn::PackedScene::131912054012022097::1795439225::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
+Wall_Jobb.tscn::PackedScene::5834856544700763395::1795439199::0::1::::<><><>0<>0<><>::uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png
 ::res://Scenes/Rooms/Zsakutca/::1794742963
 Zsakutca_also.tscn::PackedScene::471991831607534801::1794679088::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 Zsakutca_bal.tscn::PackedScene::3116952155305774056::1794679099::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
@@ -723,22 +630,22 @@ Zsakutca_felso.tscn::PackedScene::6828573778106930514::1794679104::0::1::::<><><
 Zsakutca_jobb.tscn::PackedScene::4503719620656942096::1794679106::0::1::::<><><>0<>0<><>::uid://5bkvwrivrdxv::::res://Assets/Tilesets/Dungeon/decorative_cracks_floor.png<>uid://b727p7158rbhj::::res://Assets/Tilesets/Dungeon/walls_floor.png<>uid://wxxm1m1qu5yf::::res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png<>uid://wr8ib3ax7r3q::::res://Assets/Tilesets/Dungeon/Objects.png<>uid://dv6gqt581k6xj::::res://Scenes/Props/torch.tscn
 ::res://Scenes/Shop/::1794742963
 ShopItemRow.tscn::PackedScene::5267352140050595529::1794250973::0::1::::<><><>0<>0<><>::uid://cgo47jgwpnyjl::::res://Scripts/UI/ShopItemRow.gd
-ShopWindow.tscn::PackedScene::1384246618687519667::1794331134::0::1::::<><><>0<>0<><>::uid://dwr22lth0juf4::::res://Scripts/UI/ShopWindow.gd<>uid://dhpjx4tv707c7::::res://Scenes/Inventory/InventoryGrid.tscn
-::res://Scenes/UI/::1794742963
-battle_dialog.tscn::PackedScene::7010389610128567249::1794682367::0::1::::<><><>0<>0<><>::uid://b3q24efey7ssb::::res://Scripts/UI/battle_dialog.gd
+ShopWindow.tscn::PackedScene::1384246618687519667::1794747723::0::1::::<><><>0<>0<><>::uid://dwr22lth0juf4::::res://Scripts/UI/ShopWindow.gd<>uid://dhpjx4tv707c7::::res://Scenes/Inventory/InventoryGrid.tscn
+::res://Scenes/UI/::1795462823
+battle_dialog.tscn::PackedScene::7010389610128567249::1795463399::0::1::::<><><>0<>0<><>::uid://b3q24efey7ssb::::res://Scripts/UI/battle_dialog.gd<>res://Assets/UI/Icons/play_sword.png<>res://Assets/UI/Icons/turn_left.png<>res://Assets/UI/Icons/turn_right.png<>res://Assets/UI/Icons/character.png<>res://Assets/UI/Icons/heart.png<>res://Assets/UI/Icons/xp_star.png<>res://Assets/UI/Icons/shield.png<>res://Assets/UI/Icons/initiative.png<>res://Assets/UI/Icons/target.png<>res://Assets/UI/Icons/skull.png<>res://Assets/UI/Icons/crown.png<>res://Assets/UI/Icons/armor.png<>res://Assets/UI/Icons/scroll.png
 CharacterCreationOverlay.tscn::PackedScene::4707236788893233822::1794683460::0::1::::<><><>0<>0<><>::uid://2jdrmp6k6uxw::::res://Scripts/UI/character_creation_overlay.gd
 ClassSelectionMenu.tscn::PackedScene::7164091789914604157::1794683460::0::1::::<><><>0<>0<><>::uid://c6tt8eubks02r::::res://Scripts/UI/class_selection_menu.gd
-death_screen.tscn::PackedScene::7095510218352474786::1794700646::0::1::::<><><>0<>0<><>::uid://doefuaohruiib::::res://Scripts/UI/death_screen.gd
-hud.tscn::PackedScene::4785130805463699943::1794682081::0::1::::<><><>0<>0<><>::uid://d27t50r8ivv6r::::res://Scripts/UI/hud.gd
-loading_screen.tscn::PackedScene::211259424504161729::1794700643::0::1::::<><><>0<>0<><>::uid://dwkwbqgv1674k::::res://Scripts/UI/loading_screen.gd
-pause_menu.tscn::PackedScene::7049886698512516272::1794681794::0::1::::<><><>0<>0<><>::uid://bnljtev74qt4r::::res://Scripts/UI/pause_menu.gd
+death_screen.tscn::PackedScene::7095510218352474786::1794838271::0::1::::<><><>0<>0<><>::uid://doefuaohruiib::::res://Scripts/UI/death_screen.gd<>res://Assets/UI/Icons/skull.png<>res://Assets/UI/Icons/play_sword.png<>res://Assets/UI/Icons/dungeon.png<>res://Assets/UI/Icons/restart.png<>res://Assets/UI/Icons/home.png
+hud.tscn::PackedScene::4785130805463699943::1795437216::0::1::::<><><>0<>0<><>::uid://d27t50r8ivv6r::::res://Scripts/UI/hud.gd<>res://Assets/UI/Icons/play_sword.png<>res://Assets/UI/Icons/shield.png<>res://Assets/UI/Icons/initiative.png<>res://Assets/UI/Icons/vision.png<>res://Assets/UI/Icons/frost.png<>res://Assets/UI/Icons/pause.png<>res://Assets/UI/Icons/map.png
+loading_screen.tscn::PackedScene::211259424504161729::1794838275::0::1::::<><><>0<>0<><>::uid://dwkwbqgv1674k::::res://Scripts/UI/loading_screen.gd<>res://Assets/UI/Icons/play_sword.png<>res://Assets/UI/Icons/dungeon.png
+pause_menu.tscn::PackedScene::7049886698512516272::1795463605::0::1::::<><><>0<>0<><>::uid://bnljtev74qt4r::::res://Scripts/UI/pause_menu.gd<>uid://dq5j6aa20lps6::::res://Assets/UI/Icons/pause.png<>uid://djs7ds8rr2q1i::::res://Assets/UI/Icons/play_sword.png<>uid://dhvln67w37fg8::::res://Assets/UI/Icons/dungeon.png<>uid://d30ug1o8wvegs::::res://Assets/UI/Icons/play.png<>uid://d1p6yjcavilnw::::res://Assets/UI/Icons/settings.png<>uid://cycyjfnnnsbvu::::res://Assets/UI/Icons/restart.png<>uid://bmjnqr3bgfmyt::::res://Assets/UI/Icons/home.png
 ::res://Scripts/::1794742964
 ::res://Scripts/Core/::1794742963
-combat_engine.gd::GDScript::3351513414157955424::1794250973::0::1::::CombatEngine<>RefCounted<><>0<>0<><>::
-grid_manager.gd::GDScript::4294273929524807756::1794676324::0::1::::GridManager<>Node<><>0<>0<><>::
+combat_engine.gd::GDScript::3351513414157955424::1794838361::0::1::::CombatEngine<>RefCounted<><>0<>0<><>::
+grid_manager.gd::GDScript::4294273929524807756::1795458572::0::1::::GridManager<>Node<><>0<>0<><>::
 ::res://Scripts/Data/::1794742964
-CharacterClassData.gd::GDScript::7608171466629404685::1794676324::0::1::::CharacterClassData<>Resource<><>0<>0<><>::
-CharacterProfile.gd::GDScript::1160928261279378612::1794682815::0::1::::CharacterProfile<>Resource<><>0<>0<><>::
+CharacterClassData.gd::GDScript::7608171466629404685::1795456151::0::1::::CharacterClassData<>Resource<><>0<>0<><>::
+CharacterProfile.gd::GDScript::1160928261279378612::1795438054::0::1::::CharacterProfile<>Resource<><>0<>0<><>::
 DungeonDefinition.gd::GDScript::3264264746337942443::1794250973::0::1::::DungeonDefinition<>Resource<><>0<>0<><>::
 DungeonDifficultyData.gd::GDScript::2733631253981001115::1794250973::0::1::::DungeonDifficultyData<>Resource<><>0<>0<><>::
 EnchantmentData.gd::GDScript::3571247029448529757::1794676324::0::1::::EnchantmentData<>Resource<><>0<>0<><>::
@@ -747,57 +654,64 @@ InventoryItem.gd::GDScript::4900627546991069739::1794250973::0::1::::InventoryIt
 ItemData.gd::GDScript::2069057278535839501::1794250973::0::1::::ItemData<>Resource<><>0<>0<><>::
 SmithingRecipeData.gd::GDScript::5260895718119954540::1794250973::0::1::::SmithingRecipeData<>Resource<><>0<>0<><>::
 ::res://Scripts/Enemy/::1794742964
-armored_enemy_combat.gd::GDScript::701048316033796385::1794250973::0::1::::ArmoredEnemyCombat<>RefCounted<><>0<>0<><>::
-elite_enemy_combat.gd::GDScript::5353155989956886542::1794680014::0::1::::EliteEnemyCombat<>RefCounted<><>0<>0<><>::
-EnemyController.gd::GDScript::7955907486931504645::1794679922::0::1::::EnemyController<>Node2D<><>0<>0<><>::
-enemy_brain.gd::GDScript::3400049660141421717::1794681510::0::1::::EnemyBrain<>Node<><>0<>0<><>::
-enemy_combat.gd::GDScript::6440002065834604327::1794324704::0::1::::EnemyCombat<>Node<><>0<>0<><>::
-enemy_data.gd::GDScript::642289459854860450::1794679921::0::1::::EnemyData<>Resource<><>0<>1<><>::
-enemy_visuals.gd::GDScript::2933910087936295265::1794676324::0::1::::EnemyVisuals<>AnimatedSprite2D<><>0<>0<><>::
-grid_mover.gd::GDScript::8488764000627513829::1794250973::0::1::::GridMover<>Node<><>0<>0<><>::
-::res://Scripts/Managers/::1794746393
-DungeonManager.gd::GDScript::2405995155122113116::1794746222::0::1::::<>Node<><>0<>0<><>::
-GameSaveSerializer.gd::GDScript::3665815430687271086::1794682817::0::1::::<>RefCounted<><>0<>0<><>::
-GameState.gd::GDScript::99344552947216335::1794747196::0::1::::<>Node<><>0<>0<><>::
-SceneTransition.gd::GDScript::4031094063431869977::1794746201::0::1::::<>Node<><>0<>0<><>::
-SettingsManager.gd::GDScript::6109774817522816424::1794744246::0::1::::<>CanvasLayer<><>0<>0<><>::
+armored_enemy_combat.gd::GDScript::701048316033796385::1795456280::0::1::::ArmoredEnemyCombat<>RefCounted<><>0<>0<><>::
+elite_enemy_combat.gd::GDScript::5353155989956886542::1795461409::0::1::::EliteEnemyCombat<>RefCounted<><>0<>0<><>::
+EnemyController.gd::GDScript::7955907486931504645::1795458822::0::1::::EnemyController<>Node2D<><>0<>0<><>::
+enemy_brain.gd::GDScript::3400049660141421717::1794837117::0::1::::EnemyBrain<>Node<><>0<>0<><>::
+enemy_combat.gd::GDScript::6440002065834604327::1795462471::0::1::::EnemyCombat<>Node<><>0<>0<><>::
+enemy_data.gd::GDScript::642289459854860450::1795456272::0::1::::EnemyData<>Resource<><>0<>1<><>::
+enemy_visuals.gd::GDScript::2933910087936295265::1795451988::0::1::::EnemyVisuals<>AnimatedSprite2D<><>0<>0<><>::
+grid_mover.gd::GDScript::8488764000627513829::1795445151::0::1::::GridMover<>Node<><>0<>0<><>::
+::res://Scripts/Managers/::1795451317
+AudioManager.gd::GDScript::2845337187734215250::1795460544::0::1::::<>Node<><>0<>0<><>::
+DungeonManager.gd::GDScript::2405995155122113116::1795438121::0::1::::<>Node<><>0<>0<><>::
+GameSaveSerializer.gd::GDScript::3665815430687271086::1795438055::0::1::::<>RefCounted<><>0<>0<><>::
+GameState.gd::GDScript::99344552947216335::1795462033::0::1::::<>Node<><>0<>0<><>::
+SceneTransition.gd::GDScript::4031094063431869977::1794838266::0::1::::<>Node<><>0<>0<><>::
+SettingsManager.gd::GDScript::6109774817522816424::1795454695::0::1::::<>CanvasLayer<><>0<>0<><>::
 ::res://Scripts/Player/::1794742964
 character_class.gd::GDScript::2713614107584809898::1794250973::0::1::::CharacterClass<>Resource<><>0<>1<><>::
-HeroController.gd::GDScript::3962778252270541331::1794700903::0::1::::HeroController<>Node2D<><>0<>0<><>::
-hero_combat.gd::GDScript::8609883533325743643::1794747198::0::1::::HeroCombat<>Node<><>0<>0<><>::
-hero_mover.gd::GDScript::9016610262324001769::1794250973::0::1::::HeroMover<>Node<><>0<>0<><>::
-hero_progression.gd::GDScript::5205322939699019069::1794329102::0::1::::HeroProgression<>Node<><>0<>0<><>::
-hero_visuals.gd::GDScript::1678628531540914384::1794672754::0::1::::HeroVisuals<>AnimatedSprite2D<><>0<>0<><>::
+HeroController.gd::GDScript::3962778252270541331::1795458750::0::1::::HeroController<>Node2D<><>0<>0<><>::
+hero_combat.gd::GDScript::8609883533325743643::1795462393::0::1::::HeroCombat<>Node<><>0<>0<><>::
+hero_mover.gd::GDScript::9016610262324001769::1795458825::0::1::::HeroMover<>Node<><>0<>0<><>::
+hero_progression.gd::GDScript::5205322939699019069::1795462764::0::1::::HeroProgression<>Node<><>0<>0<><>::
+hero_visuals.gd::GDScript::1678628531540914384::1795461440::0::1::::HeroVisuals<>AnimatedSprite2D<><>0<>0<><>::
 ::res://Scripts/Projectiles/::1794742964
-arrow.gd::GDScript::7093912433709717366::1794250973::0::1::::ProjectileArrow<>Node2D<><>0<>0<><>::
-holy_spell.gd::GDScript::5226390562956522510::1794250973::0::1::::HolySpellProjectile<>Node2D<><>0<>0<><>::
-wizard_spell.gd::GDScript::742329129412794663::1794250973::0::1::::WizardSpell<>Node2D<><>0<>0<><>::
-::res://Scripts/UI/::1794742964
-battle_dialog.gd::GDScript::4386429714483416301::1794680932::0::1::::BattleDialog<>CanvasLayer<><>0<>0<><>::
-BlacksmithWindow.gd::GDScript::7947620169851623784::1794250973::0::1::::<>Panel<><>0<>0<><>::
-CharacterWindow.gd::GDScript::7828783093076742860::1794747151::0::1::::<>Panel<><>0<>0<><>::
+arrow.gd::GDScript::7093912433709717366::1795445073::0::1::::ProjectileArrow<>Node2D<><>0<>0<><>::
+holy_spell.gd::GDScript::5226390562956522510::1795445076::0::1::::HolySpellProjectile<>Node2D<><>0<>0<><>::
+wizard_spell.gd::GDScript::742329129412794663::1795445130::0::1::::WizardSpell<>Node2D<><>0<>0<><>::
+::res://Scripts/UI/::1795461402
+battle_dialog.gd::GDScript::4386429714483416301::1795463429::0::1::::BattleDialog<>CanvasLayer<><>0<>0<><>::
+BlacksmithWindow.gd::GDScript::7947620169851623784::1795457796::0::1::::<>Panel<><>0<>0<><>::
+CharacterWindow.gd::GDScript::7828783093076742860::1795457974::0::1::::<>Panel<><>0<>0<><>::
 character_creation_overlay.gd::GDScript::1913891342363466796::1794745609::0::1::::CharacterCreationOverlay<>Control<><>0<>0<><>::
-class_selection_menu.gd::GDScript::6989131492602791131::1794700867::0::1::::ClassSelectionMenu<>Control<><>0<>0<><>::
-death_screen.gd::GDScript::8150502695838748993::1794746227::0::1::::DeathScreen<>CanvasLayer<><>0<>0<><>::
-DungeonWindow.gd::GDScript::229690362075531321::1794250973::0::1::::<>Panel<><>0<>0<><>::
-hud.gd::GDScript::9121629454972139147::1794700898::0::1::::PlayerHUD<>CanvasLayer<><>0<>0<><>::
-InventoryGrid.gd::GDScript::1049851693752393049::1794747152::0::1::::InventoryGrid<>Control<><>0<>0<><>::
-InventoryWindow.gd::GDScript::4153204880117934494::1794747150::0::1::::<>Panel<><>0<>0<><>::
-ItemAugmentationWindow.gd::GDScript::2268779297065828756::1794747154::0::1::::<>Panel<><>0<>0<><>::
-loading_screen.gd::GDScript::8725398798923954332::1794746188::0::1::::LoadingScreen<>CanvasLayer<><>0<>0<><>::
-lobby.gd::GDScript::3939202454829219711::1794746224::0::1::::<>Control<><>0<>0<><>::
-main_menu.gd::GDScript::6953812936494766665::1794746223::0::1::::<>Control<><>0<>0<><>::
-pause_menu.gd::GDScript::3322164433328903239::1794746226::0::1::::PauseMenu<>CanvasLayer<><>0<>0<><>::
-ShopItemRow.gd::GDScript::5224694138965558581::1794250973::0::1::::<>PanelContainer<><>0<>0<><>::
-ShopWindow.gd::GDScript::8740199215635127439::1794250973::0::1::::<>Panel<><>0<>0<><>::
-ui_theme.gd::GDScript::782331998654319809::1794250973::0::1::::<>RefCounted<><>0<>0<><>::
-WizardWindow.gd::GDScript::5029988082160121848::1794250973::0::1::::<>Panel<><>0<>0<><>::
+class_selection_menu.gd::GDScript::6989131492602791131::1794838359::0::1::::ClassSelectionMenu<>Control<><>0<>0<><>::
+death_screen.gd::GDScript::8150502695838748993::1795445036::0::1::::DeathScreen<>CanvasLayer<><>0<>0<><>::
+DungeonWindow.gd::GDScript::229690362075531321::1795457976::0::1::::<>Panel<><>0<>0<><>::
+dungeon_backpack_overlay.gd::GDScript::2074842997049736818::1795445022::0::1::::DungeonBackpackOverlay<>CanvasLayer<><>0<>0<><>::
+dungeon_loot_overlay.gd::GDScript::6246164844789732238::1795462182::0::1::::DungeonLootOverlay<>CanvasLayer<><>0<>0<><>::
+dungeon_victory_overlay.gd::GDScript::6905479375862705137::1795455221::0::1::::DungeonVictoryOverlay<>CanvasLayer<><>0<>0<><>::
+hud.gd::GDScript::9121629454972139147::1795463607::0::1::::PlayerHUD<>CanvasLayer<><>0<>0<><>::
+InventoryGrid.gd::GDScript::1049851693752393049::1795444969::0::1::::InventoryGrid<>Control<><>0<>0<><>::
+InventoryWindow.gd::GDScript::4153204880117934494::1795462059::0::1::::<>Panel<><>0<>0<><>::
+ItemAugmentationWindow.gd::GDScript::2268779297065828756::1795459451::0::1::::<>Panel<><>0<>0<><>::
+loading_screen.gd::GDScript::8725398798923954332::1794838268::0::1::::LoadingScreen<>CanvasLayer<><>0<>0<><>::
+lobby.gd::GDScript::3939202454829219711::1795458169::0::1::::<>Control<><>0<>0<><>::
+main_menu.gd::GDScript::6953812936494766665::1795445436::0::1::::<>Control<><>0<>0<><>::
+pause_menu.gd::GDScript::3322164433328903239::1795463603::0::1::::PauseMenu<>CanvasLayer<><>0<>0<><>::
+ShopItemRow.gd::GDScript::5224694138965558581::1795458929::0::1::::<>PanelContainer<><>0<>0<><>::
+ShopWindow.gd::GDScript::8740199215635127439::1795458171::0::1::::<>Panel<><>0<>0<><>::
+ui_icons.gd::GDScript::1169604856433570635::1795436151::0::1::::UiIcons<>RefCounted<><>0<>0<><>::
+ui_theme.gd::GDScript::782331998654319809::1795457444::0::1::::<>RefCounted<><>0<>0<><>::
+WizardWindow.gd::GDScript::5029988082160121848::1795457797::0::1::::<>Panel<><>0<>0<><>::
 ::res://Scripts/Utils/::1794742964
-ClassVisualHelper.gd::GDScript::2065052677639885141::1794747146::0::1::::ClassVisualHelper<>RefCounted<><>0<>0<><>::
+ClassVisualHelper.gd::GDScript::2065052677639885141::1795462000::0::1::::ClassVisualHelper<>RefCounted<><>0<>0<><>::
 ResourceCatalog.gd::GDScript::868415764343066269::1794250973::0::1::::<>RefCounted<><>0<>0<><>::
-::res://Scripts/World/::1794742964
+::res://Scripts/World/::1795461402
 DebugCamera.gd::GDScript::1126382118131214090::1794700905::0::1::::<>Camera2D<><>0<>0<><>::
-EnemySpawner.gd::GDScript::7165259295688527657::1794680099::0::1::::EnemySpawner<>RefCounted<><>0<>0<><>::
-fog_of_war.gd::GDScript::548211673793755555::1794676324::0::1::::FogOfWar<>Node2D<><>0<>0<><>::
-MapGenerator.gd::GDScript::3046593102662457217::1794681492::0::1::::<>Node2D<><>0<>0<><>::
+EnemySpawner.gd::GDScript::7165259295688527657::1794830919::0::1::::EnemySpawner<>RefCounted<><>0<>0<><>::
+exit_gate.gd::GDScript::1574821208670887844::1795461461::0::1::::ExitGate<>Area2D<><>0<>0<><>::
+fog_of_war.gd::GDScript::548211673793755555::1795436554::0::1::::FogOfWar<>Node2D<><>0<>0<><>::
+loot_bag.gd::GDScript::7196856498210755080::1795461501::0::1::::LootBag<>Area2D<><>0<>0<><>::
+MapGenerator.gd::GDScript::3046593102662457217::1795461442::0::1::::<>Node2D<><>0<>0<><>::
 ::res://Tools/::1794742964

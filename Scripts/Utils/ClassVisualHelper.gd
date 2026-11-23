@@ -41,7 +41,7 @@ const CLASS_GAMEPLAY_META := {
 		"combat_style": "Nehézpáncélos tank",
 		"range_text": "1 mező (Közelharc)",
 		"mobility_text": "Megfontolt (0.18 mp / lépés)",
-		"special_note": "A legmagasabb életerő (160 HP) és védelem, pajzshárítással kombinálva."
+		"special_note": "A legmagasabb életerő (140 HP) és védelem, pajzshárítással és hátralökéssel kombinálva."
 	},
 	&"priest": {
 		"combat_style": "Szent gyógyító",
@@ -59,7 +59,7 @@ const CLASS_GAMEPLAY_META := {
 		"combat_style": "Gyors közelharci sebző",
 		"range_text": "1 mező (Közelharc)",
 		"mobility_text": "Villámgyors (0.12 mp / lépés)",
-		"special_note": "Legmagasabb kezdeményezés (15.0), pusztító sebzés és magas kritikus esély."
+		"special_note": "Magas kezdeményezés (13.5 + kard), erős közelharci sebzés és kiemelkedő kritikus esély."
 	},
 	&"wizard": {
 		"combat_style": "Elemi mágus",
@@ -132,6 +132,11 @@ static func get_sprite_frames(class_id: StringName) -> SpriteFrames:
 		_sprite_frames_cache[normalized] = hero_cls.sprite_frames
 		return hero_cls.sprite_frames
 	return null
+
+
+static func can_class_use_shield(class_id: StringName) -> bool:
+	var frames := get_sprite_frames(class_id)
+	return frames != null and frames.has_animation(&"block")
 
 
 static func get_portrait_texture(

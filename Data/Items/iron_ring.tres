@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Accessories/iron_ring.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1")
 id = &"iron_ring"
 display_name = "Vasgyűrű"
 description = "Egyszerű, masszív gyűrű. Kis védelmet biztosít."
+icon = ExtResource("2_icon")
 buy_price = 90
 sell_price = 40
 item_type = &"ring"

@@ -1,6 +1,19 @@
 [gd_scene format=3 uid="uid://c645dfdo7w2qv"]
 
 [ext_resource type="Script" uid="uid://b3q24efey7ssb" path="res://Scripts/UI/battle_dialog.gd" id="1_jngcs"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/play_sword.png" id="2_icon_sword"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/turn_left.png" id="3_icon_turn_l"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/turn_right.png" id="4_icon_turn_r"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/character.png" id="5_icon_char"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/heart.png" id="6_icon_heart"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/xp_star.png" id="7_icon_xp"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/shield.png" id="8_icon_shield"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/initiative.png" id="9_icon_init"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/target.png" id="10_icon_target"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/skull.png" id="11_icon_skull"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/crown.png" id="12_icon_crown"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/armor.png" id="13_icon_armor"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/scroll.png" id="14_icon_scroll"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_panel"]
 content_margin_left = 14.0
@@ -181,25 +194,57 @@ layout_mode = 2
 theme_override_constants/separation = 3
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox" unique_id=2039605439]
+[node name="TitleRow" type="HBoxContainer" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox" unique_id=920000101]
+layout_mode = 2
+theme_override_constants/separation = 7
+alignment = 1
+
+[node name="TitleIcon" type="TextureRect" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox/TitleRow" unique_id=920000102]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_sword")
+
+[node name="TitleLabel" type="Label" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox/TitleRow" unique_id=2039605439]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.88, 0.45, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 15
-text = "⚔️  1. KÖR  •  PÁRBAJ"
+text = "1. KÖR  •  PÁRBAJ"
 horizontal_alignment = 1
 
-[node name="TurnBannerLabel" type="Label" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox" unique_id=307535431]
+[node name="TurnBannerRow" type="HBoxContainer" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox" unique_id=920000103]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="TurnLeftIcon" type="TextureRect" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox/TurnBannerRow" unique_id=920000104]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("3_icon_turn_l")
+
+[node name="TurnBannerLabel" type="Label" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox/TurnBannerRow" unique_id=307535431]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.9, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "◄  A HŐS KÖVETKEZIK"
+text = "A HŐS KÖVETKEZIK"
 horizontal_alignment = 1
+
+[node name="TurnRightIcon" type="TextureRect" parent="Root/HeaderAnchor/HeaderPanel/HeaderVBox/TurnBannerRow" unique_id=920000105]
+visible = false
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("4_icon_turn_r")
 
 [node name="HeroAnchor" type="Control" parent="Root" unique_id=621672212]
 layout_mode = 1
@@ -249,24 +294,36 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="HeroSideTag" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=2018942388]
+[node name="HeroSideRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=920000106]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HeroSideIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox/HeroSideRow" unique_id=920000107]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("5_icon_char")
+
+[node name="HeroSideTag" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox/HeroSideRow" unique_id=2018942388]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.54, 0.8, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "🛡️  SAJÁT KARAKTER"
+text = "SAJÁT KARAKTER"
 
 [node name="HeroNameLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=158366644]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.98, 0.94, 0.82, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 15
 text = "Kalandor"
-clip_text = true
+autowrap_mode = 3
 
 [node name="HeroClassLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroTopRow/HeroIdentityVBox" unique_id=1846850178]
 layout_mode = 2
@@ -275,7 +332,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "Kardforgató  •  Lv. 1"
+text = "Kardforgató  •  Szint 1"
 clip_text = true
 
 [node name="HeroVitalsBadge" type="PanelContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox" unique_id=728872357]
@@ -288,6 +345,14 @@ theme_override_constants/separation = 4
 
 [node name="HeroHpHeader" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=1900405765]
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HeroHpIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroHpHeader" unique_id=920000108]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("6_icon_heart")
 
 [node name="HeroHpTitle" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroHpHeader" unique_id=1296463535]
 layout_mode = 2
@@ -297,7 +362,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "❤️ ÉLETERŐ"
+text = "ÉLETERŐ"
 
 [node name="HeroHpText" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroHpHeader" unique_id=26213725]
 layout_mode = 2
@@ -319,6 +384,14 @@ show_percentage = false
 
 [node name="HeroXpHeader" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=925988114]
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HeroXpIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroXpHeader" unique_id=920000109]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("7_icon_xp")
 
 [node name="HeroXpTitle" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroXpHeader" unique_id=337714108]
 layout_mode = 2
@@ -328,7 +401,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "⭐ TAPASZTALAT"
+text = "TAPASZTALAT"
 
 [node name="HeroXpText" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroXpHeader" unique_id=1586683421]
 layout_mode = 2
@@ -348,6 +421,29 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
 max_value = 10.0
 show_percentage = false
 
+[node name="HeroTitleRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox" unique_id=920000190]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HeroTitleIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroTitleRow" unique_id=920000191]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("12_icon_crown")
+
+[node name="HeroTitleLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroVitalsBadge/HeroVitalsVBox/HeroTitleRow" unique_id=920000192]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.82, 0.44, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "Titulus: -"
+autowrap_mode = 3
+
 [node name="HeroStatsGrid" type="GridContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox" unique_id=911059773]
 layout_mode = 2
 theme_override_constants/h_separation = 6
@@ -359,14 +455,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="HeroAtkLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroAtkBox" unique_id=101479264]
+[node name="HeroAtkRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroAtkBox" unique_id=920000110]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="HeroAtkIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroAtkBox/HeroAtkRow" unique_id=920000111]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_sword")
+
+[node name="HeroAtkLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroAtkBox/HeroAtkRow" unique_id=101479264]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.78, 0.56, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "⚔️ Támadás
+text = "Támadás
 12"
 horizontal_alignment = 1
 
@@ -375,14 +483,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="HeroDefLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroDefBox" unique_id=724952277]
+[node name="HeroDefRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroDefBox" unique_id=920000112]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="HeroDefIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroDefBox/HeroDefRow" unique_id=920000113]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("8_icon_shield")
+
+[node name="HeroDefLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroDefBox/HeroDefRow" unique_id=724952277]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.58, 0.85, 0.98, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "🛡️ Védekezés
+text = "Védekezés
 2"
 horizontal_alignment = 1
 
@@ -391,14 +511,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="HeroInitLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroInitBox" unique_id=887047044]
+[node name="HeroInitRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroInitBox" unique_id=920000114]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="HeroInitIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroInitBox/HeroInitRow" unique_id=920000115]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("9_icon_init")
+
+[node name="HeroInitLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroInitBox/HeroInitRow" unique_id=887047044]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.88, 0.48, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "⚡ Kezdeményezés
+text = "Kezdeményezés
 10.0"
 horizontal_alignment = 1
 
@@ -407,14 +539,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="HeroRangeLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroRangeBox" unique_id=11258696]
+[node name="HeroRangeRow" type="HBoxContainer" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroRangeBox" unique_id=920000116]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="HeroRangeIcon" type="TextureRect" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroRangeBox/HeroRangeRow" unique_id=920000117]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("10_icon_target")
+
+[node name="HeroRangeLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatsGrid/HeroRangeBox/HeroRangeRow" unique_id=11258696]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.94, 0.68, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "🎯 Hatótáv
+text = "Hatótáv
 1 mező"
 horizontal_alignment = 1
 
@@ -422,15 +566,17 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
 
-[node name="HeroStatusLabel" type="Label" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatusBadge" unique_id=224755711]
+[node name="HeroStatusLabel" type="RichTextLabel" parent="Root/HeroAnchor/HeroPanel/HeroVBox/HeroStatusBadge" unique_id=224755711]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.88, 0.98, 1)
+theme_override_colors/default_color = Color(0.75, 0.88, 0.98, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
 text = "Állapot: Harcra kész"
-autowrap_mode = 2
+fit_content = true
+scroll_active = false
 
 [node name="EnemyAnchor" type="Control" parent="Root" unique_id=1642552619]
 layout_mode = 1
@@ -470,15 +616,27 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="EnemySideTag" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox" unique_id=971604764]
+[node name="EnemySideRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox" unique_id=920000118]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 2
+
+[node name="EnemySideTag" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox/EnemySideRow" unique_id=971604764]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.48, 0.48, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "💀  ELLENFÉL"
+text = "ELLENFÉL"
 horizontal_alignment = 2
+
+[node name="EnemySideIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox/EnemySideRow" unique_id=920000119]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("11_icon_skull")
 
 [node name="EnemyNameLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyTopRow/EnemyIdentityVBox" unique_id=1203721854]
 layout_mode = 2
@@ -498,7 +656,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "Alap  •  Lv. 1"
+text = "Alap  •  Szint 1"
 horizontal_alignment = 2
 clip_text = true
 
@@ -526,6 +684,14 @@ theme_override_constants/separation = 4
 
 [node name="EnemyHpHeader" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox" unique_id=491031356]
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="EnemyHpIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyHpHeader" unique_id=920000120]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("6_icon_heart")
 
 [node name="EnemyHpTitle" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyHpHeader" unique_id=174800583]
 layout_mode = 2
@@ -535,7 +701,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "❤️ ÉLETERŐ"
+text = "ÉLETERŐ"
 
 [node name="EnemyHpText" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyHpHeader" unique_id=232938872]
 layout_mode = 2
@@ -555,15 +721,27 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
 value = 100.0
 show_percentage = false
 
-[node name="EnemyBossTitleLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox" unique_id=1584776321]
+[node name="EnemyBossTitleRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox" unique_id=920000121]
 visible = false
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="EnemyBossTitleIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyBossTitleRow" unique_id=920000122]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("12_icon_crown")
+
+[node name="EnemyBossTitleLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyVitalsBadge/EnemyVitalsVBox/EnemyBossTitleRow" unique_id=1584776321]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.96, 0.82, 0.44, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
-text = "👑 Titulus: -"
+text = "Titulus: -"
 clip_text = true
 
 [node name="EnemyStatsGrid" type="GridContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox" unique_id=171983685]
@@ -577,14 +755,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="EnemyAtkLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyAtkBox" unique_id=2067153138]
+[node name="EnemyAtkRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyAtkBox" unique_id=920000123]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="EnemyAtkIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyAtkBox/EnemyAtkRow" unique_id=920000124]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_sword")
+
+[node name="EnemyAtkLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyAtkBox/EnemyAtkRow" unique_id=2067153138]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.72, 0.56, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "⚔️ Támadás
+text = "Támadás
 8"
 horizontal_alignment = 1
 
@@ -593,14 +783,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="EnemyDefLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyDefBox" unique_id=903099003]
+[node name="EnemyDefRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyDefBox" unique_id=920000125]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="EnemyDefIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyDefBox/EnemyDefRow" unique_id=920000126]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("8_icon_shield")
+
+[node name="EnemyDefLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyDefBox/EnemyDefRow" unique_id=903099003]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.92, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "🛡️ Védekezés
+text = "Védekezés
 1"
 horizontal_alignment = 1
 
@@ -609,14 +811,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="EnemyArmorLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyArmorBox" unique_id=569500740]
+[node name="EnemyArmorRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyArmorBox" unique_id=920000127]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="EnemyArmorIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyArmorBox/EnemyArmorRow" unique_id=920000128]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("13_icon_armor")
+
+[node name="EnemyArmorLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyArmorBox/EnemyArmorRow" unique_id=569500740]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.84, 0.9, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "🪨 Páncél
+text = "Páncél
 0"
 horizontal_alignment = 1
 
@@ -625,14 +839,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_stat_cell")
 
-[node name="EnemyInitLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyInitBox" unique_id=378254544]
+[node name="EnemyInitRow" type="HBoxContainer" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyInitBox" unique_id=920000129]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="EnemyInitIcon" type="TextureRect" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyInitBox/EnemyInitRow" unique_id=920000130]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("9_icon_init")
+
+[node name="EnemyInitLabel" type="Label" parent="Root/EnemyAnchor/EnemyPanel/EnemyVBox/EnemyStatsGrid/EnemyInitBox/EnemyInitRow" unique_id=378254544]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.86, 0.48, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "⚡ Kezdeményezés
+text = "Kezdeményezés
 8.0"
 horizontal_alignment = 1
 
@@ -678,14 +904,25 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_log_panel")
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LogHeader" type="Label" parent="Root/LogAnchor/LogPanel/LogVBox" unique_id=372683141]
+[node name="LogHeaderRow" type="HBoxContainer" parent="Root/LogAnchor/LogPanel/LogVBox" unique_id=920000131]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LogHeaderIcon" type="TextureRect" parent="Root/LogAnchor/LogPanel/LogVBox/LogHeaderRow" unique_id=920000132]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("14_icon_scroll")
+
+[node name="LogHeader" type="Label" parent="Root/LogAnchor/LogPanel/LogVBox/LogHeaderRow" unique_id=372683141]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.8, 0.52, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
-text = "📜  HARCI NAPLÓ"
+text = "HARCI NAPLÓ"
 
 [node name="LogDivider" type="HSeparator" parent="Root/LogAnchor/LogPanel/LogVBox" unique_id=1948201980]
 modulate = Color(0.75, 0.6, 0.35, 0.45)

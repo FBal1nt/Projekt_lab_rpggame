@@ -8,8 +8,9 @@
 script = ExtResource("1_dm03e")
 class_name_id = "Soldier"
 max_hp = 115
-base_damage = 18
-initiative = 11
+base_damage = 12
+base_defense = 2
+initiative = 10.5
 move_duration = 0.14
 is_ranged = true
 attack_range = 4

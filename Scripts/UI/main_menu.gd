@@ -221,6 +221,7 @@ func _create_save_overlay() -> void:
 	cancel_save_button.custom_minimum_size = Vector2(140, 48)
 	UI_THEME.style_button(cancel_save_button, Color("718096"))
 	cancel_save_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	AudioManager.mark_custom_button_sfx(cancel_save_button)
 	cancel_save_button.pressed.connect(_close_save_overlay)
 	footer.add_child(cancel_save_button)
 
@@ -763,6 +764,7 @@ func _request_delete_confirmation() -> void:
 
 func _close_save_overlay() -> void:
 	save_overlay.visible = false
+	AudioManager.sfx(&"ui_cancel", 0.96, 1.04)
 	start_button.grab_focus()
 
 

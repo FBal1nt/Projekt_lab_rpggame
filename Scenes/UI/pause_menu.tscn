@@ -1,6 +1,13 @@
 [gd_scene format=3 uid="uid://c7pauseujax3m"]
 
 [ext_resource type="Script" uid="uid://bnljtev74qt4r" path="res://Scripts/UI/pause_menu.gd" id="1_pause"]
+[ext_resource type="Texture2D" uid="uid://dq5j6aa20lps6" path="res://Assets/UI/Icons/pause.png" id="2_icon_pause"]
+[ext_resource type="Texture2D" uid="uid://djs7ds8rr2q1i" path="res://Assets/UI/Icons/play_sword.png" id="3_icon_sword"]
+[ext_resource type="Texture2D" uid="uid://dhvln67w37fg8" path="res://Assets/UI/Icons/dungeon.png" id="4_icon_dungeon"]
+[ext_resource type="Texture2D" uid="uid://d30ug1o8wvegs" path="res://Assets/UI/Icons/play.png" id="5_icon_play"]
+[ext_resource type="Texture2D" uid="uid://d1p6yjcavilnw" path="res://Assets/UI/Icons/settings.png" id="6_icon_settings"]
+[ext_resource type="Texture2D" uid="uid://cycyjfnnnsbvu" path="res://Assets/UI/Icons/restart.png" id="7_icon_restart"]
+[ext_resource type="Texture2D" uid="uid://bmjnqr3bgfmyt" path="res://Assets/UI/Icons/home.png" id="8_icon_home"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_panel"]
 content_margin_left = 22.0
@@ -161,6 +168,7 @@ anti_aliasing = false
 [node name="PauseMenu" type="CanvasLayer" unique_id=1610327770]
 process_mode = 3
 layer = 105
+visible = false
 script = ExtResource("1_pause")
 
 [node name="Root" type="Control" parent="." unique_id=1793971289]
@@ -190,7 +198,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PausePanel" type="PanelContainer" parent="Root/CenterContainer" unique_id=1519475677]
-custom_minimum_size = Vector2(410, 0)
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pause_panel")
 
@@ -210,16 +218,12 @@ custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_icon_badge")
 
-[node name="IconLabel" type="Label" parent="Root/CenterContainer/PausePanel/VBoxContainer/HeaderBox/IconCenter/IconBadge" unique_id=254787669]
+[node name="IconTexture" type="TextureRect" parent="Root/CenterContainer/PausePanel/VBoxContainer/HeaderBox/IconCenter/IconBadge" unique_id=254787669]
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.98, 0.88, 0.45, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 20
-text = "⏸️"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("2_icon_pause")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TitleLabel" type="Label" parent="Root/CenterContainer/PausePanel/VBoxContainer/HeaderBox" unique_id=1410685999]
 layout_mode = 2
@@ -239,24 +243,48 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_summary_badge")
 layout_mode = 2
 theme_override_constants/separation = 3
 
-[node name="HeroSummaryLabel" type="Label" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=1751542688]
+[node name="HeroSummaryRow" type="HBoxContainer" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=910000201]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="HeroSummaryIcon" type="TextureRect" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox/HeroSummaryRow" unique_id=910000202]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+texture = ExtResource("3_icon_sword")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HeroSummaryLabel" type="Label" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox/HeroSummaryRow" unique_id=1751542688]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.92, 0.82, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
-text = "⚔️ Kalandor  •  Szint 1"
+text = "Kalandor  •  Szint 1"
 horizontal_alignment = 1
 
-[node name="RunSummaryLabel" type="Label" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=1569973589]
+[node name="RunSummaryRow" type="HBoxContainer" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=910000203]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="RunSummaryIcon" type="TextureRect" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox/RunSummaryRow" unique_id=910000204]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+texture = ExtResource("4_icon_dungeon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RunSummaryLabel" type="Label" parent="Root/CenterContainer/PausePanel/VBoxContainer/SummaryBadge/SummaryVBox/RunSummaryRow" unique_id=1569973589]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.76, 0.88, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 11
-text = "🏰 Elfeledett Kripta"
+text = "Elfeledett Kripta"
 horizontal_alignment = 1
 
 [node name="ButtonsCol" type="VBoxContainer" parent="Root/CenterContainer/PausePanel/VBoxContainer" unique_id=105189503]
@@ -268,52 +296,67 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.92, 0.78, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_primary_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_primary_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_primary_hover")
-text = "▶ FOLYTATÁS [ESC / P]"
+text = "FOLYTATÁS [P / ESC]"
+icon = ExtResource("5_icon_play")
+expand_icon = true
 
 [node name="SettingsButton" type="Button" parent="Root/CenterContainer/PausePanel/VBoxContainer/ButtonsCol" unique_id=251742038]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84, 0.9, 0.98, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_slate_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_slate_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_slate_hover")
-text = "⚙️ BEÁLLÍTÁSOK"
+text = "BEÁLLÍTÁSOK"
+icon = ExtResource("6_icon_settings")
+expand_icon = true
 
 [node name="RestartButton" type="Button" parent="Root/CenterContainer/PausePanel/VBoxContainer/ButtonsCol" unique_id=1389054821]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84, 0.9, 0.98, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_slate_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_slate_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_slate_hover")
-text = "🔄 DUNGEON ÚJRAINDÍTÁSA"
+text = "DUNGEON ÚJRAINDÍTÁSA"
+icon = ExtResource("7_icon_restart")
+expand_icon = true
 
 [node name="LobbyButton" type="Button" parent="Root/CenterContainer/PausePanel/VBoxContainer/ButtonsCol" unique_id=1917833722]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84, 0.9, 0.98, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_slate_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_slate_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_slate_hover")
-text = "🏰 VISSZA A LOBBYBA"
+text = "VISSZA A TÁBORBA"
+icon = ExtResource("4_icon_dungeon")
+expand_icon = true
 
 [node name="MenuButton" type="Button" parent="Root/CenterContainer/PausePanel/VBoxContainer/ButtonsCol" unique_id=1476657620]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.72, 0.72, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_danger_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_danger_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_danger_hover")
-text = "🏠 VISSZA A FŐMENÜBE"
+text = "VISSZA A FŐMENÜBE"
+icon = ExtResource("8_icon_home")
+expand_icon = true

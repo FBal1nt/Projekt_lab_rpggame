@@ -1,6 +1,9 @@
 extends Node
 class_name EnemyCombat
 
+const LOOT_BAG_SCENE: PackedScene = preload("res://Scenes/Props/loot_bag.tscn")
+const LOOT_BAG_SCRIPT = preload("res://Scripts/World/loot_bag.gd")
+
 var controller: EnemyController
 var armored_combat: ArmoredEnemyCombat
 var elite_combat: EliteEnemyCombat
@@ -45,20 +48,59 @@ func can_attack_hero(hero_cell: Vector2i) -> bool:
 	var a_range = controller.attack_range
 
 	if a_range > 1:
-		return maxi(absi(diff.x), absi(diff.y)) <= a_range
+		if maxi(absi(diff.x), absi(diff.y)) > a_range:
+			return false
+		if elite_combat and elite_combat.is_necromancer():
+			return has_line_of_sight(controller.grid_pos, hero_cell)
+		return true
 	else:
 		return diff.y == 0 and absi(diff.x) == 1
+
+func has_line_of_sight(from_cell: Vector2i, to_cell: Vector2i) -> bool:
+	if controller == null or controller.mover == null or controller.mover.grid_manager == null:
+		return true
+	var gm := controller.mover.grid_manager
+	var x0 := from_cell.x
+	var y0 := from_cell.y
+	var x1 := to_cell.x
+	var y1 := to_cell.y
+	var dx := absi(x1 - x0)
+	var dy := absi(y1 - y0)
+	var sx := 1 if x0 < x1 else -1
+	var sy := 1 if y0 < y1 else -1
+	var err := dx - dy
+
+	while true:
+		var current := Vector2i(x0, y0)
+		if current != from_cell and current != to_cell:
+			if gm.is_cell_solid(current):
+				return false
+		if x0 == x1 and y0 == y1:
+			break
+		var e2 := 2 * err
+		if e2 > -dy:
+			err -= dy
+			x0 += sx
+		if e2 < dx:
+			err += dx
+			y0 += sy
+	return true
 
 func roll_attack_damage() -> int:
 	return controller.enemy_data.roll_attack_damage() if (controller and controller.enemy_data) else 10
 
 func take_damage(incoming_raw_damage: int) -> int:
 	if is_dead or controller == null or controller.enemy_data == null: return 0
-	if elite_combat and elite_combat.is_necromancer_vanished(): return 0
+	if elite_combat and elite_combat.is_necromancer_transitioning(): return 0
 	var data = controller.enemy_data
+	if int(data.tier) == EnemyData.EnemyTier.BOSS or int(data.special_profile) == 4:
+		var map_gen := get_tree().get_first_node_in_group("map_generator")
+		if map_gen != null and map_gen.has_method("on_boss_fight_started"):
+			map_gen.on_boss_fight_started()
 
 	if data.check_dodge():
-		print("💨 [%s KITÉRT] Elsuhant a támadás elől!" % controller.monster_name)
+		AudioManager.sfx(&"dodge_whoosh", 0.95, 1.08, -1.5)
+		print("[%s KITÉRT] Elsuhant a támadás elől!" % controller.monster_name)
 		return 0
 
 	var actual_raw = incoming_raw_damage
@@ -70,7 +112,7 @@ func take_damage(incoming_raw_damage: int) -> int:
 	if data.get("flat_armor") != null and data.flat_armor > 0:
 		var absorbed = mini(actual_raw, data.flat_armor)
 		actual_raw = maxi(0, actual_raw - data.flat_armor)
-		print("🛡️ [%s PÁNCÉL] -%d sebzés elnyelve! (Maradt: %d)" % [controller.monster_name, absorbed, actual_raw])
+		print("[%s PÁNCÉL] -%d sebzés elnyelve! (Maradt: %d)" % [controller.monster_name, absorbed, actual_raw])
 
 	var prev_hp: int = data.get_current_hp()
 	var dealt = data.take_damage(actual_raw)
@@ -84,6 +126,7 @@ func take_damage(incoming_raw_damage: int) -> int:
 
 	if not data.is_alive():
 		is_dead = true
+		AudioManager.sfx(&"death_enemy", 0.90, 1.08, -1.5)
 		if controller.brain and controller.brain.ai_timer and is_instance_valid(controller.brain.ai_timer):
 			controller.brain.ai_timer.stop()
 		if controller.mover:
@@ -103,7 +146,7 @@ func try_trigger_block() -> bool:
 		is_blocking_active = true
 		if controller.visuals.sprite:
 			controller.visuals.sprite.play(block_anim)
-		print("🛡️ [%s BLOKKOL] Felemeli a pajzsát a csapás ellen!" % controller.monster_name)
+		print("[%s BLOKKOL] Felemeli a pajzsát a csapás ellen!" % controller.monster_name)
 		return true
 
 	is_blocking_active = false
@@ -163,7 +206,9 @@ func perform_combat_turn(target_hero: HeroController, is_extra_attack: bool = fa
 			multiplier = light_mult
 
 	var sprite = controller.visuals.sprite if controller.visuals else null
+	var is_ranged_attack: bool = data != null and (data.attack_range > 1 or data.projectile_scene != null)
 	if anim != "" and sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
+		AudioManager.sfx(&"bow_release" if is_ranged_attack else &"sword_swing", 0.92, 1.08, -2.5)
 		sprite.play(anim)
 		if target_hero.has_method("try_trigger_block"): target_hero.try_trigger_block()
 		await sprite.animation_finished
@@ -179,11 +224,12 @@ func perform_combat_turn(target_hero: HeroController, is_extra_attack: bool = fa
 			proj.launch(controller.global_position, target_hero, raw_dmg, controller)
 		await proj.tree_exited
 	else:
+		AudioManager.sfx(&"hit_melee", 0.92, 1.08, -2.0)
 		target_hero.take_damage(raw_dmg)
 
 	var drained = data.apply_life_steal(raw_dmg) if data else 0
 	if drained > 0:
-		print("🩸 [%s VÁMPÍRIZMUS] Visszaszívott %d HP-t!" % [controller.monster_name, drained])
+		print("[%s VÁMPÍRIZMUS] Visszaszívott %d HP-t!" % [controller.monster_name, drained])
 
 	if target_hero.has_method("play_hurt_reaction"):
 		await target_hero.play_hurt_reaction()
@@ -203,7 +249,7 @@ func set_all_monsters_ai_frozen(frozen: bool) -> void:
 
 func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 	if is_dead or is_attacking or not controller.is_monster_alive(): return
-	if elite_combat and (elite_combat.is_necromancer_vanished() or elite_combat.is_necromancer_out_of_magic()):
+	if elite_combat and (elite_combat.is_necromancer_transitioning() or elite_combat.is_necromancer_out_of_magic()):
 		return
 	var battle_ui = get_tree().get_first_node_in_group("battle_ui") as BattleDialog
 	if battle_ui != null and battle_ui.combat_active: return
@@ -214,7 +260,8 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 	elif hero.get("is_ranged") != null:
 		hero_is_ranged = bool(hero.get("is_ranged"))
 
-	if hero_is_ranged:
+	var is_necro: bool = elite_combat != null and elite_combat.is_necromancer()
+	if hero_is_ranged and not is_necro:
 		if battle_ui != null and not battle_ui.combat_active:
 			if hero.has_method("cancel_movement_immediately"):
 				hero.cancel_movement_immediately()
@@ -222,18 +269,31 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 		return
 
 	is_attacking = true
+	controller.z_index = 11
+	if is_instance_valid(hero):
+		hero.z_index = 8
 	if controller.visuals:
 		controller.visuals.update_facing(hero.grid_pos.x)
 
-	if elite_combat and elite_combat.is_necromancer():
+	if is_necro:
+		AudioManager.set_boss_encounter_active(true)
+		var map_gen := get_tree().get_first_node_in_group("map_generator")
+		if map_gen != null and map_gen.has_method("on_boss_fight_started"):
+			map_gen.on_boss_fight_started()
 		await elite_combat._necromancer_cast_magic_attack(hero)
+		if is_instance_valid(controller):
+			controller.z_index = 8
+		if is_instance_valid(hero):
+			hero.z_index = 10
 		is_attacking = false
 		return
 
 	var anim = controller.visuals._get_attack_anim_name() if controller.visuals else ""
 	var sprite = controller.visuals.sprite if controller.visuals else null
 
+	var is_ranged_enemy: bool = controller.enemy_data != null and (controller.enemy_data.attack_range > 1 or controller.enemy_data.projectile_scene != null)
 	if anim != "" and sprite:
+		AudioManager.sfx(&"bow_release" if is_ranged_enemy else &"sword_swing", 0.92, 1.08, -2.5)
 		sprite.play(anim)
 		var anim_len = 0.4
 		if sprite.sprite_frames:
@@ -254,6 +314,7 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 			await proj.tree_exited
 	else:
 		if is_instance_valid(hero):
+			AudioManager.sfx(&"hit_melee", 0.92, 1.08, -2.0)
 			hero.take_damage(raw_dmg)
 
 	if is_instance_valid(hero) and hero.is_alive():
@@ -262,6 +323,10 @@ func _perform_overworld_ranged_initiation(hero: HeroController) -> void:
 		if not hero.is_moving and hero.has_method("play_hurt_reaction"):
 			hero.play_hurt_reaction()
 
+	if is_instance_valid(controller):
+		controller.z_index = 8
+	if is_instance_valid(hero):
+		hero.z_index = 10
 	is_attacking = false
 
 func play_overworld_death() -> void:
@@ -273,15 +338,18 @@ func play_overworld_death() -> void:
 
 	if d_anim != "" and sprite:
 		sprite.play(d_anim)
-		await sprite.animation_finished
+		if controller.visuals and controller.visuals.has_method("_await_anim_or_interrupt"):
+			await controller.visuals._await_anim_or_interrupt(d_anim, 1.2)
+		else:
+			await sprite.animation_finished
 
 	var data = controller.enemy_data
 	if data and data.can_self_revive and not data.has_resurrected():
-		print("💀 [%s ELTERÜLT] A csontok a földön hevernek..." % controller.monster_name)
+		print("[%s ELTERÜLT] A csontok a földön hevernek..." % controller.monster_name)
 		var delay = data.resurrect_delay if data.get("resurrect_delay") != null else 3.0
 		await get_tree().create_timer(delay).timeout
 
-		print("✨ [%s FELTÁMADT] A csontok újra összeállnak!" % controller.monster_name)
+		print("[%s FELTÁMADT] A csontok újra összeállnak!" % controller.monster_name)
 		if controller.visuals:
 			await controller.visuals.play_respawn_animation()
 
@@ -302,12 +370,91 @@ func play_overworld_death() -> void:
 		if randf() < data.split_chance_on_death:
 			_spawn_split_slimes()
 
+	if data != null and (int(data.tier) == EnemyData.EnemyTier.BOSS or int(data.special_profile) == 4):
+		var map_gen := get_tree().get_first_node_in_group("map_generator")
+		if map_gen != null and map_gen.has_method("on_boss_defeated"):
+			map_gen.on_boss_defeated()
+
+	_drop_loot_bag()
 	controller.remove_from_group("enemies")
 	controller.queue_free()
 
+func _drop_loot_bag() -> void:
+	if controller == null or not is_instance_valid(controller) or controller.has_meta("loot_dropped"):
+		return
+	controller.set_meta("loot_dropped", true)
+
+	var tree := get_tree()
+	if tree == null or LOOT_BAG_SCENE == null:
+		return
+
+	var is_summoned: bool = controller.has_meta("is_summoned_minion") and bool(controller.get_meta("is_summoned_minion"))
+	var is_split_child: bool = controller.has_meta("is_split_child") and bool(controller.get_meta("is_split_child"))
+	var diff_id: String = "normal"
+	var gs := tree.root.get_node_or_null("GameState")
+	if gs != null and "run_state" in gs and gs.run_state is Dictionary:
+		diff_id = String(gs.run_state.get("difficulty_id", "normal"))
+
+	var loot_info: Dictionary = LOOT_BAG_SCRIPT.generate_loot_for_enemy(
+		controller.enemy_data,
+		is_summoned,
+		is_split_child,
+		diff_id
+	)
+	var drop_tier: int = int(loot_info.get("tier", 1))
+	var drop_name: String = String(loot_info.get("enemy_name", controller.monster_name))
+	var drop_gold: int = int(loot_info.get("gold", 0))
+	var drop_mats: Array[Dictionary] = []
+	for entry in (loot_info.get("materials", []) as Array):
+		if entry is Dictionary:
+			drop_mats.append(entry as Dictionary)
+
+	if drop_gold <= 0 and drop_mats.is_empty():
+		return
+
+	var cell: Vector2i = controller.grid_pos
+	for existing in tree.get_nodes_in_group("loot_bags"):
+		var bag := existing as LootBag
+		if bag != null and is_instance_valid(bag) and not bag.is_queued_for_deletion() and bag.grid_pos == cell:
+			bag.merge_loot(drop_tier, drop_name, drop_gold, drop_mats)
+			return
+
+	var container: Node = _get_or_create_loot_container(tree)
+	if container == null:
+		return
+
+	var world_pos: Vector2 = controller.global_position
+	var fl: TileMapLayer = controller.mover.floor_layer if controller.mover else null
+	if fl != null:
+		world_pos = fl.to_global(fl.map_to_local(cell))
+
+	var loot_bag := LOOT_BAG_SCENE.instantiate() as LootBag
+	if loot_bag == null:
+		return
+	loot_bag.global_position = world_pos
+	container.add_child(loot_bag)
+	loot_bag.setup_loot(cell, drop_tier, drop_name, drop_gold, drop_mats, controller.fog_of_war)
+
+
+func _get_or_create_loot_container(tree: SceneTree) -> Node:
+	var host: Node = tree.current_scene
+	if host == null and controller != null and controller.get_parent() != null:
+		host = controller.get_parent().get_parent()
+	if host == null:
+		host = controller.get_parent()
+	if host == null:
+		return null
+	var existing := host.get_node_or_null("LootBags")
+	if existing != null:
+		return existing
+	var container := Node2D.new()
+	container.name = "LootBags"
+	host.add_child(container)
+	return container
+
 func _spawn_split_slimes() -> void:
 	if controller == null or controller.mover == null: return
-	print("🟢 [%s KETTÉVÁLT] Két kis nyálka születik a tócsából!" % controller.monster_name)
+	print("[%s KETTÉVÁLT] Két kis nyálka születik a tócsából!" % controller.monster_name)
 	var spawn_dirs = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
 	spawn_dirs.shuffle()
 
@@ -331,6 +478,7 @@ func _spawn_split_slimes() -> void:
 
 			small_slime.is_dead = false
 			small_slime.visible = true
+			small_slime.set_meta("is_split_child", true)
 
 			if small_slime.visuals and small_slime.visuals.sprite and controller.visuals and controller.visuals.sprite:
 				small_slime.visuals.sprite.scale = controller.visuals.sprite.scale * 0.65

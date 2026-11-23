@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://c8deathui7p2q"]
 
 [ext_resource type="Script" uid="uid://doefuaohruiib" path="res://Scripts/UI/death_screen.gd" id="1_death"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/skull.png" id="2_icon_skull"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/play_sword.png" id="3_icon_sword"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/dungeon.png" id="4_icon_dungeon"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/restart.png" id="5_icon_restart"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/home.png" id="6_icon_home"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_death_panel"]
 content_margin_left = 22.0
@@ -170,16 +175,12 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_skull_badge")
 
-[node name="SkullLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox/SkullCenter/SkullBadge" unique_id=1603775120]
+[node name="SkullIcon" type="TextureRect" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox/SkullCenter/SkullBadge" unique_id=1603775120]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.35, 0.35, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 24
-text = "☠️"
-horizontal_alignment = 1
-vertical_alignment = 1
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_skull")
 
 [node name="TitleLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/HeaderBox" unique_id=1595676324]
 layout_mode = 2
@@ -209,24 +210,48 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_summary_badge")
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="HeroSummaryLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=1954121025]
+[node name="HeroSummaryRow" type="HBoxContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=910000101]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="HeroSummaryIcon" type="TextureRect" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox/HeroSummaryRow" unique_id=910000102]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("3_icon_sword")
+
+[node name="HeroSummaryLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox/HeroSummaryRow" unique_id=1954121025]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.98, 0.92, 0.8, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
-text = "⚔️ Kardforgató • Szint 1"
+text = "Kardforgató • Szint 1"
 horizontal_alignment = 1
 
-[node name="RunSummaryLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=2037941049]
+[node name="RunSummaryRow" type="HBoxContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox" unique_id=910000103]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="RunSummaryIcon" type="TextureRect" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox/RunSummaryRow" unique_id=910000104]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("4_icon_dungeon")
+
+[node name="RunSummaryLabel" type="Label" parent="Root/CenterContainer/DeathPanel/VBoxContainer/SummaryBadge/SummaryVBox/RunSummaryRow" unique_id=2037941049]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.75, 0.88, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
-text = "🏰 Elfeledett Kripta • Közepes"
+text = "Elfeledett Kripta • Közepes"
 horizontal_alignment = 1
 
 [node name="ButtonsRow" type="HBoxContainer" parent="Root/CenterContainer/DeathPanel/VBoxContainer" unique_id=1881385228]
@@ -239,11 +264,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.98, 0.92, 0.78, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_restart_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_restart_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_restart_hover")
-text = "🔄 DUNGEON ÚJRAINDÍTÁSA"
+text = "DUNGEON ÚJRAINDÍTÁSA"
+icon = ExtResource("5_icon_restart")
+expand_icon = true
 
 [node name="MenuButton" type="Button" parent="Root/CenterContainer/DeathPanel/VBoxContainer/ButtonsRow" unique_id=1166599181]
 custom_minimum_size = Vector2(0, 42)
@@ -251,8 +279,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.95, 0.72, 0.72, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_constants/icon_max_width = 18
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_menu_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_menu_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_menu_hover")
-text = "🏠 VISSZA A MENÜBE"
+text = "VISSZA A TÁBORBA"
+icon = ExtResource("6_icon_home")
+expand_icon = true

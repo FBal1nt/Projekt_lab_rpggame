@@ -4,6 +4,10 @@ class_name HeroController
 @export_group("Hős Alapadatok")
 @export var hero_name: String = "Gandalf"
 
+@export_group("Debug")
+@export var debug_mode_on_start: bool = false
+@export var debug_default_class: CharacterClass
+
 @export_group("Komponensek")
 @onready var visuals: HeroVisuals = $Visuals
 @onready var mover: HeroMover = $Mover
@@ -120,6 +124,12 @@ var fog_of_war: FogOfWar:
 			visuals.fog_of_war = val
 
 var is_death_played: bool = false
+var debug_invincible: bool = false
+
+func _exit_tree() -> void:
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_signal("settings_changed") and sm.settings_changed.is_connected(_apply_camera_settings):
+		sm.settings_changed.disconnect(_apply_camera_settings)
 
 func _ready() -> void:
 	add_to_group("player")
@@ -130,6 +140,25 @@ func _ready() -> void:
 	if visuals: visuals.setup(self)
 	if combat: combat.setup(self)
 	if progression: progression.setup(self)
+
+	_apply_camera_settings()
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_signal("settings_changed") and not sm.settings_changed.is_connected(_apply_camera_settings):
+		sm.settings_changed.connect(_apply_camera_settings)
+
+	if debug_mode_on_start:
+		enable_debug_mode()
+
+func _apply_camera_settings() -> void:
+	var cam := get_node_or_null("Camera2D") as Camera2D
+	if cam == null:
+		return
+	cam.position_smoothing_enabled = false
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm == null:
+		return
+	var zoom_val := clampf(float(sm.get("camera_zoom")), 2.5, 6.0)
+	cam.zoom = Vector2(zoom_val, zoom_val)
 
 func setup_grid_astar() -> void:
 	var gm = get_tree().get_first_node_in_group("grid_manager") as GridManager
@@ -165,54 +194,83 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_alive() or in_battle or is_attacking or is_stunned:
 		return
 
-	# 1. WASD és Nyílbillentyűk (lépés mezőnként)
-	var move_dir := Vector2i.ZERO
-	if event.is_action_pressed("ui_up") or _is_key_pressed(event, [KEY_W, KEY_UP]):
-		move_dir = Vector2i(0, -1)
-	elif event.is_action_pressed("ui_down") or _is_key_pressed(event, [KEY_S, KEY_DOWN]):
-		move_dir = Vector2i(0, 1)
-	elif event.is_action_pressed("ui_left") or _is_key_pressed(event, [KEY_A, KEY_LEFT]):
-		move_dir = Vector2i(-1, 0)
-	elif event.is_action_pressed("ui_right") or _is_key_pressed(event, [KEY_D, KEY_RIGHT]):
-		move_dir = Vector2i(1, 0)
+	var sm_move := get_node_or_null("/root/SettingsManager")
+	var allow_wasd: bool = (
+		bool(sm_move.is_wasd_movement_enabled())
+		if (sm_move != null and sm_move.has_method("is_wasd_movement_enabled"))
+		else true
+	)
+	var allow_click_move: bool = (
+		bool(sm_move.is_click_movement_enabled())
+		if (sm_move != null and sm_move.has_method("is_click_movement_enabled"))
+		else true
+	)
 
-	if move_dir != Vector2i.ZERO:
-		if mover and mover.move_in_direction(move_dir):
-			_mark_input_handled()
-			return
+	# 1. WASD és Nyílbillentyűk (lépés mezőnként)
+	if allow_wasd:
+		var move_dir := Vector2i.ZERO
+		if event.is_action_pressed("ui_up") or _is_key_pressed(event, [KEY_W, KEY_UP]):
+			move_dir = Vector2i(0, -1)
+		elif event.is_action_pressed("ui_down") or _is_key_pressed(event, [KEY_S, KEY_DOWN]):
+			move_dir = Vector2i(0, 1)
+		elif event.is_action_pressed("ui_left") or _is_key_pressed(event, [KEY_A, KEY_LEFT]):
+			move_dir = Vector2i(-1, 0)
+		elif event.is_action_pressed("ui_right") or _is_key_pressed(event, [KEY_D, KEY_RIGHT]):
+			move_dir = Vector2i(1, 0)
+
+		if move_dir != Vector2i.ZERO:
+			if mover and mover.move_in_direction(move_dir):
+				_mark_input_handled()
+				return
 
 	# 2. Számbillentyűk és képességek
 	if event is InputEventKey and event.pressed and not event.echo:
-		var code = event.physical_keycode if event.physical_keycode != 0 else event.keycode
-		match code:
-			KEY_F:
-				if combat and active_class and active_class.class_name_id == "Wizard":
-					combat.wizard_element = "fire" if combat.wizard_element == "ice" else "ice"
-					print("🔥/❄️ Varázsló elem váltva: ", combat.wizard_element)
-					if progression:
-						progression.update_hud()
-					_mark_input_handled()
-					return
-			KEY_H:
-				if combat and active_class and active_class.class_name_id == "Priest":
-					combat.cast_priest_self_heal()
-					_mark_input_handled()
-					return
+		if event.keycode == KEY_Z or (event.keycode == KEY_NONE and event.physical_keycode == KEY_Z):
+			if _teleport_to_boss_debug():
+				_mark_input_handled()
+				return
+
+		var sm := get_node_or_null("/root/SettingsManager")
+		var is_wizard_swap: bool = (
+			sm.matches_keybind(event, "wizard_element")
+			if (sm != null and sm.has_method("matches_keybind"))
+			else _is_key_pressed(event, [KEY_F])
+		)
+		var is_priest_heal: bool = (
+			sm.matches_keybind(event, "priest_heal")
+			if (sm != null and sm.has_method("matches_keybind"))
+			else _is_key_pressed(event, [KEY_H])
+		)
+		if is_wizard_swap:
+			if combat and active_class and active_class.class_name_id == "Wizard":
+				combat.wizard_element = "fire" if combat.wizard_element == "ice" else "ice"
+				AudioManager.sfx(&"element_swap", 0.96, 1.06, -2.0)
+				print("[VARÁZSLÓ] Elem váltva: ", combat.wizard_element)
+				if progression:
+					progression.update_hud()
+				_mark_input_handled()
+				return
+		elif is_priest_heal:
+			if combat and active_class and active_class.class_name_id == "Priest":
+				combat.cast_priest_self_heal()
+				_mark_input_handled()
+				return
 
 	# 3. Egér kattintások:
-	# Bal klikk: ha ellenségre kattintunk -> támadás, ha üres mezőre -> odasétálás!
+	# Bal klikk: ha ellenségre kattintunk -> támadás, ha üres mezőre -> odasétálás (ha az egérmozgás aktív)!
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		var handled_attack = combat.handle_attack_click() if combat else false
-		if not handled_attack and mover:
+		if not handled_attack and allow_click_move and mover:
 			mover.handle_move_click()
-		_mark_input_handled()
+		if handled_attack or allow_click_move:
+			_mark_input_handled()
 		return
 
-	# Jobb klikk: közvetlen mozgás parancs
+	# Jobb klikk: közvetlen mozgás parancs (csak ha a kattintásos mozgás engedélyezve van)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		if mover:
+		if allow_click_move and mover:
 			mover.handle_move_click()
-		_mark_input_handled()
+			_mark_input_handled()
 		return
 
 func _is_key_pressed(event: InputEvent, keys: Array) -> bool:
@@ -239,6 +297,17 @@ func is_alive() -> bool: return current_hp > 0
 func award_title(new_title: String) -> void:
 	if progression and progression.has_method("award_title"):
 		progression.award_title(new_title)
+
+func on_boss_defeated() -> void:
+	var map_gen := get_tree().get_first_node_in_group("map_generator")
+	if map_gen != null and map_gen.has_method("on_boss_defeated"):
+		map_gen.on_boss_defeated()
+	for gate in get_tree().get_nodes_in_group("exit_gates"):
+		if is_instance_valid(gate) and gate.has_method("on_boss_defeated"):
+			gate.on_boss_defeated()
+	var hud := get_tree().get_first_node_in_group("hud")
+	if hud != null and hud.has_method("show_boss_defeated_toast"):
+		hud.show_boss_defeated_toast()
 
 func take_damage(incoming_raw_damage: int) -> int:
 	return combat.take_damage(incoming_raw_damage) if combat else 0
@@ -271,6 +340,7 @@ func is_tile_in_vision(cell: Vector2i) -> bool:
 func play_overworld_death() -> void:
 	if is_death_played: return
 	is_death_played = true
+	AudioManager.sfx(&"death_hero", 0.96, 1.04, 0.0)
 
 	if mover:
 		mover.cancel_movement_immediately()
@@ -282,11 +352,13 @@ func play_overworld_death() -> void:
 
 	var spr = sprite
 	if spr and spr.sprite_frames and spr.sprite_frames.has_animation("death"):
-		spr.play("death")
-		await spr.animation_finished
-		var last_frame = spr.sprite_frames.get_frame_count("death") - 1
-		spr.frame = last_frame
-		spr.pause()
+		var last_frame: int = maxi(0, spr.sprite_frames.get_frame_count("death") - 1)
+		if not (spr.animation == "death" and spr.frame >= last_frame and not spr.is_playing()):
+			spr.play("death")
+			await spr.animation_finished
+			spr.stop()
+			spr.animation = "death"
+			spr.frame = last_frame
 
 	var battle_ui := get_tree().get_first_node_in_group("battle_ui")
 	if battle_ui == null or not bool(battle_ui.get("combat_active")):
@@ -311,3 +383,47 @@ func show_death_screen() -> void:
 
 	if death_ui != null and death_ui.has_method("show_death_screen"):
 		death_ui.show_death_screen(self)
+
+
+func _teleport_to_boss_debug() -> bool:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return false
+
+	var debug_marker: Node2D = null
+	var map_gen := scene.find_child("MapGenerator", true, false)
+	if map_gen != null:
+		var boss_room = map_gen.get("boss_room_node") as Node
+		if is_instance_valid(boss_room):
+			debug_marker = boss_room.find_child("DEBUG", true, false) as Node2D
+	if debug_marker == null:
+		debug_marker = scene.find_child("DEBUG", true, false) as Node2D
+	if debug_marker == null:
+		return false
+
+	if mover:
+		mover.cancel_movement_immediately()
+
+	var fl: TileMapLayer = floor_layer
+	if fl != null:
+		var target_cell := fl.local_to_map(fl.to_local(debug_marker.global_position))
+		grid_pos = target_cell
+		current_step_target = target_cell
+		global_position = fl.to_global(fl.map_to_local(target_cell))
+	else:
+		global_position = debug_marker.global_position
+
+	enable_debug_mode()
+	return true
+
+
+## Enables debug testing mode (invincibility and extended 50-tile room vision).
+func enable_debug_mode() -> void:
+	debug_invincible = true
+	if visuals:
+		visuals.vision_limit = maxi(visuals.vision_limit, 50)
+	update_fog_of_war()
+	if progression:
+		progression.update_hud()
+	if visuals:
+		visuals.queue_redraw()

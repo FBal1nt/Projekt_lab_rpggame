@@ -40,6 +40,23 @@ func setup_astar() -> void:
 
 	is_initialized = true
 
+
+func refresh_cells(cells: Array[Vector2i]) -> void:
+	if astar == null or not is_initialized or cells.is_empty():
+		return
+	var needs_resize := false
+	var expanded_region: Rect2i = astar.region
+	for cell in cells:
+		if not expanded_region.has_point(cell):
+			expanded_region = expanded_region.expand(cell)
+			needs_resize = true
+	if needs_resize:
+		setup_astar()
+		return
+	for cell in cells:
+		if astar.is_in_boundsv(cell):
+			astar.set_point_solid(cell, is_cell_solid(cell))
+
 func is_cell_solid(cell: Vector2i) -> bool:
 	if floor_layer == null: return true
 	var floor_data = _get_safe_tile_data(floor_layer, cell)

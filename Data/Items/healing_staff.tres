@@ -18,10 +18,10 @@ equipment_slot = &"weapon"
 can_upgrade = true
 max_upgrade_level = 5
 base_stats = {
-"damage": 7.0,
+"damage": 5.0,
 "healing_power": 15.0
 }
 upgrade_stat_bonuses = {
-"damage": 1.0,
+"damage": 2.0,
 "healing_power": 4.0
 }

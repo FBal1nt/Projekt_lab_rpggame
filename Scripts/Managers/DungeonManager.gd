@@ -97,6 +97,41 @@ func roll_enemy_type_id() -> StringName:
 # Build and start a dungeon run
 # -----------------------------------------------------------------------------
 
+func get_active_hero_level() -> int:
+	## Returns the active character class level (>= 1) for dungeon enemy scaling.
+	if GameState != null:
+		if GameState.has_method("get_active_character"):
+			var active_char = GameState.get_active_character()
+			if active_char != null and active_char.get("level") != null:
+				return maxi(1, int(active_char.level))
+		if "level" in GameState:
+			return maxi(1, int(GameState.level))
+	return 1
+
+
+func get_scaled_enemy_level_range(difficulty: DungeonDifficultyData, hero_level: int = -1) -> Vector2i:
+	## Scales the difficulty's baseline (Lv.1 hero) enemy level range to the active class's level.
+	var active_level: int = maxi(1, hero_level if hero_level > 0 else get_active_hero_level())
+	if difficulty == null:
+		return Vector2i(active_level, active_level + 2)
+
+	var base_min: int = maxi(1, difficulty.enemy_level_min)
+	var base_max: int = maxi(base_min, difficulty.enemy_level_max)
+	var diff_id: String = String(difficulty.id).strip_edges().to_lower()
+	var spread: int = maxi(0, base_max - base_min)
+
+	if "easy" in diff_id:
+		if active_level <= 1:
+			return Vector2i(base_min, base_max)
+		var easy_min: int = maxi(1, active_level - 1)
+		return Vector2i(easy_min, easy_min + spread)
+
+	var level_offset: int = maxi(0, active_level - 1)
+	var scaled_min: int = base_min + level_offset
+	var scaled_max: int = maxi(scaled_min, base_max + level_offset)
+	return Vector2i(scaled_min, scaled_max)
+
+
 func get_launch_configuration(dungeon_id: StringName, difficulty_id: StringName) -> Dictionary:
 	var dungeon := get_dungeon(dungeon_id)
 	var difficulty := get_difficulty(dungeon_id, difficulty_id)
@@ -110,6 +145,9 @@ func get_launch_configuration(dungeon_id: StringName, difficulty_id: StringName)
 	for enemy_name in difficulty.enemy_type_names:
 		enemy_type_names.append(String(enemy_name))
 
+	var hero_level := get_active_hero_level()
+	var scaled_levels := get_scaled_enemy_level_range(difficulty, hero_level)
+
 	return {
 		"config_version": 1,
 		"dungeon_id": String(dungeon.id),
@@ -119,9 +157,10 @@ func get_launch_configuration(dungeon_id: StringName, difficulty_id: StringName)
 		"scene_path": dungeon.scene_path,
 		"spawn_rate_multiplier": dungeon.base_spawn_rate_multiplier * difficulty.spawn_rate_multiplier,
 		"encounter_count_multiplier": difficulty.encounter_count_multiplier,
-		"enemy_level_min": difficulty.enemy_level_min,
-		"enemy_level_max": maxi(difficulty.enemy_level_min, difficulty.enemy_level_max),
-		"enemy_level_range": [difficulty.enemy_level_min, maxi(difficulty.enemy_level_min, difficulty.enemy_level_max)],
+		"hero_level_at_start": hero_level,
+		"enemy_level_min": scaled_levels.x,
+		"enemy_level_max": scaled_levels.y,
+		"enemy_level_range": [scaled_levels.x, scaled_levels.y],
 		"enemy_type_ids": enemy_type_ids,
 		"enemy_type_names": enemy_type_names,
 		"elite_spawn_chance": difficulty.elite_spawn_chance
@@ -159,6 +198,7 @@ func start_dungeon(dungeon_id: StringName, difficulty_id: StringName) -> Diction
 	configuration["room_index"] = 0
 	configuration["encounter_index"] = 0
 	configuration["status"] = "prepared"
+	GameState.reset_dungeon_run_titles()
 	GameState.set_run_state(configuration)
 	configuration_prepared.emit(configuration.duplicate(true))
 

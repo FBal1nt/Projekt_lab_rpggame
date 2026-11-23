@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://g1v64r1gnxiw" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_Attack01.png" id="1_60mjp"]
 [ext_resource type="Texture2D" uid="uid://d1holg7xmhbpk" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_Attack02.png" id="2_lf5uy"]
 [ext_resource type="Texture2D" uid="uid://c5mf0dbb4ixws" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_DEATH.png" id="3_1a5dw"]
+[ext_resource type="Texture2D" uid="uid://be7wsfj4c2vb7" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_Hide.png" id="4_xvwfh"]
 [ext_resource type="Texture2D" uid="uid://budt4midominj" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_Hurt.png" id="4_ye85i"]
 [ext_resource type="Texture2D" uid="uid://cityuxmka7ogd" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_Idle.png" id="5_cjbp7"]
 [ext_resource type="Texture2D" uid="uid://btelrbb2y3604" path="res://Assets/Characters/Necromancer/Necromancer/Necromancer_Summon.png" id="6_rf7gm"]
@@ -119,6 +120,38 @@ region = Rect2(700, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_yerrf"]
 atlas = ExtResource("3_1a5dw")
 region = Rect2(800, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsulr"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_225rx"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw356"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dmgqk"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vve5l"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fi5lv"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ox8y7"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(600, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh6qc"]
+atlas = ExtResource("4_xvwfh")
+region = Rect2(700, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d4qox"]
 atlas = ExtResource("4_ye85i")
@@ -323,6 +356,35 @@ animations = [{
 }],
 "loop": 0,
 "name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsulr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_225rx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lw356")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dmgqk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vve5l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fi5lv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ox8y7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fh6qc")
+}],
+"loop": 0,
+"name": &"hide",
 "speed": 8.0
 }, {
 "frames": [{

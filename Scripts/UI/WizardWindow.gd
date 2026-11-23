@@ -4,7 +4,9 @@ extends "res://Scripts/UI/ItemAugmentationWindow.gd"
 func _configure_workshop() -> void:
 	workshop_type = &"wizard"
 	workshop_title = "VARÁZSLÓ TORNYA"
-	accent_color = Color(0.58, 0.48, 0.88, 1.0)
+	workshop_subtitle = "Elemi rúnák, ellenállások és védőáldások bűvölése"
+	workshop_icon_path = "res://Assets/UI/Icons/wizard.png"
+	accent_color = UI_THEME.ARCANE_VIOLET
 	option_configs = [
 		{
 			"id": &"weapon_element",

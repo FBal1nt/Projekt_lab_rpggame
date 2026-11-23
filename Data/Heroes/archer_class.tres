@@ -7,9 +7,10 @@
 [resource]
 script = ExtResource("2_kjvre")
 class_name_id = "Archer"
-max_hp = 85
-base_damage = 15
-initiative = 14.0
+max_hp = 90
+base_damage = 13
+base_defense = 0
+initiative = 13.5
 move_duration = 0.13
 is_ranged = true
 attack_range = 5

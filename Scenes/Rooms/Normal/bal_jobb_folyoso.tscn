@@ -2069,7 +2069,7 @@ sources/1 = SubResource("TileSetAtlasSource_72cn0")
 sources/2 = SubResource("TileSetAtlasSource_ugvhu")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ltwgq"]
-size = Vector2(104, 99)
+size = Vector2(80, 112)
 
 [node name="Node2D" type="Node2D" unique_id=1939294505]
 
@@ -2101,7 +2101,6 @@ metadata/_edit_lock_ = true
 [node name="Hitbox" type="Area2D" parent="." unique_id=1667281876]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=22087774]
-position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_ltwgq")
 
 [node name="Torch" parent="." unique_id=563503918 instance=ExtResource("5_dwi5p")]

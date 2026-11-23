@@ -137,6 +137,16 @@ func _build_spawn_context(difficulty_fallback: String) -> Dictionary:
 
 	var tree := Engine.get_main_loop() as SceneTree
 	var gs: Node = tree.root.get_node_or_null("GameState") if tree else null
+	var hero_level := 1
+	if gs != null:
+		if gs.has_method("get_active_character"):
+			var active_char = gs.get_active_character()
+			if active_char != null and active_char.get("level") != null:
+				hero_level = maxi(1, int(active_char.level))
+		elif "level" in gs:
+			hero_level = maxi(1, int(gs.level))
+
+	var already_scaled := false
 	if gs != null and "run_state" in gs and gs.run_state is Dictionary and not gs.run_state.is_empty():
 		var rs: Dictionary = gs.run_state
 		if rs.has("difficulty_id"):
@@ -149,6 +159,8 @@ func _build_spawn_context(difficulty_fallback: String) -> Dictionary:
 			ctx["enemy_level_min"] = maxi(int(rs["enemy_level_min"]), 1)
 		if rs.has("enemy_level_max"):
 			ctx["enemy_level_max"] = maxi(int(ctx["enemy_level_min"]), int(rs["enemy_level_max"]))
+		if rs.has("hero_level_at_start") and int(rs["hero_level_at_start"]) > 0:
+			already_scaled = true
 		if rs.has("elite_spawn_chance"):
 			ctx["elite_spawn_chance"] = clampf(float(rs["elite_spawn_chance"]), 0.0, 1.0)
 		if rs.has("enemy_type_ids") and rs["enemy_type_ids"] is Array:
@@ -158,6 +170,18 @@ func _build_spawn_context(difficulty_fallback: String) -> Dictionary:
 				if not clean_id.is_empty() and clean_id != "necromancer":
 					allowed[clean_id] = true
 			ctx["allowed_ids"] = allowed
+
+	if not already_scaled and hero_level > 1:
+		var base_min := int(ctx["enemy_level_min"])
+		var base_max := maxi(base_min, int(ctx["enemy_level_max"]))
+		var spread := base_max - base_min
+		if "easy" in String(ctx["difficulty_id"]):
+			var easy_min := maxi(1, hero_level - 1)
+			ctx["enemy_level_min"] = easy_min
+			ctx["enemy_level_max"] = easy_min + spread
+		else:
+			ctx["enemy_level_min"] = base_min + (hero_level - 1)
+			ctx["enemy_level_max"] = base_max + (hero_level - 1)
 
 	return ctx
 
@@ -273,7 +297,7 @@ func _pick_tier_for_spawn(depth: int, max_depth: int, rolled_level: int, ctx: Di
 	var diff_id: String = String(ctx["difficulty_id"])
 	var elite_chance: float = float(ctx["elite_spawn_chance"])
 	var depth_ratio := clampf(float(depth) / float(maxi(1, max_depth)), 0.0, 1.0)
-	var is_max_difficulty := ("hard" in diff_id) or int(ctx["enemy_level_min"]) >= 5 or rolled_level >= 5
+	var is_max_difficulty := ("hard" in diff_id) or elite_chance >= 0.40
 
 	var w_basic := 0.0
 	var w_armored := 0.0
@@ -350,12 +374,26 @@ func _spawn_boss_room_encounter(
 		boss_marker = boss_room.find_child("BossSpawn", true, false) as Node2D
 
 	var boss_world_pos := boss_marker.global_position if boss_marker != null else boss_room.global_position
+	var roam_cells := _collect_boss_roam_cells(boss_room, grid_manager)
 	var boss_cell_lookup := _find_walkable_spawn_cell(boss_world_pos, grid_manager, occupied_cells, Vector2i.ZERO, 0, 4)
 	if not boss_cell_lookup["found"]:
 		push_warning("[EnemySpawner] Nem található járható mező a Nekromanta számára a Boss szobában!")
 		return result
 
 	var boss_cell: Vector2i = boss_cell_lookup["cell"]
+	if not roam_cells.is_empty() and not roam_cells.has(boss_cell):
+		var best_cell := boss_cell
+		var best_dist := INF
+		for cell_variant in roam_cells.keys():
+			var candidate := cell_variant as Vector2i
+			if grid_manager.is_cell_solid(candidate) or occupied_cells.has(candidate):
+				continue
+			var d := Vector2(candidate - boss_cell).length_squared()
+			if d < best_dist:
+				best_dist = d
+				best_cell = candidate
+		boss_cell = best_cell
+
 	var boss_level := maxi(int(ctx["enemy_level_max"]), 2)
 	var diff_id: String = String(ctx["difficulty_id"])
 	var boss := _spawn_enemy_instance(
@@ -371,78 +409,11 @@ func _spawn_boss_room_encounter(
 	if boss == null:
 		return result
 
-	var roam_cells := _collect_room_floor_cells(boss_room, grid_manager)
 	if not roam_cells.is_empty():
 		boss.set_meta("roam_room_cells", roam_cells)
 
 	result["boss_spawned"] = true
-
-	# A Nekromanta közvetlenül maga mellé idézi a kezdő csatlósait (MinionSpawn_* nélkül)
-	var minion_count := 2
-	var minion_pool: Array[String] = ["armored_skeleton", "skeleton_archer", "skeleton"]
-	if "easy" in diff_id:
-		minion_count = 1
-		minion_pool = ["skeleton", "armored_skeleton"]
-	elif "hard" in diff_id:
-		minion_count = 3
-		minion_pool = ["armored_skeleton", "armored_orc", "greatsword_skeleton"]
-
-	var adjacent_cells := _find_adjacent_walkable_cells(boss_cell, minion_count, grid_manager, occupied_cells)
-	var spawned_minions := 0
-	for idx in range(adjacent_cells.size()):
-		var minion_id := minion_pool[idx] if idx < minion_pool.size() else String(minion_pool.pick_random())
-		var minion := _spawn_enemy_instance(
-			minion_id,
-			adjacent_cells[idx],
-			boss_level,
-			diff_id,
-			enemies_container,
-			grid_manager,
-			fog_of_war,
-			occupied_cells
-		)
-		if minion != null:
-			spawned_minions += 1
-
-	result["minions_spawned"] = spawned_minions
 	return result
-
-
-func _find_adjacent_walkable_cells(
-	center_cell: Vector2i,
-	wanted_count: int,
-	grid_manager: GridManager,
-	occupied_cells: Dictionary
-) -> Array[Vector2i]:
-	var found: Array[Vector2i] = []
-	var cardinals: Array[Vector2i] = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
-	var diagonals: Array[Vector2i] = [Vector2i(-1, -1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(1, 1)]
-	cardinals.shuffle()
-	diagonals.shuffle()
-
-	var rings: Array[Vector2i] = []
-	rings.append_array(cardinals)
-	rings.append_array(diagonals)
-
-	for offset in rings:
-		if found.size() >= wanted_count:
-			return found
-		var candidate := center_cell + offset
-		if not grid_manager.is_cell_solid(candidate) and not occupied_cells.has(candidate):
-			found.append(candidate)
-
-	# Végső tartalék a 2. gyűrűből, ha közvetlen szomszédos falak foglalják a helyet
-	for dx in range(-2, 3):
-		for dy in range(-2, 3):
-			if found.size() >= wanted_count:
-				return found
-			if maxi(absi(dx), absi(dy)) != 2:
-				continue
-			var candidate := center_cell + Vector2i(dx, dy)
-			if not grid_manager.is_cell_solid(candidate) and not occupied_cells.has(candidate):
-				found.append(candidate)
-
-	return found
 
 
 func _find_walkable_spawn_cell(
@@ -476,6 +447,67 @@ func _find_walkable_spawn_cell(
 			return {"found": true, "cell": cell}
 
 	return {"found": false, "cell": Vector2i.ZERO}
+
+
+func _collect_boss_roam_cells(boss_room: Node2D, grid_manager: GridManager) -> Dictionary:
+	var floor_cells := _collect_room_floor_cells(boss_room, grid_manager)
+	if boss_room == null or grid_manager == null or grid_manager.floor_layer == null:
+		return floor_cells
+
+	var roam_zone := boss_room.get_node_or_null("RoamZone") as Area2D
+	if roam_zone == null:
+		return floor_cells
+
+	var shapes: Array[CollisionShape2D] = []
+	var polygons: Array[CollisionPolygon2D] = []
+	for child in roam_zone.find_children("*", "", true, false):
+		if child is CollisionShape2D:
+			var cs := child as CollisionShape2D
+			if not cs.disabled and cs.shape != null:
+				shapes.append(cs)
+		elif child is CollisionPolygon2D:
+			var cp := child as CollisionPolygon2D
+			if not cp.disabled and cp.polygon.size() >= 3:
+				polygons.append(cp)
+
+	if shapes.is_empty() and polygons.is_empty():
+		return floor_cells
+
+	var master_floor := grid_manager.floor_layer
+	var zoned_cells: Dictionary = {}
+	for cell_variant in floor_cells.keys():
+		var cell := cell_variant as Vector2i
+		if grid_manager.is_cell_solid(cell):
+			continue
+		var world_pos := master_floor.to_global(master_floor.map_to_local(cell))
+		if _is_world_point_in_roam_zone(world_pos, shapes, polygons):
+			zoned_cells[cell] = true
+
+	return zoned_cells if not zoned_cells.is_empty() else floor_cells
+
+
+func _is_world_point_in_roam_zone(
+	world_pos: Vector2,
+	shapes: Array[CollisionShape2D],
+	polygons: Array[CollisionPolygon2D]
+) -> bool:
+	for cs in shapes:
+		var local_pt: Vector2 = cs.global_transform.affine_inverse() * world_pos
+		if cs.shape is RectangleShape2D:
+			var half := (cs.shape as RectangleShape2D).size * 0.5
+			if absf(local_pt.x) <= half.x and absf(local_pt.y) <= half.y:
+				return true
+		elif cs.shape is CircleShape2D:
+			var radius := (cs.shape as CircleShape2D).radius
+			if local_pt.length_squared() <= radius * radius:
+				return true
+
+	for cp in polygons:
+		var local_pt: Vector2 = cp.global_transform.affine_inverse() * world_pos
+		if Geometry2D.is_point_in_polygon(local_pt, cp.polygon):
+			return true
+
+	return false
 
 
 func _collect_room_floor_cells(room_node: Node2D, grid_manager: GridManager) -> Dictionary:

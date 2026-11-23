@@ -33,7 +33,7 @@ func resolve_attack(is_extra_attack: bool = false) -> Dictionary:
 				push_and_chase = not is_extra_attack
 			else:
 				anim = "attack_2"
-				multiplier = 0.55
+				multiplier = 0.50
 				hits = 3
 				knockback = 0
 
@@ -45,13 +45,13 @@ func resolve_attack(is_extra_attack: bool = false) -> Dictionary:
 				hits = 1
 			elif roll < 0.80:
 				anim = "attack_2"
-				multiplier = 1.4
+				multiplier = 1.30
 				hits = 1
 				knockback = 1
 				push_and_chase = not is_extra_attack
 			else:
 				anim = "attack_3"
-				multiplier = 1.3
+				multiplier = 1.25
 				hits = 1
 				knockback = 2
 				causes_stun = true
@@ -66,11 +66,11 @@ func resolve_attack(is_extra_attack: bool = false) -> Dictionary:
 				push_and_chase = not is_extra_attack
 			elif roll < 0.80:
 				anim = "attack_2"
-				multiplier = 0.75
+				multiplier = 0.70
 				hits = 2
 			else:
 				anim = "attack_3"
-				multiplier = 1.6
+				multiplier = 1.40
 				hits = 1
 				knockback = 2
 				causes_stun = true
@@ -106,39 +106,41 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 			anim = "default"
 
 	var data = controller.enemy_data
-	var fps: float = 8.0
-	if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
-		var s_fps = sprite.sprite_frames.get_animation_speed(anim)
-		if s_fps > 0.0: fps = s_fps
 
 	# 1. SÚLYOS KÁBÍTÓ CSAPÁS (Ork / Fejszés 3. támadása)
 	if knockback_tiles > 0 and causes_stun:
+		AudioManager.sfx(&"heavy_cleave", 0.90, 1.04, -1.5)
 		if anim != "" and sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
 			sprite.play(anim)
 			if target_hero.has_method("try_trigger_block"): target_hero.try_trigger_block()
 
 			var target_frame = data.get_knockback_frame(anim) if data else 3
-			await combat.get_tree().create_timer(float(target_frame) / fps).timeout
+			await EnemyVisuals.await_sprite_frame(combat, sprite, anim, target_frame)
 
+			AudioManager.sfx(&"crit_slam", 0.94, 1.06, -1.0)
 			target_hero.take_damage(single_raw)
+			if controller.visuals:
+				controller.visuals.finish_attack_to_idle_async(anim)
 			await execute_knockback_stun_sequence(target_hero, knockback_tiles, combat.stun_duration)
 
 			if sprite.is_playing() and sprite.animation == anim:
 				await sprite.animation_finished
-			if not combat.is_dead and controller.visuals:
+			if not combat.is_dead and controller.visuals and sprite.animation == anim:
 				controller.visuals.play_idle_anim()
 
 			return single_raw
 
 	# 2. SIMA HÁTRALÖKÉS (Impact frame-nél becsapódás és lökés)
 	elif knockback_tiles > 0:
+		AudioManager.sfx(&"heavy_cleave", 0.92, 1.06, -1.5)
 		if anim != "" and sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
 			sprite.play(anim)
 			if target_hero.has_method("try_trigger_block"): target_hero.try_trigger_block()
 
 			var target_frame = data.get_knockback_frame(anim) if data else 2
-			await combat.get_tree().create_timer(float(target_frame) / fps).timeout
+			await EnemyVisuals.await_sprite_frame(combat, sprite, anim, target_frame)
 
+			AudioManager.sfx(&"hit_melee", 0.92, 1.05, -1.0)
 			target_hero.take_damage(single_raw)
 			total_dealt += single_raw
 			if target_hero.has_method("play_hurt_reaction"): target_hero.play_hurt_reaction()
@@ -152,7 +154,7 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 
 			if push_and_chase and is_instance_valid(target_hero) and target_hero.is_alive():
 				await step_closer_to_hero(target_hero)
-				print("⚡ [%s ROZSDÁS LENDÜLET] Hátralökte a hőst, utánalépett és újra lecsap!" % controller.monster_name)
+				print("[%s ROZSDÁS LENDÜLET] Hátralökte a hőst, utánalépett és újra lecsap!" % controller.monster_name)
 				await combat.get_tree().create_timer(0.15).timeout
 				var followup_dmg = await combat.perform_combat_turn(target_hero, true)
 				total_dealt += followup_dmg
@@ -167,7 +169,9 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 
 		# A fix 3 helyett a hit_count változót használjuk:
 		for _i in range(hit_count):
-			await combat.get_tree().create_timer(2.0 / fps).timeout
+			AudioManager.sfx(&"sword_swing", 0.96, 1.12, -2.0)
+			await EnemyVisuals.await_sprite_frame(combat, sprite, anim, 2 * (_i + 1))
+			AudioManager.sfx(&"hit_melee", 0.94, 1.08, -2.0)
 			target_hero.take_damage(single_raw)
 			total_dealt += single_raw
 			if target_hero.has_method("play_hurt_reaction"): target_hero.play_hurt_reaction()
@@ -185,7 +189,9 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 
 		# A fix 2 helyett a hit_count változót használjuk:
 		for _i in range(hit_count):
-			await combat.get_tree().create_timer(4.0 / fps).timeout
+			AudioManager.sfx(&"heavy_cleave", 0.90, 1.04, -1.5)
+			await EnemyVisuals.await_sprite_frame(combat, sprite, anim, 4 * (_i + 1))
+			AudioManager.sfx(&"crit_slam", 0.92, 1.05, -1.5)
 			target_hero.take_damage(single_raw)
 			total_dealt += single_raw
 			if target_hero.has_method("play_hurt_reaction"): target_hero.play_hurt_reaction()
@@ -198,6 +204,7 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 
 	# 5. EGYÉB TÁMADÁSOK
 	if anim != "" and sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(anim):
+		AudioManager.sfx(&"sword_swing", 0.92, 1.08, -2.0)
 		sprite.play(anim)
 		if target_hero.has_method("try_trigger_block"): target_hero.try_trigger_block()
 		await sprite.animation_finished
@@ -205,6 +212,7 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 			controller.visuals.play_idle_anim()
 
 	for _h in range(hit_count):
+		AudioManager.sfx(&"hit_melee", 0.92, 1.08, -2.0)
 		target_hero.take_damage(single_raw)
 		total_dealt += single_raw
 		if hit_count > 1:
@@ -218,11 +226,17 @@ func perform_turn(target_hero: HeroController, is_extra_attack: bool = false) ->
 
 ## SÚLYOS HÁTRALÖKÉS (HARCBÓL KILÉPÉS, HÁTRAESÉS, 1.5 MP FEKVÉS ÉS FELÁLLÁS)
 func execute_knockback_stun_sequence(target_hero: HeroController, tiles: int, duration: float) -> void:
+	if not is_instance_valid(target_hero):
+		return
+
 	var battle_ui = combat.get_tree().get_first_node_in_group("battle_ui") as BattleDialog
 	if battle_ui != null and battle_ui.combat_active:
 		battle_ui.interrupt_combat_due_to_knockback()
 
+	target_hero.set_meta("knockback_in_progress", true)
 	target_hero.is_stunned = true
+	if target_hero.combat:
+		target_hero.combat.is_blocking_active = false
 	combat.set_all_monsters_ai_frozen(true)
 
 	var diff = target_hero.grid_pos - controller.grid_pos
@@ -250,56 +264,84 @@ func execute_knockback_stun_sequence(target_hero: HeroController, tiles: int, du
 	var knockback_slide_duration: float = 0.65
 
 	if hero_sprite and hero_sprite.sprite_frames and hero_sprite.sprite_frames.has_animation("death"):
+		AudioManager.sfx(&"knockback_slide", 0.92, 1.04, -1.0)
 		hero_sprite.play("death")
 
 	if actual_steps > 0 and gm and gm.floor_layer:
 		target_hero.grid_pos = current
+		if target_hero.get("current_step_target") != null:
+			target_hero.current_step_target = current
 		var target_world = gm.floor_layer.map_to_local(current)
 		var tween = target_hero.create_tween()
 		tween.tween_property(target_hero, "position", target_world, knockback_slide_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		await tween.finished
-		if target_hero.visuals:
+		if is_instance_valid(target_hero) and target_hero.visuals:
 			target_hero.visuals.update_fog_of_war()
 	else:
 		await combat.get_tree().create_timer(knockback_slide_duration).timeout
 
-	if hero_sprite and hero_sprite.is_playing() and hero_sprite.animation == "death":
-		await hero_sprite.animation_finished
-
-	if hero_sprite and hero_sprite.sprite_frames and hero_sprite.sprite_frames.has_animation("death"):
-		var last_frame = hero_sprite.sprite_frames.get_frame_count("death") - 1
-		hero_sprite.frame = last_frame
-		hero_sprite.pause()
-
-	# Ha a hős meghalt, nem áll fel:
-	if not target_hero.is_alive():
-		print("☠️ [A HŐS ELESETT] Az életerő elfogyott, a hős a földön marad!")
-		target_hero.is_stunned = true
-		if target_hero.has_method("play_overworld_death"):
-			await target_hero.play_overworld_death()
+	if not is_instance_valid(target_hero):
+		combat.set_all_monsters_ai_frozen(false)
 		return
 
-	print("💫 [KÁBÍTÁS] A hős a földön fekszik %.1f másodpercig..." % duration)
+	if is_instance_valid(hero_sprite) and hero_sprite.is_playing() and hero_sprite.animation == "death":
+		if target_hero.visuals and target_hero.visuals.has_method("_await_anim_or_interrupt"):
+			await target_hero.visuals._await_anim_or_interrupt("death", 1.0)
+		else:
+			await hero_sprite.animation_finished
+
+	if is_instance_valid(hero_sprite) and hero_sprite.sprite_frames and hero_sprite.sprite_frames.has_animation("death"):
+		var last_frame = maxi(0, hero_sprite.sprite_frames.get_frame_count("death") - 1)
+		hero_sprite.stop()
+		hero_sprite.animation = "death"
+		hero_sprite.frame = last_frame
+
+	# Ha a hős meghalt, nem áll fel:
+	if not is_instance_valid(target_hero) or not target_hero.is_alive():
+		print("[A HŐS ELESETT] Az életerő elfogyott, a hős a földön marad!")
+		if is_instance_valid(target_hero):
+			if target_hero.has_meta("knockback_in_progress"):
+				target_hero.remove_meta("knockback_in_progress")
+			target_hero.is_stunned = true
+			if target_hero.has_method("play_overworld_death"):
+				await target_hero.play_overworld_death()
+		return
+
+	print("[KÁBÍTÁS] A hős a földön fekszik %.1f másodpercig..." % duration)
 	await combat.get_tree().create_timer(duration).timeout
 
-	if not target_hero.is_alive(): return
+	if not is_instance_valid(target_hero) or not target_hero.is_alive():
+		if is_instance_valid(target_hero) and target_hero.has_meta("knockback_in_progress"):
+			target_hero.remove_meta("knockback_in_progress")
+		return
 
-	if hero_sprite and hero_sprite.sprite_frames and hero_sprite.sprite_frames.has_animation("death"):
+	if is_instance_valid(hero_sprite) and hero_sprite.sprite_frames and hero_sprite.sprite_frames.has_animation("death"):
+		var last_frame_rev: int = maxi(0, hero_sprite.sprite_frames.get_frame_count("death") - 1)
+		hero_sprite.stop()
+		hero_sprite.animation = "death"
+		hero_sprite.frame = last_frame_rev
 		hero_sprite.play_backwards("death")
-		await hero_sprite.animation_finished
+		if target_hero.visuals and target_hero.visuals.has_method("_await_anim_or_interrupt"):
+			await target_hero.visuals._await_anim_or_interrupt("death", 1.0)
+		else:
+			await hero_sprite.animation_finished
 
-	if hero_sprite:
+	if is_instance_valid(hero_sprite):
 		if target_hero.visuals and target_hero.visuals.has_method("play_idle_anim"):
 			target_hero.visuals.play_idle_anim()
 		else:
 			hero_sprite.play("idle")
 
+	if target_hero.has_meta("knockback_in_progress"):
+		target_hero.remove_meta("knockback_in_progress")
 	target_hero.is_stunned = false
 	combat.set_all_monsters_ai_frozen(false)
-	print("✨ [KÁBÍTÁS LEJÁRT] A hős felkelt a földről!")
+	print("[KÁBÍTÁS LEJÁRT] A hős felkelt a földről!")
 
 ## SIMA HÁTRALÖKÉS (1 CSEMPE)
 func apply_knockback(target_hero: HeroController, tiles: int) -> void:
+	if not is_instance_valid(target_hero):
+		return
 	var diff = target_hero.grid_pos - controller.grid_pos
 	var dir = Vector2i(signi(diff.x), signi(diff.y))
 	if dir == Vector2i.ZERO: dir = Vector2i.RIGHT
@@ -323,13 +365,20 @@ func apply_knockback(target_hero: HeroController, tiles: int) -> void:
 		actual_steps += 1
 
 	if actual_steps > 0:
+		target_hero.set_meta("knockback_in_progress", true)
+		AudioManager.sfx(&"knockback_slide", 0.94, 1.06, -2.0)
 		target_hero.grid_pos = current
+		if target_hero.get("current_step_target") != null:
+			target_hero.current_step_target = current
 		var target_world = gm.floor_layer.map_to_local(current)
 		var tween = target_hero.create_tween()
 		tween.tween_property(target_hero, "position", target_world, 0.15 * actual_steps).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		await tween.finished
-		if target_hero.visuals:
-			target_hero.visuals.update_fog_of_war()
+		if is_instance_valid(target_hero):
+			if target_hero.has_meta("knockback_in_progress"):
+				target_hero.remove_meta("knockback_in_progress")
+			if target_hero.visuals:
+				target_hero.visuals.update_fog_of_war()
 
 ## SZÖRNY UTÁNALÉPÉSE A HŐS MELLÉ
 func step_closer_to_hero(target_hero: HeroController) -> void:

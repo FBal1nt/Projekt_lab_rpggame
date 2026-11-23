@@ -29,6 +29,8 @@ static func build_payload(
 			"current_mana": character.current_mana,
 			"stress": character.stress,
 			"quirk_ids": Array(character.quirk_ids),
+			"unlocked_titles": Array(character.unlocked_titles),
+			"selected_titles": Array(character.selected_titles),
 			"attributes": character.attributes.duplicate(true),
 			"stat_modifiers": character.stat_modifiers.duplicate(true),
 			"status_effects": character.status_effects.duplicate(true),

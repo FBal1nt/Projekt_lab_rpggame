@@ -3,6 +3,7 @@ extends Control
 
 
 signal item_selected(item: InventoryItem)
+signal item_right_clicked(item: InventoryItem)
 signal action_feedback(message: String, is_success: bool)
 
 
@@ -193,8 +194,13 @@ func create_item_visual(inventory_item: InventoryItem) -> void:
 	if not stat_values.is_empty():
 		var stat_parts: Array[String] = []
 		for stat_key in stat_values.keys():
-			stat_parts.append("%s: %s" % [String(stat_key), str(stat_values[stat_key])])
+			if String(stat_key) == "heal_amount":
+				stat_parts.append("Gyógyítás: +%d ÉP" % int(round(float(stat_values[stat_key]))))
+			else:
+				stat_parts.append("%s: %s" % [String(stat_key), str(stat_values[stat_key])])
 		item_panel.tooltip_text += "\n\n" + ", ".join(PackedStringArray(stat_parts))
+	if inventory_item.item_data.item_type == &"consumable":
+		item_panel.tooltip_text += "\nJobb klikk vagy HASZNÁLAT a fogyasztáshoz."
 
 	add_child(item_panel)
 
@@ -339,11 +345,13 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var amount := maxi(int(data.get("amount", 1)), 1)
 	var target_cell := get_cell_from_mouse_position(at_position)
 	if GameState.buy_item_at(item_data, target_cell, amount):
+		AudioManager.sfx(&"gold_coins", 0.96, 1.06)
 		action_feedback.emit(
 			"Megvásárolva: %s (-%d arany)." % [item_data.display_name, item_data.buy_price * amount],
 			true
 		)
 	else:
+		AudioManager.sfx(&"ui_error", 0.96, 1.04)
 		var reason := GameState.get_buy_item_at_failure_reason(item_data, target_cell, amount)
 		if reason.is_empty():
 			reason = "A vásárlás nem sikerült."
@@ -441,12 +449,15 @@ func try_place_selected_item(target_cell: Vector2i) -> void:
 
 			if merged and not inventory.items.has(item_being_merged):
 				selected_item = null
+			if merged:
+				AudioManager.sfx(&"item_move", 0.95, 1.08)
 
 			preview_cell = Vector2i(-1, -1)
 			placement_preview.hide()
 			return
 
 		# Másik item vagy megtelt stack → nincs mozgatás.
+		AudioManager.sfx(&"ui_error", 0.96, 1.04)
 		print(
 			"Cannot place ",
 			selected_item.item_data.display_name,
@@ -462,6 +473,7 @@ func try_place_selected_item(target_cell: Vector2i) -> void:
 	)
 
 	if moved:
+		AudioManager.sfx(&"item_move", 0.95, 1.08)
 		print(
 			"Moved ",
 			selected_item.item_data.display_name,
@@ -473,6 +485,7 @@ func try_place_selected_item(target_cell: Vector2i) -> void:
 		preview_cell = Vector2i(-1, -1)
 		placement_preview.hide()
 	else:
+		AudioManager.sfx(&"ui_error", 0.96, 1.04)
 		print(
 			"Cannot place ",
 			selected_item.item_data.display_name,
@@ -640,6 +653,16 @@ func handle_item_click(clicked_item: InventoryItem) -> void:
 	try_place_selected_item(clicked_item.position)
 
 func handle_mouse_button(event: InputEventMouseButton) -> void:
+	if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		if inventory == null:
+			return
+		var right_cell := get_cell_from_mouse_position(event.position)
+		var right_item := inventory.get_item_at_cell(right_cell)
+		if right_item != null and right_item.item_data != null:
+			select_item(right_item)
+			item_right_clicked.emit(right_item)
+		return
+
 	if event.button_index != MOUSE_BUTTON_LEFT:
 		return
 
@@ -714,6 +737,7 @@ func try_transfer_from_peer(target_cell: Vector2i) -> bool:
 	)
 
 	if transferred:
+		AudioManager.sfx(&"item_move", 0.95, 1.08)
 		if not source_grid.inventory.items.has(source_item):
 			source_grid.clear_selection()
 		action_feedback.emit(
@@ -721,6 +745,7 @@ func try_transfer_from_peer(target_cell: Vector2i) -> bool:
 			true
 		)
 	else:
+		AudioManager.sfx(&"ui_error", 0.96, 1.04)
 		action_feedback.emit(
 			"Nem lehet ide áthelyezni a tárgyat.",
 			false
@@ -756,11 +781,13 @@ func accept_external_drag(
 	source_grid.finish_external_drag(source_item)
 
 	if transferred:
+		AudioManager.sfx(&"item_move", 0.95, 1.08)
 		action_feedback.emit(
 			"Áthelyezve: " + source_item.item_data.display_name,
 			true
 		)
 	else:
+		AudioManager.sfx(&"ui_error", 0.96, 1.04)
 		action_feedback.emit(
 			"Nem lehet ide áthelyezni a tárgyat.",
 			false

@@ -7,9 +7,10 @@
 [resource]
 script = ExtResource("1_t3klc")
 class_name_id = "Wizard"
-max_hp = 80
-base_damage = 28
-initiative = 12.0
+max_hp = 85
+base_damage = 15
+base_defense = 0
+initiative = 11.5
 is_ranged = true
 attack_range = 5
 projectile_scene = ExtResource("1_wyu87")

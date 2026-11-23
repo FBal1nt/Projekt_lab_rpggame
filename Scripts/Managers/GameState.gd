@@ -5,6 +5,7 @@ extends Node
 # -----------------------------------------------------------------------------
 
 const RESOURCE_CATALOG := preload("res://Scripts/Utils/ResourceCatalog.gd")
+const CLASS_VISUAL_HELPER := preload("res://Scripts/Utils/ClassVisualHelper.gd")
 const SAVE_SERIALIZER := preload("res://Scripts/Managers/GameSaveSerializer.gd")
 const SAVE_VERSION := 4
 
@@ -28,6 +29,7 @@ const ITEM_DATA_DIRECTORY := "res://Data/Items"
 const CHARACTER_CLASS_DIRECTORY := "res://Data/CharacterClasses"
 const SMITHING_RECIPE_DIRECTORY := "res://Data/SmithingRecipes"
 const ENCHANTMENT_DIRECTORY := "res://Data/Enchantments"
+const MONSTER_DATA_DIRECTORY := "res://Data/Monsters"
 const BACKPACK_WIDTH := 8
 const BACKPACK_HEIGHT := 4
 const STASH_WIDTH := 10
@@ -44,9 +46,15 @@ var stash: Inventory
 ## Shared, persistent dungeon/run data. Use JSON-compatible values only.
 ## Example: {"dungeon_id":"crypt_01", "floor":2, "seed":12345, "turn":8}.
 var run_state: Dictionary = {}
+## Titles collected during the active dungeon run; only committed to the character on victory.
+var pending_run_titles: PackedStringArray = PackedStringArray()
+var completed_run_newly_unlocked: PackedStringArray = PackedStringArray()
+var completed_run_titles: PackedStringArray = PackedStringArray()
+var current_run_completed: bool = false
 
 var _loading_save: bool = false
 var _item_data_cache: Dictionary = {}
+var _collectible_titles_cache: Array[Dictionary] = []
 
 ## Backwards-compatible access for older scripts. This now always resolves to
 ## the active character's backpack, so teammates can keep using GameState.backpack.
@@ -350,7 +358,320 @@ func update_run_state(key: StringName, value: Variant) -> void:
 
 func clear_run_state() -> void:
 	run_state.clear()
+	pending_run_titles = PackedStringArray()
+	completed_run_newly_unlocked = PackedStringArray()
+	completed_run_titles = PackedStringArray()
+	current_run_completed = false
 	_save_and_emit_state()
+
+
+# -----------------------------------------------------------------------------
+# Collectible hero titles (single active title with passive stat buffs)
+# -----------------------------------------------------------------------------
+
+const TITLE_BUFFS: Dictionary = {
+	"a Földhasító": {
+		"damage": 3.0,
+		"max_health": 10.0
+	},
+	"a Törhetetlen Pajzsú": {
+		"defense": 2.0,
+		"max_health": 15.0
+	},
+	"a Vascsontú": {
+		"defense": 2.0,
+		"damage": 2.0,
+		"max_health": 5.0
+	},
+	"a Vérszomjas": {
+		"damage": 4.0,
+		"crit_chance": 8.0,
+		"lifesteal": 2.0
+	},
+	"a Zúzó": {
+		"damage": 5.0,
+		"defense": 1.0
+	},
+	"a Megtörhetetlen": {
+		"max_health": 25.0,
+		"defense": 3.0
+	},
+	"az Éjszakai Vadász": {
+		"speed": 3.0,
+		"crit_chance": 10.0,
+		"vision_bonus": 1.0
+	},
+	"a Sötétség Ura": {
+		"max_health": 20.0,
+		"damage": 4.0,
+		"defense": 2.0,
+		"speed": 2.0,
+		"crit_chance": 8.0
+	}
+}
+
+
+func get_title_buffs(title: String) -> Dictionary:
+	var clean_title := title.strip_edges()
+	if clean_title.is_empty():
+		return {}
+	if TITLE_BUFFS.has(clean_title):
+		return (TITLE_BUFFS[clean_title] as Dictionary).duplicate(true)
+	return {"max_health": 10.0, "damage": 2.0}
+
+
+func format_title_buff_summary(title: String) -> String:
+	var buffs: Dictionary = get_title_buffs(title)
+	if buffs.is_empty():
+		return "Nincs bónusz"
+	var parts: Array[String] = []
+	var hp_bonus := int(round(float(buffs.get("max_health", 0.0))))
+	var dmg_bonus := int(round(float(buffs.get("damage", 0.0))))
+	var def_bonus := int(round(float(buffs.get("defense", 0.0))))
+	var spd_bonus := int(round(float(buffs.get("speed", 0.0))))
+	var crit_bonus := int(round(float(buffs.get("crit_chance", 0.0))))
+	var ls_bonus := int(round(float(buffs.get("lifesteal", 0.0))))
+	var vis_bonus := int(round(float(buffs.get("vision_bonus", 0.0))))
+
+	if hp_bonus > 0:
+		parts.append("+%d Max HP" % hp_bonus)
+	if dmg_bonus > 0:
+		parts.append("+%d Sebzés" % dmg_bonus)
+	if def_bonus > 0:
+		parts.append("+%d Passzív páncél" % def_bonus)
+	if spd_bonus > 0:
+		parts.append("+%d Kezdeményezés" % spd_bonus)
+	if crit_bonus > 0:
+		parts.append("+%d%% Kritikus" % crit_bonus)
+	if ls_bonus > 0:
+		parts.append("+%d HP elszívás/találat" % ls_bonus)
+	if vis_bonus > 0:
+		parts.append("+%d Látótáv" % vis_bonus)
+	return " · ".join(parts) if not parts.is_empty() else "Nincs bónusz"
+
+
+func get_active_title(character: CharacterProfile = null) -> String:
+	var target := character if character != null else get_active_character()
+	if target == null or target.selected_titles.is_empty():
+		return ""
+	for raw in target.selected_titles:
+		var clean := String(raw).strip_edges()
+		if not clean.is_empty() and target.unlocked_titles.has(clean):
+			return clean
+	return ""
+
+
+func get_active_title_buffs(character: CharacterProfile = null) -> Dictionary:
+	var active_title := get_active_title(character)
+	if active_title.is_empty():
+		return {}
+	return get_title_buffs(active_title)
+
+
+func get_all_collectible_titles() -> Array[Dictionary]:
+	if not _collectible_titles_cache.is_empty():
+		return _collectible_titles_cache.duplicate(true)
+
+	var seen: Dictionary = {}
+	var paths: Array[String] = RESOURCE_CATALOG.collect_resource_paths(MONSTER_DATA_DIRECTORY)
+	for resource_path in paths:
+		var loaded := load(resource_path)
+		if not (loaded is EnemyData):
+			continue
+		var enemy_data := loaded as EnemyData
+		var clean_title := enemy_data.title.strip_edges()
+		if clean_title.is_empty() or seen.has(clean_title):
+			continue
+		seen[clean_title] = true
+		_collectible_titles_cache.append({
+			"title": clean_title,
+			"monster_name": enemy_data.monster_name,
+			"tier": int(enemy_data.tier)
+		})
+
+	_collectible_titles_cache.sort_custom(_sort_collectible_titles)
+	return _collectible_titles_cache.duplicate(true)
+
+
+func _sort_collectible_titles(a: Dictionary, b: Dictionary) -> bool:
+	var tier_a := int(a.get("tier", 0))
+	var tier_b := int(b.get("tier", 0))
+	if tier_a != tier_b:
+		return tier_a < tier_b
+	return String(a.get("title", "")).naturalnocasecmp_to(String(b.get("title", ""))) < 0
+
+
+func _order_titles_canonically(titles: PackedStringArray) -> PackedStringArray:
+	var clean_unique: Array[String] = []
+	for raw in titles:
+		var t := String(raw).strip_edges()
+		if not t.is_empty() and not clean_unique.has(t):
+			clean_unique.append(t)
+
+	var ordered := PackedStringArray()
+	for entry in get_all_collectible_titles():
+		var catalog_title := String(entry.get("title", ""))
+		if clean_unique.has(catalog_title):
+			ordered.append(catalog_title)
+			clean_unique.erase(catalog_title)
+	for remaining in clean_unique:
+		ordered.append(remaining)
+	return ordered
+
+
+func format_merged_title_phrase(titles: PackedStringArray) -> String:
+	var ordered := _order_titles_canonically(titles)
+	if ordered.is_empty():
+		return ""
+	return "%s legyőzője" % ordered[0]
+
+
+func get_character_display_name(character: CharacterProfile = null) -> String:
+	var target := character if character != null else get_active_character()
+	if target == null:
+		return ""
+	var base_name := target.character_name.strip_edges()
+	var active_title := get_active_title(target)
+	if active_title.is_empty():
+		return base_name
+	return "%s, %s legyőzője" % [base_name, active_title]
+
+
+func reset_dungeon_run_titles() -> void:
+	pending_run_titles = PackedStringArray()
+	completed_run_newly_unlocked = PackedStringArray()
+	completed_run_titles = PackedStringArray()
+	current_run_completed = false
+	if run_state.has("pending_titles"):
+		run_state.erase("pending_titles")
+
+
+func collect_pending_title(raw_title: String, character: CharacterProfile = null) -> Dictionary:
+	## Records a defeated monster's title for the current run.
+	## Does NOT modify the hero's active name; becomes permanently unlocked only on dungeon victory.
+	var clean_title := raw_title.strip_edges()
+	if clean_title.is_empty():
+		return {"added": false, "already_unlocked": false, "already_pending": false, "title": "", "unlocked_immediately": false}
+
+	var target := character if character != null else get_active_character()
+	var already_unlocked := target != null and target.unlocked_titles.has(clean_title)
+
+	if current_run_completed and target != null:
+		if not completed_run_titles.has(clean_title):
+			completed_run_titles.append(clean_title)
+			completed_run_titles = _order_titles_canonically(completed_run_titles)
+		if not already_unlocked:
+			target.unlocked_titles.append(clean_title)
+			target.unlocked_titles = _order_titles_canonically(target.unlocked_titles)
+			if not completed_run_newly_unlocked.has(clean_title):
+				completed_run_newly_unlocked.append(clean_title)
+				completed_run_newly_unlocked = _order_titles_canonically(completed_run_newly_unlocked)
+			_save_and_emit_state()
+		return {
+			"added": not already_unlocked,
+			"already_unlocked": already_unlocked,
+			"already_pending": false,
+			"title": clean_title,
+			"unlocked_immediately": true
+		}
+
+	var already_pending := pending_run_titles.has(clean_title)
+	if not already_pending:
+		pending_run_titles.append(clean_title)
+		run_state["pending_titles"] = Array(pending_run_titles)
+
+	return {
+		"added": not already_pending,
+		"already_unlocked": already_unlocked,
+		"already_pending": already_pending,
+		"title": clean_title,
+		"unlocked_immediately": false
+	}
+
+
+func complete_dungeon_run(character: CharacterProfile = null) -> Dictionary:
+	## Marks the current dungeon run as beaten and permanently unlocks all pending titles collected in it.
+	var target := character if character != null else get_active_character()
+	var run_titles := _order_titles_canonically(pending_run_titles)
+	var newly_unlocked := PackedStringArray()
+
+	current_run_completed = true
+	run_state["status"] = "completed"
+
+	if target != null:
+		for title in run_titles:
+			if not target.unlocked_titles.has(title):
+				target.unlocked_titles.append(title)
+				newly_unlocked.append(title)
+		target.unlocked_titles = _order_titles_canonically(target.unlocked_titles)
+
+	completed_run_newly_unlocked = _order_titles_canonically(newly_unlocked)
+	completed_run_titles = run_titles
+	pending_run_titles = PackedStringArray()
+	if run_state.has("pending_titles"):
+		run_state.erase("pending_titles")
+	_save_and_emit_state()
+
+	return {
+		"newly_unlocked": completed_run_newly_unlocked,
+		"run_titles": completed_run_titles
+	}
+
+
+func get_completed_run_title_summary() -> Dictionary:
+	return {
+		"newly_unlocked": completed_run_newly_unlocked,
+		"run_titles": completed_run_titles
+	}
+
+
+func set_character_title_selected(title: String, selected: bool, character: CharacterProfile = null) -> bool:
+	## Single-title selection: equipping a title replaces any previously active title and recalculates stats.
+	var target := character if character != null else get_active_character()
+	var clean_title := title.strip_edges()
+	if target == null or clean_title.is_empty():
+		return false
+	if selected and not target.unlocked_titles.has(clean_title):
+		return false
+
+	var prev_stats := get_character_stats(target)
+	var prev_max_hp := maxi(int(round(float(prev_stats.get("max_health", 1)))), 1)
+	var was_full_hp := target.current_health < 0 or target.current_health >= prev_max_hp
+
+	if selected:
+		target.selected_titles = PackedStringArray([clean_title])
+	elif get_active_title(target) == clean_title:
+		target.selected_titles = PackedStringArray()
+
+	var new_stats := recalculate_character_stats(target)
+	var new_max_hp := maxi(int(round(float(new_stats.get("max_health", 1)))), 1)
+	if was_full_hp:
+		target.current_health = new_max_hp
+	else:
+		target.current_health = clampi(target.current_health, 0, new_max_hp)
+
+	_save_and_emit_state()
+	return true
+
+
+func clear_selected_character_titles(character: CharacterProfile = null) -> bool:
+	var target := character if character != null else get_active_character()
+	if target == null:
+		return false
+	var prev_stats := get_character_stats(target)
+	var prev_max_hp := maxi(int(round(float(prev_stats.get("max_health", 1)))), 1)
+	var was_full_hp := target.current_health < 0 or target.current_health >= prev_max_hp
+
+	target.selected_titles = PackedStringArray()
+	var new_stats := recalculate_character_stats(target)
+	var new_max_hp := maxi(int(round(float(new_stats.get("max_health", 1)))), 1)
+	if was_full_hp:
+		target.current_health = new_max_hp
+	else:
+		target.current_health = clampi(target.current_health, 0, new_max_hp)
+
+	_save_and_emit_state()
+	return true
 
 
 func set_character_stress(character_id: String, stress_value: int) -> bool:
@@ -417,6 +738,26 @@ func recalculate_character_stats(character: CharacterProfile) -> Dictionary:
 			else:
 				final_stats[key_str] = float(final_stats.get(key_str, 0.0)) + bonus
 
+	# Normalize legacy saves that had multiple titles selected to a single active title.
+	var active_title := get_active_title(character)
+	if active_title.is_empty():
+		if not character.selected_titles.is_empty():
+			character.selected_titles = PackedStringArray()
+	elif character.selected_titles.size() != 1 or String(character.selected_titles[0]) != active_title:
+		character.selected_titles = PackedStringArray([active_title])
+
+	var title_buffs := get_title_buffs(active_title)
+	for stat_key in title_buffs:
+		var key_str := String(stat_key)
+		var bonus := float(title_buffs[stat_key])
+		if key_str == "damage":
+			final_stats["damage_min"] = float(final_stats.get("damage_min", 0.0)) + bonus
+			final_stats["damage_max"] = float(final_stats.get("damage_max", 0.0)) + bonus
+		elif key_str in ["vision_bonus", "lifesteal"]:
+			final_stats[key_str] = float(final_stats.get(key_str, 0.0)) + bonus
+		else:
+			final_stats[key_str] = float(final_stats.get(key_str, 0.0)) + bonus
+
 	character.base_stats = base.duplicate(true)
 	character.derived_stats = final_stats.duplicate(true)
 	var max_health := maxi(int(round(float(final_stats.get("max_health", 1)))), 1)
@@ -459,28 +800,45 @@ func get_equipped_item(slot: StringName, character: CharacterProfile = null) -> 
 	return target.equipment.get(slot, null) as InventoryItem
 
 
-func can_equip_item(item: InventoryItem, character: CharacterProfile = null) -> bool:
+func can_character_use_shield(character: CharacterProfile = null) -> bool:
+	var target := character if character != null else get_active_character()
+	if target == null:
+		return false
+	return CLASS_VISUAL_HELPER.can_class_use_shield(target.class_id)
+
+
+func get_equip_item_failure_reason(item: InventoryItem, character: CharacterProfile = null) -> String:
 	var target := character if character != null else get_active_character()
 	if target == null or target.inventory == null or item == null or item.item_data == null:
-		return false
+		return "Érvénytelen tárgy vagy aktív karakter."
 	if item.amount != 1 or not target.inventory.items.has(item):
-		return false
+		return "Csak a hátizsákban lévő egyedi felszerelés vehető fel."
 	var slot := item.item_data.equipment_slot
 	if String(slot).is_empty() or slot == &"none":
-		return false
+		return "Ez a tárgy nem felszerelhető."
+	if (slot == &"shield" or item.item_data.item_type == &"shield") and not can_character_use_shield(target):
+		var cls_data := get_character_class(target.class_id)
+		var cls_name := cls_data.display_name if cls_data != null else String(target.class_id)
+		return "A(z) %s osztály nem használhat pajzsot (nincs blokkolás animációja)." % cls_name
 	if not target.equipment.has(slot):
-		return true
+		return ""
 	var currently_equipped := target.equipment[slot] as InventoryItem
 	if currently_equipped == null:
-		return true
+		return ""
 
 	# Test the swap in a temporary inventory before mutating the real state.
 	var simulation := _copy_inventory(target.inventory)
 	var simulated_source := simulation.get_item_at_cell(item.position)
 	if simulated_source == null:
-		return false
+		return "A tárgy nem található a hátizsákban."
 	simulation.items.erase(simulated_source)
-	return simulation.find_free_position(currently_equipped.item_data) != Vector2i(-1, -1)
+	if simulation.find_free_position(currently_equipped.item_data) == Vector2i(-1, -1):
+		return "Nincs elég szabad hely a hátizsákban a lecserélt tárgynak."
+	return ""
+
+
+func can_equip_item(item: InventoryItem, character: CharacterProfile = null) -> bool:
+	return get_equip_item_failure_reason(item, character).is_empty()
 
 
 func equip_item(item: InventoryItem, character: CharacterProfile = null) -> bool:
@@ -723,6 +1081,104 @@ func consume_active_character_item(item_id: StringName, amount: int = 1) -> bool
 	return true
 
 
+func is_consumable_item(item: InventoryItem) -> bool:
+	return item != null and item.item_data != null and item.item_data.item_type == &"consumable"
+
+
+func get_consumable_heal_amount(item_data: ItemData) -> int:
+	if item_data == null or item_data.item_type != &"consumable":
+		return 0
+	var heal_value := int(round(float(item_data.base_stats.get("heal_amount", 0.0))))
+	if heal_value <= 0 and item_data.id == &"health_potion":
+		heal_value = 40
+	return maxi(heal_value, 0)
+
+
+func get_use_consumable_failure_reason(item: InventoryItem, character: CharacterProfile = null) -> String:
+	var target := character if character != null else get_active_character()
+	if target == null or target.inventory == null:
+		return "Nincs aktív karakter."
+	if not is_consumable_item(item) or item.amount <= 0:
+		return "Ez a tárgy nem használható el."
+	if not target.inventory.items.has(item):
+		return "Csak a hátizsákban lévő tárgy használható."
+	var heal_amount := get_consumable_heal_amount(item.item_data)
+	if heal_amount <= 0:
+		return "Ennek a tárgynak nincs használható hatása."
+	var stats := get_character_stats(target)
+	var max_health := maxi(int(round(float(stats.get("max_health", 1)))), 1)
+	var current_hp := target.current_health if target.current_health >= 0 else max_health
+	if current_hp <= 0:
+		return "Az elesett hős nem tud gyógyitalt használni."
+	if current_hp >= max_health:
+		return "Az életerőd már tele van."
+	return ""
+
+
+func can_use_consumable_item(item: InventoryItem, character: CharacterProfile = null) -> bool:
+	return get_use_consumable_failure_reason(item, character).is_empty()
+
+
+func use_consumable_item(item: InventoryItem, character: CharacterProfile = null) -> Dictionary:
+	var target := character if character != null else get_active_character()
+	var item_name := item.item_data.display_name if (item != null and item.item_data != null) else "Tárgy"
+	var failure_reason := get_use_consumable_failure_reason(item, target)
+	if not failure_reason.is_empty():
+		return {
+			"ok": false,
+			"healed": 0,
+			"message": failure_reason,
+			"item_name": item_name,
+			"consumed_stack": false
+		}
+
+	var stats := get_character_stats(target)
+	var max_health := maxi(int(round(float(stats.get("max_health", 1)))), 1)
+	var before_hp := clampi(target.current_health if target.current_health >= 0 else max_health, 0, max_health)
+	var heal_amount := get_consumable_heal_amount(item.item_data)
+	var after_hp := clampi(before_hp + heal_amount, 0, max_health)
+	var actual_healed := after_hp - before_hp
+
+	item.amount -= 1
+	var consumed_stack := false
+	if item.amount <= 0:
+		target.inventory.items.erase(item)
+		consumed_stack = true
+
+	target.current_health = after_hp
+	target.inventory.inventory_changed.emit()
+
+	return {
+		"ok": true,
+		"healed": actual_healed,
+		"message": "Elhasználva: %s (+%d ÉP)." % [item_name, actual_healed],
+		"item_name": item_name,
+		"consumed_stack": consumed_stack
+	}
+
+
+func use_consumable_by_id(item_id: StringName, character: CharacterProfile = null) -> Dictionary:
+	var target := character if character != null else get_active_character()
+	if target == null or target.inventory == null:
+		return {
+			"ok": false,
+			"healed": 0,
+			"message": "Nincs aktív karakter.",
+			"item_name": "",
+			"consumed_stack": false
+		}
+	for item in target.inventory.items:
+		if item != null and item.item_data != null and item.item_data.id == item_id and item.amount > 0:
+			return use_consumable_item(item, target)
+	return {
+		"ok": false,
+		"healed": 0,
+		"message": "Nincs gyógyital a hátizsákban.",
+		"item_name": "",
+		"consumed_stack": false
+	}
+
+
 func get_item_stats(item: InventoryItem) -> Dictionary:
 	## Unified stat helper for future combat/equipment scripts.
 	if item == null or item.item_data == null:
@@ -961,6 +1417,10 @@ func _create_new_game() -> void:
 	active_character_id = ""
 	gold = STARTING_GOLD
 	run_state.clear()
+	pending_run_titles = PackedStringArray()
+	completed_run_newly_unlocked = PackedStringArray()
+	completed_run_titles = PackedStringArray()
+	current_run_completed = false
 	stash = _new_inventory(STASH_WIDTH, STASH_HEIGHT)
 	_seed_starting_smithing_materials()
 
@@ -1009,10 +1469,12 @@ func _setup_starting_inventory(target: Variant) -> void:
 					push_warning("Hiányzó kezdőtárgy az osztályhoz (%s): %s" % [String(character.class_id), String(item_id)])
 					continue
 				var amount := _get_starting_item_amount(character.class_id, item_id)
+				var is_shield_item := item_data.equipment_slot == &"shield" or item_data.item_type == &"shield"
 				if (
 					amount == 1
 					and item_data.equipment_slot != &""
 					and item_data.equipment_slot != &"none"
+					and (not is_shield_item or can_character_use_shield(character))
 					and not character.equipment.has(item_data.equipment_slot)
 				):
 					var equipped := InventoryItem.new()
@@ -1049,6 +1511,68 @@ func add_gold(amount: int, emit_changes: bool = true) -> void:
 	_sync_coin_items_to_gold(emit_changes)
 	if emit_changes:
 		_save_and_emit_state()
+
+
+func grant_dungeon_loot(gold_amount: int, material_drops: Array) -> Dictionary:
+	## Grants gold coins and crafting materials from a dungeon loot bag into the active backpack (overflowing to camp stash).
+	var added_gold: int = maxi(0, gold_amount)
+	if added_gold > 0:
+		add_gold(added_gold, false)
+
+	var active_inv := get_active_inventory()
+	var touched_invs: Array[Inventory] = []
+	var granted_items: Array[Dictionary] = []
+
+	for raw_entry in material_drops:
+		if not (raw_entry is Dictionary):
+			continue
+		var entry: Dictionary = raw_entry as Dictionary
+		var item_id := StringName(String(entry.get("item_id", "")).strip_edges())
+		var amount: int = int(entry.get("amount", 0))
+		if String(item_id).is_empty() or amount <= 0:
+			continue
+		var item_data := get_item_data(item_id)
+		if item_data == null:
+			continue
+
+		var remaining: int = amount
+		var to_backpack: int = 0
+		var to_stash: int = 0
+
+		if active_inv != null:
+			var left_after_bp: int = active_inv.try_add_item(item_data, remaining, false)
+			to_backpack = remaining - left_after_bp
+			remaining = left_after_bp
+			if to_backpack > 0 and not touched_invs.has(active_inv):
+				touched_invs.append(active_inv)
+
+		if remaining > 0 and stash != null:
+			var left_after_stash: int = stash.try_add_item(item_data, remaining, false)
+			to_stash = remaining - left_after_stash
+			remaining = left_after_stash
+			if to_stash > 0 and not touched_invs.has(stash):
+				touched_invs.append(stash)
+
+		var total_added: int = to_backpack + to_stash
+		if total_added > 0:
+			granted_items.append({
+				"item_id": item_id,
+				"display_name": item_data.display_name,
+				"description": item_data.description,
+				"icon": item_data.icon,
+				"amount": total_added,
+				"added_to_backpack": to_backpack,
+				"added_to_stash": to_stash
+			})
+
+	for inv in touched_invs:
+		inv.inventory_changed.emit()
+
+	_save_and_emit_state()
+	return {
+		"gold": added_gold,
+		"items": granted_items
+	}
 
 
 func spend_gold(amount: int, emit_changes: bool = true) -> bool:
@@ -1502,9 +2026,39 @@ func _start_autosave_timer() -> void:
 	_autosave_timer.autostart = true
 	_autosave_timer.timeout.connect(_on_autosave_timeout)
 	add_child(_autosave_timer)
+	call_deferred("_bind_autosave_settings")
+
+
+func _bind_autosave_settings() -> void:
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_signal("settings_changed"):
+		if not sm.settings_changed.is_connected(_apply_autosave_settings):
+			sm.settings_changed.connect(_apply_autosave_settings)
+	_apply_autosave_settings()
+
+
+func _apply_autosave_settings() -> void:
+	if _autosave_timer == null or not is_instance_valid(_autosave_timer):
+		return
+	var sm := get_node_or_null("/root/SettingsManager")
+	var enabled := true
+	var interval := AUTOSAVE_INTERVAL_SECONDS
+	if sm != null:
+		enabled = bool(sm.get("autosave_enabled"))
+		interval = clampf(float(sm.get("autosave_interval_seconds")), 15.0, 600.0)
+	var interval_changed := not is_equal_approx(_autosave_timer.wait_time, interval)
+	_autosave_timer.wait_time = interval
+	if enabled:
+		if _autosave_timer.is_stopped() or interval_changed:
+			_autosave_timer.start()
+	else:
+		_autosave_timer.stop()
 
 
 func _on_autosave_timeout() -> void:
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and not bool(sm.get("autosave_enabled")):
+		return
 	var current_scene := get_tree().current_scene if get_tree() != null else null
 	if current_scene != null and current_scene.name == "MainMenu":
 		return
@@ -1562,6 +2116,22 @@ func _load_game(path: String) -> bool:
 		character.quirk_ids = PackedStringArray()
 		for quirk_id in stored_quirks:
 			character.quirk_ids.append(str(quirk_id))
+		var stored_unlocked_titles: Variant = character_entry.get("unlocked_titles", [])
+		var loaded_unlocked := PackedStringArray()
+		if typeof(stored_unlocked_titles) == TYPE_ARRAY:
+			for raw_title in stored_unlocked_titles:
+				var clean_t := str(raw_title).strip_edges()
+				if not clean_t.is_empty() and not loaded_unlocked.has(clean_t):
+					loaded_unlocked.append(clean_t)
+		character.unlocked_titles = _order_titles_canonically(loaded_unlocked)
+		var stored_selected_titles: Variant = character_entry.get("selected_titles", [])
+		var loaded_selected := PackedStringArray()
+		if typeof(stored_selected_titles) == TYPE_ARRAY:
+			for raw_sel in stored_selected_titles:
+				var clean_s := str(raw_sel).strip_edges()
+				if not clean_s.is_empty() and character.unlocked_titles.has(clean_s) and not loaded_selected.has(clean_s):
+					loaded_selected.append(clean_s)
+		character.selected_titles = _order_titles_canonically(loaded_selected)
 		var stored_attributes: Variant = character_entry.get("attributes", {})
 		character.attributes = stored_attributes.duplicate(true) if typeof(stored_attributes) == TYPE_DICTIONARY else {}
 		var stored_modifiers: Variant = character_entry.get("stat_modifiers", {})

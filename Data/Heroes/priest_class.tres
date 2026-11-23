@@ -7,9 +7,10 @@
 [resource]
 script = ExtResource("1_tw7u2")
 class_name_id = "Priest"
-max_hp = 95
-base_damage = 17
-initiative = 11.0
+max_hp = 100
+base_damage = 12
+base_defense = 1
+initiative = 10.5
 is_ranged = true
 attack_range = 4
 projectile_scene = ExtResource("1_jvt0x")

@@ -12,8 +12,9 @@ const TIPS: Array[String] = [
 ]
 
 @onready var root_control: Control = find_child("Root", true, false) as Control
-@onready var crest_icon_label: Label = find_child("CrestIcon", true, false) as Label
+@onready var crest_icon_rect: TextureRect = find_child("CrestIcon", true, false) as TextureRect
 @onready var title_label: Label = find_child("TitleLabel", true, false) as Label
+@onready var dungeon_info_icon: TextureRect = find_child("DungeonInfoIcon", true, false) as TextureRect
 @onready var dungeon_info_label: Label = find_child("DungeonInfoLabel", true, false) as Label
 @onready var stage_label: Label = find_child("StageLabel", true, false) as Label
 @onready var progress_bar: ProgressBar = find_child("ProgressBar", true, false) as ProgressBar
@@ -54,11 +55,12 @@ func begin_loading(dungeon_name: String, difficulty_name: String) -> void:
 	var diff_text := difficulty_name if not difficulty_name.is_empty() else "Normál"
 	begin_scene_loading(
 		"DUNGEON BETÖLTÉSE",
-		"🏰 %s  •  Nehézség: %s" % [d_text, diff_text],
+		"%s  •  Nehézség: %s" % [d_text, diff_text],
 		"Előkészítés...",
-		"⚔️",
+		UiIcons.PLAY_SWORD,
 		"DUNGEON BETÖLTVE",
-		"Készen állsz! Jó felfedezést!"
+		"Készen állsz! Jó felfedezést!",
+		UiIcons.DUNGEON
 	)
 
 
@@ -66,9 +68,10 @@ func begin_scene_loading(
 	title_text: String,
 	info_text: String,
 	initial_stage: String = "Betöltés...",
-	icon_text: String = "⏳",
+	icon_path: String = UiIcons.HOURGLASS,
 	finished_title_text: String = "BETÖLTVE",
-	finished_stage_text: String = "Kész!"
+	finished_stage_text: String = "Kész!",
+	info_icon_path: String = UiIcons.DUNGEON
 ) -> void:
 	if _fade_tween != null and is_instance_valid(_fade_tween):
 		_fade_tween.kill()
@@ -85,8 +88,15 @@ func begin_scene_loading(
 	if root_control:
 		root_control.modulate = Color(1, 1, 1, 1)
 
-	if crest_icon_label:
-		crest_icon_label.text = icon_text
+	if crest_icon_rect:
+		var resolved_crest := icon_path if icon_path.begins_with("res://") else UiIcons.HOURGLASS
+		if ResourceLoader.exists(resolved_crest):
+			crest_icon_rect.texture = load(resolved_crest) as Texture2D
+
+	if dungeon_info_icon:
+		var resolved_info_icon := info_icon_path if info_icon_path.begins_with("res://") else UiIcons.DUNGEON
+		if ResourceLoader.exists(resolved_info_icon):
+			dungeon_info_icon.texture = load(resolved_info_icon) as Texture2D
 
 	if title_label:
 		title_label.text = _title_base + "."

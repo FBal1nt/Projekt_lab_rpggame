@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Materials/silver_ingot.png" id="2"]
 
 [resource]
 script = ExtResource("1")
 id = &"silver_ingot"
 display_name = "Ezüstrúd"
 description = "Finom ékszerek és mágikus felszerelések alapanyaga."
+icon = ExtResource("2")
 max_stack = 99
 buy_price = 24
 sell_price = 10

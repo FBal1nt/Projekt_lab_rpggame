@@ -21,7 +21,7 @@ extends Resource
 @export_range(0, 999, 1) var base_damage_min: int = 4
 @export_range(0, 999, 1) var base_damage_max: int = 8
 @export_range(0, 999, 1) var base_defense: int = 2
-@export_range(0, 99, 1) var base_speed: int = 4
+@export_range(0.0, 99.0, 0.5) var base_speed: float = 10.0
 @export_range(0, 100, 1) var base_accuracy: int = 90
 @export_range(0.0, 100.0, 0.1) var base_crit_chance: float = 5.0
 @export_range(0, 100, 1) var base_dodge: int = 8
@@ -46,13 +46,14 @@ extends Resource
 
 func get_stats_at_level(character_level: int = 1) -> Dictionary:
 	var level_steps := maxi(character_level - 1, 0)
+	var scaled_speed: float = snappedf(float(base_speed) * pow(1.1, level_steps), 0.1)
 	var result: Dictionary = {
 		"max_health": base_health + health_per_level * level_steps,
 		"max_mana": base_mana + mana_per_level * level_steps,
 		"damage_min": base_damage_min + damage_min_per_level * level_steps,
 		"damage_max": base_damage_max + damage_max_per_level * level_steps,
 		"defense": base_defense + defense_per_level * level_steps,
-		"speed": base_speed,
+		"speed": scaled_speed,
 		"accuracy": base_accuracy,
 		"crit_chance": base_crit_chance,
 		"dodge": base_dodge,

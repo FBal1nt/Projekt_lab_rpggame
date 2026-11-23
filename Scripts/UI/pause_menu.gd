@@ -53,7 +53,12 @@ func _input(event: InputEvent) -> void:
 		return
 
 	var is_esc := (key_event.keycode == KEY_ESCAPE or key_event.physical_keycode == KEY_ESCAPE)
-	var is_p := (key_event.keycode == KEY_P or key_event.physical_keycode == KEY_P)
+	var sm := get_node_or_null("/root/SettingsManager")
+	var is_p: bool = (
+		sm.matches_keybind(key_event, "pause_game")
+		if (sm != null and sm.has_method("matches_keybind"))
+		else (key_event.keycode == KEY_P or key_event.physical_keycode == KEY_P)
+	)
 	if not is_esc and not is_p:
 		return
 
@@ -66,6 +71,12 @@ func _input(event: InputEvent) -> void:
 		return
 
 	var hud := get_tree().get_first_node_in_group("hud")
+	if hud != null and hud.has_method("is_backpack_open") and hud.is_backpack_open():
+		if is_esc:
+			if hud.has_method("toggle_backpack"):
+				hud.toggle_backpack(false)
+				_mark_input_handled()
+			return
 	if hud != null and hud.has_method("is_fullscreen_map_open") and hud.is_fullscreen_map_open():
 		if is_esc:
 			if hud.has_method("toggle_fullscreen_map"):
@@ -90,6 +101,14 @@ func _is_blocked_by_other_overlays() -> bool:
 	if death_ui != null and death_ui.visible:
 		return true
 
+	var victory_ui := get_tree().get_first_node_in_group("dungeon_victory")
+	if victory_ui != null and victory_ui.visible:
+		return true
+
+	var loot_ui := get_tree().get_first_node_in_group("dungeon_loot")
+	if loot_ui != null and loot_ui.visible:
+		return true
+
 	return false
 
 
@@ -98,6 +117,9 @@ func open_pause() -> void:
 		return
 
 	var hud := get_tree().get_first_node_in_group("hud")
+	if hud != null and hud.has_method("is_backpack_open") and hud.is_backpack_open():
+		if hud.has_method("toggle_backpack"):
+			hud.toggle_backpack(false)
 	if hud != null and hud.has_method("is_fullscreen_map_open") and hud.is_fullscreen_map_open():
 		hud.toggle_fullscreen_map(false)
 
@@ -105,6 +127,7 @@ func open_pause() -> void:
 	_was_paused_before = get_tree().paused
 	get_tree().paused = true
 	visible = true
+	AudioManager.sfx(&"ui_pause")
 
 	if resume_button:
 		resume_button.grab_focus()
@@ -118,27 +141,73 @@ func close_pause() -> void:
 		focus_owner.release_focus()
 	visible = false
 	get_tree().paused = _was_paused_before
+	AudioManager.sfx(&"ui_window_close")
 
 
 func _populate_summary() -> void:
 	var hero := get_tree().get_first_node_in_group("player") as HeroController
 	if hero_summary_label:
+		hero_summary_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 		if is_instance_valid(hero):
-			var c_name: String = hero.active_class.class_name_id if hero.active_class else "Kalandor"
-			hero_summary_label.text = "⚔️ %s  •  %s (Lv. %d)  •  HP: %d/%d" % [
-				hero.hero_name, c_name, hero.level, hero.get_current_hp(), hero.get_max_hp()
+			var c_name: String = _get_localized_class_name(hero)
+			var summary_text := "%s  •  %s  •  Szint %d" % [
+				hero.hero_name, c_name, hero.level
 			]
+			hero_summary_label.text = summary_text
+			var f_size: int = 12
+			if summary_text.length() > 54:
+				f_size = 10
+			elif summary_text.length() > 38:
+				f_size = 11
+			hero_summary_label.add_theme_font_size_override("font_size", f_size)
 		else:
-			hero_summary_label.text = "⚔️ Játék szüneteltetve"
+			hero_summary_label.text = "Játék szüneteltetve"
+			hero_summary_label.add_theme_font_size_override("font_size", 12)
 
 	if run_summary_label:
 		var gs := get_node_or_null("/root/GameState")
 		if gs != null and "run_state" in gs and gs.run_state is Dictionary and not gs.run_state.is_empty():
 			var d_name := String(gs.run_state.get("dungeon_name", "Dungeon"))
 			var diff_name := String(gs.run_state.get("difficulty_name", "Normál"))
-			run_summary_label.text = "🏰 %s  •  Nehézség: %s" % [d_name, diff_name]
+			run_summary_label.text = "%s  •  Nehézség: %s" % [d_name, diff_name]
 		else:
-			run_summary_label.text = "🏰 Felfedezés folyamatban"
+			run_summary_label.text = "Felfedezés folyamatban"
+
+
+func _get_localized_class_name(hero: HeroController) -> String:
+	var raw_id: String = ""
+	if is_instance_valid(hero) and hero.active_class != null:
+		raw_id = hero.active_class.class_name_id.strip_edges().to_lower().replace(" ", "_")
+		if raw_id == "templar":
+			raw_id = "knight_templar"
+	var gs := get_node_or_null("/root/GameState")
+	if gs != null and gs.has_method("get_active_character") and gs.has_method("get_character_class"):
+		var active_char := gs.get_active_character() as CharacterProfile
+		var lookup_id: StringName = StringName(raw_id)
+		if String(lookup_id).is_empty() and active_char != null:
+			lookup_id = active_char.class_id
+		if lookup_id != &"":
+			var cls_data := gs.get_character_class(lookup_id) as CharacterClassData
+			if cls_data != null and not String(cls_data.display_name).strip_edges().is_empty():
+				return String(cls_data.display_name)
+	match raw_id:
+		"archer":
+			return "Íjász"
+		"knight":
+			return "Lovag"
+		"knight_templar":
+			return "Templomos lovag"
+		"priest":
+			return "Papnő"
+		"soldier":
+			return "Katona"
+		"swordsman":
+			return "Kardforgató"
+		"wizard":
+			return "Varázsló"
+	if is_instance_valid(hero) and hero.active_class != null and not hero.active_class.class_name_id.strip_edges().is_empty():
+		return hero.active_class.class_name_id
+	return "Kalandor"
 
 
 func _set_buttons_disabled(disabled: bool) -> void:
@@ -217,6 +286,8 @@ func _leave_dungeon_to_scene(scene_path: String) -> void:
 	get_tree().paused = false
 
 	var gs := get_node_or_null("/root/GameState")
+	if gs != null and gs.has_method("reset_dungeon_run_titles"):
+		gs.reset_dungeon_run_titles()
 	if gs != null and gs.has_method("clear_run_state"):
 		gs.clear_run_state()
 

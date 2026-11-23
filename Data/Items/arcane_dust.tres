@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Data/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Assets/Items/Materials/arcane_dust.png" id="2"]
 
 [resource]
 script = ExtResource("1")
 id = &"arcane_dust"
 display_name = "Arkán por"
 description = "Mágikus energia koncentrátuma; fejlesztésekhez és enchantokhoz használható."
+icon = ExtResource("2")
 max_stack = 99
 buy_price = 30
 sell_price = 12

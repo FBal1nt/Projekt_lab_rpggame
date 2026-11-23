@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://wxxm1m1qu5yf" path="res://Assets/Tilesets/Dungeon/decorative_cracks_walls.png" id="3_5ywdk"]
 [ext_resource type="Texture2D" uid="uid://wr8ib3ax7r3q" path="res://Assets/Tilesets/Dungeon/Objects.png" id="4_xs8xs"]
 [ext_resource type="PackedScene" uid="uid://dv6gqt581k6xj" path="res://Scenes/Props/torch.tscn" id="5_iep0d"]
+[ext_resource type="PackedScene" path="res://Scenes/Props/exit_gate.tscn" id="6_exit_gate"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1ha0"]
 texture = ExtResource("1_cw47o")
@@ -2100,4 +2101,7 @@ metadata/_edit_lock_ = true
 shape = SubResource("RectangleShape2D_a1ha0")
 
 [node name="Torch" parent="." unique_id=563503918 instance=ExtResource("5_iep0d")]
-position = Vector2(0, -104)
+position = Vector2(28, -104)
+
+[node name="ExitGate" parent="." instance=ExtResource("6_exit_gate")]
+position = Vector2(0, -96)

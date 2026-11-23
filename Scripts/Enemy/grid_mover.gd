@@ -4,6 +4,7 @@ class_name GridMover
 var controller: EnemyController
 var grid_manager: GridManager
 
+var move_tween: Tween
 var grid_pos: Vector2i = Vector2i.ZERO
 var current_step_target: Vector2i = Vector2i.ZERO
 var is_moving: bool = false
@@ -68,6 +69,16 @@ func _step_next_in_queue() -> void:
 		return
 
 	var next_cell = path_queue.pop_front()
+	if controller.has_meta("roam_room_cells"):
+		var raw_roam = controller.get_meta("roam_room_cells")
+		if raw_roam is Dictionary and not raw_roam.is_empty() and not raw_roam.has(next_cell):
+			path_queue.clear()
+			is_moving = false
+			current_step_target = grid_pos
+			if controller.visuals and not controller.is_dead and not controller.is_attacking:
+				controller.visuals.play_idle_anim()
+			return
+
 	if is_cell_blocked_by_entity(next_cell) or (grid_manager and grid_manager.is_cell_solid(next_cell)):
 		path_queue.clear()
 		is_moving = false
@@ -81,6 +92,7 @@ func _step_next_in_queue() -> void:
 		controller.visuals.update_facing(next_cell.x)
 
 	grid_pos = next_cell
+	AudioManager.sfx(&"step_enemy", 0.85, 1.15, -13.0, 0.16)
 
 	if controller.visuals:
 		controller.visuals.play_move_anim()
@@ -93,9 +105,23 @@ func _step_next_in_queue() -> void:
 	var target_world = fl.map_to_local(grid_pos)
 	var dur = controller.enemy_data.move_duration if controller.enemy_data else 0.5
 
-	var tween = controller.create_tween()
-	tween.tween_property(controller, "position", target_world, dur)
-	tween.finished.connect(_on_step_finished)
+	if move_tween and move_tween.is_valid():
+		move_tween.kill()
+	move_tween = controller.create_tween()
+	move_tween.tween_property(controller, "position", target_world, dur)
+	move_tween.finished.connect(_on_step_finished)
+
+func cancel_movement_immediately() -> void:
+	path_queue.clear()
+	is_moving = false
+	current_step_target = grid_pos
+	if move_tween and move_tween.is_valid():
+		move_tween.kill()
+	move_tween = null
+	if controller and grid_manager and grid_manager.floor_layer:
+		controller.position = grid_manager.floor_layer.map_to_local(grid_pos)
+	if controller and controller.visuals and not controller.is_dead and not controller.is_attacking:
+		controller.visuals.play_idle_anim()
 
 func _on_step_finished() -> void:
 	if controller.visuals:
@@ -103,16 +129,39 @@ func _on_step_finished() -> void:
 
 	var hero = _find_hero()
 	if hero and controller.combat and controller.combat.can_attack_hero(hero.grid_pos) and not hero.in_battle:
-		path_queue.clear()
-		is_moving = false
-		if controller.visuals:
-			controller.visuals.update_facing(hero.grid_pos.x)
-
-		if controller.attack_range > 1:
-			controller.combat._perform_overworld_ranged_initiation(hero)
+		var is_necro := controller.combat.elite_combat != null and controller.combat.elite_combat.is_necromancer()
+		if is_necro:
+			var diff: Vector2i = hero.grid_pos - controller.grid_pos
+			var melee_adj: bool = (diff.y == 0 and absi(diff.x) == 1)
+			var is_final_1v1: bool = controller.combat.elite_combat.necromancer_phase >= 3
+			var spell_ready: bool = controller.brain == null or not controller.brain.has_method("can_cast_overworld_spell") or controller.brain.can_cast_overworld_spell()
+			if is_final_1v1 and melee_adj:
+				path_queue.clear()
+				is_moving = false
+				if controller.visuals:
+					controller.visuals.update_facing(hero.grid_pos.x)
+				controller.combat.attack_hero(hero)
+				return
+			elif spell_ready:
+				path_queue.clear()
+				is_moving = false
+				if controller.visuals:
+					controller.visuals.update_facing(hero.grid_pos.x)
+				if controller.brain and controller.brain.has_method("mark_overworld_spell_cast"):
+					controller.brain.mark_overworld_spell_cast()
+				controller.combat._perform_overworld_ranged_initiation(hero)
+				return
 		else:
-			controller.combat.attack_hero(hero)
-		return
+			path_queue.clear()
+			is_moving = false
+			if controller.visuals:
+				controller.visuals.update_facing(hero.grid_pos.x)
+
+			if controller.attack_range > 1:
+				controller.combat._perform_overworld_ranged_initiation(hero)
+			else:
+				controller.combat.attack_hero(hero)
+			return
 
 	_step_next_in_queue()
 

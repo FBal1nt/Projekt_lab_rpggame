@@ -6,9 +6,10 @@
 [resource]
 script = ExtResource("1_hn4m7")
 class_name_id = "Knight Templar"
-max_hp = 160
-base_damage = 24
-initiative = 8
+max_hp = 140
+base_damage = 11
+base_defense = 2
+initiative = 8.5
 move_duration = 0.18
 sprite_frames = ExtResource("2_qurvj")
 metadata/_custom_type_script = "uid://bewq3fbkpsbt7"

@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://daloadui4k8p"]
 
 [ext_resource type="Script" uid="uid://dwkwbqgv1674k" path="res://Scripts/UI/loading_screen.gd" id="1_load"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/play_sword.png" id="2_icon_sword"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Icons/dungeon.png" id="3_icon_dungeon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loading_panel"]
 content_margin_left = 26.0
@@ -104,16 +106,12 @@ custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_crest_badge")
 
-[node name="CrestIcon" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/CrestCenter/CrestBadge" unique_id=1182466840]
+[node name="CrestIcon" type="TextureRect" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/CrestCenter/CrestBadge" unique_id=1182466840]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.98, 0.86, 0.42, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 22
-text = "⚔️"
-horizontal_alignment = 1
-vertical_alignment = 1
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_icon_sword")
 
 [node name="TitleLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=1221617053]
 layout_mode = 2
@@ -129,14 +127,26 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_info_badge")
 
-[node name="DungeonInfoLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/DungeonInfoBadge" unique_id=1056188896]
+[node name="DungeonInfoRow" type="HBoxContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/DungeonInfoBadge" unique_id=910000301]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="DungeonInfoIcon" type="TextureRect" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/DungeonInfoBadge/DungeonInfoRow" unique_id=910000302]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("3_icon_dungeon")
+
+[node name="DungeonInfoLabel" type="Label" parent="Root/CenterContainer/LoadingPanel/VBoxContainer/DungeonInfoBadge/DungeonInfoRow" unique_id=1056188896]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.9, 0.96, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
-text = "🏰 Elfeledett Kripta  •  Nehézség: Közepes"
+text = "Elfeledett Kripta  •  Nehézség: Közepes"
 horizontal_alignment = 1
 
 [node name="ProgressBox" type="VBoxContainer" parent="Root/CenterContainer/LoadingPanel/VBoxContainer" unique_id=575173535]

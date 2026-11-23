@@ -113,6 +113,7 @@ func _step_next_in_queue() -> void:
 		controller.visuals.update_facing(next_cell.x)
 		controller.visuals.play_walk_anim()
 
+	AudioManager.sfx(&"step_hero", 0.90, 1.12, -9.0, 0.14)
 	grid_pos = next_cell
 
 	var fl = grid_manager.floor_layer
@@ -184,6 +185,8 @@ func _find_adjacent_melee_enemy() -> Node2D:
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	for enemy in enemies:
 		if is_instance_valid(enemy) and enemy.has_method("is_monster_alive") and enemy.is_monster_alive():
+			if enemy.has_method("is_targetable") and not enemy.is_targetable():
+				continue
 			# Csak akkor, ha a hős ezzel a szörnnyel szemben közelharci módban van (nem íjász/varázsló távolsági):
 			if not controller.combat.is_hero_ranged_attack(enemy.grid_pos):
 				# És a szabályok szerint elérhető szomszédos mezőn áll (vízszintesen balról vagy jobbról):

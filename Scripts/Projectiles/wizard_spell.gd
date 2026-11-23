@@ -29,6 +29,7 @@ func launch(_start_pos: Vector2, target_node: Node2D, damage: int, source_actor:
 	anim_sprite.stop()
 	anim_sprite.frame = 0
 	anim_sprite.play(anim_name)
+	AudioManager.sfx(&"necro_cast", 0.94, 1.06)
 
 	var frame_count := anim_sprite.sprite_frames.get_frame_count(anim_name)
 	var fps := anim_sprite.sprite_frames.get_animation_speed(anim_name)
@@ -52,6 +53,7 @@ func spawn_ice(target_enemy: Node2D, damage: int, source_hero: Object = null) ->
 
 	global_position = target_enemy.global_position
 	z_index = 12
+	AudioManager.sfx(&"spell_ice", 0.95, 1.06)
 
 	_deliver_impact(target_enemy, damage, source_hero, "JÉGCSAP")
 
@@ -76,6 +78,7 @@ func launch_fire(start_pos: Vector2, target_enemy: Node2D, damage: int, source_h
 	rotation = flight_vector.angle()
 	if anim_sprite:
 		anim_sprite.play("fire")
+	AudioManager.sfx(&"spell_fire", 0.95, 1.06)
 
 	var duration = clampf(distance / flight_speed, 0.25, 0.6)
 	var tween = create_tween()
@@ -85,6 +88,7 @@ func launch_fire(start_pos: Vector2, target_enemy: Node2D, damage: int, source_h
 	)
 
 func _on_fireball_hit(target_enemy: Node2D, damage: int, source_hero: Object) -> void:
+	AudioManager.sfx(&"hit_melee", 0.85, 0.95, -2.0)
 	if is_instance_valid(target_enemy):
 		_deliver_impact(target_enemy, damage, source_hero, "TŰZGOLYÓ")
 

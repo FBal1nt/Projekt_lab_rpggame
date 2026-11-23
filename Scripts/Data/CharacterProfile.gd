@@ -18,6 +18,10 @@ extends Resource
 @export_range(0, 100, 1) var stress: int = 0
 ## Optional per-character traits; IDs can be registered by future gameplay systems.
 @export var quirk_ids: PackedStringArray = PackedStringArray()
+## Permanently unlocked monster titles collected by completing dungeons.
+@export var unlocked_titles: PackedStringArray = PackedStringArray()
+## Subset of unlocked_titles currently selected on this character's merged display name.
+@export var selected_titles: PackedStringArray = PackedStringArray()
 ## Persistent named attribute values (e.g. strength, agility, intellect). Empty values fall back to class data.
 @export var attributes: Dictionary = {}
 ## Persistent additive modifiers granted by equipment, quests, traits, or mechanics.

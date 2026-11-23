@@ -24,7 +24,7 @@ static func apply_hero_xp(hero: Dictionary, amount: int = 1) -> Array[String]:
 		hero["initiative"] *= 1.1            # +10% kezdeményezés
 		hero["vision_limit"] *= 3            # Látótávolság szorzása 3-mal
 
-		logs.append("    ★ ★ ★ SZINTLÉPÉS! ★ ★ ★")
+		logs.append("    === SZINTLÉPÉS! ===")
 		logs.append("    Új szint: %d | Életerő felgyógyítva: %d/%d | Támadás: %d | Védelem: %d | Kezdeményezés: %.2f | Látótáv: %d" % [
 			hero["level"], hero["current_hp"], hero["max_hp"], hero["attack_power"], hero["defense"], hero["initiative"], hero["vision_limit"]
 		])
@@ -101,7 +101,7 @@ static func simulate_battle(hero: Dictionary, monster: Dictionary, use_defense: 
 		var acquired = "the slayer of " + monster["title"]
 		if not acquired in hero["hero_name"]:
 			hero["hero_name"] = "%s, %s" % [hero["hero_name"], acquired]
-			logs.append("★ ÚJ TITULUS MEGSZEREZVE: %s" % hero["hero_name"])
+			logs.append("[TITULUS] Új titulus megszerezve: %s" % hero["hero_name"])
 
 	logs.append("==================================================================\n")
 	return {"winner": winner, "logs": logs}

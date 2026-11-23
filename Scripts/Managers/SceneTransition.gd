@@ -11,25 +11,28 @@ const MAIN_DUNGEON_SCENE_PATH := "res://Scenes/Main.tscn"
 const SCENE_PRESETS := {
 	LOBBY_SCENE_PATH: {
 		"title": "TÁBOR BETÖLTÉSE",
-		"info": "🏰 Városi Tábor  •  Felszerelés, bolt és küldetések",
+		"info": "Városi Tábor  •  Felszerelés, bolt és küldetések",
 		"stage": "Tábor jelenet betöltése...",
-		"icon": "🏰",
+		"icon": UiIcons.DUNGEON,
+		"info_icon": UiIcons.DUNGEON,
 		"finished_title": "TÁBOR BETÖLTVE",
 		"finished_stage": "Üdvözlünk a Táborban!"
 	},
 	MAIN_DUNGEON_SCENE_PATH: {
 		"title": "DUNGEON BETÖLTÉSE",
-		"info": "⚔️ Kaland előkészítése...",
+		"info": "Kaland előkészítése...",
 		"stage": "Dungeon jelenet betöltése...",
-		"icon": "⚔️",
+		"icon": UiIcons.PLAY_SWORD,
+		"info_icon": UiIcons.DUNGEON,
 		"finished_title": "DUNGEON BETÖLTVE",
 		"finished_stage": "Készen állsz! Jó felfedezést!"
 	},
 	MAIN_MENU_SCENE_PATH: {
 		"title": "FŐMENÜ BETÖLTÉSE",
-		"info": "📜 Főmenü  •  Mentések és beállítások",
+		"info": "Főmenü  •  Mentések és beállítások",
 		"stage": "Főmenü betöltése...",
-		"icon": "📜",
+		"icon": UiIcons.SCROLL,
+		"info_icon": UiIcons.SCROLL,
 		"finished_title": "FŐMENÜ BETÖLTVE",
 		"finished_stage": "Kész!"
 	}
@@ -74,9 +77,10 @@ func _ensure_loading_screen() -> LoadingScreen:
 func _perform_threaded_transition(scene_path: String, options: Dictionary) -> void:
 	var preset: Dictionary = SCENE_PRESETS.get(scene_path, {})
 	var title_text := str(options.get("title", preset.get("title", "JELENET BETÖLTÉSE")))
-	var info_text := str(options.get("info", preset.get("info", "⏳ Jelenet előkészítése...")))
+	var info_text := str(options.get("info", preset.get("info", "Jelenet előkészítése...")))
 	var stage_text := str(options.get("stage", preset.get("stage", "Jelenet betöltése...")))
-	var icon_text := str(options.get("icon", preset.get("icon", "⏳")))
+	var icon_text := str(options.get("icon", preset.get("icon", UiIcons.HOURGLASS)))
+	var info_icon_path := str(options.get("info_icon", preset.get("info_icon", UiIcons.DUNGEON)))
 	var finished_title := str(options.get("finished_title", preset.get("finished_title", "BETÖLTVE")))
 	var finished_stage := str(options.get("finished_stage", preset.get("finished_stage", "Kész!")))
 
@@ -90,7 +94,8 @@ func _perform_threaded_transition(scene_path: String, options: Dictionary) -> vo
 			stage_text,
 			icon_text,
 			finished_title,
-			finished_stage
+			finished_stage,
+			info_icon_path
 		)
 
 	await get_tree().process_frame

@@ -2651,6 +2651,9 @@ sources/4 = SubResource("TileSetAtlasSource_0nrmx")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a1ha0"]
 size = Vector2(113, 117)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y7ehq"]
+size = Vector2(7.5487285, 5.2383223)
+
 [node name="Node2D" type="Node2D" unique_id=99075124]
 
 [node name="TileMapLayer_Floor" type="TileMapLayer" parent="." unique_id=2052054544]
@@ -2686,8 +2689,22 @@ metadata/_edit_lock_ = true
 [node name="Hitbox" type="Area2D" parent="." unique_id=1245910035]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=703402970]
+visible = false
 position = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_a1ha0")
+
+[node name="RoamZone" type="Area2D" parent="." unique_id=796597176]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoamZone" unique_id=731850362]
+position = Vector2(4.5474735e-13, 15.999997)
+rotation = -3.1415925
+scale = Vector2(33.913, -42.761787)
+shape = SubResource("RectangleShape2D_y7ehq")
+debug_color = Color(0.9973963, 0.046994634, 0, 0.41960785)
 
 [node name="Spawners" type="Node2D" parent="." unique_id=379749880]
 
@@ -2706,3 +2723,6 @@ position = Vector2(-144, -40)
 
 [node name="Torch4" parent="." unique_id=966180739 instance=ExtResource("7_tkxrh")]
 position = Vector2(144, -40)
+
+[node name="DEBUG" type="Marker2D" parent="." unique_id=1127204253]
+position = Vector2(0, 104)

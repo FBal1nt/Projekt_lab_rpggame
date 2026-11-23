@@ -1,0 +1,23 @@
+Van egy világ, ahol a karakterünkkel, hősünkkel csatákat kell megvívnunk az ott lévő szörnyek ellen.
+A hősünknek vannak szokásos alapadatai (támadás, életpont stb.), valamint képes fejlődni, szintet lépni, ezzel javítva a képességeit.
+A hős tud tárgyakat felvenni, amelyek segíthetnek támadásban, védekezésben stb.
+A tárgyak származhatnak dobozokból, legyőzött szörnyektől, vagy boltból.
+A játék állapotát el kell tudni menteni, később betölteni.
+A hős és egy szörny egymással automatikusan harcol. Mindkettőnek van valamennyi életpontja és sebzési értéke. Felváltva üti meg egymást a két fél, kezdve a hőssel. A program írjon ki köztes helyzetjelentéseket, majd a végén jelenjen meg, hogy melyik fél győzött (maradt életben). Első körben még nem foglalkozzunk védő értékkel. Legyen a hős nagyobb életerejű, de kisebb támadású.
+Vezessük be a védőértéket. A védekezés legyen egy egész szám, amivel a bevitt támadás értéke csökken.
+Vezessük be a szintlépést. A hős minden ütés után kap 1 XP-t (experience point), minden összegyűjtött 10 XP után szintet lépünk, aminek hatására például: a támadásunk megnő 1-gyel, a védekezésünk megnő 1-gyel, az életerőnk a másfélszeresére nő.
+Vezessük be a gyógyítást. A hősnek legyen maximális és aktuális életereje, lehessen egy metódussal gyógyítani (ha a karakter még él), de a maximum fölé nem mehet, lehessen maximumra gyógyítani, szintlépéskor a maximum nőjön meg 10-zel, és a hős gyógyuljon fel teljesen.
+A hős szerezhessen titulust. Néhány erősebb szörny titulussal is rendelkezik, ha a hős legyőzi, akkor megkapja ezt a titulust. Például, ha a hős (Gandalf) legyőzi a Giant troll-t, akkor a neve: Gandalf, the slayer of the Giant troll lesz.
+Készítsünk egy labirintus térképet, amely jelöli, a falakat, a hős kezdő pozícióját, a szörnyek helyét és típusát. 
+Kezdetben egy konzolos interfészünk legyen, ami azt mondja meg, hogy mi van az aktuális mezőn. Tudunk lépni négy irányba és támadni, ha van ellenfél az aktuális mezőn.
+Hozzunk létre GUI-t, amely még szintén szöveggel kommunikál, de ezek címkékben jelennek meg, illetve a lépés támadás már gomb segítségével történhet.
+Oldjuk meg, hogy a nézet ne tudja közvetlenül módosítani a hős vagy az ellenfelek adattagjait, elkerülve így a véletlen hibákat, vagy szándékos csalást.
+Ne determinisztikusan ugyanannyi legyen a sebzés, hanem az eddigi legyen a maximum, a valós sebzés pedig véletlenszerűen ennek 80–100 százaléka. Továbbra is csak egész sebzés történhet; kerekítés felfele történjen a 80% kiszámolásakor. 
+Minden lénynek legyen egy kezdeményezésértéke, amely meghatározza, hogy egy támadás esetében ki üt először. Továbbá, ha ellépünk egy szörny mellől és az övénél kisebb a kezdeményezésértékünk, akkor megüt, mielőtt el tudnánk futni előle. A kezdeményezés lebegőpontos érték: ha magasabb, nagyobb gyorsaságot jelent; egyenlőség esetén a hős üt először. Szintlépéskor növekedjen a hős kezdeményezése 10%-kal.
+Fejlesszük tovább a grafikus felületet oly módon, hogy valamennyire megjelenjen a körülöttünk lévő világ. Az egyszerűség kedvéért fixáljuk le, hogy 2 lépésnyit lássunk minden irányban, így lényegében egy négyzetszeletet áttekintve.
+Legyen az eddigi térkép mellett egy nagytérkép is. 
+Vezessük be látótávolságot, ami megadja, hogy mekkora részt látunk be a térképből. A látótávolság alatt a sor- és oszlopkülönbségek négyzetét értjük, erre a hős limitje kezdetben 2, szintlépéskor mindig 3-mal szorzódik.
+A térképeket, a játékállásokat, a végigvitt térképeket egy szerveren tároljuk.
+A játék és a megjelenítés legyen szétválasztva, hogy a különböző nézetek között könnyen lehessen váltani.
+Legyenek mintacsaták a különféle helyzetekre.
+Használjunk hangeffekteket a mozgásra, amikor mi sebzünk, amikor minket sebeznek, amikor egy szereplő meghal.

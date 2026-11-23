@@ -1,7 +1,7 @@
 extends CanvasLayer
 class_name DeathScreen
 
-const MAIN_MENU_SCENE_PATH := "res://Scenes/Menu/MainMenu.tscn"
+const CAMP_SCENE_PATH := "res://Scenes/Lobby/Lobby.tscn"
 const MAIN_DUNGEON_SCENE_PATH := "res://Scenes/Main.tscn"
 
 @onready var hero_summary_label: Label = find_child("HeroSummaryLabel", true, false) as Label
@@ -20,8 +20,10 @@ func _ready() -> void:
 
 	if restart_button and not restart_button.pressed.is_connected(_on_restart_pressed):
 		restart_button.pressed.connect(_on_restart_pressed)
-	if menu_button and not menu_button.pressed.is_connected(_on_menu_pressed):
-		menu_button.pressed.connect(_on_menu_pressed)
+	if menu_button:
+		menu_button.text = "VISSZA A TÁBORBA"
+		if not menu_button.pressed.is_connected(_on_menu_pressed):
+			menu_button.pressed.connect(_on_menu_pressed)
 
 
 ## Megjeleníti a halálképernyőt és leállítja a játékot
@@ -31,12 +33,17 @@ func show_death_screen(hero: HeroController = null) -> void:
 
 	_is_transitioning = false
 	_set_buttons_disabled(false)
+	var gs := get_node_or_null("/root/GameState")
+	if gs != null and gs.has_method("reset_dungeon_run_titles"):
+		gs.reset_dungeon_run_titles()
 	_populate_summary(hero)
 	_hide_other_dungeon_uis()
 	_freeze_all_enemies()
 
 	visible = true
 	get_tree().paused = true
+	AudioManager.fade_out_music(0.25)
+	AudioManager.sfx(&"defeat_stinger", 1.0, 1.0)
 
 	if restart_button:
 		restart_button.grab_focus()
@@ -46,18 +53,18 @@ func _populate_summary(hero: HeroController) -> void:
 	if hero_summary_label:
 		if is_instance_valid(hero):
 			var c_name: String = hero.active_class.class_name_id if hero.active_class else "Kalandor"
-			hero_summary_label.text = "⚔️ %s  •  %s (Szint %d)" % [hero.hero_name, c_name, hero.level]
+			hero_summary_label.text = "%s  •  %s (Szint %d)" % [hero.hero_name, c_name, hero.level]
 		else:
-			hero_summary_label.text = "⚔️ A hős elesett a harcban"
+			hero_summary_label.text = "A hős elesett a harcban"
 
 	if run_summary_label:
 		var gs := get_node_or_null("/root/GameState")
 		if gs != null and "run_state" in gs and gs.run_state is Dictionary and not gs.run_state.is_empty():
 			var dungeon_name := String(gs.run_state.get("dungeon_name", "Elfeledett Kripta"))
 			var diff_name := String(gs.run_state.get("difficulty_name", "Közepes"))
-			run_summary_label.text = "🏰 %s  •  Nehézség: %s" % [dungeon_name, diff_name]
+			run_summary_label.text = "%s  •  Nehézség: %s" % [dungeon_name, diff_name]
 		else:
-			run_summary_label.text = "🏰 Dungeon felfedezés megszakadt"
+			run_summary_label.text = "Dungeon felfedezés megszakadt"
 
 
 func _hide_other_dungeon_uis() -> void:
@@ -160,7 +167,7 @@ func _perform_menu_transition() -> void:
 		_is_transitioning = false
 		_set_buttons_disabled(false)
 		return
-	_request_scene_transition(MAIN_MENU_SCENE_PATH)
+	_request_scene_transition(CAMP_SCENE_PATH)
 
 
 func _request_scene_transition(scene_path: String) -> void:

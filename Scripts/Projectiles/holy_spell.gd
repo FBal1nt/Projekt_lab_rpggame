@@ -11,6 +11,7 @@ func spawn_at(target_enemy: Node2D, damage: int, source_hero: Object = null) -> 
 
 	global_position = target_enemy.global_position
 	z_index = 12
+	AudioManager.sfx(&"spell_holy", 0.95, 1.05)
 
 	# Sebzés átadása
 	if target_enemy.has_method("take_damage"):
@@ -36,6 +37,7 @@ func spawn_at(target_enemy: Node2D, damage: int, source_hero: Object = null) -> 
 func cast_heal_at(caster_position: Vector2) -> void:
 	global_position = caster_position
 	z_index = 12
+	AudioManager.sfx(&"spell_heal", 0.97, 1.05)
 
 	if animated_sprite and animated_sprite.sprite_frames:
 		if animated_sprite.sprite_frames.has_animation("heal"):

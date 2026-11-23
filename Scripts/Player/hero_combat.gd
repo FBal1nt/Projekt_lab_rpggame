@@ -39,20 +39,34 @@ func _process(delta: float) -> void:
 
 func roll_attack_damage() -> int:
 	var power = controller.progression.attack_power if (controller and controller.progression) else 10
-	return ceili(float(power) * randf_range(0.8, 1.0))
+	var dmg: int = ceili(float(power) * randf_range(0.8, 1.0))
+	var crit_pct: float = controller.progression.title_crit_chance if (controller and controller.progression) else 0.0
+	if crit_pct > 0.0 and randf() * 100.0 < crit_pct:
+		dmg = ceili(float(dmg) * 1.5)
+	return dmg
+
+
+func _apply_title_lifesteal() -> void:
+	if controller == null or controller.progression == null or not controller.is_alive():
+		return
+	var ls: int = controller.progression.title_lifesteal
+	if ls > 0 and controller.current_hp < controller.max_hp:
+		controller.progression.heal(ls)
 
 func take_damage(incoming_raw_damage: int) -> int:
-	if not controller.is_alive(): return 0
+	if not controller.is_alive() or controller.debug_invincible: return 0
 
 	var raw = incoming_raw_damage
 	if is_blocking_active:
 		raw = ceili(float(incoming_raw_damage) * (1.0 - hero_block_reduction))
-		print("🛡️ [HŐS TOMPÍTOTT] Sikeres pajzshárítás! Sebzés: %d -> %d" % [incoming_raw_damage, raw])
+		print("[HŐS TOMPÍTOTT] Sikeres pajzshárítás! Sebzés: %d -> %d" % [incoming_raw_damage, raw])
 
 	var def = controller.progression.defense if controller.progression else 0
 	var actual_damage = maxi(0, raw - def)
 	controller.current_hp = maxi(0, controller.current_hp - actual_damage)
-	controller.progression.update_hud()
+	if controller.progression:
+		controller.progression.sync_health_to_game_state(false)
+		controller.progression.update_hud()
 
 	# --- FREE ROAM HALÁL ELLENŐRZÉSE ---
 	if controller.current_hp <= 0 and not in_battle:
@@ -77,7 +91,7 @@ func try_trigger_block() -> bool:
 		is_blocking_active = true
 		if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation("block"):
 			sprite.play("block")
-		print("🛡️ [HŐS BLOKKOL] A %s felemeli a pajzsát a csapás ellen!" % c_name)
+		print("[HŐS BLOKKOL] A %s felemeli a pajzsát a csapás ellen!" % c_name)
 		return true
 
 	is_blocking_active = false
@@ -87,12 +101,44 @@ func can_attack_cell(target_cell: Vector2i) -> bool:
 	var grid_mgr = controller.mover.grid_manager if (controller and controller.mover) else null
 	var dist = grid_mgr.get_grid_distance(controller.grid_pos, target_cell) if grid_mgr else 1
 	var max_range = get_effective_attack_range()
-	if dist > max_range: return false
+	if dist > max_range:
+		return false
 
-	if is_hero_ranged_attack(target_cell): return true
+	if is_hero_ranged_attack(target_cell):
+		return has_line_of_sight(controller.grid_pos, target_cell)
 
 	var diff = target_cell - controller.grid_pos
 	return diff.y == 0 and absi(diff.x) == 1
+
+func has_line_of_sight(from_cell: Vector2i, to_cell: Vector2i) -> bool:
+	var gm = controller.mover.grid_manager if (controller and controller.mover) else null
+	if gm == null:
+		return true
+	var x0: int = from_cell.x
+	var y0: int = from_cell.y
+	var x1: int = to_cell.x
+	var y1: int = to_cell.y
+	var dx: int = absi(x1 - x0)
+	var dy: int = absi(y1 - y0)
+	var sx: int = 1 if x0 < x1 else -1
+	var sy: int = 1 if y0 < y1 else -1
+	var err: int = dx - dy
+
+	while true:
+		var current := Vector2i(x0, y0)
+		if current != from_cell and current != to_cell:
+			if gm.is_cell_solid(current):
+				return false
+		if x0 == x1 and y0 == y1:
+			break
+		var e2: int = 2 * err
+		if e2 > -dy:
+			err -= dy
+			x0 += sx
+		if e2 < dx:
+			err += dx
+			y0 += sy
+	return true
 
 ## TÁMADÁSI KATTINTÁS
 func handle_attack_click() -> bool:
@@ -100,11 +146,17 @@ func handle_attack_click() -> bool:
 	if not fl or controller.is_moving or in_battle or is_attacking or not controller.is_alive() or controller.is_stunned:
 		return false
 
-	var target_cell = fl.local_to_map(fl.to_local(controller.get_global_mouse_position()))
-	if not controller.visuals.is_tile_in_vision(target_cell): return false
+	var mouse_global: Vector2 = controller.get_global_mouse_position()
+	var clicked_cell: Vector2i = fl.local_to_map(fl.to_local(mouse_global))
+	var enemy: Node2D = _get_enemy_at_click(clicked_cell, mouse_global)
+	if enemy == null:
+		return false
 
-	var enemy = _get_enemy_at_cell(target_cell)
-	if enemy != null and enemy.is_monster_alive():
+	var target_cell: Vector2i = enemy.grid_pos if enemy.get("grid_pos") != null else clicked_cell
+	if not controller.visuals.is_tile_in_vision(target_cell) and not controller.visuals.is_tile_in_vision(clicked_cell):
+		return false
+
+	if enemy.is_monster_alive() and (not enemy.has_method("is_targetable") or enemy.is_targetable()):
 		if can_attack_cell(target_cell):
 			controller.mover.cancel_movement_immediately()
 
@@ -169,13 +221,20 @@ func perform_combat_turn(target_enemy: Node2D) -> int:
 		if delay > 0.0: await get_tree().create_timer(delay).timeout
 
 		await _fire_projectile_at_enemy(target_enemy, raw_damage)
+		if raw_damage > 0:
+			_apply_title_lifesteal()
 	else:
+		var is_heavy_strike: bool = knockback_tiles > 0 or multiplier >= 1.25
+		AudioManager.sfx(&"heavy_cleave" if is_heavy_strike else &"sword_swing", 0.93, 1.07, -1.5)
 		if sprite and sprite.sprite_frames.has_animation(anim_name):
 			sprite.play(anim_name)
 			if target_enemy.has_method("try_trigger_block"): target_enemy.try_trigger_block()
 			await sprite.animation_finished
 
-		target_enemy.take_damage(raw_damage)
+		var dealt_dmg: int = int(target_enemy.take_damage(raw_damage))
+		if dealt_dmg > 0:
+			AudioManager.sfx(&"crit_slam" if multiplier >= 1.4 else &"hit_melee", 0.93, 1.07, -1.5)
+			_apply_title_lifesteal()
 		controller.progression.gain_combat_xp(1)
 
 	if sprite and controller.is_alive(): sprite.play("idle")
@@ -189,6 +248,9 @@ func perform_combat_turn(target_enemy: Node2D) -> int:
 ## TÉRKÉPI TÁVOLSÁGI LÖVÉS (PÁRBAJ NÉLKÜL)
 func perform_standalone_ranged_shot(target_enemy: Node2D, triggers_turn: bool = true) -> void:
 	is_attacking = true
+	controller.z_index = 11
+	if is_instance_valid(target_enemy):
+		target_enemy.z_index = 8
 	if controller.visuals: controller.visuals.update_facing(target_enemy.grid_pos.x)
 
 	var action = _resolve_hero_attack_action(target_enemy)
@@ -205,15 +267,27 @@ func perform_standalone_ranged_shot(target_enemy: Node2D, triggers_turn: bool = 
 	if target_enemy.has_method("try_trigger_block"): target_enemy.try_trigger_block()
 
 	await _fire_projectile_at_enemy(target_enemy, raw_damage)
+	if raw_damage > 0:
+		_apply_title_lifesteal()
 
 	if sprite and controller.is_alive(): sprite.play("idle")
+	if is_instance_valid(controller):
+		controller.z_index = 10
 	is_attacking = false
 
 	if is_instance_valid(target_enemy):
 		if not target_enemy.is_monster_alive():
+			var e_data = target_enemy.get("enemy_data") as EnemyData
+			var was_boss: bool = e_data != null and int(e_data.tier) == EnemyData.EnemyTier.BOSS
 			var title = target_enemy.get_title() if target_enemy.has_method("get_title") else ""
-			if title != "": controller.progression.award_title(title)
+			if title != "":
+				controller.progression.award_title(title)
+				var hud := get_tree().get_first_node_in_group("hud")
+				if hud != null and hud.has_method("show_title_collected_toast"):
+					hud.show_title_collected_toast(title)
 			if target_enemy.has_method("play_overworld_death"): target_enemy.play_overworld_death()
+			if was_boss and is_instance_valid(controller) and controller.has_method("on_boss_defeated"):
+				controller.on_boss_defeated()
 		else:
 			if target_enemy.has_method("play_hurt_reaction"): await target_enemy.play_hurt_reaction()
 			if is_instance_valid(target_enemy) and target_enemy.has_method("handle_post_damage_phase_reaction"):
@@ -271,6 +345,7 @@ func _fire_projectile_at_enemy(target_enemy: Node2D, raw_damage: int) -> void:
 	# 3. ÍJÁSZ ÉS KATONA LÖVEDÉKEK
 	elif p_scene != null:
 		_consume_arrow_if_available(c_name)
+		AudioManager.sfx(&"bow_release", 0.94, 1.06, -1.5)
 		var proj = p_scene.instantiate()
 		controller.get_parent().add_child(proj)
 		if proj.has_method("launch"):
@@ -334,28 +409,38 @@ func cast_priest_self_heal() -> void:
 		controller.progression.update_hud()
 
 	if sprite and controller.is_alive(): sprite.play("idle")
+	if is_instance_valid(controller):
+		controller.z_index = 10
 	is_attacking = false
 	controller.trigger_monsters_turn()
 
 func is_hero_ranged_attack(target_cell: Vector2i) -> bool:
-	if controller.active_class == null: return is_ranged
-	var c_name = controller.active_class.class_name_id
-	if c_name in ["Archer", "Wizard", "Priest"]: return true
+	if controller.active_class == null:
+		return is_ranged
+	var c_name: String = controller.active_class.class_name_id
+	if c_name in ["Archer", "Wizard", "Priest"]:
+		return true
 	if c_name == "Soldier":
 		if not _has_soldier_arrows():
 			return false
-		var grid_mgr = controller.mover.grid_manager
-		var dist = grid_mgr.get_grid_distance(controller.grid_pos, target_cell) if grid_mgr else 1
-		return dist > 1
+		var diff: Vector2i = target_cell - controller.grid_pos
+		var is_horiz_adjacent: bool = (diff.y == 0 and absi(diff.x) == 1)
+		return not is_horiz_adjacent
 	return is_ranged
 
 func get_effective_attack_range() -> int:
-	if controller.active_class == null: return 1
-	var c_name = controller.active_class.class_name_id
-	var vis = controller.visuals.vision_limit if controller.visuals else 2
-	if c_name in ["Archer", "Priest"]: return vis
-	elif c_name == "Wizard": return mini(5, vis)
-	elif c_name == "Soldier": return mini(3, vis) if _has_soldier_arrows() else 1
+	if controller.active_class == null:
+		return 1
+	var c_name: String = controller.active_class.class_name_id
+	var class_range: int = maxi(1, int(controller.active_class.attack_range))
+	if c_name == "Archer":
+		return maxi(5, class_range)
+	elif c_name == "Wizard":
+		return maxi(5, class_range)
+	elif c_name == "Priest":
+		return maxi(4, class_range)
+	elif c_name == "Soldier":
+		return maxi(4, class_range) if _has_soldier_arrows() else 1
 	return 1
 
 func _has_soldier_arrows() -> bool:
@@ -378,7 +463,7 @@ func _consume_arrow_if_available(c_name: String) -> void:
 	if gs.consume_active_character_item(&"arrow", 1):
 		var remaining := int(gs.get_item_count(&"arrow", false))
 		if c_name == "Soldier" and remaining == 0:
-			print("🏹 Elfogytak a nyílvesszők — a katona közelharci kardra vált!")
+			print("[ÍJÁSZAT] Elfogytak a nyílvesszők — a katona közelharci kardra vált!")
 
 func _resolve_hero_attack_action(target_enemy: Node2D) -> Dictionary:
 	var c_name = controller.active_class.class_name_id if controller.active_class else "Adventurer"
@@ -401,8 +486,13 @@ func _resolve_hero_attack_action(target_enemy: Node2D) -> Dictionary:
 			if anim == "attack_1":
 				knockback = 1
 		"Soldier":
-			if dist > 1: anim = "attack_2"; ranged = true
-			else: anim = "attack_1"
+			var s_diff: Vector2i = (target_enemy.grid_pos - controller.grid_pos) if target_enemy else Vector2i.RIGHT
+			var s_horiz_adj: bool = (s_diff.y == 0 and absi(s_diff.x) == 1)
+			if not s_horiz_adj and _has_soldier_arrows():
+				anim = "attack_2"
+				ranged = true
+			else:
+				anim = "attack_1"
 		"Wizard":
 			ranged = true
 			anim = "attack_1" if wizard_element == "ice" else "attack_2"
@@ -445,6 +535,7 @@ func _apply_enemy_knockback(target_enemy: Node2D, tiles: int) -> int:
 		target_enemy.current_step_target = current
 
 	var target_world: Vector2 = grid_mgr.floor_layer.map_to_local(current)
+	AudioManager.sfx(&"knockback_slide", 0.94, 1.06, -2.0)
 	var tween = target_enemy.create_tween()
 	tween.tween_property(target_enemy, "position", target_world, 0.15 * actual_steps).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await tween.finished
@@ -501,5 +592,35 @@ func _step_closer_to_enemy(target_enemy: Node2D) -> void:
 
 func _get_enemy_at_cell(cell: Vector2i) -> Node2D:
 	for enemy in get_tree().get_nodes_in_group("enemies"):
-		if is_instance_valid(enemy) and enemy.get("grid_pos") == cell: return enemy
+		if is_instance_valid(enemy) and enemy.get("grid_pos") == cell:
+			return enemy as Node2D
 	return null
+
+func _get_enemy_at_click(clicked_cell: Vector2i, click_global_pos: Vector2) -> Node2D:
+	var direct: Node2D = _get_enemy_at_cell(clicked_cell)
+	if direct != null and direct.is_monster_alive() and (not direct.has_method("is_targetable") or direct.is_targetable()):
+		return direct
+
+	# Mozgó vagy magasabb sprite-tal rendelkező ellenfelek (pl. Nekromanta) kényelmes kijelölése
+	var best_enemy: Node2D = null
+	var best_dist_sq: float = INF
+	for node in get_tree().get_nodes_in_group("enemies"):
+		var enemy := node as Node2D
+		if not is_instance_valid(enemy):
+			continue
+		if not enemy.is_monster_alive():
+			continue
+		if enemy.has_method("is_targetable") and not enemy.is_targetable():
+			continue
+
+		if enemy.get("current_step_target") != null and enemy.get("current_step_target") == clicked_cell:
+			return enemy
+
+		var delta: Vector2 = click_global_pos - enemy.global_position
+		if absf(delta.x) <= 13.0 and delta.y >= -22.0 and delta.y <= 10.0:
+			var dist_sq: float = delta.length_squared()
+			if dist_sq < best_dist_sq:
+				best_dist_sq = dist_sq
+				best_enemy = enemy
+
+	return best_enemy

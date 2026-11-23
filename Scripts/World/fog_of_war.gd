@@ -140,14 +140,33 @@ var fog_sprite: Sprite2D = null
 var fog_material: ShaderMaterial = null
 var explored_image: Image = null
 var explored_texture: ImageTexture = null
+var _base_mist_intensity: float = 0.14
+
+func _exit_tree() -> void:
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_signal("settings_changed") and sm.settings_changed.is_connected(_apply_mist_setting):
+		sm.settings_changed.disconnect(_apply_mist_setting)
 
 func _ready() -> void:
 	z_index = 5
+	_base_mist_intensity = mist_intensity
 	RenderingServer.set_default_clear_color(Color(unexplored_color.r, unexplored_color.g, unexplored_color.b, 1.0))
 	_ensure_fog_overlay()
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_signal("settings_changed") and not sm.settings_changed.is_connected(_apply_mist_setting):
+		sm.settings_changed.connect(_apply_mist_setting)
 
 	if not is_initialized and primary_layer and primary_layer.tile_set:
 		init_fog()
+	_apply_mist_setting()
+
+func _apply_mist_setting() -> void:
+	var scale_val := 1.0
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null:
+		scale_val = clampf(float(sm.get("fog_mist_scale")), 0.0, 1.0)
+	if fog_material != null:
+		fog_material.set_shader_parameter("mist_intensity", _base_mist_intensity * scale_val)
 
 func _ensure_fog_overlay() -> void:
 	if fog_sprite != null and is_instance_valid(fog_sprite):
@@ -232,7 +251,7 @@ func _setup_explored_overlay() -> void:
 	fog_material.set_shader_parameter("unexplored_color", unexplored_color)
 	fog_material.set_shader_parameter("fog_color", fog_color)
 	fog_material.set_shader_parameter("edge_softness", edge_softness)
-	fog_material.set_shader_parameter("mist_intensity", mist_intensity)
+	_apply_mist_setting()
 	fog_material.set_shader_parameter("map_size_tiles", Vector2(map_rect.size))
 	fog_material.set_shader_parameter("hero_center", Vector2(-9999.0, -9999.0))
 	fog_material.set_shader_parameter("hero_radius", 0.0)
@@ -423,8 +442,12 @@ func update_vision(hero_pos: Vector2i, vision_limit: int) -> void:
 	# Kör alakú látótávolság (euklideszi sugár = vision_limit + 0.5 csempe)
 	var r_tiles: float = _get_circle_radius_tiles(vision_limit, false)
 	var r_sq: float = r_tiles * r_tiles
-	for dx in range(-vision_limit, vision_limit + 1):
-		for dy in range(-vision_limit, vision_limit + 1):
+	var min_dx: int = maxi(-vision_limit, map_rect.position.x - hero_pos.x)
+	var max_dx: int = mini(vision_limit, map_rect.end.x - 1 - hero_pos.x)
+	var min_dy: int = maxi(-vision_limit, map_rect.position.y - hero_pos.y)
+	var max_dy: int = mini(vision_limit, map_rect.end.y - 1 - hero_pos.y)
+	for dx in range(min_dx, max_dx + 1):
+		for dy in range(min_dy, max_dy + 1):
 			if float(dx * dx + dy * dy) <= r_sq:
 				var target_cell = hero_pos + Vector2i(dx, dy)
 				if real_map_cells.has(target_cell):

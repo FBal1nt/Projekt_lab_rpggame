@@ -18,7 +18,7 @@ equipment_slot = &"shield"
 can_upgrade = true
 max_upgrade_level = 5
 base_stats = {
-"defense": 3.0,
+"defense": 2.0,
 "max_health": 5.0
 }
 upgrade_stat_bonuses = {

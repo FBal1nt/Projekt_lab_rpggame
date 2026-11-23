@@ -157,22 +157,37 @@ func initialize() -> void:
 	_has_resurrected = false
 	_just_resurrected = false
 
-## Szint- és nehézségfüggő finomhangolás a megidézett szörny példányán
+## Szint- és nehézségfüggő skálázás a megidézett szörny példányán
 func apply_level_scaling(target_level: int, difficulty_id: String = "normal") -> void:
 	enemy_level = maxi(1, target_level)
+	var diff_clean := difficulty_id.to_lower()
+	var is_easy := "easy" in diff_clean
+	var is_hard := "hard" in diff_clean
 
 	if tier == EnemyTier.BOSS:
-		var diff_clean := difficulty_id.to_lower()
 		var hp_mult := 1.0
 		var dmg_mult := 1.0
-		if "easy" in diff_clean:
-			hp_mult = 0.80
-			dmg_mult = 0.85
-		elif "hard" in diff_clean:
-			hp_mult = 1.25
-			dmg_mult = 1.15
-		max_hp = maxi(1, roundi(float(max_hp) * hp_mult))
-		base_damage = maxi(1, roundi(float(base_damage) * dmg_mult))
+		var init_mult := 1.0
+		if is_easy:
+			hp_mult = 0.75
+			dmg_mult = 0.78
+			init_mult = 0.92
+			flat_armor = maxi(0, flat_armor - 1)
+		elif is_hard:
+			hp_mult = 1.35
+			dmg_mult = 1.32
+			init_mult = 1.08
+			defense += 1
+
+		var boss_extra := maxi(0, enemy_level - 6)
+		var boss_def_div: float = 4.0 if is_easy else 3.0
+		var boss_hp_scale := 1.0 + float(boss_extra) * 0.08
+		var boss_dmg_scale := 1.0 + float(boss_extra) * 0.095
+		var boss_init_scale := pow(1.06, boss_extra)
+		max_hp = maxi(1, roundi(float(max_hp) * hp_mult * boss_hp_scale))
+		base_damage = maxi(1, roundi(float(base_damage) * dmg_mult * boss_dmg_scale))
+		initiative = snappedf(maxf(1.0, initiative * init_mult * boss_init_scale), 0.1)
+		defense += floori(float(boss_extra) / boss_def_div)
 		_current_hp = max_hp
 		return
 
@@ -181,15 +196,34 @@ func apply_level_scaling(target_level: int, difficulty_id: String = "normal") ->
 		EnemyTier.ARMORED: tier_base_level = 3
 		EnemyTier.ELITE: tier_base_level = 5
 
-	var level_delta := clampi(enemy_level - tier_base_level, -2, 3)
-	if level_delta != 0:
-		var hp_scale := clampf(1.0 + float(level_delta) * 0.07, 0.85, 1.25)
-		var dmg_scale := clampf(1.0 + float(level_delta) * 0.05, 0.88, 1.18)
-		max_hp = maxi(1, roundi(float(max_hp) * hp_scale))
-		base_damage = maxi(1, roundi(float(base_damage) * dmg_scale))
-		if level_delta >= 2:
-			defense += 1
-		_current_hp = max_hp
+	var diff_hp_mult := 1.0
+	var diff_dmg_mult := 1.0
+	var diff_init_mult := 1.0
+	if is_easy:
+		diff_hp_mult = 0.82
+		diff_dmg_mult = 0.80
+		diff_init_mult = 0.92
+		flat_armor = maxi(0, flat_armor - 1)
+	elif is_hard:
+		diff_hp_mult = 1.22
+		diff_dmg_mult = 1.32
+		diff_init_mult = 1.08
+		defense += 1
+
+	var level_delta := maxi(-2, enemy_level - tier_base_level)
+	var lvl_hp_mult_step: float = 0.05 if level_delta < 0 else 0.08
+	var lvl_dmg_mult_step: float = 0.04 if level_delta < 0 else 0.095
+	var lvl_hp_scale := 1.0 + float(level_delta) * lvl_hp_mult_step
+	var lvl_dmg_scale := 1.0 + float(level_delta) * lvl_dmg_mult_step
+	var lvl_init_scale := pow(1.06, maxi(0, level_delta))
+
+	max_hp = maxi(1, roundi(float(max_hp) * diff_hp_mult * lvl_hp_scale))
+	base_damage = maxi(1, roundi(float(base_damage) * diff_dmg_mult * lvl_dmg_scale))
+	initiative = snappedf(maxf(1.0, initiative * diff_init_mult * lvl_init_scale), 0.1)
+	if level_delta >= 2:
+		var def_step_div: float = 4.0 if is_easy else 3.0
+		defense += floori(float(level_delta) / def_step_div)
+	_current_hp = max_hp
 
 func get_current_hp() -> int: return _current_hp
 func get_max_hp() -> int: return max_hp

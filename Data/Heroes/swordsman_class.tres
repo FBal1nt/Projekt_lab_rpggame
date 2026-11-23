@@ -7,8 +7,9 @@
 script = ExtResource("1_owjtg")
 class_name_id = "Swordsman"
 max_hp = 105
-base_damage = 25
-initiative = 15
+base_damage = 15
+base_defense = 1
+initiative = 13.5
 move_duration = 0.12
 sprite_frames = ExtResource("2_ahu0g")
 metadata/_custom_type_script = "uid://bewq3fbkpsbt7"
